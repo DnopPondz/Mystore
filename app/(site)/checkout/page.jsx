@@ -165,124 +165,157 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-10 grid md:grid-cols-2 gap-6">
-      <section className="border rounded-2xl p-6 space-y-4">
-        <h1 className="text-2xl font-bold">Checkout</h1>
-        <p className="text-sm text-gray-600">
-          กรอกข้อมูลสำหรับจัดส่งสินค้า จากนั้นระบบจะสร้าง QR PromptPay เพื่อให้ชำระเงินและแนบสลิปยืนยันอัตโนมัติ
-        </p>
+    <main className="relative min-h-screen overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#ffe1ea] via-[#fff7f0] to-[#ffe9d6]" />
+      <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[#f06583]/20 blur-3xl" />
+      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[#f6c34a]/25 blur-3xl" />
 
-        <div className="grid grid-cols-1 gap-3">
-          {[
-            ["name", "ชื่อ-นามสกุล *"],
-            ["phone", "เบอร์โทร *"],
-            ["email", "อีเมล *"],
-            ["address1", "ที่อยู่ *"],
-            ["address2", "ที่อยู่ (บรรทัด 2)"],
-            ["district", "เขต/อำเภอ"],
-            ["province", "จังหวัด *"],
-            ["postcode", "รหัสไปรษณีย์ *"],
-            ["note", "หมายเหตุถึงร้าน"],
-          ].map(([key, label]) => (
-            <div key={key}>
-              <label className="text-sm block mb-1">{label}</label>
-              <input
-                className={`w-full border rounded px-3 py-2 ${
-                  REQUIRED_FIELDS.includes(key) && !form[key] ? "border-red-400" : ""
-                }`}
-                value={form[key]}
-                onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-              />
-            </div>
-          ))}
+      <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--color-rose)]">ชำระเงิน</p>
+          <h1 className="mt-2 text-3xl font-bold text-[var(--color-rose-dark)]">รายละเอียดจัดส่ง &amp; ยืนยันการโอน</h1>
+          <p className="mt-2 text-sm text-[var(--color-choco)]/70">
+            กรอกข้อมูลการจัดส่ง แล้วระบบจะสร้าง QR PromptPay พร้อมให้แนบสลิปยืนยัน เพื่อให้ทีมงานเริ่มจัดเตรียมสินค้าอย่างรวดเร็ว
+          </p>
         </div>
 
-        <button
-          onClick={placeOrder}
-          disabled={creating || cart.items.length === 0}
-          className={`px-4 py-2 rounded text-white ${
-            creating || cart.items.length === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-black"
-          }`}
-        >
-          {creating ? "กำลังสร้าง QR..." : "สร้าง QR สำหรับชำระเงิน"}
-        </button>
-
-        {err && <div className="text-sm text-red-600">{err}</div>}
-      </section>
-
-      <section className="border rounded-2xl p-6 space-y-4">
-        <h2 className="text-xl font-semibold">สรุปรายการ</h2>
-
-        <div className="space-y-2">
-          {currentTotals.items.map((it) => (
-            <div key={`${it.productId}-${it.title}`} className="flex justify-between">
-              <span>
-                {it.title} × {it.qty}
-              </span>
-              <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <section className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#f065831f] space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-[var(--color-choco)]">ข้อมูลผู้รับและที่อยู่</h2>
+              <p className="mt-1 text-xs text-[var(--color-choco)]/70">ช่องที่มีเครื่องหมาย * จำเป็นต้องกรอก</p>
             </div>
-          ))}
-        </div>
 
-        <div className="pt-2 space-y-1">
-          <div className="flex justify-between">
-            <span>รวม</span>
-            <span>฿{fmt(currentTotals.subtotal)}</span>
-          </div>
-          {currentTotals.discount ? (
-            <div className="flex justify-between text-green-700">
-              <span>
-                คูปอง {currentTotals.coupon?.code}
-                {currentTotals.coupon?.description ? ` (${currentTotals.coupon.description})` : ""}
-              </span>
-              <span>-฿{fmt(currentTotals.discount)}</span>
-            </div>
-          ) : null}
-          <div className="flex justify-between font-semibold pt-1 border-t">
-            <span>ยอดสุทธิ</span>
-            <span>฿{fmt(currentTotals.total)}</span>
-          </div>
-        </div>
-
-        {order ? (
-          <div className="space-y-4">
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm">
-              สร้างคำสั่งซื้อ #{order.orderId} แล้ว กรุณาชำระเงินและแนบสลิปเพื่อยืนยันการสั่งซื้อ
-            </div>
-            {order.promptpay ? (
-              <QrBox
-                payload={order.promptpay.payload}
-                amount={order.orderPreview.total}
-                title="สแกนเพื่อชำระเงิน"
-              />
-            ) : (
-              <div className="text-sm text-gray-600">ออเดอร์นี้ไม่ต้องชำระเงินเพิ่มเติม</div>
-            )}
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">แนบสลิปการโอน *</label>
-              <input type="file" accept="image/*" onChange={handleSlipChange} />
-              {slipName && (
-                <div className="text-xs text-gray-500">ไฟล์: {slipName}</div>
-              )}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {["name", "phone", "email", "address1", "address2", "district", "province", "postcode", "note"].map((key) => (
+                <div key={key} className={key === "note" ? "sm:col-span-2" : key === "address1" ? "sm:col-span-2" : ""}>
+                  <label className="mb-1 block text-sm font-medium">
+                    {key === "name"
+                      ? "ชื่อ-นามสกุล *"
+                      : key === "phone"
+                      ? "เบอร์โทร *"
+                      : key === "email"
+                      ? "อีเมล *"
+                      : key === "address1"
+                      ? "ที่อยู่ (บรรทัด 1) *"
+                      : key === "address2"
+                      ? "ที่อยู่ (บรรทัด 2)"
+                      : key === "district"
+                      ? "เขต/อำเภอ"
+                      : key === "province"
+                      ? "จังหวัด *"
+                      : key === "postcode"
+                      ? "รหัสไปรษณีย์ *"
+                      : "หมายเหตุถึงร้าน"}
+                  </label>
+                  <input
+                    className={`w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-3 text-sm text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[#f06583]/30 ${
+                      REQUIRED_FIELDS.includes(key) && !form[key] ? "border-rose-300" : ""
+                    }`}
+                    value={form[key]}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                  />
+                </div>
+              ))}
             </div>
 
             <button
-              onClick={confirmPayment}
-              disabled={confirming || !slipData}
-              className={`px-4 py-2 rounded text-white ${
-                confirming || !slipData ? "bg-gray-400 cursor-not-allowed" : "bg-black"
+              onClick={placeOrder}
+              disabled={creating || cart.items.length === 0}
+              className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
+                creating || cart.items.length === 0
+                  ? "bg-[#f3b6c7] cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#f06583] to-[#f78da7] hover:shadow-xl"
               }`}
             >
-              {confirming ? "กำลังยืนยัน..." : "ยืนยันการชำระเงิน"}
+              {creating ? "กำลังสร้าง QR..." : "สร้าง QR สำหรับชำระเงิน"}
             </button>
-          </div>
-        ) : (
-          <div className="text-sm text-gray-500">
-            กดปุ่ม "สร้าง QR สำหรับชำระเงิน" เพื่อสร้างคำสั่งซื้อและรับ QR PromptPay
-          </div>
-        )}
-      </section>
+
+            {err && !order && <div className="text-sm text-rose-600">{err}</div>}
+          </section>
+
+          <section className="space-y-6">
+            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[#f065831a]">
+              <h2 className="text-lg font-semibold text-[var(--color-choco)]">สรุปรายการ</h2>
+              <div className="mt-4 space-y-3 text-sm">
+                {currentTotals.items.map((it) => (
+                  <div key={`${it.productId}-${it.title}`} className="flex justify-between">
+                    <span>
+                      {it.title} × {it.qty}
+                    </span>
+                    <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 space-y-2 border-t border-[#f7b267]/40 pt-4 text-sm">
+                <div className="flex justify-between text-[var(--color-choco)]/80">
+                  <span>รวม</span>
+                  <span>฿{fmt(currentTotals.subtotal)}</span>
+                </div>
+                {currentTotals.discount ? (
+                  <div className="flex justify-between text-emerald-600">
+                    <span>
+                      คูปอง {currentTotals.coupon?.code}
+                      {currentTotals.coupon?.description ? ` (${currentTotals.coupon.description})` : ""}
+                    </span>
+                    <span>-฿{fmt(currentTotals.discount)}</span>
+                  </div>
+                ) : null}
+                <div className="flex justify-between text-base font-semibold text-[var(--color-rose-dark)]">
+                  <span>ยอดสุทธิ</span>
+                  <span>฿{fmt(currentTotals.total)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[#f065831a] space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-choco)]">ยืนยันการโอน</h2>
+              {order ? (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    สร้างคำสั่งซื้อ #{order.orderId} แล้ว กรุณาชำระเงินและแนบสลิปเพื่อยืนยัน
+                  </div>
+                  {order.promptpay ? (
+                    <QrBox
+                      payload={order.promptpay.payload}
+                      amount={order.orderPreview.total}
+                      title="สแกนเพื่อชำระเงิน"
+                    />
+                  ) : (
+                    <div className="text-sm text-[var(--color-choco)]/70">ออเดอร์นี้ไม่ต้องชำระเงินเพิ่มเติม</div>
+                  )}
+                  <div className="space-y-2 text-sm">
+                    <label className="font-medium">แนบสลิปการโอน *</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleSlipChange}
+                      className="text-sm"
+                    />
+                    {slipName && <div className="text-xs text-[var(--color-choco)]/60">ไฟล์: {slipName}</div>}
+                  </div>
+                  <button
+                    onClick={confirmPayment}
+                    disabled={confirming || !slipData}
+                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
+                      confirming || !slipData
+                        ? "bg-[#f3b6c7] cursor-not-allowed"
+                        : "bg-gradient-to-r from-[#f06583] to-[#f6c34a] hover:shadow-xl"
+                    }`}
+                  >
+                    {confirming ? "กำลังยืนยัน..." : "ยืนยันการชำระเงิน"}
+                  </button>
+                </div>
+              ) : (
+                <div className="text-sm text-[var(--color-choco)]/70">
+                  กดปุ่ม "สร้าง QR สำหรับชำระเงิน" เพื่อสร้างคำสั่งซื้อและรับ QR PromptPay
+                </div>
+              )}
+              {err && order && <div className="text-sm text-rose-600">{err}</div>}
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
