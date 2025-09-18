@@ -113,7 +113,7 @@ export default function NavBar() {
                   {session?.user?.role === "admin" && (
                     <Link
                       href="/admin"
-                      className="px-4 py-2 rounded-full bg-white/80 text-[var(--color-rose-dark)] shadow hover:bg-white"
+                      className="px-4 py-2 rounded-full bg-green-400  text-[var(--color-rose-dark)] shadow hover:bg-green-300"
                     >
                       จัดการร้าน
                     </Link>
@@ -123,7 +123,7 @@ export default function NavBar() {
                   </span>
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="text-[var(--color-rose-dark)] underline decoration-dotted"
+                    className="px-4 py-2 rounded-full bg-red-500 text-white shadow hover:bg-red-400"
                   >
                     ออกจากระบบ
                   </button>
@@ -164,7 +164,7 @@ export default function NavBar() {
                 {session?.user?.role === "admin" && (
                   <Link
                     href="/admin"
-                    className="px-4 py-2 rounded-full font-medium bg-white text-[var(--color-rose-dark)] shadow"
+                    className="px-4 py-2 rounded-full font-medium bg-green-400 hover:bg-green-300 text-[var(--color-rose-dark)] shadow"
                   >
                     จัดการร้าน
                   </Link>
@@ -174,7 +174,7 @@ export default function NavBar() {
                 </span>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="text-left text-[var(--color-rose-dark)] underline"
+                  className="text-left  underline bg-red-500 text-white shadow hover:bg-red-400"
                 >
                   ออกจากระบบ
                 </button>
