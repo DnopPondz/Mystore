@@ -46,6 +46,9 @@ const OrderSchema = new Schema(
       method: { type: String, enum: ["stripe", "promptpay"], default: "promptpay" },
       status: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
       ref: String,
+      slip: String,
+      slipFilename: String,
+      confirmedAt: Date,
     },
 
     // สถานะคำสั่งซื้อ
