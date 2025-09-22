@@ -6,17 +6,19 @@ export default async function HomePage() {
   let products = [];
 
   try {
-    await connectToDatabase();
-    const docs = await Product.find({ active: true })
-      .sort({ createdAt: -1 })
-      .lean();
-    products = (docs || []).map((d) => ({
-      _id: String(d._id),
-      title: d.title || "",
-      description: d.description || "",
-      price: d.price ?? 0,
-      images: d.images || [],
-    }));
+    if (process.env.MONGODB_URI) {
+      await connectToDatabase();
+      const docs = await Product.find({ active: true })
+        .sort({ createdAt: -1 })
+        .lean();
+      products = (docs || []).map((d) => ({
+        _id: String(d._id),
+        title: d.title || "",
+        description: d.description || "",
+        price: d.price ?? 0,
+        images: d.images || [],
+      }));
+    }
   } catch (error) {
     console.error("โหลดสินค้าไม่สำเร็จ", error);
   }

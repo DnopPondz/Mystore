@@ -6,6 +6,7 @@ import { Coupon } from "@/models/Coupon"; // ⬅️ เพิ่ม
 import { Order } from "@/models/Order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getPaymentConfig } from "@/lib/paymentConfig";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -67,6 +68,7 @@ export async function POST(req) {
     const userId = session?.user?.id || null;
 
     const paymentStatus = total > 0 ? "pending" : "paid";
+    const { promptpayId, bankAccount: configuredBank } = getPaymentConfig();
 
     const order = await Order.create({
       userId,
@@ -95,20 +97,12 @@ export async function POST(req) {
     const promptpayData =
       method === "promptpay" && total > 0
         ? {
-            payload: promptPayPayload({ id: process.env.PROMPTPAY_ID, amount: total }),
+            payload: promptPayPayload({ id: promptpayId, amount: total }),
             amount: total,
           }
         : null;
 
-    const bankAccount =
-      method === "bank"
-        ? {
-            name: process.env.BANK_ACCOUNT_NAME || "บจก. Sweet Cravings",
-            number: process.env.BANK_ACCOUNT_NUMBER || "123-4-567890",
-            bank: process.env.BANK_ACCOUNT_BANK || "ธนาคารตัวอย่าง",
-            promptpayId: process.env.PROMPTPAY_ID || "", // เผื่อใช้สแกนด้วยพร้อมเพย์
-          }
-        : null;
+    const bankAccount = method === "bank" ? configuredBank : null;
 
     return NextResponse.json({
       ok: 1,
