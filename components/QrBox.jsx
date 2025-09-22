@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 export default function QrBox({ payload, amount, title = "สแกนจ่าย PromptPay" }) {
   const canvasRef = useRef(null);
   const [err, setErr] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!payload || !canvasRef.current) return;
@@ -15,6 +16,7 @@ export default function QrBox({ payload, amount, title = "สแกนจ่า�
           width: 240,
           margin: 1,
           errorCorrectionLevel: "M",
+          color: { dark: "#4f2b1d", light: "#ffffff" },
         });
       } catch (e) {
         setErr(String(e.message || e));
@@ -22,30 +24,39 @@ export default function QrBox({ payload, amount, title = "สแกนจ่า�
     })();
   }, [payload]);
 
-  return (
-    <div className="border rounded-xl p-4 bg-white">
-      <div className="font-semibold mb-1">{title}</div>
-      <div className="text-sm text-gray-600">จำนวนเงิน: ฿{amount}</div>
+  async function copyPayload() {
+    try {
+      await navigator.clipboard.writeText(payload);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (copyErr) {
+      setErr(String(copyErr?.message || copyErr || "คัดลอกไม่สำเร็จ"));
+    }
+  }
 
-      {/* QR */}
-      <div className="mt-3 flex items-center justify-center">
-        <canvas ref={canvasRef} />
+  return (
+    <div className="rounded-3xl bg-white p-6 text-center shadow-lg shadow-[#f065831a]">
+      <div className="text-lg font-semibold text-[var(--color-choco)]">{title}</div>
+      <div className="mt-1 text-sm text-[var(--color-choco)]/70">จำนวนเงิน: ฿{amount}</div>
+
+      <div className="mt-4 flex items-center justify-center">
+        <canvas ref={canvasRef} className="rounded-2xl border border-[#f7b267]/40 bg-white p-3" />
       </div>
 
-      {/* payload + copy */}
-      <div className="mt-3">
-        <div className="text-xs text-gray-500 break-all bg-gray-50 border rounded p-2">
+      <div className="mt-4 space-y-2 text-left">
+        <div className="rounded-2xl border border-[#f7b267]/40 bg-[#fff8f1] p-3 text-xs text-[var(--color-choco)]/80 break-all">
           {payload}
         </div>
         <button
-          className="mt-2 text-sm underline"
-          onClick={() => navigator.clipboard.writeText(payload)}
+          className="w-full rounded-full bg-gradient-to-r from-[#f06583] to-[#f78da7] px-4 py-2 text-sm font-semibold text-white shadow shadow-[#f0658333] transition hover:shadow-md"
+          onClick={copyPayload}
+          type="button"
         >
-          คัดลอกโค้ด
+          {copied ? "คัดลอกแล้ว" : "คัดลอกโค้ด"}
         </button>
       </div>
 
-      {err && <div className="text-red-600 text-sm mt-2">{err}</div>}
+      {err && <div className="mt-3 text-sm text-rose-600">{err}</div>}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// components/admin/AdminSidebar.jsx
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,20 +12,25 @@ const items = [
 export default function AdminSidebar() {
   const path = usePathname();
   return (
-    <aside className="w-56 shrink-0 border-r h-[calc(100vh-0px)] sticky top-0">
-      <div className="h-14 flex items-center px-4 border-b font-bold">Admin</div>
-      <nav className="p-2 space-y-1">
-        {items.map((it) => (
-          <Link
-            key={it.href}
-            href={it.href}
-            className={`block px-3 py-2 rounded hover:bg-gray-100 ${
-              path === it.href ? "bg-gray-200 font-medium" : ""
-            }`}
-          >
-            {it.label}
-          </Link>
-        ))}
+    <aside className="w-64 shrink-0 bg-gradient-to-b from-[#f06583] to-[#f78da7] text-white shadow-2xl">
+      <div className="h-16 flex items-center px-6 text-lg font-semibold tracking-wide">
+        🍰 Admin Suite
+      </div>
+      <nav className="px-4 pb-6 space-y-2">
+        {items.map((it) => {
+          const active = path === it.href;
+          return (
+            <Link
+              key={it.href}
+              href={it.href}
+              className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                active ? "bg-white text-[var(--color-rose)] shadow-lg" : "hover:bg-white/15"
+              }`}
+            >
+              {it.label}
+            </Link>
+          );
+        })}
       </nav>
     </aside>
   );

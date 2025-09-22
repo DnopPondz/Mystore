@@ -59,6 +59,20 @@ export async function POST(req) {
       });
     }
 
+    if (method === "bank") {
+      return NextResponse.json({
+        ok: 1,
+        method,
+        orderPreview: { items: checked, subtotal, discount, total, coupon: used },
+        bankAccount: {
+          name: process.env.BANK_ACCOUNT_NAME || "บจก. Sweet Cravings",
+          number: process.env.BANK_ACCOUNT_NUMBER || "123-4-567890",
+          bank: process.env.BANK_ACCOUNT_BANK || "ธนาคารตัวอย่าง",
+          promptpayId: process.env.PROMPTPAY_ID || "",
+        },
+      });
+    }
+
     return NextResponse.json({ error: "Unknown payment method" }, { status: 400 });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
