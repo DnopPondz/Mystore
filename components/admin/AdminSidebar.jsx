@@ -22,7 +22,10 @@ export default function AdminSidebar() {
   const nav = useMemo(
     () =>
       items.map((it) => {
-        const active = path === it.href || path?.startsWith(`${it.href}/`);
+        const active =
+          it.href === "/admin"
+            ? path === it.href
+            : path === it.href || path?.startsWith(`${it.href}/`);
         return (
           <Link
             key={it.href}
