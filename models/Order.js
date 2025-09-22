@@ -1,5 +1,7 @@
 import { Schema, models, model } from "mongoose";
 
+const PAYMENT_METHODS = ["promptpay", "bank"];
+
 const OrderSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User" },
@@ -43,7 +45,7 @@ const OrderSchema = new Schema(
 
     // การชำระเงิน
     payment: {
-      method: { type: String, enum: ["promptpay", "bank"], default: "promptpay" },
+      method: { type: String, enum: PAYMENT_METHODS, default: "promptpay" },
       status: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
       ref: String,
       amountPaid: Number,
@@ -57,5 +59,16 @@ const OrderSchema = new Schema(
   },
   { timestamps: true }
 );
+
+if (models.Order) {
+  const methodPath = models.Order.schema?.path("payment.method");
+  const hasAllMethods = Array.isArray(methodPath?.enumValues)
+    ? PAYMENT_METHODS.every((value) => methodPath.enumValues.includes(value))
+    : false;
+
+  if (!hasAllMethods) {
+    delete models.Order;
+  }
+}
 
 export const Order = models.Order || model("Order", OrderSchema);
