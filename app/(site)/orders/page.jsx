@@ -11,23 +11,51 @@ export default function OrdersPage() {
   const { status } = useSession();
 
   useEffect(() => {
-    (async () => {
+    let ignore = false;
+
+    async function loadOrders() {
       try {
+        setLoading(true);
+        setErr("");
         const res = await fetch("/api/my/orders", { cache: "no-store" });
         const data = await res.json();
+        if (ignore) return;
         if (res.status === 401) {
           setNeedsAuth(true);
+          setOrders([]);
           return;
         }
         if (!res.ok) throw new Error(data?.error || "Load orders failed");
         setOrders(data);
       } catch (e) {
-        setErr(String(e.message || e));
+        if (!ignore) setErr(String(e.message || e));
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
-    })();
-  }, []);
+    }
+
+    if (status === "loading") {
+      return () => {
+        ignore = true;
+      };
+    }
+
+    if (status !== "authenticated") {
+      setNeedsAuth(true);
+      setOrders([]);
+      setLoading(false);
+      return () => {
+        ignore = true;
+      };
+    }
+
+    setNeedsAuth(false);
+    loadOrders();
+
+    return () => {
+      ignore = true;
+    };
+  }, [status]);
 
   const statusLabel = useMemo(
     () => ({
