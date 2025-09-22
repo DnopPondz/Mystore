@@ -30,6 +30,12 @@ export default function HookPage({ searchParams }) {
           >
             กลับสู่หน้าหลัก
           </Link>
+          <Link
+            href="/orders"
+            className="mt-4 inline-flex items-center justify-center rounded-full border border-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-rose-dark)] hover:bg-[var(--color-rose)]/10"
+          >
+            ดูคำสั่งซื้อของฉัน
+          </Link>
         </div>
       </div>
     </main>
