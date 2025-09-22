@@ -24,6 +24,27 @@ export default function AdminDashboardPage() {
     })();
   }, []);
 
+  const lowStock = data?.cards?.lowStock ?? 0;
+
+  const reminders = useMemo(() => {
+    const list = [];
+    if (lowStock > 0) {
+      list.push({
+        title: "เติมสต็อกสินค้ายอดนิยม",
+        detail: `มี ${lowStock} รายการที่กำลังจะหมด เลือกเติมสต็อกก่อนเวลาเปิดร้านพรุ่งนี้`,
+      });
+    }
+    list.push({
+      title: "ตรวจสอบสลิปเงินเข้า",
+      detail: "ยืนยันการชำระเงินจากหน้า 'คำสั่งซื้อ' เพื่อให้ลูกค้าได้รับการจัดส่งเร็วที่สุด",
+    });
+    list.push({
+      title: "วางแผนโปรโมชั่น",
+      detail: "สร้างคูปองส่วนลดใหม่เพื่อกระตุ้นยอดขายช่วงสุดสัปดาห์",
+    });
+    return list;
+  }, [lowStock]);
+
   if (err)
     return (
       <section className="rounded-3xl border border-rose-200/60 bg-rose-50/80 p-6 text-rose-700 shadow-sm">
@@ -38,25 +59,6 @@ export default function AdminDashboardPage() {
     );
 
   const { cards, topProducts } = data;
-
-  const reminders = useMemo(() => {
-    const list = [];
-    if (cards.lowStock > 0) {
-      list.push({
-        title: "เติมสต็อกสินค้ายอดนิยม",
-        detail: `มี ${cards.lowStock} รายการที่กำลังจะหมด เลือกเติมสต็อกก่อนเวลาเปิดร้านพรุ่งนี้`,
-      });
-    }
-    list.push({
-      title: "ตรวจสอบสลิปเงินเข้า",
-      detail: "ยืนยันการชำระเงินจากหน้า 'คำสั่งซื้อ' เพื่อให้ลูกค้าได้รับการจัดส่งเร็วที่สุด",
-    });
-    list.push({
-      title: "วางแผนโปรโมชั่น",
-      detail: "สร้างคูปองส่วนลดใหม่เพื่อกระตุ้นยอดขายช่วงสุดสัปดาห์",
-    });
-    return list;
-  }, [cards.lowStock]);
 
   return (
     <div className="space-y-12">
