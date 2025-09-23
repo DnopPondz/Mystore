@@ -4,11 +4,11 @@
 @tailwind utilities;
 
 :root {
-  --color-cream: #fff7f0;
-  --color-rose: #f06583;
-  --color-rose-dark: #db4568;
-  --color-gold: #f6c34a;
-  --color-choco: #4f2b1d;
+  --color-cream: #fffaf2;
+  --color-rose: #f5a25d;
+  --color-rose-dark: #d97a2c;
+  --color-gold: #f3d36b;
+  --color-choco: #5e4029;
   --layout-max: 1200px;
 }
 
@@ -33,7 +33,7 @@ a:hover {
 }
 
 ::selection {
-  background: rgba(240, 101, 131, 0.25);
+  background: rgba(245, 162, 93, 0.25);
 }
 
 label {

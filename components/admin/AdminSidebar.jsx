@@ -32,7 +32,7 @@ export default function AdminSidebar() {
             href={it.href}
             className={`group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold tracking-wide transition ${
               active
-                ? "bg-white text-[var(--color-rose-dark)] shadow-lg shadow-[#f0658333]"
+                ? "bg-white text-[var(--color-rose-dark)] shadow-lg shadow-[#f5a25d33]"
                 : "text-white/80 hover:bg-white/15 hover:text-white"
             }`}
           >
@@ -48,7 +48,7 @@ export default function AdminSidebar() {
     <>
       <button
         type="button"
-        className="fixed left-4 top-4 z-40 inline-flex items-center gap-2 rounded-full border border-white/40 bg-[var(--color-rose)]/90 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] backdrop-blur transition hover:bg-[var(--color-rose)] lg:hidden"
+        className="fixed left-4 top-4 z-40 inline-flex items-center gap-2 rounded-full border border-white/40 bg-[var(--color-rose)]/90 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] backdrop-blur transition hover:bg-[var(--color-rose)] lg:hidden"
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="admin-sidebar"
@@ -65,7 +65,7 @@ export default function AdminSidebar() {
 
       <aside
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-gradient-to-b from-[#f06583] via-[#f78da7] to-[#f6c34a] text-white shadow-[12px_0_40px_-16px_#f0658390] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-gradient-to-b from-[#f5a25d] via-[#f7c68b] to-[#f3d36b] text-white shadow-[12px_0_40px_-16px_#f5a25d90] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >

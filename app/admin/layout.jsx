@@ -5,7 +5,7 @@ export const metadata = { title: "Admin | Sweet Cravings" };
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="relative min-h-screen bg-[radial-gradient(circle_at_20%_20%,#ffe6f2,transparent_55%),radial-gradient(circle_at_80%_0%,#fff1dd,transparent_45%),radial-gradient(circle_at_100%_80%,#ffe9fb,transparent_35%)] text-[var(--color-choco)] lg:flex">
+    <div className="relative min-h-screen bg-[radial-gradient(circle_at_20%_20%,#ffe6f2,transparent_55%),radial-gradient(circle_at_80%_0%,#fff5e4,transparent_45%),radial-gradient(circle_at_100%_80%,#ffe9fb,transparent_35%)] text-[var(--color-choco)] lg:flex">
       <AdminSidebar />
 
       <main className="flex-1 lg:ml-0">
@@ -28,7 +28,7 @@ export default function AdminLayout({ children }) {
               </Link>
               <Link
                 href="/orders"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
               >
                 🛒 ดูร้านแบบลูกค้า
               </Link>

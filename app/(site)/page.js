@@ -26,9 +26,9 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#ffe0c7] via-[#ffe9d6] to-[#ffe0ec]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#fff3df] via-[#fde7b8] to-[#f6c08c]" />
         <div className="absolute -top-20 -right-10 h-72 w-72 rounded-full bg-[#fbd8a4]/60 blur-3xl" />
-        <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-[#f5a3c2]/40 blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-[#f3c0a6]/40 blur-3xl" />
 
         <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-20 grid gap-12 lg:grid-cols-2 items-center">
           <div className="space-y-6">
@@ -44,7 +44,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
                 href="#menu"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
               >
                 เลือกขนมเลย
               </a>
@@ -72,9 +72,9 @@ export default async function HomePage() {
           </div>
 
           <div className="relative flex justify-center">
-            <div className="relative h-[320px] w-[320px] sm:h-[360px] sm:w-[360px] rounded-[48%] bg-gradient-to-br from-white/80 via-white to-[#ffe9f2] shadow-2xl shadow-[#f0658322] flex items-center justify-center">
+            <div className="relative h-[320px] w-[320px] sm:h-[360px] sm:w-[360px] rounded-[48%] bg-gradient-to-br from-white/80 via-white to-[#fff4e6] shadow-2xl shadow-[#f5a25d22] flex items-center justify-center">
               <div className="absolute -top-8 right-8 h-16 w-16 rounded-full bg-[#fcd9b6] shadow-lg shadow-[#fcd9b6]/50" />
-              <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[#f8acc5] shadow-lg shadow-[#f8acc5]/50" />
+              <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[#f5be9a] shadow-lg shadow-[#f5be9a]/50" />
               <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-white/70" />
               <div className="text-center px-10">
                 <p className="text-lg font-semibold text-[var(--color-rose-dark)]">เมนูใหม่!</p>
@@ -109,17 +109,17 @@ export default async function HomePage() {
 
         <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.length === 0 ? (
-            <div className="col-span-full rounded-3xl bg-white/90 p-10 text-center text-[var(--color-choco)]/70 shadow-lg shadow-[#f0658320]">
+            <div className="col-span-full rounded-3xl bg-white/90 p-10 text-center text-[var(--color-choco)]/70 shadow-lg shadow-[#f5a25d20]">
               เมนูใหม่กำลังอบอยู่ รอสักครู่นะคะ 🍞
             </div>
           ) : (
             products.map((p) => (
               <div
                 key={p._id}
-                className="group relative flex h-full flex-col rounded-3xl bg-white/90 shadow-lg shadow-[#f0658320] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative flex h-full flex-col rounded-3xl bg-white/90 shadow-lg shadow-[#f5a25d20] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative overflow-hidden rounded-t-3xl">
-                  <div className="aspect-square w-full bg-gradient-to-br from-[#ffe5d0] via-[#fff] to-[#ffe6f5] flex items-center justify-center">
+                  <div className="aspect-square w-full bg-gradient-to-br from-[#ffe5d0] via-[#fff] to-[#fff2e2] flex items-center justify-center">
                     {p.images?.[0] ? (
                       <img
                         src={p.images[0]}
@@ -153,8 +153,8 @@ export default async function HomePage() {
       <section className="bg-white/70">
         <div className="max-w-screen-xl mx-auto px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-3">
           {["Chef มืออาชีพ", "ส่งเร็วใน 2 ชม.", "มีเมนูสุขภาพ"].map((title, idx) => (
-            <div key={title} className="rounded-3xl bg-white p-8 shadow-md shadow-[#f0658315]">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f06583] to-[#f6c34a] text-white text-xl shadow">
+            <div key={title} className="rounded-3xl bg-white p-8 shadow-md shadow-[#f5a25d15]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f5a25d] to-[#f3d36b] text-white text-xl shadow">
                 {idx === 0 ? "👩‍🍳" : idx === 1 ? "🚚" : "💚"}
               </div>
               <h3 className="mt-6 text-xl font-semibold text-[var(--color-choco)]">{title}</h3>

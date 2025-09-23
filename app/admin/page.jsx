@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl shadow-[#f0658320] backdrop-blur">
+      <section className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl shadow-[#f5a25d20] backdrop-blur">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 className="text-3xl font-semibold text-[var(--color-rose-dark)]">
@@ -93,26 +93,26 @@ export default function AdminDashboardPage() {
             title="ยอดขายวันนี้"
             value={`฿${cards.todaySales}`}
             caption="เปรียบเทียบจากยอดรวมที่ยืนยันแล้ว"
-            accent="from-[#f6c34a]/80 via-[#f78da7]/40 to-transparent"
+            accent="from-[#f3d36b]/80 via-[#f7c68b]/40 to-transparent"
           />
           <StatCard
             title="ออเดอร์ใหม่"
             value={cards.newOrders}
             caption="ตรวจสอบรายละเอียดก่อน 18:00 น. เพื่อจัดส่งทันวันถัดไป"
-            accent="from-[#f06583]/60 via-[#f6c34a]/40 to-transparent"
+            accent="from-[#f5a25d]/60 via-[#f3d36b]/40 to-transparent"
           />
           <StatCard
             title="สินค้าใกล้หมด"
             value={cards.lowStock}
             caption="เติมสต็อกล่วงหน้าเพื่อไม่ให้ยอดขายสะดุด"
-            accent="from-[#7cd1b8]/60 via-[#f6c34a]/40 to-transparent"
+            accent="from-[#7cd1b8]/60 via-[#f3d36b]/40 to-transparent"
           />
         </div>
       </section>
 
       <section className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          <div className="rounded-3xl border border-[#f7b267]/40 bg-[#fff7f0]/80 p-6 shadow-lg shadow-[#f0658318]">
+          <div className="rounded-3xl border border-[#f4c689]/40 bg-[#fff7f0]/80 p-6 shadow-lg shadow-[#f5a25d18]">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-xl font-semibold text-[var(--color-choco)]">
@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
               </div>
               <a
                 href="/api/admin/export/sales"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
               >
                 ⬇️ ดาวน์โหลด CSV
               </a>
@@ -132,7 +132,7 @@ export default function AdminDashboardPage() {
 
             <div className="mt-6 overflow-hidden rounded-2xl border border-white/60 bg-white/70">
               <table className="w-full text-sm text-[var(--color-choco)]/80">
-                <thead className="bg-[#fff1dd] text-[var(--color-choco)]/80">
+                <thead className="bg-[#fff5e4] text-[var(--color-choco)]/80">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium">สินค้า</th>
                     <th className="px-4 py-3 text-right font-medium">จำนวนที่ขาย</th>
@@ -160,7 +160,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-lg shadow-[#f0658318]">
+          <div className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-lg shadow-[#f5a25d18]">
             <h3 className="text-xl font-semibold text-[var(--color-choco)]">รายการงานด่วนวันนี้</h3>
             <p className="mt-1 text-sm text-[var(--color-choco)]/60">
               จัดลำดับความสำคัญเพื่อให้ทีมในครัวและหน้าร้านทำงานสอดคล้องกัน
@@ -177,7 +177,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f0658318]">
+          <div className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d18]">
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">โน้ตสำหรับทีมงาน</h3>
             <ul className="mt-4 space-y-3 text-sm text-[var(--color-choco)]/70">
               <li className="flex items-start gap-3">
@@ -223,7 +223,7 @@ export default function AdminDashboardPage() {
 
 function StatCard({ title, value, caption, accent }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/90 p-6 shadow-lg shadow-[#f0658314]">
+    <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/90 p-6 shadow-lg shadow-[#f5a25d14]">
       <div className={`pointer-events-none absolute -right-10 -top-16 h-36 w-36 rounded-full bg-gradient-to-br ${accent}`} />
       <div className="relative">
         <p className="text-sm font-medium text-[var(--color-choco)]/70">{title}</p>

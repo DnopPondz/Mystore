@@ -72,7 +72,7 @@ export default function NavBar() {
         </a>
       </div>
 
-      <nav className="bg-gradient-to-r from-[#ffe1c9] via-[#ffe9d6] to-[#ffe1ea] shadow-md">
+      <nav className="bg-gradient-to-r from-[#fff5e6] via-[#fde7b8] to-[#f6c08c] shadow-md">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between py-4">
             <Link href="/" className="flex items-center gap-2">

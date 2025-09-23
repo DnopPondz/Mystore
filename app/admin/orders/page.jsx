@@ -18,12 +18,12 @@ const statusLabels = {
 };
 
 const statusStyles = {
-  new: "bg-[#fff1dd] text-[var(--color-choco)]",
-  pending: "bg-[#f6c34a]/30 text-[var(--color-choco)]",
+  new: "bg-[#fff5e4] text-[var(--color-choco)]",
+  pending: "bg-[#f3d36b]/30 text-[var(--color-choco)]",
   shipping: "bg-[#7cd1b8]/30 text-[#1f7a65]",
   success: "bg-[#7cd1b8]/40 text-[#1f7a65]",
   cancel: "bg-rose-100 text-rose-500",
-  preparing: "bg-[#f6c34a]/30 text-[var(--color-choco)]",
+  preparing: "bg-[#f3d36b]/30 text-[var(--color-choco)]",
   shipped: "bg-[#7cd1b8]/30 text-[#1f7a65]",
   done: "bg-[#7cd1b8]/40 text-[#1f7a65]",
   cancelled: "bg-rose-100 text-rose-500",
@@ -43,7 +43,7 @@ const paymentStatusLabels = {
 
 const paymentStatusStyles = {
   unpaid: "bg-amber-100 text-amber-600",
-  verifying: "bg-[#fff1dd] text-[var(--color-choco)]",
+  verifying: "bg-[#fff5e4] text-[var(--color-choco)]",
   paid: "bg-emerald-100 text-emerald-600",
   invalid: "bg-rose-100 text-rose-600",
   cash: "bg-sky-100 text-sky-600",
@@ -146,7 +146,7 @@ export default function AdminOrdersPage() {
 
   if (loading)
     return (
-      <main className="rounded-3xl border border-white/80 bg-white/80 px-6 py-10 text-[var(--color-choco)]/70 shadow-lg shadow-[#f0658314]">
+      <main className="rounded-3xl border border-white/80 bg-white/80 px-6 py-10 text-[var(--color-choco)]/70 shadow-lg shadow-[#f5a25d14]">
         กำลังโหลดคำสั่งซื้อ...
       </main>
     );
@@ -160,7 +160,7 @@ export default function AdminOrdersPage() {
 
   return (
     <main className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f0658314] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">คำสั่งซื้อทั้งหมด</h2>
@@ -185,7 +185,7 @@ export default function AdminOrdersPage() {
             </label>
             <a
               href="/api/admin/export/orders"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
             >
               ⬇️ ส่งออก CSV
             </a>
@@ -219,7 +219,7 @@ export default function AdminOrdersPage() {
             return (
               <article
                 key={order._id}
-                className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-[#f0658314] backdrop-blur"
+                className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-[#f5a25d14] backdrop-blur"
               >
                 <header className="flex flex-col gap-3 border-b border-white/60 pb-4 md:flex-row md:items-center md:justify-between">
                   <div>
@@ -244,7 +244,7 @@ export default function AdminOrdersPage() {
                         className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                           !canAccept || isUpdating
                             ? "cursor-not-allowed bg-[var(--color-rose)]/20 text-[var(--color-choco)]/40"
-                            : "bg-[var(--color-rose)] text-white shadow shadow-[#f0658333] hover:bg-[var(--color-rose-dark)]"
+                            : "bg-[var(--color-rose)] text-white shadow shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
                         }`}
                         title={
                           canAccept
@@ -396,7 +396,7 @@ export default function AdminOrdersPage() {
           onClick={() => setSelectedSlip(null)}
         >
           <div
-            className="max-h-full w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white shadow-2xl shadow-[#f0658330]"
+            className="max-h-full w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white shadow-2xl shadow-[#f5a25d30]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-white/60 bg-[var(--color-rose)]/10 px-5 py-3 text-sm font-semibold text-[var(--color-choco)]">

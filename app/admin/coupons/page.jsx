@@ -124,7 +124,7 @@ export default function AdminCouponsPage() {
 
   return (
     <main className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f0658314] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">คูปองและโปรโมชัน</h2>
@@ -141,7 +141,7 @@ export default function AdminCouponsPage() {
               className="w-52 rounded-full border border-[var(--color-rose)]/30 bg-white/70 px-4 py-2 text-sm text-[var(--color-choco)] shadow-inner focus:border-[var(--color-rose)] focus:outline-none"
             />
             <button
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
               onClick={startCreate}
             >
               🎉 สร้างคูปองใหม่
@@ -152,12 +152,12 @@ export default function AdminCouponsPage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <CouponStat label="คูปองทั้งหมด" value={filtered.length} />
           <CouponStat label="เปิดใช้งาน" value={activeCount} tone="from-[#7cd1b8]/30" />
-          <CouponStat label="ส่วนลด %" value={percentCount} tone="from-[#f6c34a]/30" />
-          <CouponStat label="ส่วนลดเป็นจำนวน" value={amountCount} tone="from-[#f78da7]/30" />
+          <CouponStat label="ส่วนลด %" value={percentCount} tone="from-[#f3d36b]/30" />
+          <CouponStat label="ส่วนลดเป็นจำนวน" value={amountCount} tone="from-[#f7c68b]/30" />
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[#f0658318]">
+      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[#f5a25d18]">
         <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">รายการคูปอง</h3>
@@ -187,7 +187,7 @@ export default function AdminCouponsPage() {
               </thead>
               <tbody>
                 {filtered.map((coupon) => (
-                  <tr key={coupon._id} className="rounded-3xl bg-white/80 shadow shadow-[#f0658312]">
+                  <tr key={coupon._id} className="rounded-3xl bg-white/80 shadow shadow-[#f5a25d12]">
                     <td className="px-4 py-4 font-semibold text-[var(--color-choco)]">{coupon.code}</td>
                     <td className="px-4 py-4 text-[var(--color-choco)]/70">{coupon.type}</td>
                     <td className="px-4 py-4 text-[var(--color-choco)]">
@@ -236,7 +236,7 @@ export default function AdminCouponsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-2xl shadow-[#f0658330]">
+          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-2xl shadow-[#f5a25d30]">
             <div className="flex items-center justify-between border-b border-white/60 bg-[var(--color-rose)]/10 px-6 py-4">
               <div>
                 <h3 className="text-lg font-semibold text-[var(--color-choco)]">
@@ -323,7 +323,7 @@ export default function AdminCouponsPage() {
                   ยกเลิก
                 </button>
                 <button
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
                   disabled={saving}
                 >
                   {saving ? "กำลังบันทึก..." : editing?._id ? "บันทึกการแก้ไข" : "สร้างคูปอง"}

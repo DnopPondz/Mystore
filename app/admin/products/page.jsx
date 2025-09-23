@@ -152,7 +152,7 @@ export default function AdminProductsPage() {
 
   return (
     <main className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f0658314] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">จัดการสินค้า</h2>
@@ -174,7 +174,7 @@ export default function AdminProductsPage() {
               </span>
             </div>
             <button
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
               onClick={startCreate}
             >
               ➕ เพิ่มสินค้าใหม่
@@ -183,14 +183,14 @@ export default function AdminProductsPage() {
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatBubble label="สินค้าทั้งหมด" value={filteredItems.length} tone="from-[#f6c34a]/30 via-[#f78da7]/20 to-transparent" />
-          <StatBubble label="กำลังขาย" value={activeCount} tone="from-[#7cd1b8]/30 via-[#f6c34a]/20 to-transparent" />
-          <StatBubble label="ซ่อนอยู่" value={hiddenCount} tone="from-[#f06583]/30 via-[#f78da7]/20 to-transparent" />
-          <StatBubble label="รอดำเนินการ" value={loading ? "กำลังโหลด" : "พร้อมจัดการ"} tone="from-[#c4b5fd]/30 via-[#f78da7]/10 to-transparent" />
+          <StatBubble label="สินค้าทั้งหมด" value={filteredItems.length} tone="from-[#f3d36b]/30 via-[#f7c68b]/20 to-transparent" />
+          <StatBubble label="กำลังขาย" value={activeCount} tone="from-[#7cd1b8]/30 via-[#f3d36b]/20 to-transparent" />
+          <StatBubble label="ซ่อนอยู่" value={hiddenCount} tone="from-[#f5a25d]/30 via-[#f7c68b]/20 to-transparent" />
+          <StatBubble label="รอดำเนินการ" value={loading ? "กำลังโหลด" : "พร้อมจัดการ"} tone="from-[#c4b5fd]/30 via-[#f7c68b]/10 to-transparent" />
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[#f0658318]">
+      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[#f5a25d18]">
         <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h3>
@@ -221,10 +221,10 @@ export default function AdminProductsPage() {
               </thead>
               <tbody>
                 {filteredItems.map((p) => (
-                  <tr key={p._id} className="rounded-3xl bg-white/80 shadow shadow-[#f0658312]">
+                  <tr key={p._id} className="rounded-3xl bg-white/80 shadow shadow-[#f5a25d12]">
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-16 w-16 overflow-hidden rounded-2xl bg-[#fff1dd]">
+                        <div className="h-16 w-16 overflow-hidden rounded-2xl bg-[#fff5e4]">
                           {p.images?.[0] ? (
                             <img src={p.images[0]} alt={p.title} className="h-full w-full object-cover" />
                           ) : (
@@ -284,7 +284,7 @@ export default function AdminProductsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-2xl shadow-[#f0658330]">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-2xl shadow-[#f5a25d30]">
             <div className="flex items-center justify-between border-b border-white/60 bg-[var(--color-rose)]/10 px-6 py-4">
               <div>
                 <h3 className="text-lg font-semibold text-[var(--color-choco)]">
@@ -376,7 +376,7 @@ export default function AdminProductsPage() {
                 </Field>
                 <Field label="รูปสินค้า">
                   <div className="flex flex-col gap-4 sm:flex-row">
-                    <div className="h-28 w-28 overflow-hidden rounded-2xl border border-white/70 bg-[#fff1dd] shadow-inner">
+                    <div className="h-28 w-28 overflow-hidden rounded-2xl border border-white/70 bg-[#fff5e4] shadow-inner">
                       {form.image ? (
                         <img src={form.image} alt="preview" className="h-full w-full object-cover" />
                       ) : (
@@ -419,7 +419,7 @@ export default function AdminProductsPage() {
                     ยกเลิก
                   </button>
                   <button
-                    className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={saving}
                   >
                     {saving ? "กำลังบันทึก..." : isEdit ? "บันทึกการแก้ไข" : "สร้างสินค้า"}
