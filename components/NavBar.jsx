@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก" },
+  { href: "/about", label: "เกี่ยวกับเรา" },
+  { href: "/preorder", label: "สั่งทำพิเศษ" },
   { href: "/cart", label: "ตะกร้า" },
   { href: "/orders", label: "คำสั่งซื้อ" },
 ];

@@ -41,7 +41,7 @@ export default async function HomePage() {
             <p className="text-base sm:text-lg text-[var(--color-choco)]/80 max-w-xl">
               ขนมปังหอมกรุ่น ครัวซองต์กรอบนอกนุ่มใน และเค้กสุดละมุน พร้อมเสิร์ฟทุกเช้าเพื่อเติมเต็มช่วงเวลาพิเศษให้ครอบครัวของคุณ
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
                 href="#menu"
                 className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] hover:bg-[var(--color-rose-dark)]"
@@ -49,8 +49,14 @@ export default async function HomePage() {
                 เลือกขนมเลย
               </a>
               <a
-                href="/checkout"
+                href="/preorder"
                 className="inline-flex items-center justify-center rounded-full border border-white/60 bg-white/70 px-6 py-3 text-sm font-semibold text-[var(--color-rose-dark)] shadow hover:bg-white"
+              >
+                สั่งทำพิเศษ
+              </a>
+              <a
+                href="/checkout"
+                className="inline-flex items-center justify-center rounded-full border border-white/0 bg-white/80 px-6 py-3 text-sm font-semibold text-[var(--color-choco)] shadow hover:bg-white"
               >
                 สั่งด่วนภายในวันเดียว
               </a>
