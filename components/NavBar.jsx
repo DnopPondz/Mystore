@@ -28,6 +28,29 @@ export default function NavBar() {
     setMenuOpen(false);
   }, [path]);
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      window.addEventListener("keydown", onKeyDown);
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   const link = (item) => {
     const targetHref =
       item.requiresAuth && status !== "authenticated"
@@ -38,11 +61,12 @@ export default function NavBar() {
       <Link
         key={item.href}
         href={targetHref}
-        className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+        className={`flex w-full items-center justify-between gap-3 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
             ? "bg-white/80 text-[var(--color-rose)] shadow"
             : "text-[var(--color-choco)] hover:text-[var(--color-rose)]"
         }`}
+        onClick={() => setMenuOpen(false)}
       >
         {item.icon ? (
           <>
@@ -51,10 +75,11 @@ export default function NavBar() {
               alt={item.iconAlt || item.label}
               width={24}
               height={24}
-              className="h-6 w-6"
+              className="h-6 w-6 flex-shrink-0"
               priority={item.href === "/cart"}
             />
-            <span className="sr-only">{item.label}</span>
+            <span className="text-sm font-medium md:hidden">{item.label}</span>
+            <span className="sr-only md:not-sr-only md:inline">{item.label}</span>
           </>
         ) : (
           item.label
@@ -64,19 +89,25 @@ export default function NavBar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 backdrop-blur bg-[var(--color-cream)]/70">
-      <div className="hidden md:flex items-center justify-between px-6 py-2 text-xs text-[var(--color-choco)]/80 max-w-screen-xl mx-auto">
-        <span>อบสดใหม่ทุกวัน • ส่งฟรีในเมืองเมื่อสั่งครบ ฿800</span>
-        <a href="tel:021234567" className="font-medium hover:text-[var(--color-rose)]">
+    <header className="sticky top-0 z-30 bg-[var(--color-cream)]/80 backdrop-blur">
+      <div className="hidden md:flex items-center justify-between border-b border-white/50 px-6 py-2 text-xs text-[var(--color-choco)]/80 max-w-screen-xl mx-auto">
+        <span className="tracking-wide">อบสดใหม่ทุกวัน • ส่งฟรีในเมืองเมื่อสั่งครบ ฿800</span>
+        <a
+          href="tel:021234567"
+          className="font-medium transition-colors hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        >
           โทร. 02-123-4567
         </a>
       </div>
 
       <nav className="bg-gradient-to-r from-[#fff5e6] via-[#fde7b8] to-[#f6c08c] shadow-md">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between py-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl">
+          <div className="flex items-center justify-between gap-6 py-4">
+            <Link
+              href="/"
+              className="group flex items-center gap-3 rounded-full bg-white/70 px-3 py-1 transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
+            >
+              <div className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
                 🥐
               </div>
               <span className="text-xl sm:text-2xl font-extrabold text-[var(--color-rose-dark)] tracking-tight">
@@ -85,10 +116,12 @@ export default function NavBar() {
             </Link>
 
             <button
-              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[var(--color-rose-dark)] shadow transition hover:bg-white"
+              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-[var(--color-rose-dark)] shadow transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               type="button"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,8 +145,10 @@ export default function NavBar() {
               </svg>
             </button>
 
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2 rounded-full bg-white/70 px-2 py-1 shadow-inner">
               {navItems.map((item) => link(item))}
+              </div>
               {status === "loading" && (
                 <span className="text-xs text-[var(--color-choco)]/70">กำลังโหลด...</span>
               )}
@@ -122,13 +157,13 @@ export default function NavBar() {
                 <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="px-4 py-2 rounded-full text-sm font-medium bg-white/70 text-[var(--color-rose-dark)] shadow hover:bg-white"
+                    className="px-4 py-2 rounded-full text-sm font-medium bg-white/80 text-[var(--color-rose-dark)] shadow transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                   >
                     เข้าสู่ระบบ
                   </Link>
                   <Link
                     href="/register"
-                    className="px-4 py-2 rounded-full text-sm font-medium text-white bg-[var(--color-rose)] shadow-lg hover:bg-[var(--color-rose-dark)]"
+                    className="px-4 py-2 rounded-full text-sm font-medium text-white bg-[var(--color-rose)] shadow-lg transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                   >
                     สมัครสมาชิก
                   </Link>
@@ -140,7 +175,7 @@ export default function NavBar() {
                   {session?.user?.role === "admin" && (
                     <Link
                       href="/admin"
-                      className="px-4 py-2 rounded-full bg-white/80 text-[var(--color-rose-dark)] shadow hover:bg-white"
+                      className="px-4 py-2 rounded-full bg-white/80 text-[var(--color-rose-dark)] shadow transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                     >
                       จัดการร้าน
                     </Link>
@@ -150,7 +185,7 @@ export default function NavBar() {
                   </span>
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="text-[var(--color-rose-dark)] underline decoration-dotted"
+                    className="text-[var(--color-rose-dark)] underline decoration-dotted transition hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                   >
                     ออกจากระบบ
                   </button>
@@ -160,13 +195,27 @@ export default function NavBar() {
           </div>
         </div>
 
+        {menuOpen && (
+          <button
+            type="button"
+            className="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm md:hidden"
+            aria-hidden="true"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+
         <div
-          className={`md:hidden transition-all duration-200 ${
-            menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden bg-white/80 backdrop-blur`}
+          id="mobile-menu"
+          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl bg-white/90 p-6 text-sm text-[var(--color-choco)] shadow-2xl backdrop-blur transition-transform duration-200 ${
+            menuOpen ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
+          }`}
         >
-          <div className="px-6 pb-6 flex flex-col gap-3 text-sm text-[var(--color-choco)]">
-            {navItems.map((item) => link(item))}
+          <div className="flex flex-col gap-4">
+            {navItems.map((item) => (
+              <div key={item.href} className="flex">
+                {link(item)}
+              </div>
+            ))}
             {status === "loading" && (
               <span className="text-xs text-[var(--color-choco)]/70">กำลังโหลด...</span>
             )}
@@ -174,13 +223,13 @@ export default function NavBar() {
               <div className="flex flex-col gap-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 rounded-full font-medium bg-white text-[var(--color-rose-dark)] shadow"
+                  className="px-4 py-2 rounded-full font-medium bg-white text-[var(--color-rose-dark)] shadow transition hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
                 >
                   เข้าสู่ระบบ
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-full font-medium text-white bg-[var(--color-rose)] shadow"
+                  className="px-4 py-2 rounded-full font-medium text-white bg-[var(--color-rose)] shadow transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                 >
                   สมัครสมาชิก
                 </Link>
@@ -191,7 +240,7 @@ export default function NavBar() {
                 {session?.user?.role === "admin" && (
                   <Link
                     href="/admin"
-                    className="px-4 py-2 rounded-full font-medium bg-white text-[var(--color-rose-dark)] shadow"
+                    className="px-4 py-2 rounded-full font-medium bg-white text-[var(--color-rose-dark)] shadow transition hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
                   >
                     จัดการร้าน
                   </Link>
@@ -201,7 +250,7 @@ export default function NavBar() {
                 </span>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="text-left text-[var(--color-rose-dark)] underline"
+                  className="text-left text-[var(--color-rose-dark)] underline transition hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
                 >
                   ออกจากระบบ
                 </button>
