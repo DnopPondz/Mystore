@@ -5,14 +5,17 @@ import { promptPayPayload } from "@/lib/promptpay";
 import { getPaymentConfig } from "@/lib/paymentConfig";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { serializeOrder } from "@/lib/serializeOrder";
 
 const ALLOWED_METHODS = ["promptpay", "bank"];
 
 function buildResponse(order, method) {
   const total = Number(order.total || 0);
   const { promptpayId, bankAccount } = getPaymentConfig();
+  const sanitized = serializeOrder(order) || {};
+  const normalizedMethod = sanitized.payment?.method || method;
 
-  const promptpay = method === "promptpay" && total > 0
+  const promptpay = normalizedMethod === "promptpay" && total > 0
     ? {
         payload: promptPayPayload({ id: promptpayId, amount: total }),
         amount: total,
@@ -21,12 +24,12 @@ function buildResponse(order, method) {
 
   return {
     ok: 1,
-    method,
+    method: normalizedMethod,
     orderId: String(order._id),
     orderPreview: buildPreview(order),
     promptpay,
-    bankAccount: method === "bank" ? bankAccount : null,
-    paymentStatus: order.payment?.status || (total > 0 ? "pending" : "paid"),
+    bankAccount: normalizedMethod === "bank" ? bankAccount : null,
+    paymentStatus: sanitized.payment?.status || (total > 0 ? "unpaid" : "paid"),
   };
 }
 
@@ -106,14 +109,15 @@ export async function PATCH(req, { params }) {
     const { order, error } = await loadOrderForUser(orderId);
     if (error) return error;
 
-    if ((order.payment?.status || "pending") === "paid") {
-      return NextResponse.json({ error: "คำสั่งซื้อชำระเงินแล้ว ไม่สามารถเปลี่ยนวิธีได้" }, { status: 400 });
+    const current = serializeOrder(order)?.payment?.status || (order.total > 0 ? "unpaid" : "paid");
+    if (["paid", "cash", "verifying"].includes(current)) {
+      return NextResponse.json({ error: "คำสั่งซื้ออยู่ระหว่างหรือเสร็จสิ้นการชำระเงิน ไม่สามารถเปลี่ยนวิธีได้" }, { status: 400 });
     }
 
     order.payment = {
       ...(order.payment?.toObject ? order.payment.toObject() : order.payment),
       method,
-      status: order.total > 0 ? "pending" : "paid",
+      status: order.total > 0 ? "unpaid" : "paid",
       ref: "",
       amountPaid: 0,
       slip: "",

@@ -3,6 +3,17 @@ import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { useSession } from "next-auth/react";
 
+const normalizeStatus = (status) => {
+  const map = { preparing: "pending", shipped: "shipping", done: "success", cancelled: "cancel" };
+  return map[status] || status;
+};
+
+const normalizePaymentStatus = (status, total) => {
+  const map = { pending: "unpaid", failed: "invalid" };
+  const fallback = Number(total || 0) > 0 ? "unpaid" : "paid";
+  return map[status] || status || fallback;
+};
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,8 +70,12 @@ export default function OrdersPage() {
 
   const statusLabel = useMemo(
     () => ({
-      new: "รอจัดเตรียม",
-      preparing: "กำลังจัดเตรียม",
+      new: "คำสั่งซื้อใหม่",
+      pending: "กำลังเตรียมสินค้า",
+      shipping: "กำลังจัดส่ง",
+      success: "จัดส่งสำเร็จ",
+      cancel: "ยกเลิก",
+      preparing: "กำลังเตรียมสินค้า",
       shipped: "กำลังจัดส่ง",
       done: "จัดส่งสำเร็จ",
       cancelled: "ยกเลิก",
@@ -70,9 +85,13 @@ export default function OrdersPage() {
 
   const paymentLabel = useMemo(
     () => ({
-      pending: "รอยืนยัน",
+      unpaid: "ยังไม่จ่าย",
+      verifying: "รอยืนยัน",
       paid: "ชำระแล้ว",
-      failed: "ไม่สำเร็จ",
+      invalid: "ไม่ถูกต้อง",
+      cash: "เงินสด",
+      pending: "ยังไม่จ่าย",
+      failed: "ไม่ถูกต้อง",
     }),
     []
   );
@@ -160,9 +179,10 @@ export default function OrdersPage() {
             {orders.map((o) => {
               const orderId = o?.id || o?._id || "";
               const createdAt = o?.createdAt ? new Date(o.createdAt) : null;
-              const paymentStatus = o?.payment?.status || "pending";
+              const normalizedStatus = normalizeStatus(o?.status);
+              const paymentStatus = normalizePaymentStatus(o?.payment?.status, o?.total);
               const displayPayment = paymentLabel[paymentStatus] || paymentStatus;
-              const displayStatus = statusLabel[o?.status] || o?.status;
+              const displayStatus = statusLabel[normalizedStatus] || normalizedStatus;
 
               return (
                 <Link
@@ -191,9 +211,9 @@ export default function OrdersPage() {
                       <span>สถานะ</span>
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          o.status === "cancelled"
+                          normalizedStatus === "cancel"
                             ? "bg-rose-100 text-rose-600"
-                            : o.status === "done"
+                            : normalizedStatus === "success"
                             ? "bg-emerald-100 text-emerald-600"
                             : "bg-[#ecfdf5] text-emerald-600"
                         }`}
@@ -207,8 +227,12 @@ export default function OrdersPage() {
                         className={`rounded-full px-2 py-1 font-semibold ${
                           paymentStatus === "paid"
                             ? "bg-emerald-100 text-emerald-600"
-                            : paymentStatus === "failed"
+                            : paymentStatus === "cash"
+                            ? "bg-sky-100 text-sky-600"
+                            : paymentStatus === "invalid"
                             ? "bg-rose-100 text-rose-600"
+                            : paymentStatus === "verifying"
+                            ? "bg-[#fff1dd] text-[var(--color-choco)]"
                             : "bg-amber-100 text-amber-600"
                         }`}
                       >
@@ -225,9 +249,17 @@ export default function OrdersPage() {
                       </span>
                     ))}
                   </div>
-                  {paymentStatus === "pending" ? (
+                  {paymentStatus === "unpaid" ? (
                     <div className="mt-4 text-xs font-semibold text-[var(--color-rose-dark)]/80">
                       แตะเพื่อแนบสลิปและยืนยันการชำระเงิน
+                    </div>
+                  ) : paymentStatus === "verifying" ? (
+                    <div className="mt-4 text-xs font-semibold text-amber-600">
+                      รอทีมงานตรวจสอบสลิปที่ส่งมา
+                    </div>
+                  ) : paymentStatus === "invalid" ? (
+                    <div className="mt-4 text-xs font-semibold text-rose-600">
+                      ยอดโอนไม่ถูกต้อง กรุณาอัปโหลดสลิปใหม่
                     </div>
                   ) : null}
                 </Link>

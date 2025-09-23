@@ -13,11 +13,11 @@ export default function HookPage({ searchParams }) {
         <div className="max-w-lg w-full rounded-3xl bg-white/95 p-10 text-center shadow-2xl shadow-[#f0658320]">
           <div className="space-y-3">
             <span className="inline-flex items-center gap-2 rounded-full bg-[#ecfdf5] px-4 py-2 text-xs font-semibold text-emerald-600">
-              ✅ การสั่งซื้อสำเร็จ
+              ✅ รับคำสั่งซื้อแล้ว
             </span>
             <h1 className="text-3xl font-bold text-[var(--color-rose-dark)]">ขอบคุณที่สั่ง Sweet Cravings</h1>
             <p className="text-sm text-[var(--color-choco)]/70">
-              เราได้รับสลิปและยืนยันการชำระเงินเรียบร้อยแล้ว ทีมงานกำลังจัดเตรียมสินค้าเพื่อจัดส่งให้คุณโดยเร็วที่สุด
+              เราได้รับสลิปและรายละเอียดการชำระเงินแล้ว ทีมงานจะตรวจสอบและยืนยันสถานะให้โดยเร็วที่สุด
             </p>
             {orderId ? (
               <p className="text-xs font-medium text-[var(--color-choco)]/60">รหัสคำสั่งซื้อของคุณ: {orderId}</p>

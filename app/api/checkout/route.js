@@ -67,7 +67,7 @@ export async function POST(req) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id || null;
 
-    const paymentStatus = total > 0 ? "pending" : "paid";
+    const paymentStatus = total > 0 ? "unpaid" : "paid";
     const { promptpayId, bankAccount: configuredBank } = getPaymentConfig();
 
     const order = await Order.create({
@@ -90,7 +90,7 @@ export async function POST(req) {
         postcode: String(shipping?.postcode || ""),
         note: String(shipping?.note || ""),
       },
-      payment: { method, status: paymentStatus, ref: "" },
+      payment: { method, status: paymentStatus, ref: "", amountPaid: 0, confirmedAt: null },
       status: "new",
     });
 

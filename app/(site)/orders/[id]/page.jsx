@@ -18,6 +18,17 @@ function fmt(n) {
   return Number(n || 0).toLocaleString("th-TH");
 }
 
+function normalizeStatus(status) {
+  const map = { preparing: "pending", shipped: "shipping", done: "success", cancelled: "cancel" };
+  return map[status] || status;
+}
+
+function normalizePaymentStatus(status, total) {
+  const map = { pending: "unpaid", failed: "invalid" };
+  const fallback = Number(total || 0) > 0 ? "unpaid" : "paid";
+  return map[status] || status || fallback;
+}
+
 export default function OrderDetailPage() {
   const params = useParams();
   const id = params?.id;
@@ -82,8 +93,12 @@ export default function OrderDetailPage() {
 
   const statusLabel = useMemo(
     () => ({
-      new: "รอจัดเตรียม",
-      preparing: "กำลังจัดเตรียม",
+      new: "คำสั่งซื้อใหม่",
+      pending: "กำลังเตรียมสินค้า",
+      shipping: "กำลังจัดส่ง",
+      success: "จัดส่งสำเร็จ",
+      cancel: "ยกเลิก",
+      preparing: "กำลังเตรียมสินค้า",
       shipped: "กำลังจัดส่ง",
       done: "จัดส่งสำเร็จ",
       cancelled: "ยกเลิก",
@@ -93,9 +108,13 @@ export default function OrderDetailPage() {
 
   const paymentLabel = useMemo(
     () => ({
-      pending: "รอยืนยัน",
+      unpaid: "ยังไม่จ่าย",
+      verifying: "รอยืนยัน",
       paid: "ชำระแล้ว",
-      failed: "ไม่สำเร็จ",
+      invalid: "ไม่ถูกต้อง",
+      cash: "เงินสด",
+      pending: "ยังไม่จ่าย",
+      failed: "ไม่ถูกต้อง",
     }),
     []
   );
@@ -109,22 +128,24 @@ export default function OrderDetailPage() {
   );
 
   const orderIdSafe = order?.id || order?._id || "";
-  const paymentStatus = order?.payment?.status || "pending";
-  const isPaid = paymentStatus === "paid";
+  const paymentStatus = normalizePaymentStatus(order?.payment?.status, order?.total);
+  const isPaid = ["paid", "cash"].includes(paymentStatus);
   const amountDue = Number(order?.total || 0);
+  const awaitingReview = paymentStatus === "verifying";
   const needsAmountInput = amountDue > 0;
 
   useEffect(() => {
     if (!order) return;
     setPaymentMethod(order.payment?.method || "promptpay");
-    if (order.payment?.status !== "paid") {
+    const normalized = normalizePaymentStatus(order.payment?.status, order?.total);
+    if (!["paid", "cash"].includes(normalized)) {
       if (needsAmountInput) {
         setTransferAmount(amountDue.toFixed(2));
       } else {
         setTransferAmount("");
       }
     }
-    if (order.payment?.status === "paid") {
+    if (["paid", "cash"].includes(normalized)) {
       setSlipData("");
       setSlipName("");
       setReference("");
@@ -192,7 +213,7 @@ export default function OrderDetailPage() {
           payment: {
             ...prev.payment,
             method: data.method || nextMethod,
-            status: data.paymentStatus || (Number(prev.total || 0) > 0 ? "pending" : "paid"),
+            status: data.paymentStatus || (Number(prev.total || 0) > 0 ? "unpaid" : "paid"),
           },
         };
       });
@@ -274,7 +295,7 @@ export default function OrderDetailPage() {
       if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถยืนยันการชำระเงินได้");
 
       await reloadOrder();
-      setActionSuccess("ยืนยันการชำระเงินเรียบร้อยแล้ว");
+      setActionSuccess("ส่งข้อมูลการชำระเงินเรียบร้อยแล้ว กรุณารอการตรวจสอบ");
       setSlipData("");
       setSlipName("");
       setReference("");
@@ -321,6 +342,20 @@ export default function OrderDetailPage() {
   if (err) return <main className="max-w-3xl mx-auto px-6 py-10 text-rose-600">{err}</main>;
   if (!order) return null;
 
+  const normalizedStatus = normalizeStatus(order.status);
+  const statusText = statusLabel[normalizedStatus] || normalizedStatus;
+  const paymentText = paymentLabel[paymentStatus] || paymentStatus;
+  const paymentBadgeClass =
+    paymentStatus === "paid"
+      ? "bg-emerald-100 text-emerald-600"
+      : paymentStatus === "cash"
+      ? "bg-sky-100 text-sky-600"
+      : paymentStatus === "invalid"
+      ? "bg-rose-100 text-rose-600"
+      : paymentStatus === "verifying"
+      ? "bg-[#fff1dd] text-[var(--color-choco)]"
+      : "bg-amber-100 text-amber-600";
+
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#ffe9f2] via-[#fff7f0] to-[#ffe1d0]" />
@@ -351,35 +386,31 @@ export default function OrderDetailPage() {
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">สถานะคำสั่งซื้อ</h2>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  order.status === "cancelled"
+                  normalizedStatus === "cancel"
                     ? "bg-rose-100 text-rose-600"
-                    : order.status === "done"
+                    : normalizedStatus === "success"
                     ? "bg-emerald-100 text-emerald-600"
                     : "bg-[#ecfdf5] text-emerald-600"
                 }`}
               >
-                {statusLabel[order.status] || order.status}
+                {statusText}
               </span>
             </header>
             <div className="mt-4 grid gap-3 text-sm text-[var(--color-choco)]/80">
               <div className="flex items-center justify-between rounded-2xl bg-[#fff6ee] px-4 py-3">
                 <span>การชำระเงิน</span>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    order.payment?.status === "paid"
-                      ? "bg-emerald-100 text-emerald-600"
-                      : order.payment?.status === "failed"
-                      ? "bg-rose-100 text-rose-600"
-                      : "bg-amber-100 text-amber-600"
-                  }`}
-                >
-                  {paymentLabel[order.payment?.status] || order.payment?.status}
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${paymentBadgeClass}`}>
+                  {paymentText}
                 </span>
               </div>
               <div className="flex items-center justify-between rounded-2xl bg-[#fef9ff] px-4 py-3">
                 <span>ช่องทาง</span>
                 <span className="font-medium text-[var(--color-rose-dark)]">
-                  {order.payment?.method === "bank" ? "โอนผ่านธนาคาร" : "พร้อมเพย์"}
+                  {paymentStatus === "cash"
+                    ? "เงินสดหน้างาน"
+                    : order.payment?.method === "bank"
+                    ? "โอนผ่านธนาคาร"
+                    : "พร้อมเพย์"}
                 </span>
               </div>
               {typeof order.payment?.amountPaid === "number" ? (
@@ -414,9 +445,19 @@ export default function OrderDetailPage() {
                 <div>
                   <h3 className="text-base font-semibold text-[var(--color-choco)]">ชำระเงินสำหรับคำสั่งซื้อนี้</h3>
                   <p className="mt-1 text-xs text-[var(--color-choco)]/70">
-                    เลือกช่องทางที่สะดวก แนบสลิป แล้วระบบจะอัปเดตสถานะเป็น “ชำระแล้ว” ทันที
+                    เลือกช่องทางที่สะดวก แนบสลิป แล้วระบบจะบันทึกข้อมูลพร้อมรอทีมงานตรวจสอบให้โดยอัตโนมัติ
                   </p>
                 </div>
+
+                {awaitingReview ? (
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-700">
+                    สลิปของคุณอยู่ระหว่างการตรวจสอบ หากต้องการแก้ไขสามารถอัปโหลดใหม่ได้เลย
+                  </div>
+                ) : paymentStatus === "invalid" ? (
+                  <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700">
+                    ยอดโอนที่แจ้งมาไม่ตรงกับยอดที่ต้องชำระ กรุณาแนบสลิปใหม่อีกครั้ง
+                  </div>
+                ) : null}
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {paymentOptions.map((option) => {
@@ -426,7 +467,7 @@ export default function OrderDetailPage() {
                         key={option.value}
                         type="button"
                         onClick={() => handleSelectMethod(option.value)}
-                        disabled={updatingMethod || confirming}
+                        disabled={updatingMethod || confirming || awaitingReview || paymentStatus === "cash"}
                         className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
                           active
                             ? "border-[var(--color-rose)] bg-[#fff1f5] text-[var(--color-rose-dark)] shadow"
@@ -499,7 +540,13 @@ export default function OrderDetailPage() {
 
                 <button
                   onClick={confirmPayment}
-                  disabled={confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)}
+                  disabled={
+                    confirming ||
+                    updatingMethod ||
+                    loadingPayment ||
+                    !slipData ||
+                    (needsAmountInput && !transferAmount)
+                  }
                   className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
                     confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)
                       ? "cursor-not-allowed bg-[#f3b6c7]"

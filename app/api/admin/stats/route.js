@@ -15,13 +15,16 @@ export async function GET() {
 
   const [todayAgg, newOrdersCount, lowStockCount, topProducts] = await Promise.all([
     Order.aggregate([
-      { $match: { createdAt: { $gte: todayStart }, status: { $ne: "cancelled" } } },
+      { $match: { createdAt: { $gte: todayStart }, status: { $nin: ["cancel", "cancelled"] } } },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]),
-    Order.countDocuments({ createdAt: { $gte: todayStart }, status: { $ne: "cancelled" } }),
+    Order.countDocuments({
+      createdAt: { $gte: todayStart },
+      status: { $in: ["new", "pending", "preparing"] },
+    }),
     Product.countDocuments({ stock: { $lt: 5 } }),
     Order.aggregate([
-      { $match: { status: { $ne: "cancelled" } } },
+      { $match: { status: { $nin: ["cancel", "cancelled"] } } },
       { $unwind: "$items" },
       { $group: { _id: "$items.title", qty: { $sum: "$items.qty" }, revenue: { $sum: { $multiply: ["$items.price", "$items.qty"] } } } },
       { $sort: { qty: -1 } },

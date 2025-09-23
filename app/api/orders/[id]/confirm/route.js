@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Order } from "@/models/Order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { serializeOrder } from "@/lib/serializeOrder";
 
 function isValidDataUrl(str) {
   if (typeof str !== "string") return false;
@@ -77,6 +78,11 @@ export async function POST(req, { params }) {
     }
 
     const expected = Number(order.total || 0);
+    const normalizedStatus = serializeOrder(order)?.payment?.status || (expected > 0 ? "unpaid" : "paid");
+    if (["paid", "cash"].includes(normalizedStatus)) {
+      return NextResponse.json({ error: "คำสั่งซื้อนี้ได้รับการชำระแล้ว" }, { status: 400 });
+    }
+
     let paidAmount = 0;
 
     if (expected > 0) {
@@ -102,7 +108,7 @@ export async function POST(req, { params }) {
       slip,
       slipFilename: String(filename || "").slice(0, 120),
       confirmedAt: new Date(),
-      status: "paid",
+      status: expected > 0 ? "verifying" : "paid",
       amountPaid: paidAmount,
       ref: String(reference || "").slice(0, 120),
     };

@@ -1,6 +1,8 @@
 import { Schema, models, model } from "mongoose";
 
 const PAYMENT_METHODS = ["promptpay", "bank"];
+const PAYMENT_STATUSES = ["unpaid", "verifying", "paid", "invalid", "cash"];
+const FULFILLMENT_STATUSES = ["new", "pending", "shipping", "success", "cancel"];
 
 const OrderSchema = new Schema(
   {
@@ -46,7 +48,7 @@ const OrderSchema = new Schema(
     // การชำระเงิน
     payment: {
       method: { type: String, enum: PAYMENT_METHODS, default: "promptpay" },
-      status: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
+      status: { type: String, enum: PAYMENT_STATUSES, default: "unpaid" },
       ref: String,
       amountPaid: Number,
       slip: String,
@@ -55,7 +57,7 @@ const OrderSchema = new Schema(
     },
 
     // สถานะคำสั่งซื้อ
-    status: { type: String, enum: ["new", "preparing", "shipped", "done", "cancelled"], default: "new" },
+    status: { type: String, enum: FULFILLMENT_STATUSES, default: "new" },
   },
   { timestamps: true }
 );
@@ -72,3 +74,6 @@ if (models.Order) {
 }
 
 export const Order = models.Order || model("Order", OrderSchema);
+
+export const PAYMENT_STATUS_VALUES = PAYMENT_STATUSES;
+export const ORDER_STATUS_VALUES = FULFILLMENT_STATUSES;
