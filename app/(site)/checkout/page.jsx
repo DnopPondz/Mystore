@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
 import QrBox from "@/components/QrBox";
 
+const REQUIRED_FIELDS = ["name", "phone", "email", "address1", "province", "postcode"];
+
+function isFormValid(form) {
+  return REQUIRED_FIELDS.every((key) => String(form[key]).trim() !== "");
+}
+
+function fmt(n) {
+  return Number(n || 0).toLocaleString("th-TH");
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error("ไม่สามารถอ่านไฟล์ได้"));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function CheckoutPage() {
   const cart = useCart();
+  const router = useRouter();
 
-  // ฟอร์มลูกค้า/ที่อยู่จัดส่ง
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -20,65 +40,105 @@ export default function CheckoutPage() {
     note: "",
   });
 
-  // สถานะการทำงาน
+  const [paymentMethod, setPaymentMethod] = useState("promptpay");
   const [err, setErr] = useState("");
-  const [loadingPreview, setLoadingPreview] = useState(false);
-  const [loadingPlace, setLoadingPlace] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [updatingMethod, setUpdatingMethod] = useState(false);
+  const [order, setOrder] = useState(null);
+  const [slipData, setSlipData] = useState("");
+  const [slipName, setSlipName] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
+  const [reference, setReference] = useState("");
 
-  // ผลลัพธ์จาก API
-  const [preview, setPreview] = useState(null);
-  const [placed, setPlaced] = useState(null);
+  const currentTotals = order?.orderPreview ?? {
+    items: cart.items.map((it) => ({ ...it, lineTotal: (it.price || 0) * it.qty })),
+    subtotal: cart.subtotal,
+    discount: cart.coupon?.discount || 0,
+    total: cart.subtotal - (cart.coupon?.discount || 0),
+    coupon: cart.coupon
+      ? { code: cart.coupon.code, description: cart.coupon.description, discount: cart.coupon.discount }
+      : null,
+  };
 
-  // helper
-  const fmt = (n) => Number(n || 0).toLocaleString("th-TH");
+  useEffect(() => {
+    if (order?.orderPreview?.total != null) {
+      setTransferAmount(Number(order.orderPreview.total || 0).toFixed(2));
+      setReference("");
+    } else {
+      setTransferAmount("");
+      setReference("");
+    }
+  }, [order]);
 
-  // ฟิลด์จำเป็น
-  const requiredFields = ["name", "phone", "email", "address1", "province", "postcode"];
-  const isFormValid = requiredFields.every((key) => String(form[key]).trim() !== "");
+  const needsPayment = (order?.orderPreview?.total || 0) > 0;
 
-  // --- พรีวิว ---
-  async function doPreview() {
+  async function handleSelectMethod(nextMethod) {
+    if (paymentMethod === nextMethod && (!order || order.method === nextMethod)) {
+      return;
+    }
+
+    setPaymentMethod(nextMethod);
+
+    if (!order) {
+      return;
+    }
+
+    setUpdatingMethod(true);
     setErr("");
-    setPreview(null);
-    setPlaced(null);
+
     try {
-      setLoadingPreview(true);
-      const res = await fetch("/api/checkout/preview", {
-        method: "POST",
+      const res = await fetch(`/api/orders/${order.orderId}/payment`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          method: "promptpay",
-          items: cart.items.map((x) => ({ productId: x.productId, qty: x.qty })),
-          couponCode: cart.coupon?.code || null,
-        }),
+        body: JSON.stringify({ method: nextMethod }),
       });
       const raw = await res.text();
       const data = raw ? JSON.parse(raw) : null;
-      if (!res.ok || !data?.ok) throw new Error(data?.error || "Preview failed");
-      setPreview(data);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถเปลี่ยนวิธีการชำระเงินได้");
+
+      setOrder(data);
+      setPaymentMethod(data.method || nextMethod);
+      setSlipData("");
+      setSlipName("");
+      setReference("");
     } catch (e) {
       setErr(String(e.message || e));
+      setPaymentMethod(order.method || paymentMethod);
     } finally {
-      setLoadingPreview(false);
+      setUpdatingMethod(false);
     }
   }
 
-  // --- สร้างออเดอร์จริง ---
   async function placeOrder() {
-    if (!isFormValid) {
+    if (order) {
+      setErr("คุณได้สร้างคำสั่งซื้อแล้ว กรุณาใช้ปุ่มด้านล่างเพื่อยืนยันการชำระเงินหรือติดต่อร้านค้าเพื่อแก้ไข");
+      return;
+    }
+
+    if (cart.items.length === 0) {
+      setErr("ตะกร้าว่างเปล่า");
+      return;
+    }
+
+    if (!isFormValid(form)) {
       setErr("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
       return;
     }
 
     setErr("");
-    setPlaced(null);
+    setCreating(true);
+    setSlipData("");
+    setSlipName("");
+    setTransferAmount("");
+    setReference("");
+
     try {
-      setLoadingPlace(true);
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          method: "promptpay",
+          method: paymentMethod,
           items: cart.items.map((x) => ({ productId: x.productId, qty: x.qty })),
           couponCode: cart.coupon?.code || null,
           customer: { name: form.name, phone: form.phone, email: form.email },
@@ -95,129 +155,321 @@ export default function CheckoutPage() {
       const raw = await res.text();
       const data = raw ? JSON.parse(raw) : null;
       if (!res.ok || !data?.ok) throw new Error(data?.error || "Checkout failed");
-      setPlaced(data);
-      // cart.clear(); // ถ้าต้องการล้างตะกร้าทันที
+      setOrder(data);
+      setPaymentMethod(data.method || paymentMethod);
     } catch (e) {
       setErr(String(e.message || e));
     } finally {
-      setLoadingPlace(false);
+      setCreating(false);
+    }
+  }
+
+  async function handleSlipChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setSlipData("");
+      setSlipName("");
+      return;
+    }
+
+    if (!file.type?.startsWith("image/")) {
+      setErr("รองรับเฉพาะไฟล์รูปภาพเท่านั้น");
+      event.target.value = "";
+      return;
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      if (typeof dataUrl !== "string") throw new Error("ไม่สามารถอ่านไฟล์ได้");
+      setSlipData(dataUrl);
+      setSlipName(file.name || "สลิปการโอน");
+      setErr("");
+    } catch (e) {
+      setErr(String(e.message || e));
+      setSlipData("");
+      setSlipName("");
+      event.target.value = "";
+    }
+  }
+
+  async function confirmPayment() {
+    if (!order?.orderId) {
+      setErr("ยังไม่มีคำสั่งซื้อให้ยืนยัน");
+      return;
+    }
+    if (!slipData) {
+      setErr("กรุณาแนบสลิปการโอนก่อนยืนยัน");
+      return;
+    }
+
+    if (needsPayment && !transferAmount) {
+      setErr("กรุณากรอกจำนวนเงินที่โอน");
+      return;
+    }
+
+    setErr("");
+    setConfirming(true);
+
+    try {
+      const res = await fetch(`/api/orders/${order.orderId}/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slip: slipData,
+          filename: slipName,
+          amount: transferAmount,
+          reference,
+        }),
+      });
+      const raw = await res.text();
+      const data = raw ? JSON.parse(raw) : null;
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถยืนยันการชำระเงินได้");
+
+      cart.clear();
+      router.push(`/hook?order=${order.orderId}`);
+    } catch (e) {
+      setErr(String(e.message || e));
+    } finally {
+      setConfirming(false);
     }
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-10 grid md:grid-cols-2 gap-6">
-      {/* ซ้าย: ฟอร์มผู้รับ */}
-      <section className="border rounded-2xl p-6 space-y-4">
-        <h1 className="text-2xl font-bold">Checkout</h1>
+    <main className="relative min-h-screen overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#ffe1ea] via-[#fff7f0] to-[#ffe9d6]" />
+      <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[#f06583]/20 blur-3xl" />
+      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[#f6c34a]/25 blur-3xl" />
 
-        <div className="grid grid-cols-1 gap-3">
-          {[
-            ["name", "ชื่อ-นามสกุล *"],
-            ["phone", "เบอร์โทร *"],
-            ["email", "อีเมล *"],
-            ["address1", "ที่อยู่ *"],
-            ["address2", "ที่อยู่ (บรรทัด 2)"],
-            ["district", "เขต/อำเภอ"],
-            ["province", "จังหวัด *"],
-            ["postcode", "รหัสไปรษณีย์ *"],
-            ["note", "หมายเหตุถึงร้าน"],
-          ].map(([key, label]) => (
-            <div key={key}>
-              <label className="text-sm block mb-1">{label}</label>
-              <input
-                className={`w-full border rounded px-3 py-2 ${
-                  requiredFields.includes(key) && !form[key] ? "border-red-400" : ""
+      <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--color-rose)]">ชำระเงิน</p>
+          <h1 className="mt-2 text-3xl font-bold text-[var(--color-rose-dark)]">รายละเอียดจัดส่ง &amp; ยืนยันการโอน</h1>
+          <p className="mt-2 text-sm text-[var(--color-choco)]/70">
+            กรอกข้อมูลการจัดส่ง แล้วระบบจะสร้าง QR PromptPay พร้อมให้แนบสลิปยืนยัน เพื่อให้ทีมงานเริ่มจัดเตรียมสินค้าอย่างรวดเร็ว
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <section className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#f065831f] space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-[var(--color-choco)]">ข้อมูลผู้รับและที่อยู่</h2>
+              <p className="mt-1 text-xs text-[var(--color-choco)]/70">ช่องที่มีเครื่องหมาย * จำเป็นต้องกรอก</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {["name", "phone", "email", "address1", "address2", "district", "province", "postcode", "note"].map((key) => (
+                <div key={key} className={key === "note" ? "sm:col-span-2" : key === "address1" ? "sm:col-span-2" : ""}>
+                  <label className="mb-1 block text-sm font-medium">
+                    {key === "name"
+                      ? "ชื่อ-นามสกุล *"
+                      : key === "phone"
+                      ? "เบอร์โทร *"
+                      : key === "email"
+                      ? "อีเมล *"
+                      : key === "address1"
+                      ? "ที่อยู่ (บรรทัด 1) *"
+                      : key === "address2"
+                      ? "ที่อยู่ (บรรทัด 2)"
+                      : key === "district"
+                      ? "เขต/อำเภอ"
+                      : key === "province"
+                      ? "จังหวัด *"
+                      : key === "postcode"
+                      ? "รหัสไปรษณีย์ *"
+                      : "หมายเหตุถึงร้าน"}
+                  </label>
+                  <input
+                    className={`w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-3 text-sm text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[#f06583]/30 ${
+                      REQUIRED_FIELDS.includes(key) && !form[key] ? "border-rose-300" : ""
+                    }`}
+                    value={form[key]}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-4 pt-4 border-t border-[#f7b267]/40">
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--color-choco)]">เลือกวิธีการชำระเงิน</h3>
+                <p className="mt-1 text-xs text-[var(--color-choco)]/70">
+                  รองรับทั้งการโอนผ่าน PromptPay และการโอนเข้าบัญชีธนาคาร พร้อมแนบสลิปเพื่อให้ระบบตรวจสอบยอดให้อัตโนมัติ
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {[{ value: "promptpay", label: "PromptPay QR", description: "สแกนจ่ายได้ทันที" }, { value: "bank", label: "โอนผ่านบัญชี", description: "โอนเข้าบัญชีธนาคาร" }].map((option) => {
+                  const active = paymentMethod === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleSelectMethod(option.value)}
+                      disabled={updatingMethod && paymentMethod !== option.value}
+                      className={`rounded-2xl border px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-[#f06583]/40 ${
+                        active
+                          ? "border-[#f06583] bg-[#fff4f7] text-[var(--color-rose-dark)] shadow"
+                          : "border-[#f7b267]/60 bg-white text-[var(--color-choco)]/80"
+                      } ${updatingMethod ? "cursor-wait" : ""}`}
+                    >
+                      <div className="text-sm font-semibold">{option.label}</div>
+                      <div className="mt-1 text-xs text-[var(--color-choco)]/70">{option.description}</div>
+                    </button>
+                  );
+                })}
+              </div>
+              {order ? (
+                <p className="text-xs text-[var(--color-choco)]/60">
+                  สร้างคำสั่งซื้อแล้ว สามารถสลับวิธีการชำระเงินได้ตลอดโดยไม่ต้องสร้างคำสั่งซื้อใหม่
+                </p>
+              ) : null}
+
+              <button
+                onClick={placeOrder}
+                disabled={creating || cart.items.length === 0 || Boolean(order)}
+                className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
+                  creating || cart.items.length === 0 || order
+                    ? "bg-[#f3b6c7] cursor-not-allowed"
+                    : "bg-gradient-to-r from-[#f06583] to-[#f78da7] hover:shadow-xl"
                 }`}
-                value={form[key]}
-                onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-              />
+              >
+                {order
+                  ? "สร้างคำสั่งซื้อเรียบร้อยแล้ว"
+                  : creating
+                  ? "กำลังสร้างคำสั่งซื้อ..."
+                  : paymentMethod === "bank"
+                  ? "สร้างคำสั่งซื้อเพื่อโอน"
+                  : "สร้างคำสั่งซื้อและ QR"}
+              </button>
             </div>
-          ))}
+
+            {err && <div className="text-sm text-rose-600">{err}</div>}
+          </section>
+
+          <section className="space-y-6">
+            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[#f065831a]">
+              <h2 className="text-lg font-semibold text-[var(--color-choco)]">สรุปรายการ</h2>
+              <div className="mt-4 space-y-3 text-sm">
+                {currentTotals.items.map((it) => (
+                  <div key={`${it.productId}-${it.title}`} className="flex justify-between">
+                    <span>
+                      {it.title} × {it.qty}
+                    </span>
+                    <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 space-y-2 border-t border-[#f7b267]/40 pt-4 text-sm">
+                <div className="flex justify-between text-[var(--color-choco)]/80">
+                  <span>รวม</span>
+                  <span>฿{fmt(currentTotals.subtotal)}</span>
+                </div>
+                {currentTotals.discount ? (
+                  <div className="flex justify-between text-emerald-600">
+                    <span>
+                      คูปอง {currentTotals.coupon?.code}
+                      {currentTotals.coupon?.description ? ` (${currentTotals.coupon.description})` : ""}
+                    </span>
+                    <span>-฿{fmt(currentTotals.discount)}</span>
+                  </div>
+                ) : null}
+                <div className="flex justify-between text-base font-semibold text-[var(--color-rose-dark)]">
+                  <span>ยอดสุทธิ</span>
+                  <span>฿{fmt(currentTotals.total)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[#f065831a] space-y-4">
+              <h2 className="text-lg font-semibold text-[var(--color-choco)]">ยืนยันการโอน</h2>
+              {order ? (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    สร้างคำสั่งซื้อ #{order.orderId} แล้ว กรุณาชำระเงินและแนบสลิปเพื่อยืนยัน ระบบจะตรวจสอบยอดที่ชำระให้อัตโนมัติ
+                  </div>
+                  {order.promptpay ? (
+                    <QrBox
+                      payload={order.promptpay.payload}
+                      amount={order.orderPreview.total}
+                      title="สแกนเพื่อชำระเงิน"
+                    />
+                  ) : paymentMethod === "bank" && order.bankAccount ? (
+                    <div className="space-y-3 rounded-2xl border border-[#f7b267]/50 bg-[#fff8f1] p-4 text-sm text-[var(--color-choco)]">
+                      <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
+                      <div>ธนาคาร: {order.bankAccount.bank}</div>
+                      <div>เลขบัญชี: {order.bankAccount.number}</div>
+                      <div>ชื่อบัญชี: {order.bankAccount.name}</div>
+                      {order.bankAccount.promptpayId ? (
+                        <div className="text-xs text-[var(--color-choco)]/70">
+                          หรือโอนผ่าน PromptPay ID: {order.bankAccount.promptpayId}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-[var(--color-choco)]/70">ออเดอร์นี้ไม่ต้องชำระเงินเพิ่มเติม</div>
+                  )}
+
+                  {needsPayment ? (
+                    <div className="space-y-2 text-sm">
+                      <label className="font-medium">จำนวนเงินที่โอน (บาท) *</label>
+                      <input
+                        type="text"
+                        value={transferAmount}
+                        onChange={(e) => setTransferAmount(e.target.value)}
+                        className="w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f06583]/30"
+                        placeholder={`ยอดที่ต้องชำระ ฿${fmt(order.orderPreview.total)}`}
+                      />
+                      <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(order.orderPreview.total)}</p>
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border border-[#f7b267]/40 bg-[#fff9f4] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                      ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
+                    </div>
+                  )}
+
+                  <div className="space-y-2 text-sm">
+                    <label className="font-medium">หมายเลขอ้างอิงการโอน (ถ้ามี)</label>
+                    <input
+                      type="text"
+                      value={reference}
+                      onChange={(e) => setReference(e.target.value)}
+                      className="w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f06583]/30"
+                      placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
+                    />
+                  </div>
+
+                  <div className="space-y-2 text-sm">
+                    <label className="font-medium">แนบสลิปการโอน *</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleSlipChange}
+                      className="text-sm"
+                    />
+                    {slipName && <div className="text-xs text-[var(--color-choco)]/60">ไฟล์: {slipName}</div>}
+                  </div>
+                  <button
+                    onClick={confirmPayment}
+                    disabled={confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)}
+                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
+                      confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)
+                        ? "bg-[#f3b6c7] cursor-not-allowed"
+                        : "bg-gradient-to-r from-[#f06583] to-[#f6c34a] hover:shadow-xl"
+                    }`}
+                  >
+                    {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}
+                  </button>
+                </div>
+              ) : (
+                <div className="text-sm text-[var(--color-choco)]/70">
+                  กดปุ่ม "สร้างคำสั่งซื้อ" เพื่อสร้างคำสั่งซื้อและรับรายละเอียดการชำระเงิน
+                </div>
+              )}
+              {err && order && <div className="text-sm text-rose-600">{err}</div>}
+            </div>
+          </section>
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={doPreview}
-            disabled={loadingPreview || cart.items.length === 0}
-            className="px-4 py-2 rounded border"
-          >
-            {loadingPreview ? "กำลังพรีวิว..." : "ดู QR (พรีวิว)"}
-          </button>
-
-          <button
-            onClick={placeOrder}
-            disabled={loadingPlace || cart.items.length === 0 || !isFormValid}
-            className={`px-4 py-2 rounded text-white ${
-              !isFormValid || loadingPlace || cart.items.length === 0
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-black"
-            }`}
-          >
-            {loadingPlace ? "กำลังสร้างคำสั่งซื้อ..." : "ยืนยันสั่งซื้อ"}
-          </button>
-        </div>
-
-        {err && <div className="text-sm text-red-600">{err}</div>}
-      </section>
-
-      {/* ขวา: สรุปรายการ + QR */}
-      <section className="border rounded-2xl p-6 space-y-3">
-        <h2 className="text-xl font-semibold">สรุปรายการ</h2>
-
-        <div className="space-y-2">
-          {cart.items.map((it) => (
-            <div key={it.productId} className="flex justify-between">
-              <span>
-                {it.title} × {it.qty}
-              </span>
-              <span>฿{fmt(it.price * it.qty)}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="pt-2 space-y-1">
-          <div className="flex justify-between">
-            <span>รวม</span>
-            <span>฿{fmt(cart.subtotal)}</span>
-          </div>
-          {cart.coupon?.discount ? (
-            <div className="flex justify-between text-green-700">
-              <span>
-                คูปอง {cart.coupon.code} ({cart.coupon.description})
-              </span>
-              <span>-฿{fmt(cart.coupon.discount)}</span>
-            </div>
-          ) : null}
-        </div>
-
-        {/* พรีวิว */}
-        {/* {preview && (
-          <div className="mt-3">
-            <div className="font-medium mb-2">
-              พรีวิวยอดสุทธิ: ฿{fmt(preview.orderPreview.total)}
-            </div>
-            <QrBox
-              payload={preview.promptpay?.payload}
-              amount={preview.orderPreview.total}
-              title="สแกนทดสอบ (พรีวิว)"
-            />
-          </div>
-        )} */}
-
-        {/* ออเดอร์จริง */}
-        {placed && (
-          <div className="mt-3">
-            <div className="font-medium mb-2">
-              สร้างออเดอร์แล้ว #{placed.orderId} — ยอดสุทธิ: ฿{fmt(placed.orderPreview.total)}
-            </div>
-            <QrBox
-              payload={placed.promptpay?.payload}
-              amount={placed.orderPreview.total}
-              title="สแกนเพื่อชำระเงินจริง"
-            />
-          </div>
-        )}
-      </section>
+      </div>
     </main>
   );
 }

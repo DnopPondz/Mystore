@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { promptPayPayload } from "@/lib/promptpay";
 import { Coupon } from "@/models/Coupon";
+import { getPaymentConfig } from "@/lib/paymentConfig";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -48,14 +49,25 @@ export async function POST(req) {
     const { discount, used } = calcDiscount(coupon, subtotal);
     const total = subtotal - discount;
 
+    const { promptpayId, bankAccount } = getPaymentConfig();
+
     if (method === "promptpay") {
-      const payload = promptPayPayload({ id: process.env.PROMPTPAY_ID, amount: total });
+      const payload = promptPayPayload({ id: promptpayId, amount: total });
       // ❗️ พรีวิว: ไม่สร้างออเดอร์, ไม่ตัดสต็อก — แค่ส่งข้อมูลกลับ
       return NextResponse.json({
         ok: 1,
         method,
         orderPreview: { items: checked, subtotal, discount, total, coupon: used },
         promptpay: { payload, amount: total },
+      });
+    }
+
+    if (method === "bank") {
+      return NextResponse.json({
+        ok: 1,
+        method,
+        orderPreview: { items: checked, subtotal, discount, total, coupon: used },
+        bankAccount,
       });
     }
 

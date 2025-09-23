@@ -3,6 +3,10 @@ import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { promptPayPayload } from "@/lib/promptpay";
 import { Coupon } from "@/models/Coupon"; // ⬅️ เพิ่ม
+import { Order } from "@/models/Order";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getPaymentConfig } from "@/lib/paymentConfig";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -19,7 +23,13 @@ function calcDiscount(coupon, subtotal) {
 
 export async function POST(req) {
   try {
-    const { items, method = "promptpay", couponCode } = await req.json();
+    const {
+      items,
+      method = "promptpay",
+      couponCode,
+      customer = {},
+      shipping = {},
+    } = await req.json();
 
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -49,17 +59,59 @@ export async function POST(req) {
     const { discount, used } = calcDiscount(coupon, subtotal);
     const total = subtotal - discount;
 
-    if (method === "promptpay") {
-      const payload = promptPayPayload({ id: process.env.PROMPTPAY_ID, amount: total });
-      return NextResponse.json({
-        ok: 1,
-        method,
-        orderPreview: { items: checked, subtotal, discount, total, coupon: used },
-        promptpay: { payload, amount: total },
-      });
+    const allowedMethods = ["promptpay", "bank"];
+    if (!allowedMethods.includes(method)) {
+      return NextResponse.json({ error: "Unknown payment method" }, { status: 400 });
     }
 
-    return NextResponse.json({ error: "Unknown payment method" }, { status: 400 });
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id || null;
+
+    const paymentStatus = total > 0 ? "pending" : "paid";
+    const { promptpayId, bankAccount: configuredBank } = getPaymentConfig();
+
+    const order = await Order.create({
+      userId,
+      items: checked.map(({ lineTotal, ...rest }) => rest),
+      subtotal,
+      discount,
+      total,
+      coupon: used,
+      customer: {
+        name: String(customer?.name || ""),
+        phone: String(customer?.phone || ""),
+        email: String(customer?.email || ""),
+      },
+      shipping: {
+        address1: String(shipping?.address1 || ""),
+        address2: String(shipping?.address2 || ""),
+        district: String(shipping?.district || ""),
+        province: String(shipping?.province || ""),
+        postcode: String(shipping?.postcode || ""),
+        note: String(shipping?.note || ""),
+      },
+      payment: { method, status: paymentStatus, ref: "" },
+      status: "new",
+    });
+
+    const promptpayData =
+      method === "promptpay" && total > 0
+        ? {
+            payload: promptPayPayload({ id: promptpayId, amount: total }),
+            amount: total,
+          }
+        : null;
+
+    const bankAccount = method === "bank" ? configuredBank : null;
+
+    return NextResponse.json({
+      ok: 1,
+      method,
+      orderId: String(order._id),
+      orderPreview: { items: checked, subtotal, discount, total, coupon: used },
+      promptpay: promptpayData,
+      bankAccount,
+    });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }

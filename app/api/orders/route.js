@@ -53,7 +53,12 @@ export async function POST(req) {
       userId,
       items: checked.map(({ lineTotal, ...rest }) => rest),
       subtotal, discount, total,
-      payment: { method: payment.method, status: payment.status || "pending", ref: payment.ref || "" },
+      payment: {
+        method: payment.method || "promptpay",
+        status: payment.status || "pending",
+        ref: payment.ref || "",
+        amountPaid: payment.amountPaid || 0,
+      },
       status: "new",
     });
 
