@@ -1,13 +1,23 @@
 "use client";
 import { useCart } from "@/components/cart/CartProvider";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const cart = useCart();
+  const { status } = useSession();
+  const router = useRouter();
   const [code, setCode] = useState(cart.coupon?.code || "");
   const [applying, setApplying] = useState(false);
   const [err, setErr] = useState("");
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace(`/login?callbackUrl=${encodeURIComponent("/cart")}`);
+    }
+  }, [status, router]);
 
   async function applyCoupon() {
     setErr("");
@@ -82,6 +92,35 @@ export default function CartPage() {
       </div>
     </div>
   );
+
+  if (status === "loading") {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center bg-[var(--color-cream)]/40">
+        <div className="rounded-full bg-white/90 px-6 py-3 text-sm text-[var(--color-choco)] shadow">
+          กำลังตรวจสอบสถานะการเข้าสู่ระบบ...
+        </div>
+      </main>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center bg-[var(--color-cream)]/40">
+        <div className="rounded-3xl bg-white/90 px-8 py-10 text-center text-[var(--color-choco)] shadow-lg shadow-[#f0658322]">
+          <p className="text-lg font-semibold">กรุณาเข้าสู่ระบบเพื่อเปิดตะกร้าสินค้า</p>
+          <p className="mt-3 text-sm text-[var(--color-choco)]/70">
+            ระบบกำลังพาไปยังหน้าเข้าสู่ระบบอัตโนมัติ หากไม่เปลี่ยนหน้า
+            <Link
+              href={`/login?callbackUrl=${encodeURIComponent("/cart")}`}
+              className="ml-1 text-[var(--color-rose-dark)] underline"
+            >
+              คลิกที่นี่เพื่อเข้าสู่ระบบ
+            </Link>
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">

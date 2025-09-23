@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -8,7 +9,13 @@ const navItems = [
   { href: "/", label: "หน้าหลัก" },
   { href: "/about", label: "เกี่ยวกับเรา" },
   { href: "/preorder", label: "สั่งทำพิเศษ" },
-  { href: "/cart", label: "ตะกร้า" },
+  {
+    href: "/cart",
+    label: "ตะกร้า",
+    requiresAuth: true,
+    icon: "/images/paper-bag.svg",
+    iconAlt: "ตะกร้าสินค้า",
+  },
   { href: "/orders", label: "คำสั่งซื้อ" },
 ];
 
@@ -21,19 +28,37 @@ export default function NavBar() {
     setMenuOpen(false);
   }, [path]);
 
-  const link = (href, label, key) => {
-    const active = path === href;
+  const link = (item) => {
+    const targetHref =
+      item.requiresAuth && status !== "authenticated"
+        ? `/login?callbackUrl=${encodeURIComponent(item.href)}`
+        : item.href;
+    const active = path === item.href && (!item.requiresAuth || status === "authenticated");
     return (
       <Link
-        key={key}
-        href={href}
-        className={`px-3 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+        key={item.href}
+        href={targetHref}
+        className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-colors duration-200 ${
           active
             ? "bg-white/80 text-[var(--color-rose)] shadow"
             : "text-[var(--color-choco)] hover:text-[var(--color-rose)]"
         }`}
       >
-        {label}
+        {item.icon ? (
+          <>
+            <Image
+              src={item.icon}
+              alt={item.iconAlt || item.label}
+              width={24}
+              height={24}
+              className="h-6 w-6"
+              priority={item.href === "/cart"}
+            />
+            <span className="sr-only">{item.label}</span>
+          </>
+        ) : (
+          item.label
+        )}
       </Link>
     );
   };
@@ -88,7 +113,7 @@ export default function NavBar() {
             </button>
 
             <div className="hidden md:flex items-center gap-3">
-              {navItems.map(({ href, label }) => link(href, label, href))}
+              {navItems.map((item) => link(item))}
               {status === "loading" && (
                 <span className="text-xs text-[var(--color-choco)]/70">กำลังโหลด...</span>
               )}
@@ -141,7 +166,7 @@ export default function NavBar() {
           } overflow-hidden bg-white/80 backdrop-blur`}
         >
           <div className="px-6 pb-6 flex flex-col gap-3 text-sm text-[var(--color-choco)]">
-            {navItems.map(({ href, label }) => link(href, label, href))}
+            {navItems.map((item) => link(item))}
             {status === "loading" && (
               <span className="text-xs text-[var(--color-choco)]/70">กำลังโหลด...</span>
             )}
