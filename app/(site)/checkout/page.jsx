@@ -157,6 +157,7 @@ export default function CheckoutPage() {
       if (!res.ok || !data?.ok) throw new Error(data?.error || "Checkout failed");
       setOrder(data);
       setPaymentMethod(data.method || paymentMethod);
+      cart.clear();
     } catch (e) {
       setErr(String(e.message || e));
     } finally {

@@ -3,6 +3,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import QrBox from "@/components/QrBox";
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error("ไม่สามารถอ่านไฟล์ได้"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function fmt(n) {
+  return Number(n || 0).toLocaleString("th-TH");
+}
 
 export default function OrderDetailPage() {
   const params = useParams();
@@ -12,25 +26,58 @@ export default function OrderDetailPage() {
   const [err, setErr] = useState("");
   const [needsAuth, setNeedsAuth] = useState(false);
   const { status } = useSession();
+  const [paymentInfo, setPaymentInfo] = useState(null);
+  const [loadingPayment, setLoadingPayment] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("promptpay");
+  const [slipData, setSlipData] = useState("");
+  const [slipName, setSlipName] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
+  const [reference, setReference] = useState("");
+  const [actionErr, setActionErr] = useState("");
+  const [actionSuccess, setActionSuccess] = useState("");
+  const [confirming, setConfirming] = useState(false);
+  const [updatingMethod, setUpdatingMethod] = useState(false);
+
+  async function reloadOrder() {
+    if (!id) return null;
+    const res = await fetch(`/api/my/orders/${id}`, { cache: "no-store" });
+    const data = await res.json();
+    if (res.status === 401) {
+      setNeedsAuth(true);
+      setOrder(null);
+      const error = new Error(data?.error || "Unauthorized");
+      error.status = 401;
+      throw error;
+    }
+    if (!res.ok) {
+      const error = new Error(data?.error || "ไม่สามารถโหลดคำสั่งซื้อได้");
+      error.status = res.status;
+      throw error;
+    }
+    setNeedsAuth(false);
+    setOrder(data);
+    return data;
+  }
 
   useEffect(() => {
     if (!id) return;
-    (async () => {
-      try {
-        const res = await fetch(`/api/my/orders/${id}`, { cache: "no-store" });
-        const data = await res.json();
-        if (res.status === 401) {
-          setNeedsAuth(true);
-          return;
+    let ignore = false;
+    setLoading(true);
+    setErr("");
+    reloadOrder()
+      .catch((e) => {
+        if (ignore) return;
+        if (e?.status && e.status !== 401) {
+          setErr(String(e.message || e));
         }
-        if (!res.ok) throw new Error(data?.error || "Load order failed");
-        setOrder(data);
-      } catch (e) {
-        setErr(String(e.message || e));
-      } finally {
-        setLoading(false);
-      }
-    })();
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   const statusLabel = useMemo(
@@ -52,6 +99,191 @@ export default function OrderDetailPage() {
     }),
     []
   );
+
+  const paymentOptions = useMemo(
+    () => [
+      { value: "promptpay", label: "PromptPay QR", description: "สแกนจ่ายได้ทันที" },
+      { value: "bank", label: "โอนผ่านบัญชี", description: "โอนเข้าบัญชีธนาคาร" },
+    ],
+    []
+  );
+
+  const orderIdSafe = order?.id || order?._id || "";
+  const paymentStatus = order?.payment?.status || "pending";
+  const isPaid = paymentStatus === "paid";
+  const amountDue = Number(order?.total || 0);
+  const needsAmountInput = amountDue > 0;
+
+  useEffect(() => {
+    if (!order) return;
+    setPaymentMethod(order.payment?.method || "promptpay");
+    if (order.payment?.status !== "paid") {
+      if (needsAmountInput) {
+        setTransferAmount(amountDue.toFixed(2));
+      } else {
+        setTransferAmount("");
+      }
+    }
+    if (order.payment?.status === "paid") {
+      setSlipData("");
+      setSlipName("");
+      setReference("");
+    }
+  }, [order, amountDue, needsAmountInput]);
+
+  useEffect(() => {
+    if (!orderIdSafe || isPaid) {
+      setPaymentInfo(null);
+      setLoadingPayment(false);
+      return;
+    }
+
+    let ignore = false;
+    setLoadingPayment(true);
+
+    (async () => {
+      try {
+        const res = await fetch(`/api/orders/${orderIdSafe}/payment`, { cache: "no-store" });
+        const raw = await res.text();
+        const data = raw ? JSON.parse(raw) : null;
+        if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถโหลดข้อมูลการชำระเงินได้");
+        if (ignore) return;
+        setPaymentInfo(data);
+        setPaymentMethod(data.method || order.payment?.method || "promptpay");
+        setActionErr("");
+      } catch (e) {
+        if (!ignore) setActionErr(String(e.message || e));
+      } finally {
+        if (!ignore) setLoadingPayment(false);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [orderIdSafe, order?.payment?.method, order?.payment?.status, isPaid]);
+
+  async function handleSelectMethod(nextMethod) {
+    if (!orderIdSafe) return;
+    if (paymentMethod === nextMethod && order?.payment?.method === nextMethod) {
+      return;
+    }
+
+    setUpdatingMethod(true);
+    setActionErr("");
+    setActionSuccess("");
+
+    try {
+      const res = await fetch(`/api/orders/${orderIdSafe}/payment`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ method: nextMethod }),
+      });
+      const raw = await res.text();
+      const data = raw ? JSON.parse(raw) : null;
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถเปลี่ยนวิธีการชำระเงินได้");
+
+      setPaymentInfo(data);
+      setPaymentMethod(data.method || nextMethod);
+      setOrder((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          payment: {
+            ...prev.payment,
+            method: data.method || nextMethod,
+            status: data.paymentStatus || (Number(prev.total || 0) > 0 ? "pending" : "paid"),
+          },
+        };
+      });
+      setSlipData("");
+      setSlipName("");
+      setReference("");
+      if (needsAmountInput) {
+        setTransferAmount(amountDue.toFixed(2));
+      }
+    } catch (e) {
+      setActionErr(String(e.message || e));
+      setPaymentMethod(order?.payment?.method || paymentMethod);
+    } finally {
+      setUpdatingMethod(false);
+    }
+  }
+
+  async function handleSlipChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setSlipData("");
+      setSlipName("");
+      return;
+    }
+
+    if (!file.type?.startsWith("image/")) {
+      setActionErr("รองรับเฉพาะไฟล์รูปภาพเท่านั้น");
+      event.target.value = "";
+      return;
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      if (typeof dataUrl !== "string") throw new Error("ไม่สามารถอ่านไฟล์ได้");
+      setSlipData(dataUrl);
+      setSlipName(file.name || "สลิปการโอน");
+      setActionErr("");
+      setActionSuccess("");
+    } catch (e) {
+      setActionErr(String(e.message || e));
+      setSlipData("");
+      setSlipName("");
+      event.target.value = "";
+    }
+  }
+
+  async function confirmPayment() {
+    if (!orderIdSafe) return;
+    if (isPaid) {
+      setActionErr("คำสั่งซื้อนี้ชำระเงินเรียบร้อยแล้ว");
+      return;
+    }
+    if (!slipData) {
+      setActionErr("กรุณาแนบสลิปการโอนก่อนยืนยัน");
+      return;
+    }
+    if (needsAmountInput && !transferAmount) {
+      setActionErr("กรุณากรอกจำนวนเงินที่โอน");
+      return;
+    }
+
+    setConfirming(true);
+    setActionErr("");
+    setActionSuccess("");
+
+    try {
+      const res = await fetch(`/api/orders/${orderIdSafe}/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slip: slipData,
+          filename: slipName,
+          amount: transferAmount,
+          reference,
+        }),
+      });
+      const raw = await res.text();
+      const data = raw ? JSON.parse(raw) : null;
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "ไม่สามารถยืนยันการชำระเงินได้");
+
+      await reloadOrder();
+      setActionSuccess("ยืนยันการชำระเงินเรียบร้อยแล้ว");
+      setSlipData("");
+      setSlipName("");
+      setReference("");
+    } catch (e) {
+      setActionErr(String(e.message || e));
+    } finally {
+      setConfirming(false);
+    }
+  }
 
   if (loading)
     return <main className="max-w-3xl mx-auto px-6 py-10 text-[var(--color-choco)]/70">กำลังโหลด...</main>;
@@ -176,6 +408,112 @@ export default function OrderDetailPage() {
                 </div>
               </div>
             ) : null}
+
+            {!isPaid ? (
+              <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[#fff9fb] p-5">
+                <div>
+                  <h3 className="text-base font-semibold text-[var(--color-choco)]">ชำระเงินสำหรับคำสั่งซื้อนี้</h3>
+                  <p className="mt-1 text-xs text-[var(--color-choco)]/70">
+                    เลือกช่องทางที่สะดวก แนบสลิป แล้วระบบจะอัปเดตสถานะเป็น “ชำระแล้ว” ทันที
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {paymentOptions.map((option) => {
+                    const active = paymentMethod === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => handleSelectMethod(option.value)}
+                        disabled={updatingMethod || confirming}
+                        className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
+                          active
+                            ? "border-[var(--color-rose)] bg-[#fff1f5] text-[var(--color-rose-dark)] shadow"
+                            : "border-[#f7b267]/60 bg-white text-[var(--color-choco)]/80"
+                        } ${updatingMethod || confirming ? "cursor-wait" : ""}`}
+                      >
+                        <div className="font-semibold">{option.label}</div>
+                        <div className="mt-1 text-xs text-[var(--color-choco)]/60">{option.description}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {loadingPayment ? (
+                  <div className="rounded-2xl border border-dashed border-[var(--color-rose)]/40 bg-white/70 px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                    กำลังโหลดรายละเอียดการชำระเงิน...
+                  </div>
+                ) : paymentInfo?.promptpay ? (
+                  <QrBox payload={paymentInfo.promptpay.payload} amount={paymentInfo.promptpay.amount} title="สแกนเพื่อชำระเงิน" />
+                ) : paymentMethod === "bank" && paymentInfo?.bankAccount ? (
+                  <div className="space-y-2 rounded-2xl border border-[#f7b267]/50 bg-[#fff8f1] p-4 text-sm text-[var(--color-choco)]">
+                    <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
+                    <div>ธนาคาร: {paymentInfo.bankAccount.bank}</div>
+                    <div>เลขบัญชี: {paymentInfo.bankAccount.number}</div>
+                    <div>ชื่อบัญชี: {paymentInfo.bankAccount.name}</div>
+                    {paymentInfo.bankAccount.promptpayId ? (
+                      <div className="text-xs text-[var(--color-choco)]/60">หรือ PromptPay ID: {paymentInfo.bankAccount.promptpayId}</div>
+                    ) : null}
+                  </div>
+                ) : amountDue <= 0 ? (
+                  <div className="rounded-2xl border border-[#f7b267]/40 bg-[#fff9f4] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                    ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
+                  </div>
+                ) : null}
+
+                {needsAmountInput ? (
+                  <div className="space-y-2 text-sm">
+                    <label className="font-medium">จำนวนเงินที่โอน (บาท) *</label>
+                    <input
+                      type="text"
+                      value={transferAmount}
+                      onChange={(e) => setTransferAmount(e.target.value)}
+                      className="w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                      placeholder={`ยอดที่ต้องชำระ ฿${fmt(amountDue)}`}
+                    />
+                    <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(amountDue)}</p>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border border-[#f7b267]/40 bg-[#fff9f4] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                    ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
+                  </div>
+                )}
+
+                <div className="space-y-2 text-sm">
+                  <label className="font-medium">หมายเลขอ้างอิงการโอน (ถ้ามี)</label>
+                  <input
+                    type="text"
+                    value={reference}
+                    onChange={(e) => setReference(e.target.value)}
+                    className="w-full rounded-2xl border border-[#f7b267]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                    placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
+                  />
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <label className="font-medium">แนบสลิปการโอน *</label>
+                  <input type="file" accept="image/*" onChange={handleSlipChange} className="text-sm" />
+                  {slipName ? <div className="text-xs text-[var(--color-choco)]/60">ไฟล์: {slipName}</div> : null}
+                </div>
+
+                <button
+                  onClick={confirmPayment}
+                  disabled={confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)}
+                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f0658333] transition ${
+                    confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)
+                      ? "cursor-not-allowed bg-[#f3b6c7]"
+                      : "bg-gradient-to-r from-[#f06583] to-[#f6c34a] hover:shadow-xl"
+                  }`}
+                >
+                  {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}
+                </button>
+
+                {actionSuccess ? <div className="text-sm text-emerald-600">{actionSuccess}</div> : null}
+                {actionErr ? <div className="text-sm text-rose-600">{actionErr}</div> : null}
+              </div>
+            ) : null}
+
           </section>
 
           <section className="space-y-6">

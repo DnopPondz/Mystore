@@ -225,6 +225,11 @@ export default function OrdersPage() {
                       </span>
                     ))}
                   </div>
+                  {paymentStatus === "pending" ? (
+                    <div className="mt-4 text-xs font-semibold text-[var(--color-rose-dark)]/80">
+                      แตะเพื่อแนบสลิปและยืนยันการชำระเงิน
+                    </div>
+                  ) : null}
                 </Link>
               );
             })}
