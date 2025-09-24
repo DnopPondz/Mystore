@@ -33,38 +33,38 @@ export default async function HomePage() {
         <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-20 grid gap-12 lg:grid-cols-2 items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-[var(--color-rose-dark)] shadow">
-              70% OFF เมนูเช้า • ส่งฟรีทั่วเมือง
+              นึ่งสดทุกวัน • ส่งฟรีในตัวเมืองลำพูน
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-[var(--color-rose-dark)]">
-              ความสุขจากเตาอบ สู่โต๊ะอาหารของคุณ
+              ซาลาเปาและขนมจีบร้อนๆ ส่งตรงจากครัวลำพูน
             </h1>
             <p className="text-base sm:text-lg text-[var(--color-choco)]/80 max-w-xl">
-              ขนมปังหอมกรุ่น ครัวซองต์กรอบนอกนุ่มใน และเค้กสุดละมุน
-              พร้อมเสิร์ฟทุกเช้าเพื่อเติมเต็มช่วงเวลาพิเศษให้ครอบครัวของคุณ
+              ซาลาเปาไส้หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ และเมนูพิเศษที่คิดค้นจากสูตรลับของครอบครัว
+              พร้อมขนมจีบกุ้งและหมูที่นึ่งสดใหม่ให้คุณอร่อยได้ทุกมื้อ
             </p>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
                 href="#menu"
                 className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
               >
-                เลือกขนมเลย
+                เลือกซาลาเปาเลย
               </a>
               <a
                 href="/preorder"
                 className="inline-flex items-center justify-center rounded-full border border-white/60 bg-white/70 px-6 py-3 text-sm font-semibold text-[var(--color-rose-dark)] shadow hover:bg-white"
               >
-                สั่งทำพิเศษ
+                สั่งไส้พิเศษ
               </a>
               <a
                 href="/checkout"
                 className="inline-flex items-center justify-center rounded-full border border-white/0 bg-white/80 px-6 py-3 text-sm font-semibold text-[var(--color-choco)] shadow hover:bg-white"
               >
-                สั่งด่วนภายในวันเดียว
+                สั่งด่วนพร้อมจัดส่ง
               </a>
             </div>
 
             <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
-              {["อบสดใหม่", "วัตถุดิบพรีเมียม", "ส่งไวในเมือง"].map((item) => (
+              {["นึ่งสดทุกชั่วโมง", "หมูคัดพิเศษ", "ส่งไวในเมือง"].map((item) => (
                 <div
                   key={item}
                   className="rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow"
@@ -82,14 +82,13 @@ export default async function HomePage() {
               <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-white/70" />
               <div className="text-center px-10">
                 <p className="text-lg font-semibold text-[var(--color-rose-dark)]">
-                  เมนูใหม่!
+                  เมนูขายดี!
                 </p>
                 <p className="mt-1 text-2xl font-black text-[var(--color-choco)]">
-                  Strawberry Brioche
+                  ซาลาเปาหมูสับไข่เค็ม
                 </p>
                 <p className="mt-4 text-sm text-[var(--color-choco)]/70">
-                  เนยสดคุณภาพสูง ผสานสตรอว์เบอร์รี่ออร์แกนิก
-                  เพิ่มความหวานอมเปรี้ยวอย่างลงตัว
+                  หมูสับแน่นๆ พร้อมไข่เค็มเต็มคำ นึ่งด้วยแป้งสูตรนุ่มพิเศษหอมละมุน
                 </p>
               </div>
             </div>
@@ -101,10 +100,10 @@ export default async function HomePage() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-rose)]">
-              Our Menu
+              Bao & Dim Sum
             </p>
             <h2 className="mt-2 text-3xl font-bold text-[var(--color-choco)]">
-              เมนู ขนมวันนี้
+              เมนูซาลาเปา & ขนมจีบวันนี้
             </h2>
             {/* <p className="mt-2 text-[var(--color-choco)]/70 max-w-2xl">
               {/* คัดสรรวัตถุดิบธรรมชาติจากฟาร์มท้องถิ่น ผสมผสานความพิถีพิถันในการอบจนได้ขนมสดใหม่ หวานกำลังดี พร้อมส่งถึงคุณทุกเช้า
@@ -112,7 +111,7 @@ export default async function HomePage() {
           </div>
           <div className="flex gap-3">
             <span className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--color-choco)] shadow">
-              🍞 เมนูอาจจะมีการเปลี่ยนแปลงในแต่ละวัน
+              🥟 เมนูอาจจะมีการเปลี่ยนแปลงในแต่ละวัน
             </span>
             {/* <span className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--color-choco)] shadow">
               ☕ เซตอาหารเช้า
@@ -123,7 +122,7 @@ export default async function HomePage() {
         <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.length === 0 ? (
             <div className="col-span-full rounded-3xl bg-white/90 p-10 text-center text-[var(--color-choco)]/70 shadow-lg shadow-[#f5a25d20]">
-              เมนูใหม่กำลังอบอยู่ รอสักครู่นะคะ 🍞
+              เมนูซาลาเปากำลังนึ่งอยู่ รอสักครู่นะคะ 🥟
             </div>
           ) : (
             products.map((p) => (
@@ -140,7 +139,7 @@ export default async function HomePage() {
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <span className="text-4xl">🍩</span>
+                      <span className="text-4xl">🥟</span>
                     )}
                   </div>
                   <div className="absolute top-4 left-4 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-[var(--color-rose-dark)] shadow">
