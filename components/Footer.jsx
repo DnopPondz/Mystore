@@ -4,7 +4,7 @@ const customerLinks = [
   { href: "/", label: "หน้าหลัก" },
   { href: "/cart", label: "ตะกร้าของฉัน" },
   { href: "/orders", label: "คำสั่งซื้อของฉัน" },
-  { href: "/login", label: "เข้าสู่ระบบ" },
+  // { href: "/login", label: "เข้าสู่ระบบ" },
 ];
 
 const serviceLinks = [
@@ -26,12 +26,12 @@ export default function Footer() {
   return (
     <footer className="mt-20 bg-gradient-to-br from-[#ffd5b5] via-[#ffe4d6] to-[#ffd6e8] text-[var(--color-choco)]">
       <div className="relative">
-        <div className="absolute -top-6 left-6 hidden rotate-6 text-5xl opacity-40 md:block">
+        {/* <div className="absolute -top-6 left-6 hidden rotate-6 text-5xl opacity-40 md:block">
           🥐
         </div>
         <div className="absolute -top-8 right-10 hidden -rotate-6 text-4xl opacity-30 md:block">
           🧁
-        </div>
+        </div> */}
         <div className="relative mx-auto flex max-w-screen-xl flex-col gap-12 px-6 py-14">
           <div className="grid gap-10 lg:grid-cols-4">
             <div className="lg:col-span-2">
@@ -161,12 +161,12 @@ export default function Footer() {
           <div className="flex flex-col items-start justify-between gap-4 border-t border-white/60 pt-6 text-xs text-[var(--color-choco)]/70 sm:flex-row">
             <p>© {year} Sweet Cravings Bakery. All rights reserved.</p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/privacy" className="hover:text-[var(--color-rose-dark)]">
+              {/* <Link href="/privacy" className="hover:text-[var(--color-rose-dark)]">
                 นโยบายความเป็นส่วนตัว
               </Link>
               <Link href="/terms" className="hover:text-[var(--color-rose-dark)]">
                 ข้อกำหนดการใช้งาน
-              </Link>
+              </Link> */}
               <a
                 href="https://maps.google.com/?q=Sweet+Cravings+Bakery"
                 target="_blank"

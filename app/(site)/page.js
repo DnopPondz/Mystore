@@ -39,7 +39,8 @@ export default async function HomePage() {
               ความสุขจากเตาอบ สู่โต๊ะอาหารของคุณ
             </h1>
             <p className="text-base sm:text-lg text-[var(--color-choco)]/80 max-w-xl">
-              ขนมปังหอมกรุ่น ครัวซองต์กรอบนอกนุ่มใน และเค้กสุดละมุน พร้อมเสิร์ฟทุกเช้าเพื่อเติมเต็มช่วงเวลาพิเศษให้ครอบครัวของคุณ
+              ขนมปังหอมกรุ่น ครัวซองต์กรอบนอกนุ่มใน และเค้กสุดละมุน
+              พร้อมเสิร์ฟทุกเช้าเพื่อเติมเต็มช่วงเวลาพิเศษให้ครอบครัวของคุณ
             </p>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
@@ -64,7 +65,10 @@ export default async function HomePage() {
 
             <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
               {["อบสดใหม่", "วัตถุดิบพรีเมียม", "ส่งไวในเมือง"].map((item) => (
-                <div key={item} className="rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow">
+                <div
+                  key={item}
+                  className="rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow"
+                >
                   {item}
                 </div>
               ))}
@@ -77,10 +81,15 @@ export default async function HomePage() {
               <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[#f5be9a] shadow-lg shadow-[#f5be9a]/50" />
               <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-white/70" />
               <div className="text-center px-10">
-                <p className="text-lg font-semibold text-[var(--color-rose-dark)]">เมนูใหม่!</p>
-                <p className="mt-1 text-2xl font-black text-[var(--color-choco)]">Strawberry Brioche</p>
+                <p className="text-lg font-semibold text-[var(--color-rose-dark)]">
+                  เมนูใหม่!
+                </p>
+                <p className="mt-1 text-2xl font-black text-[var(--color-choco)]">
+                  Strawberry Brioche
+                </p>
                 <p className="mt-4 text-sm text-[var(--color-choco)]/70">
-                  เนยสดคุณภาพสูง ผสานสตรอว์เบอร์รี่ออร์แกนิก เพิ่มความหวานอมเปรี้ยวอย่างลงตัว
+                  เนยสดคุณภาพสูง ผสานสตรอว์เบอร์รี่ออร์แกนิก
+                  เพิ่มความหวานอมเปรี้ยวอย่างลงตัว
                 </p>
               </div>
             </div>
@@ -91,19 +100,23 @@ export default async function HomePage() {
       <section id="menu" className="max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-rose)]">Our Menu</p>
-            <h2 className="mt-2 text-3xl font-bold text-[var(--color-choco)]">ขนมอบที่ทุกคนหลงรัก</h2>
-            <p className="mt-2 text-[var(--color-choco)]/70 max-w-2xl">
-              คัดสรรวัตถุดิบธรรมชาติจากฟาร์มท้องถิ่น ผสมผสานความพิถีพิถันในการอบจนได้ขนมสดใหม่ หวานกำลังดี พร้อมส่งถึงคุณทุกเช้า
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-rose)]">
+              Our Menu
             </p>
+            <h2 className="mt-2 text-3xl font-bold text-[var(--color-choco)]">
+              เมนู ขนมวันนี้
+            </h2>
+            {/* <p className="mt-2 text-[var(--color-choco)]/70 max-w-2xl">
+              {/* คัดสรรวัตถุดิบธรรมชาติจากฟาร์มท้องถิ่น ผสมผสานความพิถีพิถันในการอบจนได้ขนมสดใหม่ หวานกำลังดี พร้อมส่งถึงคุณทุกเช้า
+            </p> */}
           </div>
           <div className="flex gap-3">
             <span className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--color-choco)] shadow">
-              🍓 พายผลไม้ตามฤดูกาล
+              🍞 เมนูอาจจะมีการเปลี่ยนแปลงในแต่ละวัน
             </span>
-            <span className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--color-choco)] shadow">
+            {/* <span className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--color-choco)] shadow">
               ☕ เซตอาหารเช้า
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -136,11 +149,17 @@ export default async function HomePage() {
                 </div>
                 <div className="flex flex-1 flex-col gap-3 p-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--color-choco)]">{p.title}</h3>
-                    <p className="mt-1 text-sm text-[var(--color-choco)]/70 line-clamp-3">{p.description}</p>
+                    <h3 className="text-xl font-semibold text-[var(--color-choco)]">
+                      {p.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-[var(--color-choco)]/70 line-clamp-3">
+                      {p.description}
+                    </p>
                   </div>
                   <div className="mt-auto flex items-center justify-between pt-2">
-                    <span className="text-lg font-bold text-[var(--color-rose-dark)]">฿{p.price}</span>
+                    <span className="text-lg font-bold text-[var(--color-rose-dark)]">
+                      ฿{p.price}
+                    </span>
                     <AddToCartButton product={p} />
                   </div>
                 </div>
@@ -152,21 +171,28 @@ export default async function HomePage() {
 
       <section className="bg-white/70">
         <div className="max-w-screen-xl mx-auto px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-3">
-          {["Chef มืออาชีพ", "ส่งเร็วใน 2 ชม.", "มีเมนูสุขภาพ"].map((title, idx) => (
-            <div key={title} className="rounded-3xl bg-white p-8 shadow-md shadow-[#f5a25d15]">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f5a25d] to-[#f3d36b] text-white text-xl shadow">
-                {idx === 0 ? "👩‍🍳" : idx === 1 ? "🚚" : "💚"}
+          {["ทำสดใหม่ทุกวัน", "ทำเองทุกขั้นตอน", "เลือกวัตถุดิบคุณภาพ"].map(
+            (title, idx) => (
+              <div
+                key={title}
+                className="rounded-3xl bg-white p-8 shadow-md shadow-[#f5a25d15]"
+              >
+                {/* <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f5a25d] to-[#f3d36b] text-white text-xl shadow">
+                  {idx === 0 ? "👩‍🍳" : idx === 1 ? "👐" : "🌾"}
+                </div> */}
+                <h3 className="mt-6 text-xl font-semibold text-[var(--color-choco)]">
+                  {title}
+                </h3>
+                <p className="mt-3 text-sm text-[var(--color-choco)]/70">
+                  {idx === 0
+                    ? "ขนมทุกชิ้นสดใหม่จากเตา ดูแลเองทุกวันเพื่อให้ได้รสชาติที่ดีที่สุด"
+                    : idx === 1
+                    ? "ลงมือทำเองทุกขั้นตอน ตั้งแต่การเตรียมแป้งจนถึงการจัดส่ง"
+                    : "ใช้วัตถุดิบที่คัดสรรอย่างดี เพื่อให้ได้คุณภาพและรสชาติที่มั่นใจ"}
+                </p>
               </div>
-              <h3 className="mt-6 text-xl font-semibold text-[var(--color-choco)]">{title}</h3>
-              <p className="mt-3 text-sm text-[var(--color-choco)]/70">
-                {idx === 0
-                  ? "ทีมเชฟมากประสบการณ์ที่อบขนมทุกชิ้นอย่างพิถีพิถัน เพื่อรสชาติและคุณภาพที่ดีที่สุด"
-                  : idx === 1
-                  ? "บริการจัดส่งด่วนภายใน 2 ชั่วโมงในเขตเมือง เพื่อให้คุณได้รับขนมในสภาพสมบูรณ์"
-                  : "ตัวเลือกเมนูไร้น้ำตาลและวัตถุดิบออร์แกนิกสำหรับคนรักสุขภาพ"}
-              </p>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </section>
     </main>

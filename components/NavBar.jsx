@@ -9,14 +9,15 @@ const navItems = [
   { href: "/", label: "หน้าหลัก" },
   { href: "/about", label: "เกี่ยวกับเรา" },
   { href: "/preorder", label: "สั่งทำพิเศษ" },
+   { href: "/orders", label: "คำสั่งซื้อ" },
   {
     href: "/cart",
     label: "ตะกร้า",
     requiresAuth: true,
-    icon: "/images/paper-bag.svg",
+    // icon: "/images/paper-bag.svg",
     iconAlt: "ตะกร้าสินค้า",
   },
-  { href: "/orders", label: "คำสั่งซื้อ" },
+ 
 ];
 
 export default function NavBar() {
