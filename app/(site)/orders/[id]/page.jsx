@@ -1,9 +1,39 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import QrBox from "@/components/QrBox";
+
+/** ---------------- Icons (inline SVG, no external deps) ---------------- */
+function UploadIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M7 10l5-5 5 5" />
+      <path d="M12 15V5" />
+    </svg>
+  );
+}
+function ImageIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <path d="M21 15l-5-5L5 21" />
+    </svg>
+  );
+}
+function XIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+      <path d="M18 6 6 18" />
+      <path d="M6 6l12 12" />
+    </svg>
+  );
+}
+/** --------------------------------------------------------------------- */
 
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -78,17 +108,12 @@ export default function OrderDetailPage() {
     reloadOrder()
       .catch((e) => {
         if (ignore) return;
-        if (e?.status && e.status !== 401) {
-          setErr(String(e.message || e));
-        }
+        if (e?.status && e.status !== 401) setErr(String(e.message || e));
       })
       .finally(() => {
         if (!ignore) setLoading(false);
       });
-
-    return () => {
-      ignore = true;
-    };
+    return () => { ignore = true; };
   }, [id]);
 
   const statusLabel = useMemo(
@@ -139,11 +164,8 @@ export default function OrderDetailPage() {
     setPaymentMethod(order.payment?.method || "promptpay");
     const normalized = normalizePaymentStatus(order.payment?.status, order?.total);
     if (!["paid", "cash"].includes(normalized)) {
-      if (needsAmountInput) {
-        setTransferAmount(amountDue.toFixed(2));
-      } else {
-        setTransferAmount("");
-      }
+      if (needsAmountInput) setTransferAmount(amountDue.toFixed(2));
+      else setTransferAmount("");
     }
     if (["paid", "cash"].includes(normalized)) {
       setSlipData("");
@@ -158,10 +180,8 @@ export default function OrderDetailPage() {
       setLoadingPayment(false);
       return;
     }
-
     let ignore = false;
     setLoadingPayment(true);
-
     (async () => {
       try {
         const res = await fetch(`/api/orders/${orderIdSafe}/payment`, { cache: "no-store" });
@@ -178,17 +198,12 @@ export default function OrderDetailPage() {
         if (!ignore) setLoadingPayment(false);
       }
     })();
-
-    return () => {
-      ignore = true;
-    };
+    return () => { ignore = true; };
   }, [orderIdSafe, order?.payment?.method, order?.payment?.status, isPaid]);
 
   async function handleSelectMethod(nextMethod) {
     if (!orderIdSafe) return;
-    if (paymentMethod === nextMethod && order?.payment?.method === nextMethod) {
-      return;
-    }
+    if (paymentMethod === nextMethod && order?.payment?.method === nextMethod) return;
 
     setUpdatingMethod(true);
     setActionErr("");
@@ -220,9 +235,7 @@ export default function OrderDetailPage() {
       setSlipData("");
       setSlipName("");
       setReference("");
-      if (needsAmountInput) {
-        setTransferAmount(amountDue.toFixed(2));
-      }
+      if (needsAmountInput) setTransferAmount(amountDue.toFixed(2));
     } catch (e) {
       setActionErr(String(e.message || e));
       setPaymentMethod(order?.payment?.method || paymentMethod);
@@ -231,20 +244,16 @@ export default function OrderDetailPage() {
     }
   }
 
-  async function handleSlipChange(event) {
-    const file = event.target.files?.[0];
+  async function processSlipFile(file) {
     if (!file) {
       setSlipData("");
       setSlipName("");
       return;
     }
-
     if (!file.type?.startsWith("image/")) {
       setActionErr("รองรับเฉพาะไฟล์รูปภาพเท่านั้น");
-      event.target.value = "";
       return;
     }
-
     try {
       const dataUrl = await readFileAsDataUrl(file);
       if (typeof dataUrl !== "string") throw new Error("ไม่สามารถอ่านไฟล์ได้");
@@ -256,8 +265,13 @@ export default function OrderDetailPage() {
       setActionErr(String(e.message || e));
       setSlipData("");
       setSlipName("");
-      event.target.value = "";
     }
+  }
+
+  async function handleSlipChange(event) {
+    const file = event.target.files?.[0];
+    await processSlipFile(file);
+    if (event?.target) event.target.value = ""; // อนุญาตเลือกไฟล์เดิมซ้ำ
   }
 
   async function confirmPayment() {
@@ -396,6 +410,7 @@ export default function OrderDetailPage() {
                 {statusText}
               </span>
             </header>
+
             <div className="mt-4 grid gap-3 text-sm text-[var(--color-choco)]/80">
               <div className="flex items-center justify-between rounded-2xl bg-[#fff6ee] px-4 py-3">
                 <span>การชำระเงิน</span>
@@ -449,7 +464,7 @@ export default function OrderDetailPage() {
                   </p>
                 </div>
 
-                {awaitingReview ? (
+                {paymentStatus === "verifying" ? (
                   <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-700">
                     สลิปของคุณอยู่ระหว่างการตรวจสอบ หากต้องการแก้ไขสามารถอัปโหลดใหม่ได้เลย
                   </div>
@@ -467,7 +482,7 @@ export default function OrderDetailPage() {
                         key={option.value}
                         type="button"
                         onClick={() => handleSelectMethod(option.value)}
-                        disabled={updatingMethod || confirming || awaitingReview || paymentStatus === "cash"}
+                        disabled={updatingMethod || confirming || paymentStatus === "cash" || paymentStatus === "verifying"}
                         className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
                           active
                             ? "border-[var(--color-rose)] bg-[#fff1f5] text-[var(--color-rose-dark)] shadow"
@@ -507,7 +522,10 @@ export default function OrderDetailPage() {
                   <div className="space-y-2 text-sm">
                     <label className="font-medium">จำนวนเงินที่โอน (บาท) *</label>
                     <input
-                      type="text"
+                      type="number"
+                      step="0.01"
+                      inputMode="decimal"
+                      readOnly
                       value={transferAmount}
                       onChange={(e) => setTransferAmount(e.target.value)}
                       className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
@@ -521,6 +539,83 @@ export default function OrderDetailPage() {
                   </div>
                 )}
 
+                {/* ---------- แนบสลิปการโอน (สวย + drag&drop + พรีวิว) ---------- */}
+                <div className="space-y-2 text-sm">
+                  <label className="font-medium">แนบสลิปการโอน *</label>
+
+                  <div
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={async (e) => {
+                      e.preventDefault();
+                      const file = e.dataTransfer.files?.[0];
+                      await processSlipFile(file);
+                    }}
+                    className={`group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 transition 
+                      ${slipData ? "border-emerald-300 bg-emerald-50/40" : "border-[var(--color-rose)]/30 bg-white hover:border-[var(--color-rose)]/50 hover:bg-[var(--color-rose)]/5"}`}
+                  >
+                    <input
+                      id="slip"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleSlipChange}
+                      className="sr-only"
+                    />
+
+                    {!slipData ? (
+                      <label htmlFor="slip" className="flex cursor-pointer flex-col items-center gap-3 text-center">
+                        <div className="rounded-full bg-[var(--color-rose)]/10 p-3">
+                          <UploadIcon className="h-5 w-5 text-[var(--color-rose-dark)]" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-sm font-semibold text-[var(--color-rose-dark)]">
+                            คลิกเพื่ออัปโหลด หรือ ลากไฟล์มาวาง
+                          </div>
+                          <div className="text-xs text-[var(--color-choco)]/60">
+                            รองรับไฟล์รูปภาพ (PNG, JPG, JPEG)
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[#f5a25d33] group-hover:shadow-md">
+                          เลือกไฟล์สลิป
+                        </span>
+                      </label>
+                    ) : (
+                      <div className="w-full">
+                        <div className="relative overflow-hidden rounded-xl border bg-white">
+                          <img
+                            src={slipData}
+                            alt={slipName || "หลักฐานการโอน"}
+                            className="max-h-[360px] w-full object-contain"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => { setSlipData(""); setSlipName(""); }}
+                            className="absolute right-2 top-2 inline-flex items-center rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-rose-600 shadow hover:bg-white"
+                            aria-label="ลบสลิป"
+                            title="ลบสลิป"
+                          >
+                            <XIcon className="mr-1 h-3.5 w-3.5" />
+                            ลบ
+                          </button>
+                        </div>
+
+                        <div className="mt-3 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+                          <div className="truncate text-xs text-[var(--color-choco)]/70">
+                            ไฟล์: <span className="font-medium text-[var(--color-choco)]">{slipName}</span>
+                          </div>
+                          <label
+                            htmlFor="slip"
+                            className="inline-flex cursor-pointer items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-white px-4 py-1.5 text-xs font-semibold text-[var(--color-rose-dark)] hover:bg-[var(--color-rose)]/10"
+                          >
+                            <ImageIcon className="mr-1.5 h-3.5 w-3.5" />
+                            เปลี่ยนรูป
+                          </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* ----------------------------------------------------------------- */}
+
                 <div className="space-y-2 text-sm">
                   <label className="font-medium">หมายเลขอ้างอิงการโอน (ถ้ามี)</label>
                   <input
@@ -530,12 +625,6 @@ export default function OrderDetailPage() {
                     className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
                     placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
                   />
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <label className="font-medium">แนบสลิปการโอน *</label>
-                  <input type="file" accept="image/*" onChange={handleSlipChange} className="text-sm" />
-                  {slipName ? <div className="text-xs text-[var(--color-choco)]/60">ไฟล์: {slipName}</div> : null}
                 </div>
 
                 <button
@@ -560,7 +649,6 @@ export default function OrderDetailPage() {
                 {actionErr ? <div className="text-sm text-rose-600">{actionErr}</div> : null}
               </div>
             ) : null}
-
           </section>
 
           <section className="space-y-6">
@@ -604,10 +692,28 @@ export default function OrderDetailPage() {
                 </div>
               </div>
             </div>
+
+                  <div className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+            <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
+          <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
+            {order.items.map((it, idx) => (
+              <div
+                key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
+                className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
+                  <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
+                </div>
+                <div className="text-sm font-semibold text-[var(--color-rose-dark)]">฿{(it.price || 0) * (it.qty || 0)}</div>
+              </div>
+            ))}
+          </div>
+          </div>
           </section>
         </div>
 
-        <section className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+        {/* <section className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
           <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
           <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
             {order.items.map((it, idx) => (
@@ -623,7 +729,7 @@ export default function OrderDetailPage() {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
     </main>
   );

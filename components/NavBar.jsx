@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 
+
 const navItems = [
   { href: "/", label: "หน้าหลัก" },
   { href: "/about", label: "เกี่ยวกับเรา" },
@@ -97,7 +98,7 @@ export default function NavBar() {
           href="tel:021234567"
           className="font-medium transition-colors hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
-          โทร. 02-123-4567
+          โทร. 061-267-4523
         </a>
       </div>
 
@@ -108,11 +109,14 @@ export default function NavBar() {
               href="/"
               className="group flex items-center gap-3 rounded-full bg-white/70 px-3 py-1 transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
             >
-              <div className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
+              {/* <Image
+               className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
                 🥐
-              </div>
+              </Image> */}
+
+              <Image src="/images/logo.png" alt="logo" width={100} height={100} className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105" />
               <span className="text-xl sm:text-2xl font-extrabold text-[var(--color-rose-dark)] tracking-tight">
-                Sweet Cravings
+               Steaming Bun
               </span>
             </Link>
 
@@ -181,12 +185,13 @@ export default function NavBar() {
                       จัดการร้าน
                     </Link>
                   )}
-                  <span className="text-[var(--color-choco)]/80">
-                    {session?.user?.name || session?.user?.email}
-                  </span>
+                  <span className="px-5 py-2 rounded-full bg-[#f8e9d8] text-[var(--color-choco)]/80 font-medium shadow-inner"
+      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.2), inset -3px -3px 6px rgba(255,255,255,0.7)" }}>
+  {session?.user?.name || session?.user?.email}
+</span>
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="text-[var(--color-rose-dark)] underline decoration-dotted transition hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                    className="px-4 py-2 rounded-full font-medium text-white bg-red-400 shadow transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
                   >
                     ออกจากระบบ
                   </button>
@@ -246,12 +251,13 @@ export default function NavBar() {
                     จัดการร้าน
                   </Link>
                 )}
-                <span className="text-[var(--color-choco)]/70">
-                  {session?.user?.name || session?.user?.email}
-                </span>
+                <span className="px-5 py-2 rounded-full bg-[#f8e9d8] text-[var(--color-choco)]/80 font-medium shadow-inner"
+      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.2), inset -3px -3px 6px rgba(255,255,255,0.7)" }}>
+  {session?.user?.name || session?.user?.email}
+</span>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="text-left text-[var(--color-rose-dark)] underline transition hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/30"
+                  className="px-4 py-2 rounded-full font-medium text-white bg-red-400 shadow transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
                 >
                   ออกจากระบบ
                 </button>

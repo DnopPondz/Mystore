@@ -36,10 +36,10 @@ export default async function HomePage() {
               นึ่งสดทุกวัน • ส่งฟรีในตัวเมืองลำพูน
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-[var(--color-rose-dark)]">
-              ซาลาเปาและขนมจีบร้อนๆ ส่งตรงจากครัวลำพูน
+              ซาลาเปาและขนมจีบร้อนๆ 
             </h1>
             <p className="text-base sm:text-lg text-[var(--color-choco)]/80 max-w-xl">
-              ซาลาเปาไส้หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ และเมนูพิเศษที่คิดค้นจากสูตรลับของครอบครัว
+              ซาลาเปาไส้หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ และเมนูพิเศษ
               พร้อมขนมจีบกุ้งและหมูที่นึ่งสดใหม่ให้คุณอร่อยได้ทุกมื้อ
             </p>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
@@ -53,21 +53,21 @@ export default async function HomePage() {
                 href="/preorder"
                 className="inline-flex items-center justify-center rounded-full border border-white/60 bg-white/70 px-6 py-3 text-sm font-semibold text-[var(--color-rose-dark)] shadow hover:bg-white"
               >
-                สั่งไส้พิเศษ
+                สั่งเบรกเช้า & สั่งล่วงหน้า
               </a>
-              <a
+              {/* <a
                 href="/checkout"
                 className="inline-flex items-center justify-center rounded-full border border-white/0 bg-white/80 px-6 py-3 text-sm font-semibold text-[var(--color-choco)] shadow hover:bg-white"
               >
                 สั่งด่วนพร้อมจัดส่ง
-              </a>
+              </a> */}
             </div>
 
             <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
-              {["นึ่งสดทุกชั่วโมง", "หมูคัดพิเศษ", "ส่งไวในเมือง"].map((item) => (
+              {["นึ่งสดทุกวัน", "หมูคัดพิเศษ", "ส่งไวในเมือง"].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow"
+                  className="text-center rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow"
                 >
                   {item}
                 </div>
