@@ -23,7 +23,7 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    const { items, payment = { method: "promptpay", status: "paid" } } = await req.json();
+    const { items, payment = { method: "promptpay" } } = await req.json();
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
@@ -49,11 +49,22 @@ export async function POST(req) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id || null;
 
+    const allowedPaymentStatuses = new Set(["unpaid", "verifying", "paid", "invalid", "cash"]);
+    const requestedStatus = payment.status;
+    const fallbackStatus = total > 0 ? "unpaid" : "paid";
+    const initialStatus = allowedPaymentStatuses.has(requestedStatus) ? requestedStatus : fallbackStatus;
+
     const order = await Order.create({
       userId,
       items: checked.map(({ lineTotal, ...rest }) => rest),
       subtotal, discount, total,
-      payment: { method: payment.method, status: payment.status || "pending", ref: payment.ref || "" },
+      payment: {
+        method: payment.method || "promptpay",
+        status: initialStatus,
+        ref: payment.ref || "",
+        amountPaid: payment.amountPaid || 0,
+        confirmedAt: payment.confirmedAt || null,
+      },
       status: "new",
     });
 

@@ -1,18 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-
 export const metadata = {
-  title: "Bun Shop",
-  description: "Minimal bakery shop",
+  title: "Sweet Cravings Bakery",
+  description: "เบเกอรี่โฮมเมด กลิ่นหอมอบอุ่น พร้อมส่งถึงบ้านคุณ",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="th" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="text-gray-900">{children}</body>
+    <html lang="th">
+      <body className="min-h-screen bg-[var(--color-cream)] text-[var(--color-choco)]">
+        {children}
+      </body>
     </html>
   );
 }
