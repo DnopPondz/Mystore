@@ -7,6 +7,7 @@ const items = [
   { href: "/admin", label: "แดชบอร์ด", icon: "📊" },
   { href: "/admin/products", label: "จัดการสินค้า", icon: "🧁" },
   { href: "/admin/orders", label: "คำสั่งซื้อ", icon: "🧾" },
+  { href: "/admin/users", label: "ผู้ใช้งาน", icon: "👥" },
   { href: "/admin/coupons", label: "คูปอง", icon: "🎟️" },
 ];
 

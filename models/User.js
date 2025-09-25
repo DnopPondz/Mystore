@@ -6,6 +6,7 @@ const UserSchema = new Schema(
     email: { type: String, unique: true, index: true },
     passwordHash: String,
     role: { type: String, enum: ["user", "admin"], default: "user", index: true },
+    banned: { type: Boolean, default: false, index: true },
   },
   { timestamps: true }
 );
