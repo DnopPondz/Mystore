@@ -1,11 +1,12 @@
 import Link from "next/link";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import BackgroundTexture from "@/components/BackgroundTexture";
 
 export const metadata = { title: "Admin | Sweet Cravings" };
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="relative min-h-screen bg-[radial-gradient(circle_at_15%_20%,#4f1818,transparent_55%),radial-gradient(circle_at_80%_0%,#2b0c0c,transparent_50%),radial-gradient(circle_at_100%_80%,#180404,transparent_45%)] text-[var(--color-gold)] lg:flex">
+    <BackgroundTexture variant="admin" className="text-[var(--color-gold)] lg:flex">
       <AdminSidebar />
 
       <main className="flex-1 lg:ml-0">
@@ -38,6 +39,6 @@ export default function AdminLayout({ children }) {
 
         <div className="px-5 pb-20 pt-8 lg:px-10">{children}</div>
       </main>
-    </div>
+    </BackgroundTexture>
   );
 }
