@@ -19,6 +19,8 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [needsAuth, setNeedsAuth] = useState(false);
+  const [loyalty, setLoyalty] = useState(null);
+  const [loadingLoyalty, setLoadingLoyalty] = useState(false);
   const { status } = useSession();
 
   useEffect(() => {
@@ -63,6 +65,31 @@ export default function OrdersPage() {
     setNeedsAuth(false);
     loadOrders();
 
+    return () => {
+      ignore = true;
+    };
+  }, [status]);
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setLoyalty(null);
+      return;
+    }
+    let ignore = false;
+    setLoadingLoyalty(true);
+    fetch("/api/my/loyalty", { cache: "no-store" })
+      .then(async (res) => {
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (!ignore) setLoyalty(data);
+        return data;
+      })
+      .catch(() => {
+        if (!ignore) setLoyalty(null);
+      })
+      .finally(() => {
+        if (!ignore) setLoadingLoyalty(false);
+      });
     return () => {
       ignore = true;
     };
@@ -161,6 +188,40 @@ export default function OrdersPage() {
             เลือกสินค้าเพิ่ม
           </Link>
         </div>
+
+        {status === "authenticated" && (
+          <div className="mt-8 grid gap-4">
+            <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/30 backdrop-blur">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-[var(--color-text)]/70">คะแนนสะสม Bao Club</p>
+                  <p className="text-2xl font-bold text-[var(--color-gold)]">
+                    {loyalty ? loyalty.points : "-"} คะแนน
+                  </p>
+                  <p className="text-xs text-[var(--color-text)]/60">
+                    สถานะ: {loyalty?.progress?.currentLabel || "Starter"}
+                  </p>
+                </div>
+                <div className="w-full sm:w-1/2">
+                  <div className="h-2 rounded-full bg-[var(--color-burgundy-dark)]/60">
+                    <div
+                      className="h-2 rounded-full bg-[var(--color-rose)]"
+                      style={{ width: `${Math.min(100, Math.round((loyalty?.progress?.progress || 0) * 100))}%` }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--color-text)]/60">
+                    {loyalty?.progress?.next
+                      ? `อีก ${loyalty.progress.pointsToNext} คะแนนจะเลื่อนเป็น ${loyalty.progress.nextLabel}`
+                      : "คุณอยู่ในระดับสูงสุดแล้ว"}
+                  </p>
+                </div>
+              </div>
+              {loadingLoyalty && (
+                <p className="mt-2 text-xs text-[var(--color-text)]/60">กำลังโหลดข้อมูลคะแนน...</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {orders.length === 0 ? (
           <div className="mt-10 rounded-3xl bg-white/85 p-10 text-center shadow-lg shadow-[rgba(240,200,105,0.22)]">

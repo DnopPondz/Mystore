@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Sweet Cravings Bakery",
-  description: "เบเกอรี่โฮมเมด กลิ่นหอมอบอุ่น พร้อมส่งถึงบ้านคุณ",
+  title: "Bao Lamphun | ซาลาเปาและขนมจีบโฮมเมด",
+  description: "ซาลาเปาและขนมจีบนึ่งสดทุกวันจากครัวในเมืองลำพูน พร้อมบริการจัดส่งและสั่งทำพิเศษ",
 };
 
 export default function RootLayout({ children }) {

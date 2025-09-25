@@ -1,23 +1,15 @@
 "use client";
 import { useCart } from "@/components/cart/CartProvider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const cart = useCart();
   const { status } = useSession();
-  const router = useRouter();
   const [code, setCode] = useState(cart.coupon?.code || "");
   const [applying, setApplying] = useState(false);
   const [err, setErr] = useState("");
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace(`/login?callbackUrl=${encodeURIComponent("/cart")}`);
-    }
-  }, [status, router]);
 
   async function applyCoupon() {
     setErr("");
@@ -62,6 +54,12 @@ export default function CartPage() {
     }
   }
 
+  const isAuthenticated = status === "authenticated";
+  const checkoutHref = isAuthenticated
+    ? "/checkout"
+    : `/login?redirect=${encodeURIComponent("/checkout")}`;
+  const checkoutLabel = isAuthenticated ? "ไปหน้าชำระเงิน" : "เข้าสู่ระบบเพื่อชำระเงิน";
+
   const summary = (
     <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
       <div className="flex items-center justify-between text-lg font-semibold text-[var(--color-gold)]">
@@ -78,11 +76,20 @@ export default function CartPage() {
       ) : null}
       <div className="mt-6 flex flex-col gap-3">
         <Link
-          href="/checkout"
-          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
+          href={checkoutHref}
+          className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl ${
+            isAuthenticated
+              ? "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)]"
+              : "bg-[var(--color-gold)] text-[var(--color-burgundy-dark)]"
+          }`}
         >
-          ไปหน้าชำระเงิน
+          {checkoutLabel}
         </Link>
+        {!isAuthenticated && (
+          <p className="text-xs text-[var(--color-text)]/70">
+            *ยังไม่ต้องสมัครสมาชิกก็เพิ่มสินค้าในตะกร้าได้ แต่ต้องเข้าสู่ระบบก่อนชำระเงินเพื่อรับแต้ม Bao Club
+          </p>
+        )}
         <button
           className="rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/50 px-6 py-3 text-sm font-medium text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
           onClick={cart.clear}
@@ -92,35 +99,6 @@ export default function CartPage() {
       </div>
     </div>
   );
-
-  if (status === "loading") {
-    return (
-      <main className="flex min-h-[70vh] items-center justify-center bg-[var(--color-burgundy-dark)]/60">
-        <div className="rounded-full border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/70 px-6 py-3 text-sm text-[var(--color-gold)] shadow-inner">
-          กำลังตรวจสอบสถานะการเข้าสู่ระบบ...
-        </div>
-      </main>
-    );
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <main className="flex min-h-[70vh] items-center justify-center bg-[var(--color-burgundy-dark)]/60">
-        <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 px-8 py-10 text-center text-[var(--color-text)] shadow-xl shadow-black/40 backdrop-blur">
-          <p className="text-lg font-semibold text-[var(--color-gold)]">กรุณาเข้าสู่ระบบเพื่อเปิดตะกร้าสินค้า</p>
-          <p className="mt-3 text-sm text-[var(--color-text)]/70">
-            ระบบกำลังพาไปยังหน้าเข้าสู่ระบบอัตโนมัติ หากไม่เปลี่ยนหน้า
-            <Link
-              href={`/login?callbackUrl=${encodeURIComponent("/cart")}`}
-              className="ml-1 font-semibold text-[var(--color-rose)] underline"
-            >
-              คลิกที่นี่เพื่อเข้าสู่ระบบ
-            </Link>
-          </p>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">

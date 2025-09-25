@@ -29,6 +29,7 @@ export async function POST(req) {
     email: parsed.data.email,
     passwordHash,
     role: isFirst ? "admin" : "user",
+    memberSince: new Date(),
   });
 
   return NextResponse.json({ id: String(doc._id), role: doc.role });

@@ -72,8 +72,8 @@ export default function AdminSidebar() {
       >
         <div className="flex h-16 items-center justify-between px-6 text-lg font-semibold tracking-wide">
           <span className="flex items-center gap-2">
-            <span className="text-2xl">🍰</span>
-            Sweet Cravings
+            <span className="text-2xl">🥟</span>
+            Bao Lamphun Admin
           </span>
           <button
             type="button"

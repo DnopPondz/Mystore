@@ -16,6 +16,12 @@ const PreOrderSchema = new Schema(
       enum: ["phone", "line", "email"],
       default: "phone",
     },
+    lineId: { type: String, default: "" },
+    deliveryArea: { type: String, default: "" },
+    company: { type: String, default: "" },
+    occasion: { type: String, default: "" },
+    referenceImage: { type: String, default: "" },
+    moodboardUrl: { type: String, default: "" },
     status: {
       type: String,
       enum: ["new", "contacted", "quoted", "confirmed", "closed"],

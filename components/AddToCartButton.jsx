@@ -1,28 +1,17 @@
 "use client";
 import { useCart } from "@/components/cart/CartProvider";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
-export default function AddToCartButton({ product }) {
+export default function AddToCartButton({ product, quantity = 1, afterAdd }) {
   const cart = useCart();
-  const { status } = useSession();
-  const router = useRouter();
 
   function handleClick() {
-    if (status !== "authenticated") {
-      const path =
-        typeof window !== "undefined"
-          ? `${window.location.pathname}${window.location.search}`
-          : "/";
-      const redirect = encodeURIComponent(path || "/");
-      router.push(`/login?redirect=${redirect}`);
-      return;
-    }
-
+    const qty = Math.max(1, Number(quantity) || 1);
     cart.add(
       { productId: product._id, title: product.title, price: product.price },
-      1,
+      qty,
     );
+    if (typeof afterAdd === "function") {
+      afterAdd();
+    }
   }
 
   return (

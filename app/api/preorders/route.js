@@ -24,6 +24,12 @@ export async function POST(request) {
   const flavourIdeas = sanitizeText(payload.flavourIdeas);
   const notes = sanitizeText(payload.notes);
   const preferredContact = sanitizeText(payload.preferredContact || "phone");
+  const lineId = sanitizeText(payload.lineId);
+  const deliveryArea = sanitizeText(payload.deliveryArea);
+  const company = sanitizeText(payload.company);
+  const occasion = sanitizeText(payload.occasion);
+  const referenceImage = sanitizeText(payload.referenceImage);
+  const moodboardUrl = sanitizeText(payload.moodboardUrl);
 
   if (!name || !phone || !flavourIdeas) {
     return NextResponse.json(
@@ -45,6 +51,12 @@ export async function POST(request) {
     preferredContact: ["phone", "line", "email"].includes(preferredContact)
       ? preferredContact
       : "phone",
+    lineId,
+    deliveryArea,
+    company,
+    occasion,
+    referenceImage,
+    moodboardUrl,
   };
 
   let stored = false;

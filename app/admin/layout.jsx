@@ -2,7 +2,7 @@ import Link from "next/link";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { AdminPopupProvider } from "@/components/admin/AdminPopupProvider";
 
-export const metadata = { title: "Admin | Sweet Cravings" };
+export const metadata = { title: "Admin | Bao Lamphun" };
 
 export default function AdminLayout({ children }) {
   return (
@@ -15,7 +15,7 @@ export default function AdminLayout({ children }) {
             <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-10">
               <div>
                 <p className="text-sm font-medium uppercase tracking-[0.3em] text-[var(--color-gold)]/60">
-                  Sweet Cravings Admin
+                  Bao Lamphun Admin
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold text-[var(--color-rose)]">
                   แผงควบคุมการจัดการร้าน

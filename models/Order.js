@@ -58,6 +58,8 @@ const OrderSchema = new Schema(
 
     // สถานะคำสั่งซื้อ
     status: { type: String, enum: FULFILLMENT_STATUSES, default: "new" },
+
+    loyaltyEarned: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

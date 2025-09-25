@@ -15,9 +15,9 @@ export default function HookPage({ searchParams }) {
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/40 px-4 py-2 text-xs font-semibold text-[var(--color-rose)]">
               ✅ รับคำสั่งซื้อแล้ว
             </span>
-            <h1 className="text-3xl font-bold text-[var(--color-rose)]">ขอบคุณที่สั่ง Sweet Cravings</h1>
+            <h1 className="text-3xl font-bold text-[var(--color-rose)]">ขอบคุณที่สั่ง Bao Lamphun</h1>
             <p className="text-sm text-[var(--color-text)]/75">
-              เราได้รับสลิปและรายละเอียดการชำระเงินแล้ว ทีมงานจะตรวจสอบและยืนยันสถานะให้โดยเร็วที่สุด
+              เราได้รับสลิปและรายละเอียดการชำระเงินแล้ว ทีม Bao Lamphun จะตรวจสอบและยืนยันสถานะให้โดยเร็วที่สุด
             </p>
             {orderId ? (
               <p className="text-xs font-medium text-[var(--color-text)]/60">รหัสคำสั่งซื้อของคุณ: {orderId}</p>

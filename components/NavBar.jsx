@@ -8,17 +8,18 @@ import { useState, useEffect } from "react";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก" },
-  { href: "/about", label: "เกี่ยวกับเรา" },
+  { href: "/#menu", label: "เมนูวันนี้" },
+  { href: "/#signature", label: "เมนูซิกเนเจอร์" },
+  { href: "/#story", label: "เรื่องราว" },
+  { href: "/#reviews", label: "รีวิวลูกค้า" },
   { href: "/preorder", label: "สั่งทำพิเศษ" },
-   { href: "/orders", label: "คำสั่งซื้อ" },
+  { href: "/orders", label: "คำสั่งซื้อ", requiresAuth: true },
   {
     href: "/cart",
     label: "ตะกร้า",
-    requiresAuth: true,
-    // icon: "/images/paper-bag.svg",
+    requiresAuth: false,
     iconAlt: "ตะกร้าสินค้า",
   },
- 
 ];
 
 export default function NavBar() {
@@ -93,9 +94,9 @@ export default function NavBar() {
   return (
     <header className="sticky top-0 z-30 bg-[var(--color-burgundy-dark)]/60 backdrop-blur">
       <div className="hidden md:flex items-center justify-between border-b border-[var(--color-rose)]/15 px-6 py-2 text-xs text-[var(--color-gold)]/80 max-w-screen-xl mx-auto">
-        <span className="tracking-wide">อบสดใหม่ทุกวัน • ส่งฟรีในเมืองเมื่อสั่งครบ ฿800</span>
+        <span className="tracking-wide">นึ่งสดทุกเช้า • ส่งฟรีในตัวเมืองลำพูนเมื่อสั่งครบ ฿800</span>
         <a
-          href="tel:021234567"
+          href="tel:0612674523"
           className="font-medium text-[var(--color-gold)]/80 transition-colors hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         >
           โทร. 061-267-4523
@@ -122,7 +123,7 @@ export default function NavBar() {
                 className="h-10 w-10 rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/80 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
               />
               <span className="text-xl sm:text-2xl font-extrabold text-[var(--color-rose)] tracking-tight">
-               Steaming Bun
+                Bao Lamphun
               </span>
             </Link>
 
@@ -259,10 +260,12 @@ export default function NavBar() {
                     จัดการร้าน
                   </Link>
                 )}
-                <span className="px-5 py-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 text-[var(--color-gold)]/90 font-medium shadow-inner"
-      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}>
-  {session?.user?.name || session?.user?.email}
-</span>
+                <span
+                  className="px-5 py-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 text-[var(--color-gold)]/90 font-medium shadow-inner"
+                  style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}
+                >
+                  {session?.user?.name || session?.user?.email}
+                </span>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
                   className="px-4 py-2 rounded-full font-medium text-white bg-red-500/80 shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"

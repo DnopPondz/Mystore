@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { Order } from "@/models/Order";
+import { User } from "@/models/User";
+import { calculateLoyaltyPoints, resolveTier } from "@/lib/loyalty";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -54,6 +56,8 @@ export async function POST(req) {
     const fallbackStatus = total > 0 ? "unpaid" : "paid";
     const initialStatus = allowedPaymentStatuses.has(requestedStatus) ? requestedStatus : fallbackStatus;
 
+    const loyaltyEarned = calculateLoyaltyPoints(total);
+
     const order = await Order.create({
       userId,
       items: checked.map(({ lineTotal, ...rest }) => rest),
@@ -66,9 +70,32 @@ export async function POST(req) {
         confirmedAt: payment.confirmedAt || null,
       },
       status: "new",
+      loyaltyEarned,
     });
 
-    return NextResponse.json({ ok: 1, id: String(order._id) }, { status: 201 });
+    if (userId && loyaltyEarned > 0) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.loyaltyPoints = (user.loyaltyPoints || 0) + loyaltyEarned;
+        user.memberSince = user.memberSince || new Date();
+        const history = Array.isArray(user.loyaltyHistory) ? user.loyaltyHistory : [];
+        history.unshift({
+          orderId: order._id,
+          points: loyaltyEarned,
+          note: `คำสั่งซื้อ #${String(order._id).slice(-6)}`,
+          createdAt: new Date(),
+        });
+        user.loyaltyHistory = history.slice(0, 30);
+        const tier = resolveTier(user.loyaltyPoints);
+        user.loyaltyTier = tier.id;
+        await user.save();
+      }
+    }
+
+    return NextResponse.json(
+      { ok: 1, id: String(order._id), loyaltyEarned },
+      { status: 201 },
+    );
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
