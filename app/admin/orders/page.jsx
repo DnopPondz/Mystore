@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const statusOptions = ["all", "new", "pending", "shipping", "success", "cancel"];
 
@@ -69,6 +70,7 @@ export default function AdminOrdersPage() {
   const [selectedSlip, setSelectedSlip] = useState(null);
   const [updating, setUpdating] = useState("");
   const [updatingPayment, setUpdatingPayment] = useState("");
+  const popup = useAdminPopup();
 
   async function load() {
     setLoading(true);
@@ -99,12 +101,18 @@ export default function AdminOrdersPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data?.error || "Update failed");
+        await popup.alert(data?.error || "อัปเดตสถานะไม่สำเร็จ", {
+          title: "เกิดข้อผิดพลาด",
+          tone: "error",
+        });
         return;
       }
       setOrders((prev) => prev.map((o) => (o._id === id ? data : o)));
     } catch (e) {
-      alert(e?.message || "Update failed");
+      await popup.alert(e?.message || "อัปเดตสถานะไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
     } finally {
       setUpdating("");
     }
@@ -123,12 +131,18 @@ export default function AdminOrdersPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data?.error || "Update payment failed");
+        await popup.alert(data?.error || "อัปเดตสถานะการชำระเงินไม่สำเร็จ", {
+          title: "เกิดข้อผิดพลาด",
+          tone: "error",
+        });
         return;
       }
       setOrders((prev) => prev.map((o) => (o._id === order._id ? data : o)));
     } catch (e) {
-      alert(e?.message || "Update payment failed");
+      await popup.alert(e?.message || "อัปเดตสถานะการชำระเงินไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
     } finally {
       setUpdatingPayment("");
     }

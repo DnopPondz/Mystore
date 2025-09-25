@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import slugify from "slugify";
+import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const emptyProduct = {
   title: "",
@@ -52,6 +53,7 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState(emptyProduct);
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
+  const popup = useAdminPopup();
 
   const isEdit = useMemo(() => Boolean(editing?._id), [editing]);
 
@@ -131,7 +133,10 @@ export default function AdminProductsPage() {
     const data = await res.json();
     setSaving(false);
     if (!res.ok) {
-      alert(data?.error || "บันทึกข้อมูลไม่สำเร็จ");
+      await popup.alert(data?.error || "บันทึกข้อมูลไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     setEditing(null);
@@ -139,11 +144,20 @@ export default function AdminProductsPage() {
   }
 
   async function onDelete(p) {
-    if (!confirm(`ลบสินค้า "${p.title}" ?`)) return;
+    const confirmed = await popup.confirm(`ลบสินค้า "${p.title}" ?`, {
+      title: "ยืนยันการลบสินค้า",
+      confirmText: "ลบสินค้า",
+      cancelText: "ยกเลิก",
+      tone: "error",
+    });
+    if (!confirmed) return;
     const res = await fetch(`/api/products/${p._id}`, { method: "DELETE" });
     const data = await res.json();
     if (!res.ok) {
-      alert(data?.error || "Delete failed");
+      await popup.alert(data?.error || "ลบสินค้าไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     await load();
@@ -158,7 +172,10 @@ export default function AdminProductsPage() {
     });
     const data = await res.json();
     if (!res.ok) {
-      alert(data?.error || "Update failed");
+      await popup.alert(data?.error || "อัปเดตสถานะไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     setItems((prev) => prev.map((x) => (x._id === p._id ? { ...x, active: newValue } : x)));
@@ -510,7 +527,10 @@ export default function AdminProductsPage() {
                           try {
                             await onUpload(file);
                           } catch (error) {
-                            alert(String(error.message || error));
+                            await popup.alert(String(error.message || error), {
+                              title: "อัปโหลดรูปไม่สำเร็จ",
+                              tone: "error",
+                            });
                           }
                         }}
                         className="w-full rounded-[1rem] border border-dashed border-[#D2691E]/40 bg-white/70 px-4 py-3 text-sm text-[#8B4513]/70 file:mr-4 file:rounded-full file:border-0 file:bg-[#D2691E]/10 file:px-4 file:py-2 file:text-[#D2691E]"

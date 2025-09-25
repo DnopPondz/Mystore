@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const roleLabels = {
   admin: "ผู้ดูแลระบบ",
@@ -40,6 +41,7 @@ export default function AdminUsersPage() {
   const [err, setErr] = useState("");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState({});
+  const popup = useAdminPopup();
 
   async function load() {
     setLoading(true);
@@ -71,7 +73,17 @@ export default function AdminUsersPage() {
 
   async function updateUser(id, payload, options = {}) {
     const { confirmMessage } = options;
-    if (confirmMessage && !confirm(confirmMessage)) return;
+    if (confirmMessage) {
+      const confirmed = await popup.confirm(confirmMessage, {
+        title: "ยืนยันการทำรายการ",
+        confirmText: "ยืนยัน",
+        cancelText: "ยกเลิก",
+        tone: "warning",
+      });
+      if (confirmed === false) {
+        return;
+      }
+    }
 
     setBusyFor(id, true);
     try {
@@ -89,7 +101,10 @@ export default function AdminUsersPage() {
         setUsers((prev) => prev.map((u) => (u.id === id ? data.user : u)));
       }
     } catch (e) {
-      alert(String(e.message || e));
+      await popup.alert(String(e.message || e), {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
     } finally {
       setBusyFor(id, false);
     }

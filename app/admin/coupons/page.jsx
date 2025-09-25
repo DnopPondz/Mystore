@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 /* ---------- Shared UI (match Products page) ---------- */
 function StatBubble({ label, value, color }) {
@@ -82,6 +83,7 @@ export default function AdminCouponsPage() {
   const [form, setForm] = useState(emptyCoupon);
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
+  const popup = useAdminPopup();
 
   async function load() {
     setLoading(true);
@@ -144,7 +146,10 @@ export default function AdminCouponsPage() {
     const data = await res.json();
     setSaving(false);
     if (!res.ok) {
-      alert(data?.error || "บันทึกข้อมูลไม่สำเร็จ");
+      await popup.alert(data?.error || "บันทึกข้อมูลไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     setEditing(null);
@@ -152,11 +157,20 @@ export default function AdminCouponsPage() {
   }
 
   async function onDelete(coupon) {
-    if (!confirm(`ลบคูปอง "${coupon.code}" ?`)) return;
+    const confirmed = await popup.confirm(`ลบคูปอง "${coupon.code}" ?`, {
+      title: "ยืนยันการลบคูปอง",
+      confirmText: "ลบคูปอง",
+      cancelText: "ยกเลิก",
+      tone: "error",
+    });
+    if (confirmed === false) return;
     const res = await fetch(`/api/coupons/${coupon._id}`, { method: "DELETE" });
     const data = await res.json();
     if (!res.ok) {
-      alert(data?.error || "Delete failed");
+      await popup.alert(data?.error || "ลบคูปองไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     await load();
@@ -171,7 +185,10 @@ export default function AdminCouponsPage() {
     });
     const data = await res.json();
     if (!res.ok) {
-      alert(data?.error || "Update failed");
+      await popup.alert(data?.error || "อัปเดตสถานะไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
       return;
     }
     setItems((prev) => prev.map((c) => (c._id === coupon._id ? { ...c, active: newValue } : c)));
