@@ -1,9 +1,12 @@
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
+import { Review } from "@/models/Review";
 import AddToCartButton from "@/components/AddToCartButton";
+import ReviewsShowcase from "@/components/ReviewsShowcase";
 
 export default async function HomePage() {
   let products = [];
+  let featuredReviews = [];
 
   try {
     if (process.env.MONGODB_URI) {
@@ -17,6 +20,22 @@ export default async function HomePage() {
         description: d.description || "",
         price: d.price ?? 0,
         images: d.images || [],
+      }));
+
+      const reviews = await Review.find({
+        published: true,
+        rating: { $gte: 3.5 },
+      })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean();
+
+      featuredReviews = (reviews || []).map((r) => ({
+        id: String(r._id),
+        name: r.userName || "ลูกค้า",
+        rating: Number(r.rating || 0),
+        comment: r.comment || "",
+        createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : null,
       }));
     }
   } catch (error) {
@@ -198,6 +217,8 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+
+      <ReviewsShowcase reviews={featuredReviews} />
 
     </main>
   );

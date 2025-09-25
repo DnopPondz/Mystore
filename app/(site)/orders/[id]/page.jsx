@@ -78,6 +78,7 @@ export default function OrderDetailPage() {
   const [actionSuccess, setActionSuccess] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [updatingMethod, setUpdatingMethod] = useState(false);
+  const [editingPayment, setEditingPayment] = useState(false);
 
   async function reloadOrder() {
     if (!id) return null;
@@ -173,6 +174,10 @@ export default function OrderDetailPage() {
       setReference("");
     }
   }, [order, amountDue, needsAmountInput]);
+
+  useEffect(() => {
+    if (!awaitingReview) setEditingPayment(false);
+  }, [awaitingReview]);
 
   useEffect(() => {
     if (!orderIdSafe || isPaid) {
@@ -313,6 +318,7 @@ export default function OrderDetailPage() {
       setSlipData("");
       setSlipName("");
       setReference("");
+      setEditingPayment(false);
     } catch (e) {
       setActionErr(String(e.message || e));
     } finally {
@@ -462,15 +468,41 @@ export default function OrderDetailPage() {
             {!isPaid ? (
               <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/30 p-5">
                 <div>
-                  <h3 className="text-base font-semibold text-[var(--color-choco)]">ชำระเงินสำหรับคำสั่งซื้อนี้</h3>
+                  <h3 className="text-base font-semibold text-[var(--color-choco)]">
+                    {awaitingReview ? "เรากำลังตรวจสอบการชำระเงินของคุณ" : "ชำระเงินสำหรับคำสั่งซื้อนี้"}
+                  </h3>
                   <p className="mt-1 text-xs text-[var(--color-choco)]/70">
-                    เลือกช่องทางที่สะดวก แนบสลิป แล้วระบบจะบันทึกข้อมูลพร้อมรอทีมงานตรวจสอบให้โดยอัตโนมัติ
+                    {awaitingReview
+                      ? "เราได้รับสลิปของคุณแล้ว ระบบกำลังตรวจสอบโดยทีมงาน หากต้องการแก้ไขสามารถส่งข้อมูลใหม่ได้"
+                      : "เลือกช่องทางที่สะดวก แนบสลิป แล้วระบบจะบันทึกข้อมูลพร้อมรอทีมงานตรวจสอบให้โดยอัตโนมัติ"}
                   </p>
                 </div>
 
                 {paymentStatus === "verifying" ? (
-                  <div className="rounded-2xl border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] px-4 py-2 text-xs font-semibold text-[var(--color-gold)]">
-                    สลิปของคุณอยู่ระหว่างการตรวจสอบ หากต้องการแก้ไขสามารถอัปโหลดใหม่ได้เลย
+                  <div className="space-y-3 rounded-2xl border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] px-4 py-3 text-xs text-[var(--color-gold)]">
+                    <div className="font-semibold">สลิปของคุณอยู่ระหว่างการตรวจสอบ</div>
+                    <p className="text-[var(--color-text)]/75">
+                      ทีมงานจะยืนยันสถานะการชำระเงินให้โดยเร็วที่สุด หากมีข้อมูลผิดพลาดสามารถกด "แก้ไขข้อมูลการชำระเงิน" เพื่อส่งสลิปใหม่ได้
+                    </p>
+                    {!editingPayment ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPayment(true);
+                          setSlipData("");
+                          setSlipName("");
+                          if (typeof order.payment?.amountPaid === "number") {
+                            setTransferAmount(order.payment.amountPaid.toFixed(2));
+                          } else if (needsAmountInput) {
+                            setTransferAmount(amountDue.toFixed(2));
+                          }
+                          setReference(order.payment?.reference || "");
+                        }}
+                        className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/40 px-4 py-1.5 text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy-dark)]/25"
+                      >
+                        แก้ไขข้อมูลการชำระเงิน
+                      </button>
+                    ) : null}
                   </div>
                 ) : paymentStatus === "invalid" ? (
                   <div className="rounded-2xl border border-[var(--color-rose)]/40 bg-[rgba(120,32,32,0.55)] px-4 py-2 text-xs font-semibold text-[var(--color-rose)]">
@@ -478,134 +510,124 @@ export default function OrderDetailPage() {
                   </div>
                 ) : null}
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {paymentOptions.map((option) => {
-                    const active = paymentMethod === option.value;
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => handleSelectMethod(option.value)}
-                        disabled={updatingMethod || confirming || paymentStatus === "cash" || paymentStatus === "verifying"}
-                        className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/35 ${
-                          active
-                            ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)] text-[var(--color-rose)] shadow-lg shadow-black/40"
-                            : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/55 text-[var(--color-text)]/80"
-                        } ${updatingMethod || confirming ? "cursor-wait" : ""}`}
-                      >
-                        <div className="font-semibold">{option.label}</div>
-                        <div className="mt-1 text-xs text-[var(--color-text)]/70">{option.description}</div>
-                      </button>
-                    );
-                  })}
-                </div>
+                {(!awaitingReview || editingPayment) && (
+                  <>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {paymentOptions.map((option) => {
+                        const active = paymentMethod === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => handleSelectMethod(option.value)}
+                            disabled={
+                              updatingMethod ||
+                              confirming ||
+                              paymentStatus === "cash" ||
+                              (awaitingReview && !editingPayment)
+                            }
+                            className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/35 ${
+                              active
+                                ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)] text-[var(--color-rose)] shadow-lg shadow-black/40"
+                                : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/55 text-[var(--color-text)]/80"
+                            } ${updatingMethod || confirming ? "cursor-wait" : ""}`}
+                          >
+                            <div className="font-semibold">{option.label}</div>
+                            <div className="mt-1 text-xs text-[var(--color-text)]/70">{option.description}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
 
-                {loadingPayment ? (
-                  <div className="rounded-2xl border border-dashed border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/35 px-4 py-3 text-sm text-[var(--color-text)]/75">
-                    กำลังโหลดรายละเอียดการชำระเงิน...
-                  </div>
-                ) : paymentInfo?.promptpay ? (
-                  <QrBox payload={paymentInfo.promptpay.payload} amount={paymentInfo.promptpay.amount} title="สแกนเพื่อชำระเงิน" />
-                ) : paymentMethod === "bank" && paymentInfo?.bankAccount ? (
-                  <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
-                    <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
-                    <div>ธนาคาร: {paymentInfo.bankAccount.bank}</div>
-                    <div>เลขบัญชี: {paymentInfo.bankAccount.number}</div>
-                    <div>ชื่อบัญชี: {paymentInfo.bankAccount.name}</div>
-                    {paymentInfo.bankAccount.promptpayId ? (
-                      <div className="text-xs text-[var(--color-choco)]/60">หรือ PromptPay ID: {paymentInfo.bankAccount.promptpayId}</div>
+                    {loadingPayment ? (
+                      <div className="rounded-2xl border border-dashed border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/35 px-4 py-3 text-sm text-[var(--color-text)]/75">
+                        กำลังโหลดรายละเอียดการชำระเงิน...
+                      </div>
+                    ) : paymentInfo?.promptpay ? (
+                      <QrBox payload={paymentInfo.promptpay.payload} amount={paymentInfo.promptpay.amount} title="สแกนเพื่อชำระเงิน" />
+                    ) : paymentMethod === "bank" && paymentInfo?.bankAccount ? (
+                      <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
+                        <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
+                        <div>ธนาคาร: {paymentInfo.bankAccount.bank}</div>
+                        <div>เลขบัญชี: {paymentInfo.bankAccount.number}</div>
+                        <div>ชื่อบัญชี: {paymentInfo.bankAccount.name}</div>
+                        {paymentInfo.bankAccount.promptpayId ? (
+                          <div className="text-xs text-[var(--color-choco)]/60">หรือ PromptPay ID: {paymentInfo.bankAccount.promptpayId}</div>
+                        ) : null}
+                      </div>
+                    ) : amountDue <= 0 ? (
+                      <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
+                        ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
+                      </div>
                     ) : null}
-                  </div>
-                ) : amountDue <= 0 ? (
-                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
-                    ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
-                  </div>
-                ) : null}
 
-                {needsAmountInput ? (
-                  <div className="space-y-2 text-sm">
-                    <label className="font-medium">จำนวนเงินที่โอน (บาท) *</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      inputMode="decimal"
-                      readOnly
-                      value={transferAmount}
-                      onChange={(e) => setTransferAmount(e.target.value)}
-                      className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
-                      placeholder={`ยอดที่ต้องชำระ ฿${fmt(amountDue)}`}
-                    />
-                    <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(amountDue)}</p>
-                  </div>
-                ) : (
-                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
-                    ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
-                  </div>
-                )}
-
-                {/* ---------- แนบสลิปการโอน (สวย + drag&drop + พรีวิว) ---------- */}
-                <div className="space-y-2 text-sm">
-                  <label className="font-medium">แนบสลิปการโอน *</label>
-
-                  <div
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={async (e) => {
-                      e.preventDefault();
-                      const file = e.dataTransfer.files?.[0];
-                      await processSlipFile(file);
-                    }}
-                    className={`group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 transition
-                      ${slipData ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)]" : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/45 hover:border-[var(--color-rose)]/50 hover:bg-[var(--color-burgundy-dark)]/35"}`}
-                  >
-                    <input
-                      id="slip"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleSlipChange}
-                      className="sr-only"
-                    />
-
-                    {!slipData ? (
-                      <label htmlFor="slip" className="flex cursor-pointer flex-col items-center gap-3 text-center">
-                        <div className="rounded-full bg-[var(--color-rose)]/10 p-3">
-                          <UploadIcon className="h-5 w-5 text-[var(--color-rose-dark)]" />
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-sm font-semibold text-[var(--color-rose-dark)]">
-                            คลิกเพื่ออัปโหลด หรือ ลากไฟล์มาวาง
-                          </div>
-                          <div className="text-xs text-[var(--color-choco)]/60">
-                            รองรับไฟล์รูปภาพ (PNG, JPG, JPEG)
-                          </div>
-                        </div>
-                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[rgba(240,200,105,0.33)] group-hover:shadow-md">
-                          เลือกไฟล์สลิป
-                        </span>
+                    <div className="space-y-2 text-sm">
+                      <label className="font-medium">
+                        {needsAmountInput ? "จำนวนเงินที่โอน" : "จำนวนเงิน (ถ้ามี)"}
                       </label>
-                    ) : (
-                      <div className="w-full">
-                        <div className="relative overflow-hidden rounded-xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/45">
-                          <img
-                            src={slipData}
-                            alt={slipName || "หลักฐานการโอน"}
-                            className="max-h-[360px] w-full object-contain"
-                          />
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="number"
+                          inputMode="decimal"
+                          step="0.01"
+                          min="0"
+                          value={transferAmount}
+                          onChange={(e) => setTransferAmount(e.target.value)}
+                          className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
+                          placeholder="กรอกจำนวนเงินที่โอน"
+                        />
+                        {needsAmountInput ? (
                           <button
                             type="button"
-                            onClick={() => { setSlipData(""); setSlipName(""); }}
-                            className="absolute right-2 top-2 inline-flex items-center rounded-full bg-[var(--color-burgundy-dark)]/60 px-2 py-1 text-xs font-medium text-[var(--color-rose)] shadow hover:bg-[var(--color-burgundy-dark)]/45"
-                            aria-label="ลบสลิป"
-                            title="ลบสลิป"
+                            onClick={() => setTransferAmount(amountDue.toFixed(2))}
+                            className="rounded-full border border-[var(--color-rose)]/40 px-3 py-1 text-xs text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy-dark)]/35"
                           >
-                            <XIcon className="mr-1 h-3.5 w-3.5" />
-                            ลบ
+                            ใส่ยอดเต็ม
                           </button>
-                        </div>
+                        ) : null}
+                      </div>
+                    </div>
 
-                        <div className="mt-3 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
-                          <div className="truncate text-xs text-[var(--color-choco)]/70">
-                            ไฟล์: <span className="font-medium text-[var(--color-choco)]">{slipName}</span>
+                    <div className="space-y-2 text-sm">
+                      <label className="font-medium">สลิปการโอน</label>
+                      <div className="flex flex-col items-start gap-3 rounded-2xl border border-dashed border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/40 p-4 text-xs text-[var(--color-text)]/70">
+                        {slipData ? (
+                          <div className="w-full space-y-2">
+                            <div className="flex items-center justify-between gap-3 rounded-xl bg-[var(--color-burgundy-dark)]/60 px-3 py-2 text-[var(--color-text)]">
+                              <div className="flex items-center gap-2 text-xs font-medium">
+                                <ImageIcon className="h-3.5 w-3.5" />
+                                <span>{slipName || "สลิปการโอน"}</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSlipData("");
+                                  setSlipName("");
+                                }}
+                                className="inline-flex items-center gap-1 rounded-full border border-[var(--color-rose)]/35 px-2 py-1 text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy-dark)]/40"
+                              >
+                                <XIcon className="h-3 w-3" />
+                                ลบไฟล์
+                              </button>
+                            </div>
+                            <div className="overflow-hidden rounded-xl border border-[var(--color-rose)]/20 bg-black/20">
+                              <img src={slipData} alt={slipName || "หลักฐานการโอน"} className="max-h-72 w-full object-contain" />
+                            </div>
                           </div>
+                        ) : (
+                          <>
+                            <p>แนบรูปสลิปเพื่อยืนยันการโอนเงิน (รองรับไฟล์ .jpg, .png)</p>
+                            <label
+                              htmlFor="slip"
+                              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-4 py-2 text-xs font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(240,200,105,0.35)] transition hover:shadow-xl"
+                            >
+                              <UploadIcon className="h-4 w-4" />
+                              แนบสลิปการโอน
+                            </label>
+                            <input id="slip" type="file" accept="image/*" className="hidden" onChange={handleSlipChange} />
+                          </>
+                        )}
+                        {slipData ? (
                           <label
                             htmlFor="slip"
                             className="inline-flex cursor-pointer items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/45 px-4 py-1.5 text-xs font-semibold text-[var(--color-rose)] hover:bg-[var(--color-burgundy-dark)]/30"
@@ -613,41 +635,73 @@ export default function OrderDetailPage() {
                             <ImageIcon className="mr-1.5 h-3.5 w-3.5" />
                             เปลี่ยนรูป
                           </label>
-                        </div>
+                        ) : null}
                       </div>
-                    )}
-                  </div>
-                </div>
-                {/* ----------------------------------------------------------------- */}
+                    </div>
 
-                <div className="space-y-2 text-sm">
-                  <label className="font-medium">หมายเลขอ้างอิงการโอน (ถ้ามี)</label>
-                  <input
-                    type="text"
-                    value={reference}
-                    onChange={(e) => setReference(e.target.value)}
-                    className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
-                    placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
-                  />
-                </div>
+                    <div className="space-y-2 text-sm">
+                      <label className="font-medium">หมายเลขอ้างอิงการโอน (ถ้ามี)</label>
+                      <input
+                        type="text"
+                        value={reference}
+                        onChange={(e) => setReference(e.target.value)}
+                        className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
+                        placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
+                      />
+                    </div>
 
-                <button
-                  onClick={confirmPayment}
-                  disabled={
-                    confirming ||
-                    updatingMethod ||
-                    loadingPayment ||
-                    !slipData ||
-                    (needsAmountInput && !transferAmount)
-                  }
-                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
-                    confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)
-                      ? "cursor-not-allowed bg-[var(--color-burgundy-dark)]/30"
-                      : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
-                  }`}
-                >
-                  {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}
-                </button>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <button
+                        onClick={confirmPayment}
+                        disabled={
+                          confirming ||
+                          updatingMethod ||
+                          loadingPayment ||
+                          !slipData ||
+                          (needsAmountInput && !transferAmount)
+                        }
+                        className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition sm:w-auto ${
+                          confirming ||
+                          updatingMethod ||
+                          loadingPayment ||
+                          !slipData ||
+                          (needsAmountInput && !transferAmount)
+                            ? "cursor-not-allowed bg-[var(--color-burgundy-dark)]/30"
+                            : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
+                        }`}
+                      >
+                        {confirming
+                          ? "กำลังยืนยัน..."
+                          : updatingMethod
+                          ? "กำลังอัปเดตวิธีชำระเงิน..."
+                          : awaitingReview
+                          ? "ส่งสลิปใหม่"
+                          : "ยืนยันการชำระเงิน"}
+                      </button>
+                      {awaitingReview ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingPayment(false);
+                            setSlipData("");
+                            setSlipName("");
+                            if (typeof order.payment?.amountPaid === "number") {
+                              setTransferAmount(order.payment.amountPaid.toFixed(2));
+                            } else if (needsAmountInput) {
+                              setTransferAmount(amountDue.toFixed(2));
+                            } else {
+                              setTransferAmount("");
+                            }
+                            setReference(order.payment?.reference || "");
+                          }}
+                          className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)]/40 px-6 py-3 text-sm font-semibold text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy-dark)]/35"
+                        >
+                          ยกเลิกการแก้ไข
+                        </button>
+                      ) : null}
+                    </div>
+                  </>
+                )}
 
                 {actionSuccess ? <div className="text-sm text-[var(--color-gold)]">{actionSuccess}</div> : null}
                 {actionErr ? <div className="text-sm text-[var(--color-rose)]">{actionErr}</div> : null}
