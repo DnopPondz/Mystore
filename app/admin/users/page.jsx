@@ -130,7 +130,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">จัดการผู้ใช้งาน</h2>
@@ -153,13 +153,13 @@ export default function AdminUsersPage() {
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <StatCard label="ผู้ใช้ทั้งหมด" value={stats.total} tone="from-[#f3d36b]/30 via-[var(--color-rose-dark)]/20 to-transparent" />
-          <StatCard label="ผู้ดูแลระบบ" value={stats.adminCount} tone="from-[#7cd1b8]/30 via-[var(--color-gold)]/20 to-transparent" />
-          <StatCard label="ถูกระงับ" value={stats.bannedCount} tone="from-[var(--color-rose)]/30 via-[var(--color-rose-dark)]/20 to-transparent" />
+          <StatCard label="ผู้ใช้ทั้งหมด" value={stats.total} tone="from-[#f3d36b]/30 via-[#f7c68b]/20 to-transparent" />
+          <StatCard label="ผู้ดูแลระบบ" value={stats.adminCount} tone="from-[#7cd1b8]/30 via-[#f3d36b]/20 to-transparent" />
+          <StatCard label="ถูกระงับ" value={stats.bannedCount} tone="from-[#f5a25d]/30 via-[#f7c68b]/20 to-transparent" />
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[rgba(240,200,105,0.09)]">
+      <section className="rounded-[2rem] border border-white/70 bg-white/70 shadow-xl shadow-[#f5a25d18] backdrop-blur-sm overflow-hidden">
         <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">รายการผู้ใช้งาน</h3>
@@ -167,84 +167,261 @@ export default function AdminUsersPage() {
               สามารถเปลี่ยนสิทธิ์การใช้งานหรือระงับบัญชีชั่วคราวได้จากตารางด้านล่าง
             </p>
           </div>
-          {loading && <span className="text-xs text-[var(--color-choco)]/60">กำลังโหลด...</span>}
+          {loading && (
+            <div className="flex items-center gap-2 text-xs text-[var(--color-choco)]/60">
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-[var(--color-rose)]/30 border-t-[var(--color-rose)]"></div>
+              กำลังโหลด...
+            </div>
+          )}
         </header>
 
         {err ? (
-          <div className="px-6 py-8 text-center text-sm text-rose-600">{err}</div>
+                      <div className="flex items-center justify-center px-6 py-12">
+            <div className="rounded-[1.5rem] bg-rose-50 border border-rose-200 px-6 py-4 text-center">
+              <div className="mb-2 text-2xl">⚠️</div>
+              <div className="text-sm font-medium text-rose-600">{err}</div>
+                              <button 
+                onClick={load}
+                className="mt-3 rounded-full bg-rose-100 px-4 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-200 transition-colors"
+              >
+                ลองอีกครั้ง
+              </button>
+            </div>
+          </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/60 text-sm text-[var(--color-choco)]">
-              <thead className="bg-[#fff5e4] text-[var(--color-choco)]/80">
-                <tr>
-                  <th className="px-6 py-3 text-left font-medium">ชื่อ</th>
-                  <th className="px-6 py-3 text-left font-medium">อีเมล</th>
-                  <th className="px-6 py-3 text-left font-medium">สิทธิ์</th>
-                  <th className="px-6 py-3 text-left font-medium">สถานะ</th>
-                  <th className="px-6 py-3 text-left font-medium">สร้างเมื่อ</th>
-                  <th className="px-6 py-3 text-right font-medium">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-sm text-[var(--color-choco)]/60">
-                      {loading ? "กำลังโหลดข้อมูลผู้ใช้..." : "ไม่พบผู้ใช้ที่ตรงกับคำค้นหา"}
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((user, idx) => {
+          <div className="overflow-hidden rounded-[1.5rem]">
+            {/* Mobile Cards - แสดงเฉพาะใน mobile */}
+            <div className="block lg:hidden">
+              {filteredUsers.length === 0 ? (
+                <div className="px-6 py-12 text-center">
+                  <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-[var(--color-rose)]/10 flex items-center justify-center text-2xl">
+                    👤
+                  </div>
+                  <div className="text-sm font-medium text-[var(--color-choco)]/60">
+                    {loading ? "กำลังโหลดข้อมูลผู้ใช้..." : "ไม่พบผู้ใช้ที่ตรงกับคำค้นหา"}
+                  </div>
+                </div>
+              ) : (
+                                  <div className="space-y-3 p-4">
+                  {filteredUsers.map((user) => {
                     const isBusy = !!busy[user.id];
                     return (
-                      <tr key={user.id} className={idx % 2 === 0 ? "bg-white" : "bg-[#fff7f0]"}>
-                        <td className="px-6 py-4 font-medium">{user.name || "-"}</td>
-                        <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">
-                          <select
-                            className="rounded-full border border-[var(--color-rose)]/30 bg-white/80 px-3 py-1 text-xs font-semibold focus:border-[var(--color-rose)] focus:outline-none"
-                            value={user.role}
-                            disabled={isBusy}
-                            onChange={(e) => handleRoleChange(user, e.target.value)}
-                          >
-                            {Object.entries(roleLabels).map(([value, label]) => (
-                              <option key={value} value={value}>
-                                {label}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td className="px-6 py-4">
+                      <div key={user.id} className="rounded-[1.5rem] bg-white/80 border border-white/60 p-4 shadow-sm">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h4 className="font-semibold text-[var(--color-choco)]">{user.name || "ไม่ระบุชื่อ"}</h4>
+                            <p className="text-sm text-[var(--color-choco)]/70">{user.email}</p>
+                          </div>
                           <span
-                            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
+                            className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
                               user.banned
                                 ? "bg-rose-100 text-rose-600"
                                 : "bg-[#e7f8f0] text-[var(--color-rose-dark)]"
                             }`}
                           >
-                            {user.banned ? "ถูกระงับ" : "ปกติ"}
+                            {user.banned ? "🔒 ถูกระงับ" : "✅ ปกติ"}
                           </span>
-                        </td>
-                        <td className="px-6 py-4 text-xs text-[var(--color-choco)]/70">{formatDate(user.createdAt)}</td>
-                        <td className="px-6 py-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => toggleBan(user)}
-                            disabled={isBusy}
-                            className={`inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold transition ${
-                              user.banned
-                                ? "bg-[#7cd1b8]/20 text-[#0b7b59] hover:bg-[#7cd1b8]/30"
-                                : "bg-rose-100 text-rose-600 hover:bg-rose-200"
-                            } ${isBusy ? "opacity-60" : ""}`}
-                          >
-                            {isBusy ? "กำลังบันทึก..." : user.banned ? "ปลดระงับ" : "ระงับการใช้งาน"}
-                          </button>
-                        </td>
-                      </tr>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+                          <div>
+                            <span className="text-[var(--color-choco)]/60">สิทธิ์:</span>
+                            <select
+                              className="ml-2 rounded-full border border-[var(--color-rose)]/30 bg-white/80 px-2 py-1 text-xs font-semibold focus:border-[var(--color-rose)] focus:outline-none"
+                              value={user.role}
+                              disabled={isBusy}
+                              onChange={(e) => handleRoleChange(user, e.target.value)}
+                            >
+                              {Object.entries(roleLabels).map(([value, label]) => (
+                                <option key={value} value={value}>
+                                  {label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <span className="text-[var(--color-choco)]/60">สร้างเมื่อ:</span>
+                            <div className="text-[var(--color-choco)]/80 font-medium">{formatDate(user.createdAt)}</div>
+                          </div>
+                        </div>
+                        
+                        <button
+                          type="button"
+                          onClick={() => toggleBan(user)}
+                          disabled={isBusy}
+                          className={`w-full rounded-full px-4 py-2 text-xs font-semibold transition-all duration-200 ${
+                            user.banned
+                              ? "bg-[#7cd1b8]/20 text-[#0b7b59] hover:bg-[#7cd1b8]/30 hover:shadow-md"
+                              : "bg-rose-100 text-rose-600 hover:bg-rose-200 hover:shadow-md"
+                          } ${isBusy ? "opacity-60 cursor-not-allowed" : "hover:scale-105"}`}
+                        >
+                          {isBusy ? "⏳ กำลังบันทึก..." : user.banned ? "🔓 ปลดระงับ" : "🔒 ระงับการใช้งาน"}
+                        </button>
+                      </div>
                     );
-                  })
-                )}
-              </tbody>
-            </table>
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Desktop Table - แสดงเฉพาะใน desktop */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="min-w-full text-sm text-[var(--color-choco)]">
+                <thead>
+                  <tr className="bg-gradient-to-r from-[#fff5e4] to-[#fef7ed] border-b border-white/40">
+                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center gap-2">
+                        👤 ชื่อผู้ใช้
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center gap-2">
+                        ✉️ อีเมล
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center gap-2">
+                        🔑 สิทธิ์
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center gap-2">
+                        📊 สถานะ
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center gap-2">
+                        📅 วันที่สร้าง
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 text-right font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                      <div className="flex items-center justify-end gap-2">
+                        ⚙️ จัดการ
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/40">
+                  {filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center">
+                        <div className="flex flex-col items-center justify-center">
+                          <div className="mb-4 h-20 w-20 rounded-full bg-[var(--color-rose)]/10 flex items-center justify-center text-3xl">
+                            👤
+                          </div>
+                          <div className="text-sm font-medium text-[var(--color-choco)]/60">
+                            {loading ? "กำลังโหลดข้อมูลผู้ใช้..." : "ไม่พบผู้ใช้ที่ตรงกับคำค้นหา"}
+                          </div>
+                          {!loading && search && (
+                            <div className="mt-2 text-xs text-[var(--color-choco)]/50">
+                              ลองเปลี่ยนคำค้นหาหรือล้างตัวกรองดู
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredUsers.map((user, idx) => {
+                      const isBusy = !!busy[user.id];
+                      const isEven = idx % 2 === 0;
+                      return (
+                        <tr 
+                          key={user.id} 
+                          className={`group transition-all duration-200 hover:bg-gradient-to-r hover:shadow-lg ${
+                            isEven 
+                              ? "bg-white/50 hover:from-white/80 hover:to-[#fff9f5]/60" 
+                              : "bg-[#fff7f0]/40 hover:from-[#fff9f5]/70 hover:to-white/50"
+                          } ${user.banned ? 'opacity-75' : ''}`}
+                        >
+                          <td className="px-6 py-5">
+                            <div className="flex items-center gap-3">
+                              <div className={`h-10 w-10 rounded-full flex items-center justify-center text-sm font-semibold ${
+                                user.role === 'admin' 
+                                  ? 'bg-gradient-to-br from-[#7cd1b8] to-[#5fb3a3] text-white' 
+                                  : 'bg-gradient-to-br from-[#f3d36b] to-[#e6c659] text-white'
+                              }`}>
+                                {user.role === 'admin' ? '👑' : '👤'}
+                              </div>
+                              <div>
+                                <div className="font-semibold text-[var(--color-choco)]">
+                                  {user.name || "ไม่ระบุชื่อ"}
+                                </div>
+                                {user.name && (
+                                  <div className="text-xs text-[var(--color-choco)]/60 mt-0.5">
+                                    ID: {user.id.slice(0, 8)}...
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="font-medium text-[var(--color-choco)]">{user.email}</div>
+                            <div className="text-xs text-[var(--color-choco)]/60 mt-0.5">
+                              {user.emailVerified ? '✅ ยืนยันแล้ว' : '⏳ รอยืนยัน'}
+                            </div>
+                          </td>
+                          <td className="px-6 py-5">
+                            <select
+                              className={`rounded-full border border-[var(--color-rose)]/30 bg-white/90 px-3 py-2 text-xs font-semibold shadow-sm transition-all duration-200 focus:border-[var(--color-rose)] focus:outline-none focus:shadow-md hover:shadow-md ${
+                                isBusy ? 'opacity-60 cursor-not-allowed' : 'hover:bg-white'
+                              }`}
+                              value={user.role}
+                              disabled={isBusy}
+                              onChange={(e) => handleRoleChange(user, e.target.value)}
+                            >
+                              {Object.entries(roleLabels).map(([value, label]) => (
+                                <option key={value} value={value}>
+                                  {label}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="px-6 py-5">
+                            <span
+                              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-sm ${
+                                user.banned
+                                  ? "bg-gradient-to-r from-rose-100 to-rose-50 text-rose-600 border border-rose-200"
+                                  : "bg-gradient-to-r from-[#e7f8f0] to-[#d1f2e7] text-[var(--color-rose-dark)] border border-green-200"
+                              }`}
+                            >
+                              {user.banned ? "🔒 ถูกระงับ" : "✅ ปกติ"}
+                            </span>
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="text-xs text-[var(--color-choco)]/80 font-medium">
+                              {formatDate(user.createdAt)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 text-right">
+                            <button
+                              type="button"
+                              onClick={() => toggleBan(user)}
+                              disabled={isBusy}
+                              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold shadow-sm transition-all duration-200 ${
+                                user.banned
+                                  ? "bg-gradient-to-r from-[#7cd1b8]/20 to-[#5fb3a3]/10 text-[#0b7b59] border border-[#7cd1b8]/30 hover:from-[#7cd1b8]/30 hover:to-[#5fb3a3]/20 hover:shadow-md"
+                                  : "bg-gradient-to-r from-rose-100 to-rose-50 text-rose-600 border border-rose-200 hover:from-rose-200 hover:to-rose-100 hover:shadow-md"
+                              } ${isBusy ? "opacity-60 cursor-not-allowed" : "hover:scale-105 group-hover:shadow-lg"}`}
+                            >
+                              {isBusy ? (
+                                <>
+                                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
+                                  กำลังบันทึก...
+                                </>
+                              ) : user.banned ? (
+                                <>🔓 ปลดระงับ</>
+                              ) : (
+                                <>🔒 ระงับการใช้งาน</>
+                              )}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </section>
@@ -255,7 +432,7 @@ export default function AdminUsersPage() {
 function StatCard({ label, value, tone }) {
   return (
     <div
-      className={`rounded-2xl border border-white/60 bg-white/70 p-4 text-center shadow-inner shadow-[rgba(240,200,105,0.19)] ${
+      className={`rounded-[1.5rem] border border-white/60 bg-white/70 p-4 text-center shadow-inner shadow-[#f5a25d1f] transition-all duration-200 hover:shadow-lg hover:scale-105 ${
         tone ? `bg-gradient-to-br ${tone}` : ""
       }`}
     >
