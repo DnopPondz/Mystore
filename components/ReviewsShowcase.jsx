@@ -4,12 +4,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
+/* ---------- Static display stars (อ่านอย่างเดียว) ---------- */
 function StarRating({ value }) {
   const stars = useMemo(() => {
     return Array.from({ length: 5 }).map((_, index) => {
       const fill = Math.max(0, Math.min(1, value - index));
       return (
-        <span key={index} className="relative inline-block h-5 w-5 text-lg leading-none text-[var(--color-rose)]">
+        <span
+          key={index}
+          className="relative inline-block h-5 w-5 text-lg leading-none text-[var(--color-rose)]"
+          aria-hidden
+        >
           <span className="absolute inset-0 text-[var(--color-rose)]/20">★</span>
           <span
             className="absolute inset-0 overflow-hidden text-[var(--color-rose)]"
@@ -26,10 +31,162 @@ function StarRating({ value }) {
   return (
     <div className="flex items-center gap-1">
       {stars}
-      <span className="ml-2 text-sm font-semibold text-[var(--color-gold)]/80">{value.toFixed(1)}</span>
+      <span className="ml-2 text-sm font-semibold text-[var(--color-gold)]/80">
+        {Number(value || 0).toFixed(1)}
+      </span>
     </div>
   );
 }
+
+/* ---------- Interactive star picker (คลิก/โฮเวอร์/คีย์บอร์ด) ---------- */
+function StarPicker({
+  value = 0,
+  onChange,
+  size = 24,
+  readOnly = false,
+  id,
+  "aria-label": ariaLabel = "ให้คะแนนเป็นดาว",
+}) {
+  const [hoverVal, setHoverVal] = useState(null);
+
+  const clamp = (v) => Math.min(5, Math.max(1, v));
+
+  const handleFromEvent = useCallback((e, starIndex1Based) => {
+    // หา offset ที่คลิกภายในสัญลักษณ์ดาว เพื่อแยกครึ่งซ้าย/ขวา
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const x = (e.nativeEvent.touches?.[0]?.clientX ?? e.clientX) - rect.left;
+    const isRightHalf = x > rect.width / 2;
+    const base = starIndex1Based - 1; // 0..4
+    const next = base + (isRightHalf ? 1 : 0.5);
+    return clamp(next);
+  }, []);
+
+  const setByMouse = useCallback(
+    (e, idx) => {
+      if (readOnly) return;
+      setHoverVal(handleFromEvent(e, idx));
+    },
+    [handleFromEvent, readOnly]
+  );
+
+  const clearHover = useCallback(() => {
+    if (readOnly) return;
+    setHoverVal(null);
+  }, [readOnly]);
+
+  const commitByClick = useCallback(
+    (e, idx) => {
+      if (readOnly) return;
+      const v = handleFromEvent(e, idx);
+      onChange?.(v);
+      setHoverVal(null);
+    },
+    [handleFromEvent, onChange, readOnly]
+  );
+
+  const onKeyDown = useCallback(
+    (e) => {
+      if (readOnly) return;
+      let next = value;
+      if (e.key === "ArrowRight") {
+        next = clamp(value + 0.5);
+        e.preventDefault();
+      } else if (e.key === "ArrowLeft") {
+        next = clamp(value - 0.5);
+        e.preventDefault();
+      } else if (e.key === "Home") {
+        next = 1;
+        e.preventDefault();
+      } else if (e.key === "End") {
+        next = 5;
+        e.preventDefault();
+      }
+      if (next !== value) onChange?.(next);
+    },
+    [value, onChange, readOnly]
+  );
+
+  const displayVal = hoverVal ?? value;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div
+        id={id}
+        role="slider"
+        aria-label={ariaLabel}
+        aria-valuemin={1}
+        aria-valuemax={5}
+        aria-valuenow={Number(displayVal).toFixed(1)}
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+        className={`inline-flex select-none items-center gap-1 ${
+          readOnly ? "opacity-70" : "cursor-pointer"
+        }`}
+        onMouseLeave={clearHover}
+      >
+        {Array.from({ length: 5 }).map((_, i) => {
+          const index1 = i + 1;
+          // คำนวณการเติมสีต่อดาว (0, 50, 100%)
+          const diff = displayVal - i;
+          const fill =
+            diff >= 1 ? 100 : diff >= 0.5 ? 50 : diff > 0 ? 0 : 0; // แสดงเป็นครึ่ง/เต็มเท่านั้น
+          return (
+            <button
+              key={i}
+              type="button"
+              className="relative inline-block outline-none"
+              style={{ width: size, height: size }}
+              onMouseMove={(e) => setByMouse(e, index1)}
+              onTouchStart={(e) => setByMouse(e, index1)}
+              onTouchMove={(e) => setByMouse(e, index1)}
+              onClick={(e) => commitByClick(e, index1)}
+              aria-label={`${index1} ดาว`}
+            >
+              {/* ดาวพื้น */}
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute inset-0"
+                style={{ width: size, height: size }}
+              >
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.88L18.18 22 12 18.56 5.82 22 7 14.15l-5-4.88 6.91-1.01L12 2z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="text-[var(--color-rose)]/25"
+                />
+              </svg>
+              {/* ชั้นเติมสีตามเปอร์เซ็นต์ */}
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ width: `${fill}%` }}
+                aria-hidden
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="absolute inset-0"
+                  style={{ width: size, height: size }}
+                >
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.88L18.18 22 12 18.56 5.82 22 7 14.15l-5-4.88 6.91-1.01L12 2z"
+                    className="text-[var(--color-rose)]"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <div className="text-xs text-[var(--color-gold)]/70">
+        {Number(displayVal).toFixed(1)} ดาว
+      </div>
+    </div>
+  );
+}
+
+/* ========================== Main Component ========================== */
 
 function extractErrorMessage(error) {
   if (!error) return "ส่งรีวิวไม่สำเร็จ";
@@ -242,9 +399,7 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
             </div>
 
             <div className="rounded-[2rem] border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 p-6 shadow-inner shadow-black/30">
-              <h3 className="text-xl font-semibold text-[var(--color-rose)]">
-                แชร์ประสบการณ์ของคุณ
-              </h3>
+              <h3 className="text-xl font-semibold text-[var(--color-rose)]">แชร์ประสบการณ์ของคุณ</h3>
               <p className="mt-2 text-sm text-[var(--color-gold)]/75">
                 รีวิวของคุณช่วยให้เราพัฒนาสูตรให้ดียิ่งขึ้น และเป็นกำลังใจให้ทีมครัวทุกวัน
               </p>
@@ -273,18 +428,22 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
                     </label>
                     <div className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 p-4 shadow-inner">
                       <div className="flex items-center justify-between gap-3">
+                        {/* ใช้ StarRating เพื่อโชว์ค่าปัจจุบัน */}
                         <StarRating value={Number(formRating)} />
-                        <span className="text-xs text-[var(--color-gold)]/70">{Number(formRating).toFixed(1)} ดาว</span>
+                        <span className="text-xs text-[var(--color-gold)]/70">
+                          {Number(formRating).toFixed(1)} ดาว
+                        </span>
                       </div>
-                      <input
-                        type="range"
-                        min="1"
-                        max="5"
-                        step="0.5"
-                        value={formRating}
-                        onChange={(event) => setFormRating(Number(event.target.value))}
-                        className="mt-3 w-full accent-[var(--color-rose)]"
-                      />
+
+                      {/* ตัวเลือกแบบกดดาวแทนสไลด์ */}
+                      <div className="mt-3">
+                        <StarPicker
+                          value={Number(formRating)}
+                          onChange={(v) => setFormRating(Number(v))}
+                          size={26}
+                          aria-label="เลือกคะแนนรีวิว"
+                        />
+                      </div>
                     </div>
                   </div>
 
