@@ -3,7 +3,9 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(req) {
   const path = req.nextUrl.pathname;
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const secret = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET;
+  const secureCookie = req.nextUrl.protocol === "https:";
+  const token = await getToken({ req, secret, secureCookie });
 
   // ต้องล็อกอิน: /orders/*
   if (path.startsWith("/orders")) {
