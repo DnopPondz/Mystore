@@ -77,7 +77,7 @@ function LoginContent() {
             </button>
           </form>
 
-          {err && <p className="mt-4 text-sm text-rose-600">{err}</p>}
+          {err && <p className="mt-4 text-sm text-[var(--color-rose)]">{err}</p>}
 
           <p className="mt-6 text-center text-sm text-[var(--color-text)]/70">
             ยังไม่มีบัญชี?

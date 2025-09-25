@@ -237,9 +237,9 @@ export default function CheckoutPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#fff0e1] via-[#fff8ef] to-[#fde7b8]" />
-      <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
-      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[#f3d36b]/25 blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.9)] to-[var(--color-burgundy)]" />
+      <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[var(--color-rose)]/18 blur-3xl" />
+      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[var(--color-gold)]/18 blur-3xl" />
 
       <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
         <div className="max-w-2xl">
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-          <section className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[rgba(240,200,105,0.19)] space-y-6">
+          <section className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-8 shadow-2xl shadow-black/45 backdrop-blur space-y-6">
             <div>
               <h2 className="text-xl font-semibold text-[var(--color-choco)]">ข้อมูลผู้รับและที่อยู่</h2>
               <p className="mt-1 text-xs text-[var(--color-choco)]/70">ช่องที่มีเครื่องหมาย * จำเป็นต้องกรอก</p>
@@ -280,7 +280,7 @@ export default function CheckoutPage() {
                       : "หมายเหตุถึงร้าน"}
                   </label>
                   <input
-                    className={`w-full rounded-2xl border border-[var(--color-rose)]/35 bg-white px-4 py-3 text-sm text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
+                    className={`w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40 ${
                       REQUIRED_FIELDS.includes(key) && !form[key] ? "border-rose-300" : ""
                     }`}
                     value={form[key]}
@@ -309,12 +309,12 @@ export default function CheckoutPage() {
                       disabled={updatingMethod && paymentMethod !== option.value}
                       className={`rounded-2xl border px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40 ${
                         active
-                          ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.12)] text-[var(--color-rose-dark)] shadow"
-                          : "border-[var(--color-rose)]/35 bg-white text-[var(--color-choco)]/80"
+                          ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)] text-[var(--color-rose)] shadow-lg shadow-black/40"
+                          : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/55 text-[var(--color-text)]/80"
                       } ${updatingMethod ? "cursor-wait" : ""}`}
                     >
                       <div className="text-sm font-semibold">{option.label}</div>
-                      <div className="mt-1 text-xs text-[var(--color-choco)]/70">{option.description}</div>
+                      <div className="mt-1 text-xs text-[var(--color-text)]/70">{option.description}</div>
                     </button>
                   );
                 })}
@@ -330,7 +330,7 @@ export default function CheckoutPage() {
                 disabled={creating || cart.items.length === 0 || Boolean(order)}
                 className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                   creating || cart.items.length === 0 || order
-                    ? "bg-[#f2c8a5] cursor-not-allowed"
+                    ? "bg-[var(--color-burgundy-dark)]/40 cursor-not-allowed"
                     : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] hover:shadow-xl"
                 }`}
               >
@@ -344,11 +344,11 @@ export default function CheckoutPage() {
               </button>
             </div>
 
-            {err && <div className="text-sm text-rose-600">{err}</div>}
+            {err && <div className="text-sm text-[var(--color-rose)]">{err}</div>}
           </section>
 
           <section className="space-y-6">
-            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[rgba(240,200,105,0.1)]">
+            <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">สรุปรายการ</h2>
               <div className="mt-4 space-y-3 text-sm">
                 {currentTotals.items.map((it) => (
@@ -366,7 +366,7 @@ export default function CheckoutPage() {
                   <span>฿{fmt(currentTotals.subtotal)}</span>
                 </div>
                 {currentTotals.discount ? (
-                  <div className="flex justify-between text-emerald-600">
+                  <div className="flex justify-between text-[var(--color-gold)]">
                     <span>
                       คูปอง {currentTotals.coupon?.code}
                       {currentTotals.coupon?.description ? ` (${currentTotals.coupon.description})` : ""}
@@ -381,11 +381,11 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white/90 p-6 shadow-xl shadow-[rgba(240,200,105,0.1)] space-y-4">
+            <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur space-y-4">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">ยืนยันการโอน</h2>
               {order ? (
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] px-4 py-3 text-sm text-[var(--color-gold)]">
                     สร้างคำสั่งซื้อ #{order.orderId} แล้ว กรุณาชำระเงินและแนบสลิปเพื่อยืนยัน ระบบจะตรวจสอบยอดที่ชำระให้อัตโนมัติ
                   </div>
                   {order.promptpay ? (
@@ -395,7 +395,7 @@ export default function CheckoutPage() {
                       title="สแกนเพื่อชำระเงิน"
                     />
                   ) : paymentMethod === "bank" && order.bankAccount ? (
-                    <div className="space-y-3 rounded-2xl border border-[#f4c689]/50 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
+                    <div className="space-y-3 rounded-2xl border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
                       <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
                       <div>ธนาคาร: {order.bankAccount.bank}</div>
                       <div>เลขบัญชี: {order.bankAccount.number}</div>
@@ -417,13 +417,13 @@ export default function CheckoutPage() {
                         type="text"
                         value={transferAmount}
                         onChange={(e) => setTransferAmount(e.target.value)}
-                        className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                        className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                         placeholder={`ยอดที่ต้องชำระ ฿${fmt(order.orderPreview.total)}`}
                       />
                       <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(order.orderPreview.total)}</p>
                     </div>
                   ) : (
-                    <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                    <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/40 px-4 py-3 text-sm text-[var(--color-text)]/75">
                       ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                     </div>
                   )}
@@ -434,7 +434,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={reference}
                       onChange={(e) => setReference(e.target.value)}
-                      className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                      className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                       placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
                     />
                   </div>
@@ -454,7 +454,7 @@ export default function CheckoutPage() {
                     disabled={confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)}
                     className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                       confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)
-                        ? "bg-[#f2c8a5] cursor-not-allowed"
+                        ? "bg-[var(--color-burgundy-dark)]/40 cursor-not-allowed"
                         : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
                     }`}
                   >
@@ -466,7 +466,7 @@ export default function CheckoutPage() {
                   กดปุ่ม "สร้างคำสั่งซื้อ" เพื่อสร้างคำสั่งซื้อและรับรายละเอียดการชำระเงิน
                 </div>
               )}
-              {err && order && <div className="text-sm text-rose-600">{err}</div>}
+              {err && order && <div className="text-sm text-[var(--color-rose)]">{err}</div>}
             </div>
           </section>
         </div>

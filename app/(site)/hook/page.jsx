@@ -5,22 +5,22 @@ export default function HookPage({ searchParams }) {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#ecfdf5] via-[#fff] to-[#fff4e6]" />
-      <div className="absolute -top-24 right-12 h-64 w-64 rounded-full bg-[#f3d36b]/25 blur-3xl" />
-      <div className="absolute -bottom-28 left-16 h-72 w-72 rounded-full bg-[var(--color-rose)]/15 blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.88)] to-[var(--color-burgundy)]" />
+      <div className="absolute -top-24 right-12 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
+      <div className="absolute -bottom-28 left-16 h-72 w-72 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
 
       <div className="relative flex items-center justify-center px-6 py-20">
-        <div className="max-w-lg w-full rounded-3xl bg-white/95 p-10 text-center shadow-2xl shadow-[rgba(240,200,105,0.2)]">
+        <div className="w-full max-w-lg rounded-3xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/70 p-10 text-center shadow-2xl shadow-black/45 backdrop-blur">
           <div className="space-y-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-[#ecfdf5] px-4 py-2 text-xs font-semibold text-emerald-600">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/40 px-4 py-2 text-xs font-semibold text-[var(--color-rose)]">
               ✅ รับคำสั่งซื้อแล้ว
             </span>
-            <h1 className="text-3xl font-bold text-[var(--color-rose-dark)]">ขอบคุณที่สั่ง Sweet Cravings</h1>
-            <p className="text-sm text-[var(--color-choco)]/70">
+            <h1 className="text-3xl font-bold text-[var(--color-rose)]">ขอบคุณที่สั่ง Sweet Cravings</h1>
+            <p className="text-sm text-[var(--color-text)]/75">
               เราได้รับสลิปและรายละเอียดการชำระเงินแล้ว ทีมงานจะตรวจสอบและยืนยันสถานะให้โดยเร็วที่สุด
             </p>
             {orderId ? (
-              <p className="text-xs font-medium text-[var(--color-choco)]/60">รหัสคำสั่งซื้อของคุณ: {orderId}</p>
+              <p className="text-xs font-medium text-[var(--color-text)]/60">รหัสคำสั่งซื้อของคุณ: {orderId}</p>
             ) : null}
           </div>
 

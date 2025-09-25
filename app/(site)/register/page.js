@@ -81,7 +81,7 @@ export default function RegisterPage() {
           </form>
 
           {msg && (
-            <p className={`mt-4 text-sm ${msg.includes("เสร็จ") ? "text-emerald-600" : "text-rose-600"}`}>
+            <p className={`mt-4 text-sm ${msg.includes("เสร็จ") ? "text-[var(--color-gold)]" : "text-[var(--color-rose)]"}`}>
               {String(msg)}
             </p>
           )}

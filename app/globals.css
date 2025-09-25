@@ -7,13 +7,15 @@
   --color-cream: #1b0606;
   --color-cream-soft: #240909;
   --color-rose: #f0c869;
-  --color-rose-dark: #c18a1d;
+  --color-rose-dark: #f5cf7a;
   --color-gold: #f8e6b4;
   --color-text: #f6ede0;
-  --color-choco: #2b100f;
+  --color-choco: #f6ede0;
   --color-burgundy: #3a1010;
   --color-burgundy-soft: #4c1912;
   --color-burgundy-dark: #140202;
+  --surface-strong: rgba(58, 16, 16, 0.78);
+  --surface-soft: rgba(58, 16, 16, 0.62);
   --layout-max: 1200px;
 }
 
@@ -58,11 +60,26 @@ label {
   textarea,
   select {
     background-color: rgba(58, 16, 16, 0.65);
-    color: var(--color-choco);
+    color: var(--color-text);
   }
 
   input::placeholder,
   textarea::placeholder {
     color: rgba(248, 230, 180, 0.6);
   }
+}
+
+:is(.bg-white, .bg-white\/95, .bg-white\/90, .bg-white\/85) {
+  background-color: var(--surface-strong) !important;
+  color: var(--color-text) !important;
+  border-color: rgba(240, 200, 105, 0.22) !important;
+  box-shadow: 0 22px 46px -28px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+}
+
+:is(.bg-white\/80, .bg-white\/70, .bg-white\/60) {
+  background-color: var(--surface-soft) !important;
+  color: var(--color-text) !important;
+  border-color: rgba(240, 200, 105, 0.18) !important;
+  backdrop-filter: blur(12px);
 }

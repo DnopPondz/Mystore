@@ -68,12 +68,15 @@ export default function PreOrderPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#fff0e1] via-[#fff8ef] to-white" aria-hidden />
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.9)] to-[var(--color-burgundy)]"
+        aria-hidden
+      />
 
       <section className="relative max-w-screen-xl mx-auto px-6 lg:px-10 pt-16 pb-10 space-y-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-4">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-sm font-semibold text-[var(--color-rose-dark)] shadow">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy)]/70 px-4 py-1 text-sm font-semibold text-[var(--color-rose)] shadow-lg shadow-black/40">
               สั่งทำขนมพิเศษ
             </span>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-[var(--color-choco)] leading-tight">
@@ -83,7 +86,7 @@ export default function PreOrderPage() {
               ไม่ว่าจะเป็นงานวันเกิด งานหมั้น งานองค์กร หรือของฝากพิเศษ ทีมเชฟของเราพร้อมช่วยออกแบบเมนูตามความต้องการ พร้อมที่ปรึกษาด้านรสชาติและงบประมาณ
             </p>
             <div className="grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-choco)]/70">
-              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[rgba(240,200,105,0.08)]">
+              <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-5 shadow-2xl shadow-black/40 backdrop-blur">
                 <p className="font-semibold text-[var(--color-choco)]">บริการที่ได้รับ</p>
                 <ul className="mt-3 space-y-2 list-disc list-inside">
                   <li>ออกแบบรสชาติและหน้าตาขนม</li>
@@ -91,7 +94,7 @@ export default function PreOrderPage() {
                   <li>จัดส่งและจัดเซตในสถานที่</li>
                 </ul>
               </div>
-              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[rgba(240,200,105,0.08)]">
+              <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-5 shadow-2xl shadow-black/40 backdrop-blur">
                 <p className="font-semibold text-[var(--color-choco)]">ระยะเวลาแนะนำ</p>
                 <ul className="mt-3 space-y-2 list-disc list-inside">
                   <li>แจ้งล่วงหน้าอย่างน้อย 3-5 วัน</li>
@@ -102,7 +105,7 @@ export default function PreOrderPage() {
             </div>
           </div>
           <div className="flex-1">
-            <div className="rounded-[46%] bg-gradient-to-br from-white via-[#fff2e2] to-[#ffe8d2] p-10 shadow-2xl shadow-[rgba(240,200,105,0.25)] text-center">
+            <div className="rounded-[46%] border border-[var(--color-rose)]/30 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.85)] to-[var(--color-burgundy)] p-10 text-center shadow-2xl shadow-black/45">
               <p className="text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-rose)]">Made to Order</p>
               <p className="mt-3 text-3xl font-black text-[var(--color-choco)]">Pre-order ขนมชิ้นโปรด</p>
               <p className="mt-4 text-sm text-[var(--color-choco)]/70">
@@ -116,7 +119,7 @@ export default function PreOrderPage() {
       <section className="relative max-w-screen-xl mx-auto px-6 lg:px-10 pb-20 grid gap-8 lg:grid-cols-[2fr_1fr]">
         <form
           onSubmit={handleSubmit}
-          className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[rgba(240,200,105,0.08)] space-y-6"
+          className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-8 shadow-2xl shadow-black/45 backdrop-blur space-y-6"
         >
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-choco)]">กรอกรายละเอียดสำหรับสั่งทำพิเศษ</h2>
@@ -129,8 +132,8 @@ export default function PreOrderPage() {
             <div
               className={`rounded-2xl px-4 py-3 text-sm font-medium ${
                 status.type === "success"
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-rose-50 text-[var(--color-rose-dark)]"
+                  ? "border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] text-[var(--color-gold)]"
+                  : "border border-[var(--color-rose)]/40 bg-[rgba(120,32,32,0.55)] text-[var(--color-rose)]"
               }`}
             >
               {status.message}
@@ -138,44 +141,44 @@ export default function PreOrderPage() {
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               ชื่อ-นามสกุล*
               <input
                 type="text"
                 value={form.name}
                 onChange={updateField("name")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 placeholder="ชื่อผู้ติดต่อ"
                 required
               />
             </label>
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               เบอร์ติดต่อ*
               <input
                 type="tel"
                 value={form.phone}
                 onChange={updateField("phone")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 placeholder="0X-XXX-XXXX"
                 required
               />
             </label>
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               อีเมล
               <input
                 type="email"
                 value={form.email}
                 onChange={updateField("email")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 placeholder="name@example.com"
               />
             </label>
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               ช่องทางที่สะดวกให้ติดต่อกลับ
               <select
                 value={form.preferredContact}
                 onChange={updateField("preferredContact")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               >
                 <option value="phone">โทรศัพท์</option>
                 <option value="line">LINE</option>
@@ -185,38 +188,38 @@ export default function PreOrderPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               วันที่จัดงาน
               <input
                 type="date"
                 value={form.eventDate}
                 onChange={updateField("eventDate")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               />
             </label>
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               เวลาโดยประมาณ
               <input
                 type="time"
                 value={form.eventTime}
                 onChange={updateField("eventTime")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               />
             </label>
-            <label className="flex flex-col text-sm font-medium gap-2">
+            <label className="flex flex-col gap-2 text-sm font-medium">
               จำนวนโดยประมาณ
               <input
                 type="number"
                 min="0"
                 value={form.servings}
                 onChange={updateField("servings")}
-                className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+                className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 placeholder="เช่น 50 ชิ้น"
               />
             </label>
           </div>
 
-          <label className="flex flex-col text-sm font-medium gap-2">
+          <label className="flex flex-col gap-2 text-sm font-medium">
             งบประมาณคร่าวๆ (บาท)
             <input
               type="number"
@@ -224,30 +227,30 @@ export default function PreOrderPage() {
               step="100"
               value={form.budget}
               onChange={updateField("budget")}
-              className="rounded-full border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+              className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               placeholder="ระบุช่วงงบประมาณ"
             />
           </label>
 
-          <label className="flex flex-col text-sm font-medium gap-2">
+          <label className="flex flex-col gap-2 text-sm font-medium">
             รายละเอียดขนมที่ต้องการ*
             <textarea
               value={form.flavourIdeas}
               onChange={updateField("flavourIdeas")}
               rows={4}
-              className="rounded-3xl border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+              className="rounded-3xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               placeholder="ระบุธีม รสชาติ รูปแบบ หรือไอเดียที่อยากได้"
               required
             />
           </label>
 
-          <label className="flex flex-col text-sm font-medium gap-2">
+          <label className="flex flex-col gap-2 text-sm font-medium">
             ข้อมูลเพิ่มเติมที่อยากให้เราทราบ
             <textarea
               value={form.notes}
               onChange={updateField("notes")}
               rows={3}
-              className="rounded-3xl border border-white/0 bg-[rgba(255,241,236,0.7)] px-4 py-3 text-[var(--color-choco)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]"
+              className="rounded-3xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
               placeholder="แจ้งอาการแพ้ อุปกรณ์ตกแต่งเพิ่มเติม หรือรูปแบบการจัดส่ง"
             />
           </label>
@@ -259,14 +262,14 @@ export default function PreOrderPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-8 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-black/45 transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "กำลังส่งคำขอ..." : "ส่งคำขอออกแบบเมนู"}
             </button>
           </div>
         </form>
 
-        <aside className="rounded-3xl bg-white/80 p-8 shadow-xl shadow-[rgba(240,200,105,0.08)] space-y-6">
+        <aside className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/55 p-8 shadow-2xl shadow-black/45 backdrop-blur space-y-6">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-choco)]">ปรึกษาฟรี</h2>
             <p className="mt-2 text-sm text-[var(--color-choco)]/70">
@@ -276,7 +279,7 @@ export default function PreOrderPage() {
           <div className="space-y-4 text-sm text-[var(--color-choco)]/80">
             <a
               href="tel:021234567"
-              className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow hover:shadow-md transition"
+              className="flex items-center gap-3 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/45 px-4 py-3 shadow-lg shadow-black/40 transition hover:shadow-xl"
             >
               <span className="text-xl">📞</span>
               <div>
@@ -288,7 +291,7 @@ export default function PreOrderPage() {
               href="https://line.me/ti/p/@sweetcravings"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow hover:shadow-md transition"
+              className="flex items-center gap-3 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/45 px-4 py-3 shadow-lg shadow-black/40 transition hover:shadow-xl"
             >
               <span className="text-xl">💬</span>
               <div>
@@ -298,7 +301,7 @@ export default function PreOrderPage() {
             </a>
             <a
               href="mailto:hello@sweetcravings.co"
-              className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow hover:shadow-md transition"
+              className="flex items-center gap-3 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/45 px-4 py-3 shadow-lg shadow-black/40 transition hover:shadow-xl"
             >
               <span className="text-xl">📧</span>
               <div>
