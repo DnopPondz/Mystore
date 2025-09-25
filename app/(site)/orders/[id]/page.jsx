@@ -321,28 +321,32 @@ export default function OrderDetailPage() {
   }
 
   if (loading)
-    return <main className="max-w-3xl mx-auto px-6 py-10 text-[var(--color-choco)]/70">กำลังโหลด...</main>;
+    return (
+      <main className="flex min-h-[60vh] items-center justify-center bg-[var(--color-burgundy-dark)]/60 text-[var(--color-text)]/70">
+        กำลังโหลด...
+      </main>
+    );
 
   if (needsAuth && status !== "loading") {
     return (
       <main className="relative min-h-[70vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.7),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
         <div className="relative flex min-h-[60vh] items-center justify-center px-6 py-16">
-          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[#f5a25d20]">
-            <h1 className="text-2xl font-semibold text-[var(--color-rose-dark)]">เข้าสู่ระบบก่อนดูรายละเอียด</h1>
-            <p className="mt-3 text-sm text-[var(--color-choco)]/70">
+          <div className="w-full max-w-md rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-10 text-center text-[var(--color-text)] shadow-2xl shadow-black/40 backdrop-blur">
+            <h1 className="text-2xl font-semibold text-[var(--color-rose)]">เข้าสู่ระบบก่อนดูรายละเอียด</h1>
+            <p className="mt-3 text-sm text-[var(--color-text)]/75">
               โปรดเข้าสู่ระบบเพื่อยืนยันตัวตนก่อนเข้าถึงรายละเอียดคำสั่งซื้อ
             </p>
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] hover:shadow-xl"
               >
                 เข้าสู่ระบบ
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-[var(--color-rose-dark)] hover:bg-[var(--color-rose)]/10"
+                className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/50 px-5 py-3 text-sm font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
               >
                 สมัครสมาชิกใหม่
               </Link>
@@ -353,7 +357,7 @@ export default function OrderDetailPage() {
     );
   }
 
-  if (err) return <main className="max-w-3xl mx-auto px-6 py-10 text-rose-600">{err}</main>;
+  if (err) return <main className="max-w-3xl mx-auto px-6 py-10 text-[var(--color-rose)]">{err}</main>;
   if (!order) return null;
 
   const normalizedStatus = normalizeStatus(order.status);
@@ -361,66 +365,66 @@ export default function OrderDetailPage() {
   const paymentText = paymentLabel[paymentStatus] || paymentStatus;
   const paymentBadgeClass =
     paymentStatus === "paid"
-      ? "bg-emerald-100 text-emerald-600"
+      ? "bg-[var(--color-gold)]/20 text-[var(--color-burgundy-dark)]"
       : paymentStatus === "cash"
-      ? "bg-sky-100 text-sky-600"
+      ? "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-text)]/80"
       : paymentStatus === "invalid"
-      ? "bg-rose-100 text-rose-600"
+      ? "bg-[var(--color-rose)]/15 text-[var(--color-rose)]"
       : paymentStatus === "verifying"
-      ? "bg-[#fff5e4] text-[var(--color-choco)]"
-      : "bg-amber-100 text-amber-600";
+      ? "bg-[var(--color-rose)]/10 text-[var(--color-text)]/75"
+      : "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-gold)]/80";
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
-      <div className="absolute -top-24 right-16 h-64 w-64 rounded-full bg-[#f5a25d]/15 blur-3xl" />
-      <div className="absolute -bottom-20 left-20 h-72 w-72 rounded-full bg-[#f3d36b]/20 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.65),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
+      <div className="absolute -top-24 right-16 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
+      <div className="absolute -bottom-20 left-20 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
       <div className="relative max-w-4xl mx-auto px-6 py-16">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[var(--color-rose-dark)]">
+            <h1 className="text-3xl font-bold text-[var(--color-rose)]">
               คำสั่งซื้อ #{(order.id || order._id).slice(-8)}
             </h1>
-            <p className="mt-1 text-sm text-[var(--color-choco)]/70">
+            <p className="mt-1 text-sm text-[var(--color-text)]/70">
               อัปเดตล่าสุดเมื่อ {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : "-"}
             </p>
           </div>
           <Link
             href="/orders"
-            className="inline-flex items-center justify-center rounded-full bg-white/80 px-5 py-2 text-sm font-semibold text-[var(--color-rose-dark)] shadow hover:bg-white"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-2 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
           >
             ← กลับไปหน้ารายการทั้งหมด
           </Link>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-          <section className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+          <section className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
             <header className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-[var(--color-choco)]">สถานะคำสั่งซื้อ</h2>
+              <h2 className="text-lg font-semibold text-[var(--color-text)]">สถานะคำสั่งซื้อ</h2>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   normalizedStatus === "cancel"
-                    ? "bg-rose-100 text-rose-600"
+                    ? "bg-[var(--color-rose)]/15 text-[var(--color-rose)]"
                     : normalizedStatus === "success"
-                    ? "bg-emerald-100 text-emerald-600"
-                    : "bg-[#ecfdf5] text-emerald-600"
+                    ? "bg-[var(--color-gold)]/20 text-[var(--color-burgundy-dark)]"
+                    : "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-text)]/80"
                 }`}
               >
                 {statusText}
               </span>
             </header>
 
-            <div className="mt-4 grid gap-3 text-sm text-[var(--color-choco)]/80">
-              <div className="flex items-center justify-between rounded-2xl bg-[#fff6ee] px-4 py-3">
+            <div className="mt-4 grid gap-3 text-sm text-[var(--color-text)]/80">
+              <div className="flex items-center justify-between rounded-2xl bg-[var(--color-burgundy-dark)]/35 px-4 py-3">
                 <span>การชำระเงิน</span>
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold ${paymentBadgeClass}`}>
                   {paymentText}
                 </span>
               </div>
-              <div className="flex items-center justify-between rounded-2xl bg-[#fef9ff] px-4 py-3">
+              <div className="flex items-center justify-between rounded-2xl bg-[var(--color-burgundy-dark)]/30 px-4 py-3">
                 <span>ช่องทาง</span>
-                <span className="font-medium text-[var(--color-rose-dark)]">
+                <span className="font-medium text-[var(--color-rose)]">
                   {paymentStatus === "cash"
                     ? "เงินสดหน้างาน"
                     : order.payment?.method === "bank"
@@ -429,13 +433,13 @@ export default function OrderDetailPage() {
                 </span>
               </div>
               {typeof order.payment?.amountPaid === "number" ? (
-                <div className="flex items-center justify-between rounded-2xl bg-[#ecfdf5] px-4 py-3">
+                <div className="flex items-center justify-between rounded-2xl bg-[var(--color-burgundy-dark)]/35 px-4 py-3">
                   <span>จำนวนที่โอน</span>
-                  <span className="font-semibold text-emerald-600">฿{order.payment.amountPaid.toFixed(2)}</span>
+                  <span className="font-semibold text-[var(--color-gold)]">฿{order.payment.amountPaid.toFixed(2)}</span>
                 </div>
               ) : null}
               {order.payment?.confirmedAt ? (
-                <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3">
+                <div className="flex items-center justify-between rounded-2xl bg-[var(--color-burgundy-dark)]/40 px-4 py-3">
                   <span>ยืนยันเมื่อ</span>
                   <span>{new Date(order.payment.confirmedAt).toLocaleString()}</span>
                 </div>
@@ -445,18 +449,18 @@ export default function OrderDetailPage() {
             {order.payment?.slip ? (
               <div className="mt-6">
                 <h3 className="text-sm font-semibold text-[var(--color-choco)]">สลิปการโอน</h3>
-                <div className="mt-3 overflow-hidden rounded-2xl border border-white/60 shadow-inner">
+                <div className="mt-3 overflow-hidden rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/45 shadow-inner">
                   <img
                     src={order.payment.slip}
                     alt={order.payment.slipFilename || "หลักฐานการโอน"}
-                    className="max-h-[420px] w-full object-contain bg-white"
+                    className="max-h-[420px] w-full object-contain"
                   />
                 </div>
               </div>
             ) : null}
 
             {!isPaid ? (
-              <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[#fff9fb] p-5">
+              <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/30 p-5">
                 <div>
                   <h3 className="text-base font-semibold text-[var(--color-choco)]">ชำระเงินสำหรับคำสั่งซื้อนี้</h3>
                   <p className="mt-1 text-xs text-[var(--color-choco)]/70">
@@ -465,11 +469,11 @@ export default function OrderDetailPage() {
                 </div>
 
                 {paymentStatus === "verifying" ? (
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-700">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/35 bg-[rgba(240,200,105,0.12)] px-4 py-2 text-xs font-semibold text-[var(--color-gold)]">
                     สลิปของคุณอยู่ระหว่างการตรวจสอบ หากต้องการแก้ไขสามารถอัปโหลดใหม่ได้เลย
                   </div>
                 ) : paymentStatus === "invalid" ? (
-                  <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/40 bg-[rgba(120,32,32,0.55)] px-4 py-2 text-xs font-semibold text-[var(--color-rose)]">
                     ยอดโอนที่แจ้งมาไม่ตรงกับยอดที่ต้องชำระ กรุณาแนบสลิปใหม่อีกครั้ง
                   </div>
                 ) : null}
@@ -483,27 +487,27 @@ export default function OrderDetailPage() {
                         type="button"
                         onClick={() => handleSelectMethod(option.value)}
                         disabled={updatingMethod || confirming || paymentStatus === "cash" || paymentStatus === "verifying"}
-                        className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
+                        className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/35 ${
                           active
-                            ? "border-[var(--color-rose)] bg-[#fff1f5] text-[var(--color-rose-dark)] shadow"
-                            : "border-[#f4c689]/60 bg-white text-[var(--color-choco)]/80"
+                            ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)] text-[var(--color-rose)] shadow-lg shadow-black/40"
+                            : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/55 text-[var(--color-text)]/80"
                         } ${updatingMethod || confirming ? "cursor-wait" : ""}`}
                       >
                         <div className="font-semibold">{option.label}</div>
-                        <div className="mt-1 text-xs text-[var(--color-choco)]/60">{option.description}</div>
+                        <div className="mt-1 text-xs text-[var(--color-text)]/70">{option.description}</div>
                       </button>
                     );
                   })}
                 </div>
 
                 {loadingPayment ? (
-                  <div className="rounded-2xl border border-dashed border-[var(--color-rose)]/40 bg-white/70 px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                  <div className="rounded-2xl border border-dashed border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/35 px-4 py-3 text-sm text-[var(--color-text)]/75">
                     กำลังโหลดรายละเอียดการชำระเงิน...
                   </div>
                 ) : paymentInfo?.promptpay ? (
                   <QrBox payload={paymentInfo.promptpay.payload} amount={paymentInfo.promptpay.amount} title="สแกนเพื่อชำระเงิน" />
                 ) : paymentMethod === "bank" && paymentInfo?.bankAccount ? (
-                  <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[#fff6ed] p-4 text-sm text-[var(--color-choco)]">
+                  <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
                     <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
                     <div>ธนาคาร: {paymentInfo.bankAccount.bank}</div>
                     <div>เลขบัญชี: {paymentInfo.bankAccount.number}</div>
@@ -513,7 +517,7 @@ export default function OrderDetailPage() {
                     ) : null}
                   </div>
                 ) : amountDue <= 0 ? (
-                  <div className="rounded-2xl border border-[#f4c689]/40 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
                     ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                   </div>
                 ) : null}
@@ -528,13 +532,13 @@ export default function OrderDetailPage() {
                       readOnly
                       value={transferAmount}
                       onChange={(e) => setTransferAmount(e.target.value)}
-                      className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                      className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                       placeholder={`ยอดที่ต้องชำระ ฿${fmt(amountDue)}`}
                     />
                     <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(amountDue)}</p>
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-[#f4c689]/40 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
                     ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                   </div>
                 )}
@@ -550,8 +554,8 @@ export default function OrderDetailPage() {
                       const file = e.dataTransfer.files?.[0];
                       await processSlipFile(file);
                     }}
-                    className={`group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 transition 
-                      ${slipData ? "border-emerald-300 bg-emerald-50/40" : "border-[var(--color-rose)]/30 bg-white hover:border-[var(--color-rose)]/50 hover:bg-[var(--color-rose)]/5"}`}
+                    className={`group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 transition
+                      ${slipData ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.16)]" : "border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/45 hover:border-[var(--color-rose)]/50 hover:bg-[var(--color-burgundy-dark)]/35"}`}
                   >
                     <input
                       id="slip"
@@ -574,13 +578,13 @@ export default function OrderDetailPage() {
                             รองรับไฟล์รูปภาพ (PNG, JPG, JPEG)
                           </div>
                         </div>
-                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[#f5a25d33] group-hover:shadow-md">
+                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[rgba(240,200,105,0.33)] group-hover:shadow-md">
                           เลือกไฟล์สลิป
                         </span>
                       </label>
                     ) : (
                       <div className="w-full">
-                        <div className="relative overflow-hidden rounded-xl border bg-white">
+                        <div className="relative overflow-hidden rounded-xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/45">
                           <img
                             src={slipData}
                             alt={slipName || "หลักฐานการโอน"}
@@ -589,7 +593,7 @@ export default function OrderDetailPage() {
                           <button
                             type="button"
                             onClick={() => { setSlipData(""); setSlipName(""); }}
-                            className="absolute right-2 top-2 inline-flex items-center rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-rose-600 shadow hover:bg-white"
+                            className="absolute right-2 top-2 inline-flex items-center rounded-full bg-[var(--color-burgundy-dark)]/60 px-2 py-1 text-xs font-medium text-[var(--color-rose)] shadow hover:bg-[var(--color-burgundy-dark)]/45"
                             aria-label="ลบสลิป"
                             title="ลบสลิป"
                           >
@@ -604,7 +608,7 @@ export default function OrderDetailPage() {
                           </div>
                           <label
                             htmlFor="slip"
-                            className="inline-flex cursor-pointer items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-white px-4 py-1.5 text-xs font-semibold text-[var(--color-rose-dark)] hover:bg-[var(--color-rose)]/10"
+                            className="inline-flex cursor-pointer items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/45 px-4 py-1.5 text-xs font-semibold text-[var(--color-rose)] hover:bg-[var(--color-burgundy-dark)]/30"
                           >
                             <ImageIcon className="mr-1.5 h-3.5 w-3.5" />
                             เปลี่ยนรูป
@@ -622,7 +626,7 @@ export default function OrderDetailPage() {
                     type="text"
                     value={reference}
                     onChange={(e) => setReference(e.target.value)}
-                    className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                    className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                     placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
                   />
                 </div>
@@ -636,23 +640,23 @@ export default function OrderDetailPage() {
                     !slipData ||
                     (needsAmountInput && !transferAmount)
                   }
-                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition ${
+                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                     confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)
-                      ? "cursor-not-allowed bg-[#f2c8a5]"
-                      : "bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] hover:shadow-xl"
+                      ? "cursor-not-allowed bg-[var(--color-burgundy-dark)]/30"
+                      : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
                   }`}
                 >
                   {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}
                 </button>
 
-                {actionSuccess ? <div className="text-sm text-emerald-600">{actionSuccess}</div> : null}
-                {actionErr ? <div className="text-sm text-rose-600">{actionErr}</div> : null}
+                {actionSuccess ? <div className="text-sm text-[var(--color-gold)]">{actionSuccess}</div> : null}
+                {actionErr ? <div className="text-sm text-[var(--color-rose)]">{actionErr}</div> : null}
               </div>
             ) : null}
           </section>
 
           <section className="space-y-6">
-            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+            <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายละเอียดยอดชำระ</h2>
               <div className="mt-4 space-y-3 text-sm text-[var(--color-choco)]/80">
                 <div className="flex justify-between">
@@ -660,7 +664,7 @@ export default function OrderDetailPage() {
                   <span>฿{order.subtotal}</span>
                 </div>
                 {order.discount ? (
-                  <div className="flex justify-between text-emerald-600">
+                  <div className="flex justify-between text-[var(--color-gold)]">
                     <span>ส่วนลด</span>
                     <span>-฿{order.discount}</span>
                   </div>
@@ -672,7 +676,7 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+            <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">ข้อมูลจัดส่ง</h2>
               <div className="mt-4 space-y-2 text-sm text-[var(--color-choco)]/80">
                 <div>
@@ -680,7 +684,7 @@ export default function OrderDetailPage() {
                   <div>{order.customer?.phone || ""}</div>
                   <div>{order.customer?.email || ""}</div>
                 </div>
-                <div className="rounded-2xl bg-[#fff6ee] p-4 text-sm leading-relaxed">
+                <div className="rounded-2xl bg-[var(--color-burgundy-dark)]/35 p-4 text-sm leading-relaxed">
                   <p>{order.shipping?.address1}</p>
                   {order.shipping?.address2 ? <p>{order.shipping.address2}</p> : null}
                   <p>
@@ -693,43 +697,26 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
-                  <div className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
-            <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
-          <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
-            {order.items.map((it, idx) => (
-              <div
-                key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
-                className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div>
-                  <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
-                  <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
-                </div>
-                <div className="text-sm font-semibold text-[var(--color-rose-dark)]">฿{(it.price || 0) * (it.qty || 0)}</div>
+            <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
+              <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
+              <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
+                {order.items.map((it, idx) => (
+                  <div
+                    key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
+                    className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div>
+                      <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
+                      <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
+                    </div>
+                    <div className="text-sm font-semibold text-[var(--color-rose-dark)]">฿{(it.price || 0) * (it.qty || 0)}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          </div>
+            </div>
           </section>
         </div>
 
-        {/* <section className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
-          <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
-          <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
-            {order.items.map((it, idx) => (
-              <div
-                key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
-                className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div>
-                  <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
-                  <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
-                </div>
-                <div className="text-sm font-semibold text-[var(--color-rose-dark)]">฿{(it.price || 0) * (it.qty || 0)}</div>
-              </div>
-            ))}
-          </div>
-        </section> */}
       </div>
     </main>
   );

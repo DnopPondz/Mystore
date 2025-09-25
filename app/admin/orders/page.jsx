@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const statusOptions = ["all", "new", "pending", "shipping", "success", "cancel"];
 
@@ -69,6 +70,7 @@ export default function AdminOrdersPage() {
   const [selectedSlip, setSelectedSlip] = useState(null);
   const [updating, setUpdating] = useState("");
   const [updatingPayment, setUpdatingPayment] = useState("");
+  const popup = useAdminPopup();
 
   async function load() {
     setLoading(true);
@@ -99,12 +101,18 @@ export default function AdminOrdersPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data?.error || "Update failed");
+        await popup.alert(data?.error || "อัปเดตสถานะไม่สำเร็จ", {
+          title: "เกิดข้อผิดพลาด",
+          tone: "error",
+        });
         return;
       }
       setOrders((prev) => prev.map((o) => (o._id === id ? data : o)));
     } catch (e) {
-      alert(e?.message || "Update failed");
+      await popup.alert(e?.message || "อัปเดตสถานะไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
     } finally {
       setUpdating("");
     }
@@ -123,12 +131,18 @@ export default function AdminOrdersPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data?.error || "Update payment failed");
+        await popup.alert(data?.error || "อัปเดตสถานะการชำระเงินไม่สำเร็จ", {
+          title: "เกิดข้อผิดพลาด",
+          tone: "error",
+        });
         return;
       }
       setOrders((prev) => prev.map((o) => (o._id === order._id ? data : o)));
     } catch (e) {
-      alert(e?.message || "Update payment failed");
+      await popup.alert(e?.message || "อัปเดตสถานะการชำระเงินไม่สำเร็จ", {
+        title: "เกิดข้อผิดพลาด",
+        tone: "error",
+      });
     } finally {
       setUpdatingPayment("");
     }
@@ -146,7 +160,7 @@ export default function AdminOrdersPage() {
 
   if (loading)
     return (
-      <main className="rounded-3xl border border-white/80 bg-white/80 px-6 py-10 text-[var(--color-choco)]/70 shadow-lg shadow-[#f5a25d14]">
+      <main className="rounded-3xl border border-white/80 bg-white/80 px-6 py-10 text-[var(--color-choco)]/70 shadow-lg shadow-[rgba(240,200,105,0.08)]">
         กำลังโหลดคำสั่งซื้อ...
       </main>
     );
@@ -160,7 +174,7 @@ export default function AdminOrdersPage() {
 
   return (
     <main className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">คำสั่งซื้อทั้งหมด</h2>
@@ -185,7 +199,7 @@ export default function AdminOrdersPage() {
             </label>
             <a
               href="/api/admin/export/orders"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition hover:bg-[var(--color-rose-dark)]"
             >
               ⬇️ ส่งออก CSV
             </a>
@@ -219,7 +233,7 @@ export default function AdminOrdersPage() {
             return (
               <article
                 key={order._id}
-                className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-[#f5a25d14] backdrop-blur"
+                className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-[rgba(240,200,105,0.08)] backdrop-blur"
               >
                 <header className="flex flex-col gap-3 border-b border-white/60 pb-4 md:flex-row md:items-center md:justify-between">
                   <div>
@@ -244,7 +258,7 @@ export default function AdminOrdersPage() {
                         className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                           !canAccept || isUpdating
                             ? "cursor-not-allowed bg-[var(--color-rose)]/20 text-[var(--color-choco)]/40"
-                            : "bg-[var(--color-rose)] text-white shadow shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                            : "bg-[var(--color-rose)] text-white shadow shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
                         }`}
                         title={
                           canAccept
@@ -396,7 +410,7 @@ export default function AdminOrdersPage() {
           onClick={() => setSelectedSlip(null)}
         >
           <div
-            className="max-h-full w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white shadow-2xl shadow-[#f5a25d30]"
+            className="max-h-full w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white shadow-2xl shadow-[rgba(240,200,105,0.3)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-white/60 bg-[var(--color-rose)]/10 px-5 py-3 text-sm font-semibold text-[var(--color-choco)]">

@@ -7,6 +7,7 @@ const items = [
   { href: "/admin", label: "แดชบอร์ด", icon: "📊" },
   { href: "/admin/products", label: "จัดการสินค้า", icon: "🧁" },
   { href: "/admin/orders", label: "คำสั่งซื้อ", icon: "🧾" },
+  { href: "/admin/users", label: "ผู้ใช้งาน", icon: "👥" },
   { href: "/admin/coupons", label: "คูปอง", icon: "🎟️" },
 ];
 
@@ -32,8 +33,8 @@ export default function AdminSidebar() {
             href={it.href}
             className={`group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold tracking-wide transition ${
               active
-                ? "bg-white text-[var(--color-rose-dark)] shadow-lg shadow-[#f5a25d33]"
-                : "text-white/80 hover:bg-white/15 hover:text-white"
+                ? "border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/80 text-[var(--color-rose)] shadow-lg shadow-black/30"
+                : "text-[var(--color-gold)]/80 hover:bg-[var(--color-burgundy)]/60 hover:text-[var(--color-gold)]"
             }`}
           >
             <span className="text-base transition-transform group-hover:scale-110">{it.icon}</span>
@@ -48,7 +49,7 @@ export default function AdminSidebar() {
     <>
       <button
         type="button"
-        className="fixed left-4 top-4 z-40 inline-flex items-center gap-2 rounded-full border border-white/40 bg-[var(--color-rose)]/90 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] backdrop-blur transition hover:bg-[var(--color-rose)] lg:hidden"
+        className="fixed left-4 top-4 z-40 inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/80 px-4 py-2 text-sm font-semibold text-[var(--color-rose)] shadow-lg shadow-black/30 backdrop-blur transition hover:bg-[var(--color-burgundy)] lg:hidden"
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="admin-sidebar"
@@ -65,7 +66,7 @@ export default function AdminSidebar() {
 
       <aside
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-gradient-to-b from-[#f5a25d] via-[#f7c68b] to-[#f3d36b] text-white shadow-[12px_0_40px_-16px_#f5a25d90] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-gradient-to-b from-[var(--color-burgundy)] via-[var(--color-burgundy-dark)] to-[#090101] text-[var(--color-gold)] shadow-[12px_0_40px_-16px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
@@ -76,7 +77,7 @@ export default function AdminSidebar() {
           </span>
           <button
             type="button"
-            className="rounded-full border border-white/30 px-2 py-1 text-xs text-white/80 transition hover:border-white hover:text-white lg:hidden"
+            className="rounded-full border border-[var(--color-rose)]/30 px-2 py-1 text-xs text-[var(--color-gold)]/80 transition hover:border-[var(--color-rose)] hover:text-[var(--color-rose)] lg:hidden"
             onClick={() => setOpen(false)}
           >
             ปิด
@@ -84,8 +85,8 @@ export default function AdminSidebar() {
         </div>
 
         <div className="px-6 pb-6">
-          <div className="rounded-2xl bg-white/15 p-4 text-xs text-white/80 shadow-inner">
-            <p className="font-semibold text-white">สวัสดีผู้ดูแลร้าน!</p>
+          <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/70 p-4 text-xs text-[var(--color-gold)]/80 shadow-inner">
+            <p className="font-semibold text-[var(--color-rose)]">สวัสดีผู้ดูแลร้าน!</p>
             <p className="mt-1 leading-relaxed">
               จัดการสินค้า ติดตามคำสั่งซื้อ และปรับโปรโมชั่นได้จากศูนย์ควบคุมนี้
             </p>
@@ -94,16 +95,16 @@ export default function AdminSidebar() {
 
         <nav className="space-y-2 px-4 pb-8">{nav}</nav>
 
-        <div className="mt-auto space-y-3 px-6 pb-10 text-xs text-white/70">
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-3 shadow-inner">
-            <p className="font-semibold text-white">เคล็ดลับวันนี้</p>
+        <div className="mt-auto space-y-3 px-6 pb-10 text-xs text-[var(--color-gold)]/70">
+          <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/70 p-3 shadow-inner">
+            <p className="font-semibold text-[var(--color-rose)]">เคล็ดลับวันนี้</p>
             <p className="mt-1 leading-relaxed">
               ใช้ส่วนลดช่วงเทศกาลเพื่อดึงลูกค้าใหม่ๆ และกระตุ้นยอดซื้อซ้ำ
             </p>
           </div>
           <a
             href="/"
-            className="inline-flex w-full items-center justify-center rounded-full bg-white/20 px-4 py-2 font-semibold text-white transition hover:bg-white/30"
+            className="inline-flex w-full items-center justify-center rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 px-4 py-2 font-semibold text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy)]"
           >
             ↩︎ กลับหน้าร้าน
           </a>

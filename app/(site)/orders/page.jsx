@@ -98,7 +98,7 @@ export default function OrdersPage() {
 
   if (loading)
     return (
-      <main className="flex min-h-[60vh] items-center justify-center text-[var(--color-choco)]/70">
+      <main className="flex min-h-[60vh] items-center justify-center bg-[var(--color-burgundy-dark)]/60 text-[var(--color-text)]/70">
         กำลังโหลด...
       </main>
     );
@@ -106,23 +106,23 @@ export default function OrdersPage() {
   if (needsAuth && status !== "loading") {
     return (
       <main className="relative min-h-[70vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.7),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
         <div className="relative flex min-h-[60vh] items-center justify-center px-6 py-16">
-          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[#f5a25d20]">
-            <h1 className="text-2xl font-semibold text-[var(--color-rose-dark)]">เข้าสู่ระบบเพื่อดูคำสั่งซื้อ</h1>
-            <p className="mt-3 text-sm text-[var(--color-choco)]/70">
+          <div className="w-full max-w-md rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-10 text-center text-[var(--color-text)] shadow-2xl shadow-black/40 backdrop-blur">
+            <h1 className="text-2xl font-semibold text-[var(--color-rose)]">เข้าสู่ระบบเพื่อดูคำสั่งซื้อ</h1>
+            <p className="mt-3 text-sm text-[var(--color-text)]/75">
               บัญชีผู้ใช้จำเป็นสำหรับเชื่อมคำสั่งซื้อกับคุณ กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่เพื่อดูประวัติการสั่งซื้อทั้งหมดของคุณ
             </p>
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] hover:shadow-xl"
               >
                 เข้าสู่ระบบ
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-[var(--color-rose-dark)] hover:bg-[var(--color-rose)]/10"
+                className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/50 px-5 py-3 text-sm font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
               >
                 สมัครสมาชิกใหม่
               </Link>
@@ -142,28 +142,28 @@ export default function OrdersPage() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
-      <div className="absolute -top-24 right-20 h-60 w-60 rounded-full bg-[#f5a25d]/15 blur-3xl" />
-      <div className="absolute -bottom-20 left-12 h-72 w-72 rounded-full bg-[#f3d36b]/20 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.65),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
+      <div className="absolute -top-24 right-20 h-60 w-60 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
+      <div className="absolute -bottom-20 left-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
       <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[var(--color-rose-dark)]">คำสั่งซื้อของฉัน</h1>
-            <p className="mt-1 text-sm text-[var(--color-choco)]/70">
+            <h1 className="text-3xl font-bold text-[var(--color-rose)]">คำสั่งซื้อของฉัน</h1>
+            <p className="mt-1 text-sm text-[var(--color-text)]/70">
               ติดตามสถานะคำสั่งซื้อและดูรายละเอียดการชำระเงินย้อนหลังได้ที่นี่
             </p>
           </div>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
           >
             เลือกสินค้าเพิ่ม
           </Link>
         </div>
 
         {orders.length === 0 ? (
-          <div className="mt-10 rounded-3xl bg-white/85 p-10 text-center shadow-lg shadow-[#f5a25d22]">
+          <div className="mt-10 rounded-3xl bg-white/85 p-10 text-center shadow-lg shadow-[rgba(240,200,105,0.22)]">
             <p className="text-lg font-semibold text-[var(--color-choco)]">
               ยังไม่มีคำสั่งซื้อ
             </p>
@@ -188,7 +188,7 @@ export default function OrdersPage() {
                 <Link
                   href={`/orders/${orderId}`}
                   key={orderId}
-                  className="group block rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#f5a25d1a] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="group block rounded-3xl bg-white/90 p-6 shadow-lg shadow-[rgba(240,200,105,0.1)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -197,7 +197,7 @@ export default function OrdersPage() {
                         #{orderId.slice(-8)}
                       </div>
                     </div>
-                    <span className="rounded-full bg-[#fff5e4] px-3 py-1 text-xs font-semibold text-[var(--color-choco)]/80">
+                    <span className="rounded-full bg-[var(--color-burgundy-dark)]/45 px-3 py-1 text-xs font-semibold text-[var(--color-text)]/80">
                       {createdAt ? createdAt.toLocaleDateString() : "-"}
                     </span>
                   </div>
@@ -212,10 +212,10 @@ export default function OrdersPage() {
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${
                           normalizedStatus === "cancel"
-                            ? "bg-rose-100 text-rose-600"
+                            ? "bg-[var(--color-rose)]/15 text-[var(--color-rose)]"
                             : normalizedStatus === "success"
-                            ? "bg-emerald-100 text-emerald-600"
-                            : "bg-[#ecfdf5] text-emerald-600"
+                            ? "bg-[var(--color-gold)]/20 text-[var(--color-burgundy-dark)]"
+                            : "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-text)]/80"
                         }`}
                       >
                         {displayStatus}
@@ -226,14 +226,14 @@ export default function OrdersPage() {
                       <span
                         className={`rounded-full px-2 py-1 font-semibold ${
                           paymentStatus === "paid"
-                            ? "bg-emerald-100 text-emerald-600"
+                            ? "bg-[var(--color-gold)]/20 text-[var(--color-burgundy-dark)]"
                             : paymentStatus === "cash"
-                            ? "bg-sky-100 text-sky-600"
+                            ? "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-text)]/80"
                             : paymentStatus === "invalid"
-                            ? "bg-rose-100 text-rose-600"
+                            ? "bg-[var(--color-rose)]/15 text-[var(--color-rose)]"
                             : paymentStatus === "verifying"
-                            ? "bg-[#fff5e4] text-[var(--color-choco)]"
-                            : "bg-amber-100 text-amber-600"
+                            ? "bg-[var(--color-rose)]/10 text-[var(--color-text)]/75"
+                            : "bg-[var(--color-burgundy-dark)]/40 text-[var(--color-gold)]/80"
                         }`}
                       >
                         {displayPayment}
