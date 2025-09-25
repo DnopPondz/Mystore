@@ -26,32 +26,32 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#fff3df] via-[#fde7b8] to-[#f6c08c]" />
-        <div className="absolute -top-20 -right-10 h-72 w-72 rounded-full bg-[#fbd8a4]/60 blur-3xl" />
-        <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-[#f3c0a6]/40 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[#5d1f1f]" />
+        <div className="absolute -top-20 -right-10 h-72 w-72 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
+        <div className="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
         <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-20 grid gap-12 lg:grid-cols-2 items-center">
           <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-[var(--color-rose-dark)] shadow">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/70 px-4 py-1 text-sm font-medium text-[var(--color-gold)] shadow">
               นึ่งสดทุกวัน • ส่งฟรีในตัวเมืองลำพูน
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-[var(--color-rose-dark)]">
-              ซาลาเปาและขนมจีบร้อนๆ 
+            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-[var(--color-rose)]">
+              ซาลาเปาและขนมจีบร้อนๆ
             </h1>
-            <p className="text-base sm:text-lg text-[var(--color-choco)]/80 max-w-xl">
+            <p className="text-base sm:text-lg text-[var(--color-text)]/80 max-w-xl">
               ซาลาเปาไส้หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ และเมนูพิเศษ
               พร้อมขนมจีบกุ้งและหมูที่นึ่งสดใหม่ให้คุณอร่อยได้ทุกมื้อ
             </p>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
                 href="#menu"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] hover:bg-[var(--color-rose-dark)]"
               >
                 เลือกซาลาเปาเลย
               </a>
               <a
                 href="/preorder"
-                className="inline-flex items-center justify-center rounded-full border border-white/60 bg-white/70 px-6 py-3 text-sm font-semibold text-[var(--color-rose-dark)] shadow hover:bg-white"
+                className="inline-flex items-center justify-center rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 px-6 py-3 text-sm font-semibold text-[var(--color-rose)] shadow hover:bg-[var(--color-burgundy)]"
               >
                 สั่งเบรกเช้า & สั่งล่วงหน้า
               </a>
@@ -67,7 +67,7 @@ export default async function HomePage() {
               {["นึ่งสดทุกวัน", "หมูคัดพิเศษ", "ส่งไวในเมือง"].map((item) => (
                 <div
                   key={item}
-                  className="text-center rounded-2xl bg-white/70 px-4 py-3 text-sm font-medium text-[var(--color-choco)] shadow"
+                  className="text-center rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 px-4 py-3 text-sm font-medium text-[var(--color-gold)] shadow"
                 >
                   {item}
                 </div>
@@ -76,18 +76,18 @@ export default async function HomePage() {
           </div>
 
           <div className="relative flex justify-center">
-            <div className="relative h-[320px] w-[320px] sm:h-[360px] sm:w-[360px] rounded-[48%] bg-gradient-to-br from-white/80 via-white to-[#fff4e6] shadow-2xl shadow-[#f5a25d22] flex items-center justify-center">
-              <div className="absolute -top-8 right-8 h-16 w-16 rounded-full bg-[#fcd9b6] shadow-lg shadow-[#fcd9b6]/50" />
-              <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[#f5be9a] shadow-lg shadow-[#f5be9a]/50" />
-              <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-white/70" />
+            <div className="relative h-[320px] w-[320px] sm:h-[360px] sm:w-[360px] rounded-[48%] bg-gradient-to-br from-[var(--color-burgundy)] via-[#3c1212] to-[var(--color-burgundy-dark)] shadow-2xl shadow-black/50 flex items-center justify-center">
+              <div className="absolute -top-8 right-8 h-16 w-16 rounded-full bg-[var(--color-rose)]/30 shadow-lg shadow-[var(--color-rose)]/40" />
+              <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[var(--color-rose-dark)]/30 shadow-lg shadow-[var(--color-rose-dark)]/40" />
+              <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-[var(--color-rose)]/50" />
               <div className="text-center px-10">
-                <p className="text-lg font-semibold text-[var(--color-rose-dark)]">
+                <p className="text-lg font-semibold text-[var(--color-rose)]">
                   เมนูขายดี!
                 </p>
-                <p className="mt-1 text-2xl font-black text-[var(--color-choco)]">
+                <p className="mt-1 text-2xl font-black text-[var(--color-text)]">
                   ซาลาเปาหมูสับไข่เค็ม
                 </p>
-                <p className="mt-4 text-sm text-[var(--color-choco)]/70">
+                <p className="mt-4 text-sm text-[var(--color-text)]/70">
                   หมูสับแน่นๆ พร้อมไข่เค็มเต็มคำ นึ่งด้วยแป้งสูตรนุ่มพิเศษหอมละมุน
                 </p>
               </div>
@@ -121,14 +121,14 @@ export default async function HomePage() {
 
         <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.length === 0 ? (
-            <div className="col-span-full rounded-3xl bg-white/90 p-10 text-center text-[var(--color-choco)]/70 shadow-lg shadow-[#f5a25d20]">
+            <div className="col-span-full rounded-3xl bg-white/90 p-10 text-center text-[var(--color-choco)]/70 shadow-lg shadow-[rgba(240,200,105,0.2)]">
               เมนูซาลาเปากำลังนึ่งอยู่ รอสักครู่นะคะ 🥟
             </div>
           ) : (
             products.map((p) => (
               <div
                 key={p._id}
-                className="group relative flex h-full flex-col rounded-3xl bg-white/90 shadow-lg shadow-[#f5a25d20] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative flex h-full flex-col rounded-3xl bg-white/90 shadow-lg shadow-[rgba(240,200,105,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="relative overflow-hidden rounded-t-3xl">
                   <div className="aspect-square w-full bg-gradient-to-br from-[#ffe5d0] via-[#fff] to-[#fff2e2] flex items-center justify-center">
@@ -174,9 +174,9 @@ export default async function HomePage() {
             (title, idx) => (
               <div
                 key={title}
-                className="rounded-3xl bg-white p-8 shadow-md shadow-[#f5a25d15]"
+                className="rounded-3xl bg-white p-8 shadow-md shadow-[rgba(240,200,105,0.08)]"
               >
-                {/* <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f5a25d] to-[#f3d36b] text-white text-xl shadow">
+                {/* <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-gold)] text-white text-xl shadow">
                   {idx === 0 ? "👩‍🍳" : idx === 1 ? "👐" : "🌾"}
                 </div> */}
                 <h3 className="mt-6 text-xl font-semibold text-[var(--color-choco)]">

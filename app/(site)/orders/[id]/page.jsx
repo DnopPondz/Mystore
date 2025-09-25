@@ -328,7 +328,7 @@ export default function OrderDetailPage() {
       <main className="relative min-h-[70vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
         <div className="relative flex min-h-[60vh] items-center justify-center px-6 py-16">
-          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[#f5a25d20]">
+          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[rgba(240,200,105,0.2)]">
             <h1 className="text-2xl font-semibold text-[var(--color-rose-dark)]">เข้าสู่ระบบก่อนดูรายละเอียด</h1>
             <p className="mt-3 text-sm text-[var(--color-choco)]/70">
               โปรดเข้าสู่ระบบเพื่อยืนยันตัวตนก่อนเข้าถึงรายละเอียดคำสั่งซื้อ
@@ -336,7 +336,7 @@ export default function OrderDetailPage() {
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
               >
                 เข้าสู่ระบบ
               </Link>
@@ -373,7 +373,7 @@ export default function OrderDetailPage() {
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
-      <div className="absolute -top-24 right-16 h-64 w-64 rounded-full bg-[#f5a25d]/15 blur-3xl" />
+      <div className="absolute -top-24 right-16 h-64 w-64 rounded-full bg-[var(--color-rose)]/15 blur-3xl" />
       <div className="absolute -bottom-20 left-20 h-72 w-72 rounded-full bg-[#f3d36b]/20 blur-3xl" />
 
       <div className="relative max-w-4xl mx-auto px-6 py-16">
@@ -395,7 +395,7 @@ export default function OrderDetailPage() {
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-          <section className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+          <section className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)]">
             <header className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">สถานะคำสั่งซื้อ</h2>
               <span
@@ -486,7 +486,7 @@ export default function OrderDetailPage() {
                         className={`rounded-2xl border px-4 py-3 text-left text-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30 ${
                           active
                             ? "border-[var(--color-rose)] bg-[#fff1f5] text-[var(--color-rose-dark)] shadow"
-                            : "border-[#f4c689]/60 bg-white text-[var(--color-choco)]/80"
+                            : "border-[var(--color-rose)]/35 bg-white text-[var(--color-choco)]/80"
                         } ${updatingMethod || confirming ? "cursor-wait" : ""}`}
                       >
                         <div className="font-semibold">{option.label}</div>
@@ -503,7 +503,7 @@ export default function OrderDetailPage() {
                 ) : paymentInfo?.promptpay ? (
                   <QrBox payload={paymentInfo.promptpay.payload} amount={paymentInfo.promptpay.amount} title="สแกนเพื่อชำระเงิน" />
                 ) : paymentMethod === "bank" && paymentInfo?.bankAccount ? (
-                  <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[#fff6ed] p-4 text-sm text-[var(--color-choco)]">
+                  <div className="space-y-2 rounded-2xl border border-[#f4c689]/50 bg-[rgba(240,200,105,0.12)] p-4 text-sm text-[var(--color-choco)]">
                     <div className="font-semibold text-[var(--color-rose-dark)]">รายละเอียดบัญชีสำหรับโอน</div>
                     <div>ธนาคาร: {paymentInfo.bankAccount.bank}</div>
                     <div>เลขบัญชี: {paymentInfo.bankAccount.number}</div>
@@ -513,7 +513,7 @@ export default function OrderDetailPage() {
                     ) : null}
                   </div>
                 ) : amountDue <= 0 ? (
-                  <div className="rounded-2xl border border-[#f4c689]/40 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
                     ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                   </div>
                 ) : null}
@@ -528,13 +528,13 @@ export default function OrderDetailPage() {
                       readOnly
                       value={transferAmount}
                       onChange={(e) => setTransferAmount(e.target.value)}
-                      className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                      className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
                       placeholder={`ยอดที่ต้องชำระ ฿${fmt(amountDue)}`}
                     />
                     <p className="text-xs text-[var(--color-choco)]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(amountDue)}</p>
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-[#f4c689]/40 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
+                  <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[#fff7ef] px-4 py-3 text-sm text-[var(--color-choco)]/70">
                     ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                   </div>
                 )}
@@ -574,7 +574,7 @@ export default function OrderDetailPage() {
                             รองรับไฟล์รูปภาพ (PNG, JPG, JPEG)
                           </div>
                         </div>
-                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[#f5a25d33] group-hover:shadow-md">
+                        <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-[rgba(240,200,105,0.33)] group-hover:shadow-md">
                           เลือกไฟล์สลิป
                         </span>
                       </label>
@@ -622,7 +622,7 @@ export default function OrderDetailPage() {
                     type="text"
                     value={reference}
                     onChange={(e) => setReference(e.target.value)}
-                    className="w-full rounded-2xl border border-[#f4c689]/60 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                    className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
                     placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
                   />
                 </div>
@@ -636,10 +636,10 @@ export default function OrderDetailPage() {
                     !slipData ||
                     (needsAmountInput && !transferAmount)
                   }
-                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition ${
+                  className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                     confirming || updatingMethod || loadingPayment || !slipData || (needsAmountInput && !transferAmount)
                       ? "cursor-not-allowed bg-[#f2c8a5]"
-                      : "bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] hover:shadow-xl"
+                      : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
                   }`}
                 >
                   {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}
@@ -652,7 +652,7 @@ export default function OrderDetailPage() {
           </section>
 
           <section className="space-y-6">
-            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)]">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายละเอียดยอดชำระ</h2>
               <div className="mt-4 space-y-3 text-sm text-[var(--color-choco)]/80">
                 <div className="flex justify-between">
@@ -672,7 +672,7 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+            <div className="rounded-3xl bg-white/95 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)]">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">ข้อมูลจัดส่ง</h2>
               <div className="mt-4 space-y-2 text-sm text-[var(--color-choco)]/80">
                 <div>
@@ -693,7 +693,7 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
-                  <div className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+                  <div className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)]">
             <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
           <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
             {order.items.map((it, idx) => (
@@ -713,7 +713,7 @@ export default function OrderDetailPage() {
           </section>
         </div>
 
-        {/* <section className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[#f5a25d15]">
+        {/* <section className="mt-10 rounded-3xl bg-white/95 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)]">
           <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
           <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
             {order.items.map((it, idx) => (

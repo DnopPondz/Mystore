@@ -130,7 +130,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[#f5a25d14] backdrop-blur">
+      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)] backdrop-blur">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">จัดการผู้ใช้งาน</h2>
@@ -153,13 +153,13 @@ export default function AdminUsersPage() {
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <StatCard label="ผู้ใช้ทั้งหมด" value={stats.total} tone="from-[#f3d36b]/30 via-[#f7c68b]/20 to-transparent" />
-          <StatCard label="ผู้ดูแลระบบ" value={stats.adminCount} tone="from-[#7cd1b8]/30 via-[#f3d36b]/20 to-transparent" />
-          <StatCard label="ถูกระงับ" value={stats.bannedCount} tone="from-[#f5a25d]/30 via-[#f7c68b]/20 to-transparent" />
+          <StatCard label="ผู้ใช้ทั้งหมด" value={stats.total} tone="from-[#f3d36b]/30 via-[var(--color-rose-dark)]/20 to-transparent" />
+          <StatCard label="ผู้ดูแลระบบ" value={stats.adminCount} tone="from-[#7cd1b8]/30 via-[var(--color-gold)]/20 to-transparent" />
+          <StatCard label="ถูกระงับ" value={stats.bannedCount} tone="from-[var(--color-rose)]/30 via-[var(--color-rose-dark)]/20 to-transparent" />
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[#f5a25d18]">
+      <section className="rounded-3xl border border-white/70 bg-white/70 shadow-xl shadow-[rgba(240,200,105,0.09)]">
         <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">รายการผู้ใช้งาน</h3>
@@ -255,7 +255,7 @@ export default function AdminUsersPage() {
 function StatCard({ label, value, tone }) {
   return (
     <div
-      className={`rounded-2xl border border-white/60 bg-white/70 p-4 text-center shadow-inner shadow-[#f5a25d1f] ${
+      className={`rounded-2xl border border-white/60 bg-white/70 p-4 text-center shadow-inner shadow-[rgba(240,200,105,0.19)] ${
         tone ? `bg-gradient-to-br ${tone}` : ""
       }`}
     >

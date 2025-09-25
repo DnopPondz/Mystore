@@ -83,7 +83,7 @@ export default function PreOrderPage() {
               ไม่ว่าจะเป็นงานวันเกิด งานหมั้น งานองค์กร หรือของฝากพิเศษ ทีมเชฟของเราพร้อมช่วยออกแบบเมนูตามความต้องการ พร้อมที่ปรึกษาด้านรสชาติและงบประมาณ
             </p>
             <div className="grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-choco)]/70">
-              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[#f5a25d15]">
+              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[rgba(240,200,105,0.08)]">
                 <p className="font-semibold text-[var(--color-choco)]">บริการที่ได้รับ</p>
                 <ul className="mt-3 space-y-2 list-disc list-inside">
                   <li>ออกแบบรสชาติและหน้าตาขนม</li>
@@ -91,7 +91,7 @@ export default function PreOrderPage() {
                   <li>จัดส่งและจัดเซตในสถานที่</li>
                 </ul>
               </div>
-              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[#f5a25d15]">
+              <div className="rounded-3xl bg-white/90 p-5 shadow-md shadow-[rgba(240,200,105,0.08)]">
                 <p className="font-semibold text-[var(--color-choco)]">ระยะเวลาแนะนำ</p>
                 <ul className="mt-3 space-y-2 list-disc list-inside">
                   <li>แจ้งล่วงหน้าอย่างน้อย 3-5 วัน</li>
@@ -102,7 +102,7 @@ export default function PreOrderPage() {
             </div>
           </div>
           <div className="flex-1">
-            <div className="rounded-[46%] bg-gradient-to-br from-white via-[#fff2e2] to-[#ffe8d2] p-10 shadow-2xl shadow-[#f5a25d25] text-center">
+            <div className="rounded-[46%] bg-gradient-to-br from-white via-[#fff2e2] to-[#ffe8d2] p-10 shadow-2xl shadow-[rgba(240,200,105,0.25)] text-center">
               <p className="text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-rose)]">Made to Order</p>
               <p className="mt-3 text-3xl font-black text-[var(--color-choco)]">Pre-order ขนมชิ้นโปรด</p>
               <p className="mt-4 text-sm text-[var(--color-choco)]/70">
@@ -116,7 +116,7 @@ export default function PreOrderPage() {
       <section className="relative max-w-screen-xl mx-auto px-6 lg:px-10 pb-20 grid gap-8 lg:grid-cols-[2fr_1fr]">
         <form
           onSubmit={handleSubmit}
-          className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#f5a25d15] space-y-6"
+          className="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[rgba(240,200,105,0.08)] space-y-6"
         >
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-choco)]">กรอกรายละเอียดสำหรับสั่งทำพิเศษ</h2>
@@ -259,14 +259,14 @@ export default function PreOrderPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "กำลังส่งคำขอ..." : "ส่งคำขอออกแบบเมนู"}
             </button>
           </div>
         </form>
 
-        <aside className="rounded-3xl bg-white/80 p-8 shadow-xl shadow-[#f5a25d15] space-y-6">
+        <aside className="rounded-3xl bg-white/80 p-8 shadow-xl shadow-[rgba(240,200,105,0.08)] space-y-6">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-choco)]">ปรึกษาฟรี</h2>
             <p className="mt-2 text-sm text-[var(--color-choco)]/70">
@@ -307,7 +307,7 @@ export default function PreOrderPage() {
               </div>
             </a>
           </div>
-          <div className="rounded-3xl bg-gradient-to-r from-[#f5a25d] to-[#f3d36b] px-5 py-6 text-white shadow-lg shadow-[#f5a25d33]">
+          <div className="rounded-3xl bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-5 py-6 text-white shadow-lg shadow-[rgba(240,200,105,0.33)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em]">Tip</p>
             <p className="mt-2 text-sm">
               หากมี moodboard หรือรูปตัวอย่างที่ชื่นชอบ สามารถแนบส่งผ่านอีเมลหรือ LINE หลังจากกรอกแบบฟอร์มเพื่อให้ทีมออกแบบได้แม่นยำขึ้น

@@ -64,21 +64,21 @@ export default function QrBox({ payload, amount, title = "สแกนจ่า�
 }
 
   return (
-    <div className="rounded-3xl bg-white p-6 text-center shadow-lg shadow-[#f5a25d1a]">
+    <div className="rounded-3xl bg-white p-6 text-center shadow-lg shadow-[rgba(240,200,105,0.1)]">
       <div className="text-lg font-semibold text-[var(--color-choco)]">{title}</div>
       <div className="mt-1 text-sm text-[var(--color-choco)]/70">จำนวนเงิน: ฿{amount}</div>
 
       <div className="mt-4 flex items-center justify-center">
-        <canvas ref={canvasRef} className="rounded-2xl border border-[#f4c689]/40 bg-white p-3" />
+        <canvas ref={canvasRef} className="rounded-2xl border border-[var(--color-rose)]/30 bg-white p-3" />
       </div>
 
       <div className="mt-4 space-y-2 text-left">
-  {/* <div className="rounded-2xl border border-[#f4c689]/40 bg-[#fff6ed] p-3 text-xs text-[var(--color-choco)]/80 break-all">
+  {/* <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[rgba(240,200,105,0.12)] p-3 text-xs text-[var(--color-choco)]/80 break-all">
     {payload}
   </div> */}
 
   <button
-    className="w-full rounded-full bg-gradient-to-r from-[#f5a25d] to-[#f7c68b] px-4 py-2 text-sm font-semibold text-white shadow shadow-[#f5a25d33] transition hover:shadow-md"
+    className="w-full rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-4 py-2 text-sm font-semibold text-white shadow shadow-[rgba(240,200,105,0.33)] transition hover:shadow-md"
     onClick={saveQrCode}
     type="button"
   >

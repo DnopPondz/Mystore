@@ -63,7 +63,7 @@ export default function CartPage() {
   }
 
   const summary = (
-    <div className="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#f5a25d22]">
+    <div className="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[rgba(240,200,105,0.22)]">
       <div className="flex items-center justify-between text-lg font-semibold text-[var(--color-choco)]">
         <span>ยอดรวม</span>
         <span>฿{cart.subtotal}</span>
@@ -79,12 +79,12 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/checkout"
-          className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+          className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
         >
           ไปหน้าชำระเงิน
         </Link>
         <button
-          className="rounded-full border border-[#f4c689]/60 px-6 py-3 text-sm font-medium text-[var(--color-choco)] hover:bg-[#fff5e4]"
+          className="rounded-full border border-[var(--color-rose)]/35 px-6 py-3 text-sm font-medium text-[var(--color-choco)] hover:bg-[rgba(240,200,105,0.12)]"
           onClick={cart.clear}
         >
           ลบสินค้าทั้งหมด
@@ -106,7 +106,7 @@ export default function CartPage() {
   if (status === "unauthenticated") {
     return (
       <main className="flex min-h-[70vh] items-center justify-center bg-[var(--color-cream)]/40">
-        <div className="rounded-3xl bg-white/90 px-8 py-10 text-center text-[var(--color-choco)] shadow-lg shadow-[#f5a25d22]">
+        <div className="rounded-3xl bg-white/90 px-8 py-10 text-center text-[var(--color-choco)] shadow-lg shadow-[rgba(240,200,105,0.22)]">
           <p className="text-lg font-semibold">กรุณาเข้าสู่ระบบเพื่อเปิดตะกร้าสินค้า</p>
           <p className="mt-3 text-sm text-[var(--color-choco)]/70">
             ระบบกำลังพาไปยังหน้าเข้าสู่ระบบอัตโนมัติ หากไม่เปลี่ยนหน้า
@@ -126,7 +126,7 @@ export default function CartPage() {
     <main className="relative min-h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#fff0e1] via-[#fff8ef] to-[#fde7b8]" />
       <div className="absolute -top-24 right-8 h-64 w-64 rounded-full bg-[#f3d36b]/30 blur-3xl" />
-      <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-[#f5a25d]/20 blur-3xl" />
+      <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
 
       <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
         <div className="flex flex-col gap-6">
@@ -138,7 +138,7 @@ export default function CartPage() {
           </div>
 
           {cart.items.length === 0 ? (
-            <div className="rounded-3xl bg-white/80 p-10 text-center shadow-lg shadow-[#f5a25d22]">
+            <div className="rounded-3xl bg-white/80 p-10 text-center shadow-lg shadow-[rgba(240,200,105,0.22)]">
               <p className="text-lg font-medium text-[var(--color-choco)]">ตะกร้าของคุณยังว่าง</p>
               <p className="mt-2 text-sm text-[var(--color-choco)]/70">
                 ลองกลับไปเลือกเมนูโปรดดูนะคะ —
@@ -153,7 +153,7 @@ export default function CartPage() {
                 {cart.items.map((it) => (
                   <div
                     key={it.productId}
-                    className="flex flex-col gap-3 rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#f5a25d1a] sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-3 rounded-3xl bg-white/90 p-6 shadow-lg shadow-[rgba(240,200,105,0.1)] sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div>
                       <div className="text-lg font-semibold text-[var(--color-choco)]">{it.title}</div>
@@ -167,7 +167,7 @@ export default function CartPage() {
                         onChange={(e) =>
                           cart.setQty(it.productId, parseInt(e.target.value || "1", 10))
                         }
-                        className="h-11 w-24 rounded-full border border-[#f4c689]/60 bg-white px-4 text-center text-sm font-medium text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[#f5a25d]/30"
+                        className="h-11 w-24 rounded-full border border-[var(--color-rose)]/35 bg-white px-4 text-center text-sm font-medium text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
                       />
                       <button
                         className="text-sm font-medium text-[var(--color-rose-dark)] underline decoration-dotted"
@@ -181,7 +181,7 @@ export default function CartPage() {
               </div>
 
               <div className="space-y-6">
-                <div className="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#f5a25d22]">
+                <div className="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[rgba(240,200,105,0.22)]">
                   <h2 className="text-lg font-semibold text-[var(--color-choco)]">ใช้คูปอง</h2>
                   <p className="mt-1 text-xs text-[var(--color-choco)]/70">กรอกโค้ดเพื่อรับส่วนลดพิเศษ</p>
                   <div className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -189,19 +189,19 @@ export default function CartPage() {
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
                       placeholder="เช่น SWEET10"
-                      className="flex-1 rounded-full border border-[#f4c689]/60 bg-white px-5 py-3 text-sm text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[#f5a25d]/30"
+                      className="flex-1 rounded-full border border-[var(--color-rose)]/35 bg-white px-5 py-3 text-sm text-[var(--color-choco)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
                     />
                     <button
                       onClick={applyCoupon}
                       disabled={applying}
-                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#f5a25d] to-[#f7c68b] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#f5a25d33] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[rgba(240,200,105,0.33)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
                     </button>
                     {cart.coupon && (
                       <button
                         onClick={() => cart.clearCoupon()}
-                        className="rounded-full border border-[#f5a25d]/20 px-5 py-3 text-sm font-medium text-[var(--color-choco)] hover:bg-[#fff5e4]"
+                        className="rounded-full border border-[var(--color-rose)]/20 px-5 py-3 text-sm font-medium text-[var(--color-choco)] hover:bg-[rgba(240,200,105,0.12)]"
                       >
                         ลบคูปอง
                       </button>

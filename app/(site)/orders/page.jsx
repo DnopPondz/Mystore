@@ -108,7 +108,7 @@ export default function OrdersPage() {
       <main className="relative min-h-[70vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
         <div className="relative flex min-h-[60vh] items-center justify-center px-6 py-16">
-          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[#f5a25d20]">
+          <div className="w-full max-w-md rounded-3xl bg-white/90 p-10 text-center shadow-xl shadow-[rgba(240,200,105,0.2)]">
             <h1 className="text-2xl font-semibold text-[var(--color-rose-dark)]">เข้าสู่ระบบเพื่อดูคำสั่งซื้อ</h1>
             <p className="mt-3 text-sm text-[var(--color-choco)]/70">
               บัญชีผู้ใช้จำเป็นสำหรับเชื่อมคำสั่งซื้อกับคุณ กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่เพื่อดูประวัติการสั่งซื้อทั้งหมดของคุณ
@@ -116,7 +116,7 @@ export default function OrdersPage() {
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
               >
                 เข้าสู่ระบบ
               </Link>
@@ -143,7 +143,7 @@ export default function OrdersPage() {
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#fff4e6] via-[#fff7f0] to-[#ffe1d0]" />
-      <div className="absolute -top-24 right-20 h-60 w-60 rounded-full bg-[#f5a25d]/15 blur-3xl" />
+      <div className="absolute -top-24 right-20 h-60 w-60 rounded-full bg-[var(--color-rose)]/15 blur-3xl" />
       <div className="absolute -bottom-20 left-12 h-72 w-72 rounded-full bg-[#f3d36b]/20 blur-3xl" />
 
       <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
@@ -156,14 +156,14 @@ export default function OrdersPage() {
           </div>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#f5a25d33] hover:bg-[var(--color-rose-dark)]"
+            className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
           >
             เลือกสินค้าเพิ่ม
           </Link>
         </div>
 
         {orders.length === 0 ? (
-          <div className="mt-10 rounded-3xl bg-white/85 p-10 text-center shadow-lg shadow-[#f5a25d22]">
+          <div className="mt-10 rounded-3xl bg-white/85 p-10 text-center shadow-lg shadow-[rgba(240,200,105,0.22)]">
             <p className="text-lg font-semibold text-[var(--color-choco)]">
               ยังไม่มีคำสั่งซื้อ
             </p>
@@ -188,7 +188,7 @@ export default function OrdersPage() {
                 <Link
                   href={`/orders/${orderId}`}
                   key={orderId}
-                  className="group block rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#f5a25d1a] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="group block rounded-3xl bg-white/90 p-6 shadow-lg shadow-[rgba(240,200,105,0.1)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
