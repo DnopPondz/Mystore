@@ -268,7 +268,7 @@ export default function AdminUsersPage() {
             <div className="hidden lg:block overflow-x-auto">
               <table className="min-w-full text-sm text-[var(--color-choco)]">
                 <thead>
-                  <tr className="bg-gradient-to-r from-[#fff5e4] to-[#fef7ed] border-b border-white/40">
+                  <tr className="bg-gradient-to-r rounded-b-3xl rounded-t-none  from-[#fff5e4] to-[#fef7ed] border-b border-white/40">
                     <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
                       <div className="flex items-center gap-2">
                         👤 ชื่อผู้ใช้
@@ -306,7 +306,7 @@ export default function AdminUsersPage() {
                     <tr>
                       <td colSpan={6} className="px-6 py-12 text-center">
                         <div className="flex flex-col items-center justify-center">
-                          <div className="mb-4 h-20 w-20 rounded-full bg-[var(--color-rose)]/10 flex items-center justify-center text-3xl">
+                          <div className="mb-4 h-20 w-20 c-full bg-[var(--color-rose)]/10 flex items-center justify-center text-3xl">
                             👤
                           </div>
                           <div className="text-sm font-medium text-[var(--color-choco)]/60">
