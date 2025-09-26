@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { PreOrder } from "@/models/PreOrder";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 function sanitizeText(value) {
   return String(value || "").trim();
@@ -67,4 +69,23 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ ok: 1, stored });
+}
+
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    if (session?.user?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    await connectToDatabase();
+    const items = await PreOrder.find({})
+      .sort({ createdAt: -1 })
+      .limit(200)
+      .lean();
+
+    return NextResponse.json(items);
+  } catch (error) {
+    return NextResponse.json({ error: String(error || "") }, { status: 500 });
+  }
 }
