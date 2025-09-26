@@ -27,12 +27,14 @@ async function ensureAdmin() {
 }
 
 export async function GET(_req, { params }) {
+  const { id } = await params;
+
   const { error } = await ensureAdmin();
   if (error) return error;
 
   await connectToDatabase();
 
-  const preorder = await PreOrder.findById(params?.id).lean();
+  const preorder = await PreOrder.findById(id).lean();
   if (!preorder) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -46,6 +48,8 @@ export async function GET(_req, { params }) {
 }
 
 export async function PATCH(req, { params }) {
+  const { id } = await params;
+
   const { error } = await ensureAdmin();
   if (error) return error;
 
@@ -53,7 +57,7 @@ export async function PATCH(req, { params }) {
 
   await connectToDatabase();
 
-  const preorder = await PreOrder.findById(params?.id);
+  const preorder = await PreOrder.findById(id);
   if (!preorder) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

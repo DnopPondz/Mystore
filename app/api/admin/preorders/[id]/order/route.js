@@ -18,6 +18,8 @@ function computePayment(plan, quotedTotal) {
 }
 
 export async function POST(req, { params }) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -25,7 +27,7 @@ export async function POST(req, { params }) {
 
   await connectToDatabase();
 
-  const preorder = await PreOrder.findById(params?.id);
+  const preorder = await PreOrder.findById(id);
   if (!preorder) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
