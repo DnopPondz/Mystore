@@ -289,12 +289,22 @@ export default function PreOrderPage() {
                       type="button"
                       key={item._id}
                       onClick={() => setSelectedMenuId(String(item._id))}
-                      className={`flex flex-col items-start gap-2 rounded-3xl border px-5 py-5 text-left shadow-lg transition ${
+                      className={`flex flex-col items-start gap-3 rounded-3xl border px-5 py-5 text-left shadow-lg transition ${
                         active
                           ? "border-[var(--color-rose)] bg-[rgba(240,200,105,0.12)] text-[var(--color-gold)]"
                           : "border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/60 text-[var(--color-text)]/80 hover:border-[var(--color-rose)]/40"
                       }`}
                     >
+                      {item.imageUrl ? (
+                        <span className="block w-full overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="h-40 w-full object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        </span>
+                      ) : null}
                       <span className="text-sm font-semibold uppercase tracking-wide text-[var(--color-rose)]/80">
                         {item.unitLabel || "ชุด"}
                       </span>

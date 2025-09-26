@@ -35,6 +35,7 @@ export default function AdminPreordersPage() {
     price: "",
     unitLabel: "ชุด",
     depositRate: "0.5",
+    imageUrl: "",
   });
   const [creatingMenu, setCreatingMenu] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
@@ -100,6 +101,7 @@ export default function AdminPreordersPage() {
           price: Number(menuForm.price),
           unitLabel: menuForm.unitLabel || "ชุด",
           depositRate: Number(menuForm.depositRate || 0.5),
+          imageUrl: menuForm.imageUrl,
         }),
       });
 
@@ -108,9 +110,9 @@ export default function AdminPreordersPage() {
         throw new Error(data?.error || "ไม่สามารถสร้างเมนูได้");
       }
 
-      setMenuForm({ title: "", description: "", price: "", unitLabel: "ชุด", depositRate: "0.5" });
+      setMenuForm({ title: "", description: "", price: "", unitLabel: "ชุด", depositRate: "0.5", imageUrl: "" });
       refreshAll();
-      popup.show({ type: "success", message: "เพิ่มเมนูพรีออเดอร์แล้ว" });
+      void popup.alert("เพิ่มเมนูพรีออเดอร์แล้ว", { title: "บันทึกสำเร็จ", tone: "success" });
     } catch (err) {
       setMenuError(err?.message || "เกิดข้อผิดพลาด");
     } finally {
@@ -128,9 +130,9 @@ export default function AdminPreordersPage() {
       const data = await response.json();
       if (!response.ok || !data?.ok) throw new Error(data?.error || "อัปเดตเมนูไม่สำเร็จ");
       setMenuItems((prev) => prev.map((item) => (String(item._id) === String(id) ? data.item : item)));
-      popup.show({ type: "success", message: successMessage });
+      void popup.alert(successMessage, { title: "บันทึกสำเร็จ", tone: "success" });
     } catch (err) {
-      popup.show({ type: "error", message: err?.message || "อัปเดตเมนูไม่สำเร็จ" });
+      void popup.alert(err?.message || "อัปเดตเมนูไม่สำเร็จ", { title: "เกิดข้อผิดพลาด", tone: "error" });
     }
   }
 
@@ -144,9 +146,9 @@ export default function AdminPreordersPage() {
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error || "อัปเดตไม่สำเร็จ");
       setPreorders((prev) => prev.map((item) => (String(item._id) === String(id) ? data : item)));
-      popup.show({ type: "success", message });
+      void popup.alert(message, { title: "บันทึกสำเร็จ", tone: "success" });
     } catch (err) {
-      popup.show({ type: "error", message: err?.message || "อัปเดตไม่สำเร็จ" });
+      void popup.alert(err?.message || "อัปเดตไม่สำเร็จ", { title: "เกิดข้อผิดพลาด", tone: "error" });
     }
   }
 
@@ -234,6 +236,15 @@ export default function AdminPreordersPage() {
                   className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 />
               </label>
+              <label className="flex flex-col gap-1 text-xs font-medium text-[var(--color-text)]/70">
+                ลิงก์รูปภาพเมนู
+                <input
+                  value={menuForm.imageUrl}
+                  onChange={updateMenuForm("imageUrl")}
+                  className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
+                  placeholder="เช่น https://..."
+                />
+              </label>
               <label className="flex flex-col gap-1 text-xs font-medium text-[var(--color-text)]/70 md:col-span-2">
                 รายละเอียดเพิ่มเติม
                 <textarea
@@ -266,16 +277,31 @@ export default function AdminPreordersPage() {
                     key={item._id}
                     className="flex flex-col gap-3 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/60 px-4 py-4 text-sm text-[var(--color-text)] shadow-lg shadow-black/25 md:flex-row md:items-center md:justify-between"
                   >
-                    <div>
-                      <div className="text-base font-semibold text-[var(--color-gold)]">
-                        {item.title} {item.active ? "" : <span className="ml-2 text-xs font-normal text-[var(--color-rose)]/80">(ปิดชั่วคราว)</span>}
-                      </div>
-                      <div className="text-xs text-[var(--color-text)]/60">
-                        {item.unitLabel || "ชุด"} • ราคา ฿{formatCurrency(item.price)} • มัดจำ {Math.round((item.depositRate || 0.5) * 100)}%
-                      </div>
-                      {item.description ? (
-                        <div className="mt-1 text-xs text-[var(--color-text)]/60">{item.description}</div>
+                    <div className="flex flex-1 items-start gap-3">
+                      {item.imageUrl ? (
+                        <div className="h-16 w-16 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="h-full w-full object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
                       ) : null}
+                      <div>
+                        <div className="text-base font-semibold text-[var(--color-gold)]">
+                          {item.title} {item.active ? "" : <span className="ml-2 text-xs font-normal text-[var(--color-rose)]/80">(ปิดชั่วคราว)</span>}
+                        </div>
+                        <div className="text-xs text-[var(--color-text)]/60">
+                          {item.unitLabel || "ชุด"} • ราคา ฿{formatCurrency(item.price)} • มัดจำ {Math.round((item.depositRate || 0.5) * 100)}%
+                        </div>
+                        {item.description ? (
+                          <div className="mt-1 text-xs text-[var(--color-text)]/60">{item.description}</div>
+                        ) : null}
+                        {item.imageUrl ? (
+                          <div className="mt-1 text-[10px] text-[var(--color-text)]/50 break-words">{item.imageUrl}</div>
+                        ) : null}
+                      </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       <button
@@ -307,6 +333,16 @@ export default function AdminPreordersPage() {
                         className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy)]/50 px-3 py-2 text-xs font-medium text-[var(--color-gold)]"
                       >
                         ปรับอัตรามัดจำ
+                      </button>
+                      <button
+                        onClick={() => {
+                          const nextUrl = prompt("ลิงก์รูปภาพใหม่", item.imageUrl || "");
+                          if (nextUrl === null) return;
+                          handleUpdateMenu(item._id, { imageUrl: nextUrl }, nextUrl ? "อัปเดตรูปภาพแล้ว" : "ลบรูปภาพแล้ว");
+                        }}
+                        className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy)]/50 px-3 py-2 text-xs font-medium text-[var(--color-gold)]"
+                      >
+                        {item.imageUrl ? "เปลี่ยนรูป" : "เพิ่มรูป"}
                       </button>
                     </div>
                   </div>
