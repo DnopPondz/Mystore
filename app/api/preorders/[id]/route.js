@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 const allowedStatus = new Set(["new", "contacted", "quoted", "confirmed", "closed"]);
+const allowedDepositStatus = new Set(["pending", "paid", "waived"]);
 
 export async function PATCH(request, { params }) {
   const { id } = await params;
@@ -25,6 +26,10 @@ export async function PATCH(request, { params }) {
     update.status = payload.status;
   }
 
+  if (typeof payload.depositStatus === "string" && allowedDepositStatus.has(payload.depositStatus)) {
+    update.depositStatus = payload.depositStatus;
+  }
+
   const textFields = ["notes", "flavourIdeas", "name", "phone", "email", "eventDate", "eventTime", "preferredContact"];
   for (const key of textFields) {
     if (payload[key] !== undefined) {
@@ -32,7 +37,15 @@ export async function PATCH(request, { params }) {
     }
   }
 
-  const numericFields = ["servings", "budget"];
+  const numericFields = [
+    "servings",
+    "budget",
+    "quantity",
+    "itemPrice",
+    "totalPrice",
+    "depositAmount",
+    "finalPrice",
+  ];
   for (const key of numericFields) {
     if (payload[key] !== undefined) {
       const value = Number(payload[key]);

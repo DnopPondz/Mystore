@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
+import { PreOrder } from "@/models/PreOrder";
 import { promptPayPayload } from "@/lib/promptpay";
 import { Coupon } from "@/models/Coupon"; // ⬅️ เพิ่ม
 import { Order } from "@/models/Order";
@@ -37,16 +38,87 @@ export async function POST(req) {
 
     await connectToDatabase();
 
-    const ids = items.map((x) => x.productId);
-    const docs = await Product.find({ _id: { $in: ids }, active: true }).lean();
-    const byId = Object.fromEntries(docs.map((d) => [String(d._id), d]));
+    const productIds = [];
+    const preorderIds = [];
+    for (const item of items) {
+      if (item?.kind === "preorder-deposit") {
+        const preorderId = String(item.preorderId || "").trim();
+        if (!preorderId) {
+          return NextResponse.json({ error: "กรุณาเลือกคำสั่งซื้อมัดจำให้ถูกต้อง" }, { status: 400 });
+        }
+        preorderIds.push(preorderId);
+      } else {
+        const productId = String(item?.productId || "").trim();
+        if (!productId) {
+          return NextResponse.json({ error: "ไม่พบสินค้าในตะกร้า" }, { status: 400 });
+        }
+        productIds.push(productId);
+      }
+    }
+
+    const productDocs = productIds.length
+      ? await Product.find({ _id: { $in: productIds }, active: true }).lean()
+      : [];
+    const byProductId = Object.fromEntries(productDocs.map((d) => [String(d._id), d]));
+
+    const preorderDocs = preorderIds.length ? await PreOrder.find({ _id: { $in: preorderIds } }).lean() : [];
+    const byPreorderId = Object.fromEntries(preorderDocs.map((d) => [String(d._id), d]));
+
+    if (preorderIds.length && couponCode) {
+      return NextResponse.json({ error: "มัดจำไม่รองรับการใช้คูปองส่วนลด" }, { status: 400 });
+    }
 
     const checked = [];
-    for (const it of items) {
-      const p = byId[it.productId];
-      if (!p) return NextResponse.json({ error: `Product not found: ${it.productId}` }, { status: 400 });
-      const qty = Math.max(1, Number(it.qty || 1));
-      checked.push({ productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty });
+    const depositLines = [];
+    for (const item of items) {
+      if (item?.kind === "preorder-deposit") {
+        const preorderId = String(item.preorderId || "").trim();
+        const preorder = byPreorderId[preorderId];
+        if (!preorder) {
+          return NextResponse.json({ error: "ไม่พบคำขอพรีออเดอร์" }, { status: 404 });
+        }
+
+        if (preorder.orderType !== "menu") {
+          return NextResponse.json({ error: "คำขอพรีออเดอร์นี้ไม่รองรับมัดจำ" }, { status: 400 });
+        }
+
+        if (preorder.depositStatus === "paid") {
+          return NextResponse.json({ error: "คำขอนี้ชำระมัดจำเรียบร้อยแล้ว" }, { status: 400 });
+        }
+
+        const depositAmount = Number(preorder.depositAmount || 0);
+        if (!Number.isFinite(depositAmount) || depositAmount <= 0) {
+          return NextResponse.json({ error: "คำขอพรีออเดอร์นี้ยังไม่ได้คำนวณยอดมัดจำ" }, { status: 400 });
+        }
+
+        const line = {
+          kind: "preorder-deposit",
+          productId: null,
+          preorderId,
+          title: `มัดจำ ${preorder.menuSnapshot?.title || "Pre-order"}`,
+          price: depositAmount,
+          qty: 1,
+          lineTotal: depositAmount,
+        };
+        checked.push(line);
+        depositLines.push(line);
+      } else {
+        const productId = String(item?.productId || "").trim();
+        const product = byProductId[productId];
+        if (!product) {
+          return NextResponse.json({ error: `Product not found: ${productId}` }, { status: 400 });
+        }
+        const qty = Math.max(1, Number(item.qty || 1));
+        checked.push({
+          kind: "product",
+          productId: String(product._id),
+          preorderId: null,
+          title: product.title,
+          price: product.price,
+          qty,
+          lineTotal: product.price * qty,
+        });
+      }
     }
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
@@ -103,6 +175,17 @@ export async function POST(req) {
         : null;
 
     const bankAccount = method === "bank" ? configuredBank : null;
+
+    if (depositLines.length) {
+      try {
+        await PreOrder.updateMany(
+          { _id: { $in: depositLines.map((line) => line.preorderId) } },
+          { depositOrderId: order._id }
+        );
+      } catch (err) {
+        console.warn("Failed to link deposit order", err);
+      }
+    }
 
     return NextResponse.json({
       ok: 1,

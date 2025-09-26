@@ -39,7 +39,15 @@ export async function POST(req) {
     const checked = items.map((it) => {
       const p = byId[it.productId];
       const qty = Math.max(1, Number(it.qty || 1));
-      return { productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty };
+      return {
+        kind: "product",
+        productId: String(p._id),
+        preorderId: null,
+        title: p.title,
+        price: p.price,
+        qty,
+        lineTotal: p.price * qty,
+      };
     });
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);

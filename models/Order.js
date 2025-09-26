@@ -12,6 +12,12 @@ const OrderSchema = new Schema(
     items: [
       {
         productId: { type: Schema.Types.ObjectId, ref: "Product" },
+        preorderId: { type: Schema.Types.ObjectId, ref: "PreOrder" },
+        kind: {
+          type: String,
+          enum: ["product", "preorder-deposit"],
+          default: "product",
+        },
         title: String,
         price: Number,
         qty: Number,

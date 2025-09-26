@@ -21,6 +21,29 @@ const PreOrderSchema = new Schema(
       enum: ["new", "contacted", "quoted", "confirmed", "closed"],
       default: "new",
     },
+    orderType: {
+      type: String,
+      enum: ["menu", "break"],
+      default: "break",
+    },
+    menuItemId: { type: Schema.Types.ObjectId, ref: "PreorderMenuItem", default: null },
+    menuSnapshot: {
+      title: { type: String, default: "" },
+      unitLabel: { type: String, default: "" },
+      price: { type: Number, default: 0 },
+      depositRate: { type: Number, default: 0.5 },
+    },
+    quantity: { type: Number, default: 0 },
+    itemPrice: { type: Number, default: 0 },
+    totalPrice: { type: Number, default: 0 },
+    depositAmount: { type: Number, default: 0 },
+    depositStatus: {
+      type: String,
+      enum: ["pending", "paid", "waived"],
+      default: "pending",
+    },
+    depositOrderId: { type: Schema.Types.ObjectId, ref: "Order", default: null },
+    finalPrice: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

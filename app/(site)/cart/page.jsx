@@ -1,7 +1,7 @@
 "use client";
 import { useCart } from "@/components/cart/CartProvider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -12,6 +12,9 @@ export default function CartPage() {
   const [code, setCode] = useState(cart.coupon?.code || "");
   const [applying, setApplying] = useState(false);
   const [err, setErr] = useState("");
+  const hasDeposit = useMemo(() => cart.items.some((item) => item.kind === "preorder-deposit"), [cart.items]);
+  const fmt = (value) =>
+    Number(value || 0).toLocaleString("th-TH", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -66,14 +69,14 @@ export default function CartPage() {
     <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
       <div className="flex items-center justify-between text-lg font-semibold text-[var(--color-gold)]">
         <span>ยอดรวม</span>
-        <span>฿{cart.subtotal}</span>
+        <span>฿{fmt(cart.subtotal)}</span>
       </div>
       {cart.coupon?.discount ? (
         <div className="mt-3 flex items-center justify-between rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-xs text-[var(--color-gold)]/85">
           <span>
             ใช้คูปอง {cart.coupon.code} ({cart.coupon.description})
           </span>
-          <span>-฿{cart.coupon.discount}</span>
+          <span>-฿{fmt(cart.coupon.discount)}</span>
         </div>
       ) : null}
       <div className="mt-6 flex flex-col gap-3">
@@ -150,70 +153,91 @@ export default function CartPage() {
           ) : (
             <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr]">
               <div className="space-y-4">
-                {cart.items.map((it) => (
-                  <div
-                    key={it.productId}
-                    className="flex flex-col gap-3 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/30 backdrop-blur sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div>
-                      <div className="text-lg font-semibold text-[var(--color-gold)]">{it.title}</div>
-                      <div className="text-sm text-[var(--color-text)]/70">฿{it.price} ต่อชิ้น</div>
+                {cart.items.map((it) => {
+                  const isDeposit = it.kind === "preorder-deposit";
+                  return (
+                    <div
+                      key={it.id}
+                      className="flex flex-col gap-3 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/30 backdrop-blur sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div>
+                        <div className="text-lg font-semibold text-[var(--color-gold)]">{it.title}</div>
+                        <div className="text-sm text-[var(--color-text)]/70">
+                          ฿{fmt(it.price)} {isDeposit ? "มัดจำ (50%)" : "ต่อชิ้น"}
+                        </div>
+                        {isDeposit && (
+                          <div className="mt-2 text-xs text-[var(--color-text)]/60">
+                            ยอดทั้งงาน {fmt(it.totalPrice || it.price * 2)} บาท — ชำระมัดจำล่วงหน้า 50%
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                        {isDeposit ? (
+                          <div className="text-sm font-medium text-[var(--color-gold)]">จำนวน {it.qty} รายการ</div>
+                        ) : (
+                          <input
+                            type="number"
+                            min={1}
+                            value={it.qty}
+                            onChange={(e) => cart.setQty(it.id, parseInt(e.target.value || "1", 10))}
+                            className="h-11 w-24 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 text-center text-sm font-medium text-[var(--color-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                          />
+                        )}
+                        <button
+                          className="text-sm font-medium text-[var(--color-rose)] underline decoration-dotted"
+                          onClick={() => (isDeposit ? cart.clear() : cart.remove(it.id))}
+                        >
+                          ลบออก
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <input
-                        type="number"
-                        min={1}
-                        value={it.qty}
-                        onChange={(e) =>
-                          cart.setQty(it.productId, parseInt(e.target.value || "1", 10))
-                        }
-                        className="h-11 w-24 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 text-center text-sm font-medium text-[var(--color-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
-                      />
-                      <button
-                        className="text-sm font-medium text-[var(--color-rose)] underline decoration-dotted"
-                        onClick={() => cart.remove(it.productId)}
-                      >
-                        ลบออก
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="space-y-6">
-                <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
-                  <h2 className="text-lg font-semibold text-[var(--color-gold)]">ใช้คูปอง</h2>
-                  <p className="mt-1 text-xs text-[var(--color-text)]/70">กรอกโค้ดเพื่อรับส่วนลดพิเศษ</p>
-                  <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                    <input
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      placeholder="เช่น SWEET10"
-                      className="flex-1 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-5 py-3 text-sm text-[var(--color-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
-                    />
-                    <button
-                      onClick={applyCoupon}
-                      disabled={applying}
-                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
-                    </button>
-                    {cart.coupon && (
+                {hasDeposit ? (
+                  <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
+                    <h2 className="text-lg font-semibold text-[var(--color-gold)]">มัดจำพรีออเดอร์</h2>
+                    <p className="mt-2 text-xs text-[var(--color-text)]/70">
+                      การสั่งมัดจำไม่สามารถใช้คูปองส่วนลดได้ ระบบจะบันทึกการชำระและแจ้งทีมงานให้อัปเดตสถานะทันทีที่ได้รับสลิปชำระเงิน
+                    </p>
+                  </div>
+                ) : (
+                  <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
+                    <h2 className="text-lg font-semibold text-[var(--color-gold)]">ใช้คูปอง</h2>
+                    <p className="mt-1 text-xs text-[var(--color-text)]/70">กรอกโค้ดเพื่อรับส่วนลดพิเศษ</p>
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                      <input
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        placeholder="เช่น SWEET10"
+                        className="flex-1 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-5 py-3 text-sm text-[var(--color-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                      />
                       <button
-                        onClick={() => cart.clearCoupon()}
-                        className="rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/50 px-5 py-3 text-sm font-medium text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                        onClick={applyCoupon}
+                        disabled={applying}
+                        className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        ลบคูปอง
+                        {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
                       </button>
+                      {cart.coupon && (
+                        <button
+                          onClick={() => cart.clearCoupon()}
+                          className="rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/50 px-5 py-3 text-sm font-medium text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                        >
+                          ลบคูปอง
+                        </button>
+                      )}
+                    </div>
+                    {err && <div className="mt-3 text-sm text-rose-600">{err}</div>}
+                    {cart.coupon && (
+                      <div className="mt-3 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-sm text-[var(--color-gold)]/85">
+                        ใช้คูปอง {cart.coupon.code} — {cart.coupon.description} (คำนวณอีกครั้งตอนชำระเงิน)
+                      </div>
                     )}
                   </div>
-                  {err && <div className="mt-3 text-sm text-rose-600">{err}</div>}
-                  {cart.coupon && (
-                    <div className="mt-3 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-sm text-[var(--color-gold)]/85">
-                      ใช้คูปอง {cart.coupon.code} — {cart.coupon.description} (คำนวณอีกครั้งตอนชำระเงิน)
-                    </div>
-                  )}
-                </div>
+                )}
 
                 {summary}
               </div>
