@@ -91,14 +91,24 @@ export async function POST(req) {
           return NextResponse.json({ error: "คำขอพรีออเดอร์นี้ยังไม่ได้คำนวณยอดมัดจำ" }, { status: 400 });
         }
 
+        const snapshot = preorder.menuSnapshot || {};
         const line = {
           kind: "preorder-deposit",
           productId: null,
           preorderId,
-          title: `มัดจำ ${preorder.menuSnapshot?.title || "Pre-order"}`,
+          title: `มัดจำ ${snapshot.title || "Pre-order"}`,
           price: depositAmount,
           qty: 1,
           lineTotal: depositAmount,
+          meta: {
+            totalPrice: Number(preorder.totalPrice || 0),
+            depositAmount,
+            depositRate: Number.isFinite(snapshot.depositRate) ? snapshot.depositRate : null,
+            unitLabel: snapshot.unitLabel || "",
+            quantity: Number(preorder.quantity || 0),
+            itemPrice: Number(preorder.itemPrice || 0),
+            imageUrl: snapshot.imageUrl || "",
+          },
         };
         checked.push(line);
         depositLines.push(line);

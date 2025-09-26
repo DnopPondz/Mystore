@@ -146,6 +146,11 @@ export default function PreOrderPage() {
         title: `มัดจำ ${selectedMenu.title}`,
         price: data.depositAmount,
         totalPrice: data.totalPrice,
+        depositRate,
+        quantity: menuQuantity,
+        unitLabel: selectedMenu.unitLabel,
+        itemPrice: selectedMenu.price,
+        imageUrl: selectedMenu.imageUrl,
       });
       setMenuStatus({ type: "success", message: "สร้างคำขอมัดจำแล้ว กำลังพาไปหน้าชำระเงิน" });
       router.push("/checkout");

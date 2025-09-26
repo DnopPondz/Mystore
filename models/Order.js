@@ -21,6 +21,7 @@ const OrderSchema = new Schema(
         title: String,
         price: Number,
         qty: Number,
+        meta: { type: Schema.Types.Mixed, default: null },
       },
     ],
 

@@ -38,6 +38,9 @@ export default function AdminPreordersPage() {
     imageUrl: "",
   });
   const [creatingMenu, setCreatingMenu] = useState(false);
+  const [menuImageError, setMenuImageError] = useState("");
+  const [uploadingMenuImage, setUploadingMenuImage] = useState(false);
+  const [uploadingMenuItem, setUploadingMenuItem] = useState(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterType, setFilterType] = useState("all");
   const [draftFinalPrice, setDraftFinalPrice] = useState({});
@@ -73,6 +76,34 @@ export default function AdminPreordersPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function uploadMenuImage(file) {
+    if (!file) {
+      throw new Error("กรุณาเลือกรูปภาพ");
+    }
+    if (!file.type?.startsWith("image/")) {
+      throw new Error("ไฟล์ต้องเป็นรูปภาพ");
+    }
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      throw new Error("ขนาดไฟล์ต้องไม่เกิน 5MB");
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data?.url) {
+      throw new Error(data?.error || "อัปโหลดรูปไม่สำเร็จ");
+    }
+
+    return data.url;
   }
 
   function updateMenuForm(field) {
@@ -111,6 +142,7 @@ export default function AdminPreordersPage() {
       }
 
       setMenuForm({ title: "", description: "", price: "", unitLabel: "ชุด", depositRate: "0.5", imageUrl: "" });
+      setMenuImageError("");
       refreshAll();
       void popup.alert("เพิ่มเมนูพรีออเดอร์แล้ว", { title: "บันทึกสำเร็จ", tone: "success" });
     } catch (err) {
@@ -118,6 +150,40 @@ export default function AdminPreordersPage() {
     } finally {
       setCreatingMenu(false);
     }
+  }
+
+  async function handleMenuImageSelect(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setMenuImageError("");
+    setUploadingMenuImage(true);
+    try {
+      const url = await uploadMenuImage(file);
+      setMenuForm((prev) => ({ ...prev, imageUrl: url }));
+    } catch (err) {
+      setMenuImageError(err?.message || "อัปโหลดรูปไม่สำเร็จ");
+    } finally {
+      setUploadingMenuImage(false);
+      event.target.value = "";
+    }
+  }
+
+  function handleExistingMenuImageChange(id) {
+    return async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      setUploadingMenuItem(id);
+      try {
+        const url = await uploadMenuImage(file);
+        await handleUpdateMenu(id, { imageUrl: url }, "อัปเดตรูปภาพแล้ว");
+      } catch (err) {
+        await popup.alert(err?.message || "อัปโหลดรูปไม่สำเร็จ", { title: "เกิดข้อผิดพลาด", tone: "error" });
+      } finally {
+        setUploadingMenuItem(null);
+        event.target.value = "";
+      }
+    };
   }
 
   async function handleUpdateMenu(id, payload, successMessage = "บันทึกแล้ว") {
@@ -236,15 +302,60 @@ export default function AdminPreordersPage() {
                   className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
                 />
               </label>
-              <label className="flex flex-col gap-1 text-xs font-medium text-[var(--color-text)]/70">
-                ลิงก์รูปภาพเมนู
-                <input
-                  value={menuForm.imageUrl}
-                  onChange={updateMenuForm("imageUrl")}
-                  className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
-                  placeholder="เช่น https://..."
-                />
-              </label>
+              <div className="flex flex-col gap-2 text-xs font-medium text-[var(--color-text)]/70 md:col-span-2">
+                <span>รูปภาพเมนู</span>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[rgba(0,0,0,0.2)]">
+                      {menuForm.imageUrl ? (
+                        <img
+                          src={menuForm.imageUrl}
+                          alt={menuForm.title || "ตัวอย่างเมนู"}
+                          className="h-full w-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <span className="px-2 text-center text-[10px] text-[var(--color-text)]/50">ยังไม่มีรูป</span>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label
+                        className={`inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-xs font-semibold text-[var(--color-gold)] shadow-sm shadow-black/20 transition ${
+                          uploadingMenuImage ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:bg-[var(--color-burgundy-dark)]/70"
+                        }`}
+                      >
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleMenuImageSelect}
+                          disabled={uploadingMenuImage}
+                        />
+                        {uploadingMenuImage
+                          ? "กำลังอัปโหลด..."
+                          : menuForm.imageUrl
+                          ? "เปลี่ยนรูป"
+                          : "อัปโหลดรูป"}
+                      </label>
+                      {menuForm.imageUrl ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMenuForm((prev) => ({ ...prev, imageUrl: "" }));
+                            setMenuImageError("");
+                          }}
+                          className="text-[10px] font-medium text-[var(--color-rose)] underline decoration-dotted"
+                        >
+                          ลบรูปออก
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                  {menuImageError ? (
+                    <span className="text-[var(--color-rose)]">{menuImageError}</span>
+                  ) : null}
+                </div>
+              </div>
               <label className="flex flex-col gap-1 text-xs font-medium text-[var(--color-text)]/70 md:col-span-2">
                 รายละเอียดเพิ่มเติม
                 <textarea
@@ -334,16 +445,34 @@ export default function AdminPreordersPage() {
                       >
                         ปรับอัตรามัดจำ
                       </button>
-                      <button
-                        onClick={() => {
-                          const nextUrl = prompt("ลิงก์รูปภาพใหม่", item.imageUrl || "");
-                          if (nextUrl === null) return;
-                          handleUpdateMenu(item._id, { imageUrl: nextUrl }, nextUrl ? "อัปเดตรูปภาพแล้ว" : "ลบรูปภาพแล้ว");
-                        }}
-                        className="rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy)]/50 px-3 py-2 text-xs font-medium text-[var(--color-gold)]"
+                      <label
+                        className={`rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy)]/50 px-3 py-2 text-xs font-medium text-[var(--color-gold)] transition ${
+                          uploadingMenuItem === item._id
+                            ? "cursor-not-allowed opacity-60"
+                            : "cursor-pointer hover:bg-[var(--color-burgundy)]/60"
+                        }`}
                       >
-                        {item.imageUrl ? "เปลี่ยนรูป" : "เพิ่มรูป"}
-                      </button>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleExistingMenuImageChange(item._id)}
+                          disabled={uploadingMenuItem === item._id}
+                        />
+                        {uploadingMenuItem === item._id
+                          ? "กำลังอัปโหลด..."
+                          : item.imageUrl
+                          ? "เปลี่ยนรูป"
+                          : "เพิ่มรูป"}
+                      </label>
+                      {item.imageUrl ? (
+                        <button
+                          onClick={() => handleUpdateMenu(item._id, { imageUrl: "" }, "ลบรูปภาพแล้ว")}
+                          className="rounded-full border border-[var(--color-rose)]/35 bg-transparent px-3 py-2 text-xs font-medium text-[var(--color-rose)]/80"
+                        >
+                          ลบรูป
+                        </button>
+                      ) : null}
                     </div>
                   </div>
                 ))

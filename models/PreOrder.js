@@ -32,6 +32,7 @@ const PreOrderSchema = new Schema(
       unitLabel: { type: String, default: "" },
       price: { type: Number, default: 0 },
       depositRate: { type: Number, default: 0.5 },
+      imageUrl: { type: String, default: "" },
     },
     quantity: { type: Number, default: 0 },
     itemPrice: { type: Number, default: 0 },

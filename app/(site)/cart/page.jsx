@@ -155,6 +155,19 @@ export default function CartPage() {
               <div className="space-y-4">
                 {cart.items.map((it) => {
                   const isDeposit = it.kind === "preorder-deposit";
+                  const depositMeta = isDeposit ? it.meta || {} : null;
+                  const depositRate = depositMeta?.depositRate != null ? depositMeta.depositRate : null;
+                  const depositTotal = depositMeta?.totalPrice || it.totalPrice || it.price;
+                  const depositRateText = depositRate != null
+                    ? Math.round(depositRate * 100)
+                    : depositTotal
+                    ? Math.round((Number(it.price || 0) / Number(depositTotal || 1)) * 100)
+                    : 50;
+                  const depositQuantity = depositMeta?.quantity || depositMeta?.quantity === 0
+                    ? depositMeta.quantity
+                    : null;
+                  const depositUnitLabel = depositMeta?.unitLabel || "ชุด";
+                  const depositItemPrice = depositMeta?.itemPrice;
                   return (
                     <div
                       key={it.id}
@@ -163,17 +176,27 @@ export default function CartPage() {
                       <div>
                         <div className="text-lg font-semibold text-[var(--color-gold)]">{it.title}</div>
                         <div className="text-sm text-[var(--color-text)]/70">
-                          ฿{fmt(it.price)} {isDeposit ? "มัดจำ (50%)" : "ต่อชิ้น"}
+                          {isDeposit
+                            ? `฿${fmt(it.price)} มัดจำ (${depositRateText}% ของยอดเต็ม)`
+                            : `฿${fmt(it.price)} ต่อชิ้น`}
                         </div>
                         {isDeposit && (
                           <div className="mt-2 text-xs text-[var(--color-text)]/60">
-                            ยอดทั้งงาน {fmt(it.totalPrice || it.price * 2)} บาท — ชำระมัดจำล่วงหน้า 50%
+                            {depositQuantity
+                              ? `จำนวน ${depositQuantity} ${depositUnitLabel} • `
+                              : ""}
+                            ยอดทั้งงาน ฿{fmt(depositTotal)}
+                            {depositItemPrice
+                              ? ` (฿${fmt(depositItemPrice)} ต่อ${depositUnitLabel})`
+                              : ""}
                           </div>
                         )}
                       </div>
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         {isDeposit ? (
-                          <div className="text-sm font-medium text-[var(--color-gold)]">จำนวน {it.qty} รายการ</div>
+                          <div className="text-sm font-medium text-[var(--color-gold)]">
+                            จำนวน {depositQuantity || 1} {depositUnitLabel}
+                          </div>
                         ) : (
                           <input
                             type="number"
@@ -197,11 +220,30 @@ export default function CartPage() {
 
               <div className="space-y-6">
                 {hasDeposit ? (
-                  <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
+                  <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur space-y-3">
                     <h2 className="text-lg font-semibold text-[var(--color-gold)]">มัดจำพรีออเดอร์</h2>
-                    <p className="mt-2 text-xs text-[var(--color-text)]/70">
+                    <p className="text-xs text-[var(--color-text)]/70">
                       การสั่งมัดจำไม่สามารถใช้คูปองส่วนลดได้ ระบบจะบันทึกการชำระและแจ้งทีมงานให้อัปเดตสถานะทันทีที่ได้รับสลิปชำระเงิน
                     </p>
+                    {cart.items
+                      .filter((item) => item.kind === "preorder-deposit")
+                      .map((item) => {
+                        const meta = item.meta || {};
+                        const rate = meta.depositRate != null ? Math.round(meta.depositRate * 100) : 50;
+                        const quantity = meta.quantity || 1;
+                        const unit = meta.unitLabel || "ชุด";
+                        const fullTotal = meta.totalPrice || item.totalPrice || item.price;
+                        return (
+                          <div
+                            key={item.id}
+                            className="rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/50 px-4 py-3 text-xs text-[var(--color-text)]/70"
+                          >
+                            <div className="font-semibold text-[var(--color-gold)]">{item.title}</div>
+                            <div className="mt-1">จำนวน {quantity} {unit}</div>
+                            <div>ยอดเต็ม ฿{fmt(fullTotal)} • มัดจำ {rate}% = ฿{fmt(item.price)}</div>
+                          </div>
+                        );
+                      })}
                   </div>
                 ) : (
                   <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">

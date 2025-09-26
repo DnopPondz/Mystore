@@ -83,6 +83,7 @@ export async function POST(request) {
       unitLabel: menuItem.unitLabel || "",
       price: unitPrice,
       depositRate,
+      imageUrl: menuItem.imageUrl || "",
     };
     data.quantity = quantity;
     data.itemPrice = unitPrice;
@@ -112,6 +113,8 @@ export async function POST(request) {
       orderType: preorder.orderType,
       depositAmount: preorder.depositAmount,
       totalPrice: preorder.totalPrice,
+      quantity: preorder.quantity,
+      itemPrice: preorder.itemPrice,
       menuSnapshot: preorder.menuSnapshot,
     });
   } catch (error) {

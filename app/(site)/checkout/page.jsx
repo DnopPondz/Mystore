@@ -65,6 +65,11 @@ export default function CheckoutPage() {
       : null,
   };
 
+  const depositSummaryItems = useMemo(
+    () => currentTotals.items.filter((item) => item.kind === "preorder-deposit"),
+    [currentTotals.items]
+  );
+
   useEffect(() => {
     if (order?.orderPreview?.total != null) {
       setTransferAmount(Number(order.orderPreview.total || 0).toFixed(2));
@@ -361,17 +366,43 @@ export default function CheckoutPage() {
               <div className="mt-4 space-y-3 text-sm">
                 {currentTotals.items.map((it, index) => {
                   const key = `${it.kind || "product"}-${it.productId || it.preorderId || index}`;
+                  const isDeposit = it.kind === "preorder-deposit";
+                  const meta = isDeposit ? it.meta || {} : {};
+                  const qtyLabel = isDeposit
+                    ? meta.quantity
+                      ? `${meta.quantity} ${meta.unitLabel || "ชุด"}`
+                      : "1 รายการ"
+                    : it.qty;
                   return (
                     <div key={key} className="flex justify-between">
                       <span>
-                        {it.title} × {it.qty}
-                        {it.kind === "preorder-deposit" ? " (มัดจำ)" : ""}
+                        {it.title} × {qtyLabel}
+                        {isDeposit ? " (มัดจำ)" : ""}
                       </span>
                       <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
                     </div>
                   );
                 })}
               </div>
+              {depositSummaryItems.length ? (
+                <div className="mt-4 space-y-2 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/45 px-4 py-3 text-xs text-[var(--color-text)]/70">
+                  {depositSummaryItems.map((item) => {
+                    const meta = item.meta || {};
+                    const fullTotal = meta.totalPrice || item.totalPrice || item.price;
+                    const rate = meta.depositRate != null ? Math.round(meta.depositRate * 100) : 50;
+                    const quantity = meta.quantity || 1;
+                    const unit = meta.unitLabel || "ชุด";
+                    return (
+                      <div key={item.preorderId || item._id || item.title} className="space-y-1">
+                        <div className="font-semibold text-[var(--color-gold)]">{item.title}</div>
+                        <div>
+                          จำนวน {quantity} {unit} • ยอดเต็ม ฿{fmt(fullTotal)} • มัดจำ {rate}% = ฿{fmt(item.lineTotal ?? item.price)}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
               <div className="mt-4 space-y-2 border-t border-[var(--color-rose)]/30 pt-4 text-sm">
                 <div className="flex justify-between text-[var(--color-choco)]/80">
                   <span>รวม</span>

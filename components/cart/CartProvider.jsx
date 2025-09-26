@@ -13,6 +13,29 @@ function normaliseItems(rawItems) {
       if (kind === "preorder-deposit") {
         const preorderId = String(item?.preorderId || "").trim();
         if (!preorderId) return null;
+        const sourceMeta = item?.meta && typeof item.meta === "object" ? item.meta : {};
+        const amount = Number(item?.price || 0);
+        const quantityRaw = sourceMeta.quantity ?? item?.quantity;
+        const quantity = Number.isFinite(Number(quantityRaw)) ? Number(quantityRaw) : 0;
+        const unitLabel = sourceMeta.unitLabel || item?.unitLabel || "";
+        const itemPriceRaw = sourceMeta.itemPrice ?? item?.itemPrice;
+        const itemPrice = Number.isFinite(Number(itemPriceRaw)) ? Number(itemPriceRaw) : 0;
+        const totalPriceRaw =
+          sourceMeta.totalPrice ?? item?.totalPrice ?? (quantity && itemPrice ? itemPrice * quantity : null);
+        const totalPrice = Number.isFinite(Number(totalPriceRaw)) && Number(totalPriceRaw) > 0
+          ? Number(totalPriceRaw)
+          : amount;
+        const depositRateRaw = sourceMeta.depositRate ?? (totalPrice > 0 ? amount / totalPrice : null);
+        const depositRate = Number.isFinite(Number(depositRateRaw)) ? Number(depositRateRaw) : null;
+        const meta = {
+          totalPrice,
+          depositAmount: amount,
+          depositRate,
+          unitLabel,
+          quantity,
+          itemPrice,
+          imageUrl: sourceMeta.imageUrl || item?.imageUrl || "",
+        };
         return {
           id: `preorder:${preorderId}`,
           kind,
@@ -20,7 +43,8 @@ function normaliseItems(rawItems) {
           title: String(item?.title || "มัดจำพรีออเดอร์"),
           price,
           qty: 1,
-          totalPrice: Number(item?.totalPrice || 0),
+          totalPrice: meta.totalPrice,
+          meta,
         };
       }
 
@@ -104,9 +128,38 @@ export function CartProvider({ children }) {
           return item;
         })
       ),
-    addPreorderDeposit: ({ preorderId, title, price, totalPrice }) => {
+    addPreorderDeposit: ({
+      preorderId,
+      title,
+      price,
+      totalPrice,
+      depositRate,
+      quantity,
+      unitLabel,
+      itemPrice,
+      imageUrl,
+    }) => {
       const amount = Number(price || 0);
       const id = `preorder:${preorderId}`;
+      const normalizedQuantity = Number.isFinite(Number(quantity)) && Number(quantity) > 0 ? Number(quantity) : 0;
+      const normalizedItemPrice = Number.isFinite(Number(itemPrice)) ? Number(itemPrice) : 0;
+      const normalizedTotal = Number.isFinite(Number(totalPrice)) && Number(totalPrice) > 0
+        ? Number(totalPrice)
+        : normalizedQuantity && normalizedItemPrice
+        ? normalizedQuantity * normalizedItemPrice
+        : amount;
+      const normalizedDepositRate = Number.isFinite(Number(depositRate)) ? Number(depositRate) : (normalizedTotal > 0
+        ? amount / normalizedTotal
+        : null);
+      const meta = {
+        totalPrice: normalizedTotal,
+        depositAmount: amount,
+        depositRate: normalizedDepositRate,
+        unitLabel: unitLabel || "",
+        quantity: normalizedQuantity,
+        itemPrice: normalizedItemPrice,
+        imageUrl: imageUrl || "",
+      };
       setItems([
         {
           id,
@@ -115,7 +168,8 @@ export function CartProvider({ children }) {
           title: title || "มัดจำพรีออเดอร์",
           price: amount,
           qty: 1,
-          totalPrice: Number(totalPrice || 0),
+          totalPrice: meta.totalPrice,
+          meta,
         },
       ]);
       setCoupon(null);
