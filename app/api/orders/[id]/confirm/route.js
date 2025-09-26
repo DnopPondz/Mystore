@@ -4,6 +4,7 @@ import { Order } from "@/models/Order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { serializeOrder } from "@/lib/serializeOrder";
+import { PreOrder } from "@/models/PreOrder";
 
 function isValidDataUrl(str) {
   if (typeof str !== "string") return false;
@@ -114,6 +115,18 @@ export async function POST(req, { params }) {
     };
 
     await order.save();
+
+    try {
+      if (order.items.some((item) => item.kind === "preorder-deposit")) {
+        const depositStatus = expected > 0 ? "paid" : "waived";
+        await PreOrder.updateMany(
+          { depositOrderId: order._id, depositStatus: { $ne: "waived" } },
+          { depositStatus }
+        );
+      }
+    } catch (updateError) {
+      console.warn("Failed to sync preorder deposit status", updateError);
+    }
 
     return NextResponse.json({ ok: 1, orderId: String(order._id) });
   } catch (e) {

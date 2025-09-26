@@ -5,6 +5,7 @@ import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { serializeOrder } from "@/lib/serializeOrder";
+import { PreOrder } from "@/models/PreOrder";
 
 export async function GET(_req, { params }) {
   const { id } = await params;
@@ -58,6 +59,7 @@ export async function PATCH(req, { params }) {
       mergedPayment.status = normalizedPaymentStatus;
     }
     updatePayload.payment = mergedPayment;
+    updatePayload.__nextPaymentStatus = mergedPayment.status;
   }
 
   // ถ้าเปลี่ยนเป็น cancel → คืนสต็อก
@@ -72,6 +74,20 @@ export async function PATCH(req, { params }) {
     );
   }
 
-  const updated = await Order.findByIdAndUpdate(id, updatePayload, { new: true }).lean();
+  const { __nextPaymentStatus, ...persistPayload } = updatePayload;
+  const updated = await Order.findByIdAndUpdate(id, persistPayload, { new: true }).lean();
+
+  if (updated && __nextPaymentStatus) {
+    const depositStatus = ["paid", "cash"].includes(__nextPaymentStatus) ? "paid" : "pending";
+    try {
+      await PreOrder.updateMany(
+        { depositOrderId: updated._id, depositStatus: { $ne: "waived" } },
+        { depositStatus }
+      );
+    } catch (err) {
+      console.warn("Failed to sync preorder status from order patch", err);
+    }
+  }
+
   return NextResponse.json(updated);
 }

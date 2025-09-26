@@ -6,6 +6,25 @@ import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Review } from "@/models/Review";
 
+const hasMongo = Boolean(process.env.MONGODB_URI);
+
+const demoReviews = [
+  {
+    id: "demo-1",
+    name: "คุณแอน",
+    rating: 5,
+    comment: "ซาลาเปาไส้หมูสับไข่เค็มอร่อยมาก แป้งนุ่ม ไส้แน่นกำลังดีค่ะ",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "demo-2",
+    name: "คุณบอส",
+    rating: 4.5,
+    comment: "ขนมจีบรสชาติยอดเยี่ยม ส่งตรงถึงออฟฟิศตรงเวลา",
+    createdAt: new Date().toISOString(),
+  },
+];
+
 const createSchema = z.object({
   rating: z.coerce.number().min(1).max(5),
   comment: z
@@ -55,6 +74,10 @@ export async function GET(req) {
     filter.rating = { $gte: minRating };
   }
 
+  if (!hasMongo) {
+    return NextResponse.json({ reviews: demoReviews.slice(0, limit) });
+  }
+
   await connectToDatabase();
   const query = Review.find(filter).sort({ createdAt: -1 }).limit(limit);
   const docs = await query.lean();
@@ -78,6 +101,13 @@ export async function POST(req) {
 
   const rating = normalizeRating(parsed.data.rating);
   const comment = parsed.data.comment.trim();
+
+  if (!hasMongo) {
+    return NextResponse.json(
+      { error: "โหมดทดลองไม่รองรับการบันทึกรีวิว กรุณาติดต่อผู้ดูแลระบบ" },
+      { status: 503 }
+    );
+  }
 
   await connectToDatabase();
 
