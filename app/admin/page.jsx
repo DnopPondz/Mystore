@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const statusChips = [
   { key: "todaySales", label: "ยอดขายวันนี้", prefix: "฿" },
+  { key: "preorderPipeline", label: "ใบเสนอราคาวันนี้", prefix: "฿" },
   { key: "newOrders", label: "ออเดอร์ใหม่", prefix: "" },
   { key: "lowStock", label: "สินค้าใกล้หมด", prefix: "" },
 ];
@@ -96,13 +97,20 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="ยอดขายวันนี้"
             value={`฿${cards.todaySales}`}
             caption="เปรียบเทียบจากยอดรวมที่ยืนยันแล้ว"
             color="green"
             icon="💰"
+          />
+          <StatCard
+            title="ยอดเสนอราคาใหม่"
+            value={`฿${cards.preorderPipeline}`}
+            caption="รวมยอดใบเสนอราคาที่ออกภายในวันนี้"
+            color="purple"
+            icon="📝"
           />
           <StatCard
             title="ออเดอร์ใหม่"
@@ -258,7 +266,7 @@ function StatCard({ title, value, caption, color, icon }) {
     },
     blue: {
       bg: "bg-[#E6F3FF]/60",
-      border: "border-[#87CEEB]/40", 
+      border: "border-[#87CEEB]/40",
       text: "text-[#4682B4]",
       value: "text-[#8B4513]",
       accent: "bg-[#87CEEB]/20"
@@ -266,9 +274,16 @@ function StatCard({ title, value, caption, color, icon }) {
     orange: {
       bg: "bg-[#FFF8E1]/60",
       border: "border-[#FFB74D]/40",
-      text: "text-[#FF8C00]", 
+      text: "text-[#FF8C00]",
       value: "text-[#8B4513]",
       accent: "bg-[#FFB74D]/20"
+    },
+    purple: {
+      bg: "bg-[#F3E8FF]/60",
+      border: "border-[#C792FF]/40",
+      text: "text-[#7E57C2]",
+      value: "text-[#8B4513]",
+      accent: "bg-[#C792FF]/20"
     }
   };
 
