@@ -164,7 +164,11 @@ export default async function HomePage() {
                       )}
                     </div>
                     <div className="absolute top-4 left-4 rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy)]/80 px-3 py-1 text-xs font-semibold text-[var(--color-rose)] shadow">
-                      เมนูแนะนำ
+                      {p.saleMode === "preorder"
+                        ? "Pre-order เท่านั้น"
+                        : p.saleMode === "both"
+                        ? "มีทั้งพร้อมส่ง & Pre-order"
+                        : "เมนูแนะนำ"}
                     </div>
                   </div>
                   <div className="flex flex-1 flex-col gap-3 p-6">
@@ -182,6 +186,11 @@ export default async function HomePage() {
                       </span>
                       <AddToCartButton product={p} />
                     </div>
+                    {p.saleMode === "preorder" ? (
+                      <p className="text-xs text-[var(--color-text)]/60">
+                        สินค้าจัดทำตามสั่ง กรุณากรอกแบบฟอร์มเพื่อให้แอดมินติดต่อกลับ
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               ))

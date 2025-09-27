@@ -5,6 +5,7 @@ import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { serializeOrder } from "@/lib/serializeOrder";
+import { PreOrder } from "@/models/PreOrder";
 
 export async function GET(_req, { params }) {
   const { id } = await params;
@@ -73,5 +74,26 @@ export async function PATCH(req, { params }) {
   }
 
   const updated = await Order.findByIdAndUpdate(id, updatePayload, { new: true }).lean();
+
+  if (updated?.preorder?.preorderId) {
+    try {
+      const normalized = serializeOrder(updated);
+      const paymentStatus = normalized?.payment?.status;
+      if (paymentStatus && ["paid", "cash"].includes(paymentStatus)) {
+        const preorder = await PreOrder.findById(updated.preorder.preorderId);
+        if (preorder && preorder.status !== "confirmed" && preorder.status !== "closed") {
+          preorder.status = "confirmed";
+          preorder.statusHistory = Array.isArray(preorder.statusHistory) ? preorder.statusHistory : [];
+          preorder.statusHistory.push({ status: "confirmed", changedAt: new Date() });
+          if (!preorder.contactedAt) preorder.contactedAt = new Date();
+          if (!preorder.quotedAt) preorder.quotedAt = new Date();
+          await preorder.save();
+        }
+      }
+    } catch (error) {
+      console.error("Failed to sync preorder status", error);
+    }
+  }
+
   return NextResponse.json(updated);
 }

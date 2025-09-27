@@ -14,6 +14,12 @@ const normalizePaymentStatus = (status, total) => {
   return map[status] || status || fallback;
 };
 
+const formatCurrency = (value) =>
+  `฿${Number(value || 0).toLocaleString("th-TH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -183,6 +189,17 @@ export default function OrdersPage() {
               const paymentStatus = normalizePaymentStatus(o?.payment?.status, o?.total);
               const displayPayment = paymentLabel[paymentStatus] || paymentStatus;
               const displayStatus = statusLabel[normalizedStatus] || normalizedStatus;
+              const isPreorder = Boolean(o?.preorder);
+              const planLabel =
+                o?.preorder?.paymentPlan === "half"
+                  ? "มัดจำ 50%"
+                  : o?.preorder?.paymentPlan === "full"
+                  ? "ชำระเต็มจำนวน"
+                  : null;
+              const orderTotal = Number.isFinite(Number(o?.total)) ? Number(o.total) : 0;
+              const depositAmount = Number(o?.preorder?.depositAmount ?? orderTotal);
+              const quotedTotal = Number(o?.preorder?.quotedTotal ?? depositAmount);
+              const remaining = Number(o?.preorder?.balanceAmount ?? 0);
 
               return (
                 <Link
@@ -196,6 +213,11 @@ export default function OrdersPage() {
                       <div className="text-xl font-semibold text-[var(--color-choco)]">
                         #{orderId.slice(-8)}
                       </div>
+                      {isPreorder ? (
+                        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)]/15 px-3 py-1 text-xs font-semibold text-[var(--color-rose-dark)]">
+                          🗓️ Pre-order{planLabel ? ` · ${planLabel}` : ""}
+                        </div>
+                      ) : null}
                     </div>
                     <span className="rounded-full bg-[var(--color-burgundy-dark)]/45 px-3 py-1 text-xs font-semibold text-[var(--color-text)]/80">
                       {createdAt ? createdAt.toLocaleDateString() : "-"}
@@ -204,8 +226,10 @@ export default function OrdersPage() {
 
                   <div className="mt-4 space-y-2 text-sm text-[var(--color-choco)]/70">
                     <div className="flex items-center justify-between">
-                      <span>ยอดสุทธิ</span>
-                      <span className="font-semibold text-[var(--color-rose-dark)]">฿{o.total}</span>
+                      <span>{isPreorder ? "ยอดมัดจำรอบนี้" : "ยอดสุทธิ"}</span>
+                      <span className="font-semibold text-[var(--color-rose-dark)]">
+                        {formatCurrency(isPreorder ? depositAmount : o.total)}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>สถานะ</span>
@@ -239,6 +263,24 @@ export default function OrdersPage() {
                         {displayPayment}
                       </span>
                     </div>
+                    {isPreorder ? (
+                      <div className="space-y-1 rounded-2xl bg-[var(--color-rose)]/10 px-3 py-2 text-xs text-[var(--color-choco)]/70">
+                        <div className="flex items-center justify-between">
+                          <span>ยอดใบเสนอราคา</span>
+                          <span className="font-semibold text-[var(--color-rose-dark)]">
+                            {formatCurrency(quotedTotal)}
+                          </span>
+                        </div>
+                        {remaining > 0 ? (
+                          <div className="flex items-center justify-between">
+                            <span>ยอดคงเหลือ</span>
+                            <span className="font-semibold text-[var(--color-choco)]">
+                              {formatCurrency(remaining)}
+                            </span>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
 
                   <div className="mt-4 line-clamp-2 text-xs text-[var(--color-choco)]/60">

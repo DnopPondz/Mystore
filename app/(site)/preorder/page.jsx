@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const initialState = {
   name: "",
@@ -13,12 +13,32 @@ const initialState = {
   flavourIdeas: "",
   notes: "",
   preferredContact: "phone",
+  productId: "",
 };
 
 export default function PreOrderPage() {
   const [form, setForm] = useState(initialState);
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
+  const [productInfo, setProductInfo] = useState(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("product");
+    if (!productId) return;
+    setForm((prev) => (prev.productId === productId ? prev : { ...prev, productId }));
+    (async () => {
+      try {
+        const res = await fetch(`/api/products/${productId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setProductInfo(data);
+      } catch (error) {
+        console.warn("ไม่สามารถโหลดข้อมูลสินค้าได้", error);
+      }
+    })();
+  }, []);
 
   const updateField = (key) => (event) => {
     const value = event.target.value;
@@ -27,6 +47,7 @@ export default function PreOrderPage() {
 
   const resetForm = () => {
     setForm(initialState);
+    setProductInfo(null);
   };
 
   const handleSubmit = async (event) => {
@@ -139,6 +160,18 @@ export default function PreOrderPage() {
               {status.message}
             </div>
           )}
+
+          {productInfo ? (
+            <div className="rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/50 px-4 py-3 text-sm text-[var(--color-text)]/80">
+              <p className="font-semibold text-[var(--color-rose)]">สั่งทำสำหรับสินค้า:</p>
+              <p className="mt-1 text-[var(--color-text)]">{productInfo.title}</p>
+              <p className="text-xs text-[var(--color-text)]/60">ราคาเริ่มต้น {Number(productInfo.price || 0).toLocaleString("th-TH")} บาท</p>
+            </div>
+          ) : form.productId ? (
+            <div className="rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/40 px-4 py-3 text-xs text-[var(--color-text)]/70">
+              กำลังตรวจสอบรายละเอียดสินค้าแบบ Pre-order...
+            </div>
+          ) : null}
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-2 text-sm font-medium">

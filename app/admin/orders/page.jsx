@@ -250,6 +250,11 @@ export default function AdminOrdersPage() {
                       <span className="text-base">📦</span>
                       {statusLabels[normalizedStatus] || normalizedStatus}
                     </span>
+                    {order.preorder ? (
+                      <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-rose)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-rose)]">
+                        🗓️ Pre-order · {order.preorder.paymentPlan === "half" ? "มัดจำ 50%" : "ชำระเต็ม"}
+                      </span>
+                    ) : null}
                     {normalizedStatus === "new" ? (
                       <button
                         type="button"
@@ -334,6 +339,15 @@ export default function AdminOrdersPage() {
                         <SummaryRow label="ยอดสินค้า" value={formatCurrency(order.subtotal)} />
                         <SummaryRow label="ส่วนลด" value={formatCurrency(-order.discount)} negative={order.discount > 0} />
                         <SummaryRow label="ยอดชำระรวม" value={formatCurrency(order.total)} strong />
+                        {order.preorder ? (
+                          <>
+                            <SummaryRow label="ยอดใบเสนอราคา" value={formatCurrency(order.preorder.quotedTotal || order.total)} />
+                            <SummaryRow label="ยอดมัดจำรอบแรก" value={formatCurrency(order.preorder.depositAmount || order.total)} />
+                            {order.preorder.balanceAmount ? (
+                              <SummaryRow label="ยอดคงเหลือ" value={formatCurrency(order.preorder.balanceAmount)} />
+                            ) : null}
+                          </>
+                        ) : null}
                       </div>
                       {order.coupon?.code ? (
                         <p className="mt-3 rounded-full bg-[var(--color-rose)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-rose)]">

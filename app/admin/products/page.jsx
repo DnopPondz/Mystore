@@ -13,6 +13,9 @@ const emptyProduct = {
   slug: "",
   active: true,
   tags: "",
+  saleMode: "regular",
+  preorderDepositType: "full",
+  preorderNote: "",
 };
 
 function toSlug(s) {
@@ -92,6 +95,9 @@ export default function AdminProductsPage() {
       slug: p.slug || toSlug(p.title || ""),
       active: !!p.active,
       tags: Array.isArray(p.tags) ? p.tags.join(",") : "",
+      saleMode: p.saleMode || "regular",
+      preorderDepositType: p.preorderDepositType || "full",
+      preorderNote: p.preorderNote || "",
     });
   }
 
@@ -121,6 +127,11 @@ export default function AdminProductsPage() {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
+      saleMode: ["regular", "preorder", "both"].includes(form.saleMode) ? form.saleMode : "regular",
+      preorderDepositType: ["full", "half"].includes(form.preorderDepositType)
+        ? form.preorderDepositType
+        : "full",
+      preorderNote: String(form.preorderNote || ""),
     };
 
     const url = isEdit ? `/api/products/${editing._id}` : "/api/products";
@@ -488,7 +499,7 @@ export default function AdminProductsPage() {
                   />
                 </Field>
                 <div className="flex items-center gap-3">
-                  <SlidingToggle 
+                  <SlidingToggle
                     isActive={form.active}
                     onToggle={() => setForm((f) => ({ ...f, active: !f.active }))}
                   />
@@ -496,6 +507,56 @@ export default function AdminProductsPage() {
                     แสดงสินค้าบนหน้าร้าน
                   </label>
                 </div>
+                <Field label="โหมดการขาย">
+                  <select
+                    className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                    value={form.saleMode}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        saleMode: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="regular">ขายปกติ</option>
+                    <option value="preorder">เฉพาะ Pre-order</option>
+                    <option value="both">ขายปกติ + Pre-order</option>
+                  </select>
+                </Field>
+                {form.saleMode !== "regular" ? (
+                  <div className="rounded-[1.2rem] border border-[#D2691E]/20 bg-[#F5DEB3]/20 p-4 text-sm text-[#8B4513]/80 shadow-inner">
+                    <p className="font-semibold text-[#8B4513]">การรับชำระสำหรับ Pre-order</p>
+                    <div className="mt-3 flex flex-col gap-2">
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="depositType"
+                          value="full"
+                          checked={form.preorderDepositType === "full"}
+                          onChange={() => setForm((f) => ({ ...f, preorderDepositType: "full" }))}
+                        />
+                        ชำระเต็มจำนวน
+                      </label>
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="depositType"
+                          value="half"
+                          checked={form.preorderDepositType === "half"}
+                          onChange={() => setForm((f) => ({ ...f, preorderDepositType: "half" }))}
+                        />
+                        มัดจำ 50% ก่อน
+                      </label>
+                    </div>
+                    <textarea
+                      className="mt-3 w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/70 px-3 py-2 text-xs text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                      rows={3}
+                      placeholder="บันทึกเงื่อนไขหรือรายละเอียดพิเศษสำหรับการสั่งแบบ Pre-order"
+                      value={form.preorderNote}
+                      onChange={(e) => setForm((f) => ({ ...f, preorderNote: e.target.value }))}
+                    />
+                  </div>
+                ) : null}
               </div>
 
               <div className="space-y-4">

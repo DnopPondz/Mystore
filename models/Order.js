@@ -58,6 +58,21 @@ const OrderSchema = new Schema(
 
     // สถานะคำสั่งซื้อ
     status: { type: String, enum: FULFILLMENT_STATUSES, default: "new" },
+
+    preorder: {
+      type: new Schema(
+        {
+          preorderId: { type: Schema.Types.ObjectId, ref: "PreOrder" },
+          paymentPlan: { type: String, enum: ["full", "half"], default: "full" },
+          quotedTotal: { type: Number, default: 0 },
+          depositAmount: { type: Number, default: 0 },
+          balanceAmount: { type: Number, default: 0 },
+          summary: { type: String, default: "" },
+        },
+        { _id: false }
+      ),
+      default: null,
+    },
   },
   { timestamps: true }
 );
