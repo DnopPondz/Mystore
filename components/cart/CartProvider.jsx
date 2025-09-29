@@ -1,11 +1,16 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { calculateCartPromotions } from "@/lib/promotionUtils";
 
 const CartCtx = createContext();
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [coupon, setCoupon] = useState(null); // { code, discount, description }
+  const [promotionList, setPromotionList] = useState([]);
+  const [promotionError, setPromotionError] = useState("");
+  const [promotionLoading, setPromotionLoading] = useState(false);
+  const aliveRef = useRef(true);
 
   useEffect(() => {
     try {
@@ -28,40 +33,114 @@ export function CartProvider({ children }) {
     } catch {}
   }, [items, coupon]);
 
-  const api = useMemo(() => ({
-    items,
-    coupon,
-    count: items.reduce((n, it) => n + getQty(it), 0),
-    subtotal: items.reduce((n, it) => n + getPrice(it) * getQty(it), 0),
-    setCoupon,
-    clearCoupon: () => setCoupon(null),
-    clear: () => { setItems([]); setCoupon(null); },
-    remove: (productId) => setItems((prev) => prev.filter((x) => x.productId !== productId)),
-    add: ({ productId, title, price }, qty = 1) =>
-      setItems((prev) => {
-        const normalizedQty = normalizeQty(qty);
-        const normalizedPrice = normalizePrice(price);
+  useEffect(() => {
+    return () => {
+      aliveRef.current = false;
+    };
+  }, []);
 
-        const i = prev.findIndex((x) => x.productId === productId);
-        if (i >= 0) {
-          const next = [...prev];
-          const current = next[i];
-          const merged = {
-            ...current,
-            title: current?.title || title || "",
-            price: normalizePrice(current?.price),
-            qty: normalizeQty(current?.qty) + normalizedQty,
-          };
-          next[i] = sanitizeItem({ ...merged, productId });
-          return next;
-        }
-        return [...prev, sanitizeItem({ productId, title, price: normalizedPrice, qty: normalizedQty })];
-      }),
-    setQty: (productId, qty) =>
-      setItems((prev) =>
-        prev.map((x) => (x.productId === productId ? sanitizeItem({ ...x, qty: normalizeQty(qty) }) : x)),
-      ),
-  }), [items, coupon]);
+  const refreshPromotions = useCallback(async () => {
+    if (!aliveRef.current) return;
+    setPromotionLoading(true);
+    setPromotionError("");
+    try {
+      const res = await fetch("/api/promotions/active", { cache: "no-store" });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "โหลดโปรโมชันไม่สำเร็จ");
+      }
+      const data = await res.json();
+      if (!aliveRef.current) return;
+      setPromotionList(Array.isArray(data) ? data : []);
+    } catch (error) {
+      if (!aliveRef.current) return;
+      setPromotionError(String(error?.message || error) || "โหลดโปรโมชันไม่สำเร็จ");
+    } finally {
+      if (aliveRef.current) setPromotionLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshPromotions().catch(() => {});
+    const interval = setInterval(() => {
+      refreshPromotions().catch(() => {});
+    }, 5 * 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [refreshPromotions]);
+
+  const promotionSummary = useMemo(() => {
+    const result = calculateCartPromotions(items, promotionList);
+    return {
+      ...result,
+      active: promotionList,
+      loading: promotionLoading,
+      error: promotionError,
+    };
+  }, [items, promotionList, promotionError, promotionLoading]);
+
+  const couponDiscount = Math.max(0, Number(coupon?.discount || 0));
+  const promotionDiscount = Math.max(0, Number(promotionSummary.discount || 0));
+  const subtotal = items.reduce((n, it) => n + getPrice(it) * getQty(it), 0);
+  const totalDiscount = Math.min(subtotal, couponDiscount + promotionDiscount);
+  const total = Math.max(0, subtotal - totalDiscount);
+
+  const api = useMemo(
+    () => ({
+      items,
+      coupon,
+      promotions: { ...promotionSummary, refresh: refreshPromotions },
+      count: items.reduce((n, it) => n + getQty(it), 0),
+      subtotal,
+      setCoupon,
+      clearCoupon: () => setCoupon(null),
+      clear: () => {
+        setItems([]);
+        setCoupon(null);
+      },
+      remove: (productId) => setItems((prev) => prev.filter((x) => x.productId !== productId)),
+      add: ({ productId, title, price }, qty = 1) =>
+        setItems((prev) => {
+          const normalizedQty = normalizeQty(qty);
+          const normalizedPrice = normalizePrice(price);
+
+          const i = prev.findIndex((x) => x.productId === productId);
+          if (i >= 0) {
+            const next = [...prev];
+            const current = next[i];
+            const merged = {
+              ...current,
+              title: current?.title || title || "",
+              price: normalizePrice(current?.price),
+              qty: normalizeQty(current?.qty) + normalizedQty,
+            };
+            next[i] = sanitizeItem({ ...merged, productId });
+            return next;
+          }
+          return [...prev, sanitizeItem({ productId, title, price: normalizedPrice, qty: normalizedQty })];
+        }),
+      setQty: (productId, qty) =>
+        setItems((prev) =>
+          prev.map((x) => (x.productId === productId ? sanitizeItem({ ...x, qty: normalizeQty(qty) }) : x)),
+        ),
+      couponDiscount,
+      promotionDiscount,
+      totalDiscount,
+      total,
+    }),
+    [
+      items,
+      coupon,
+      promotionSummary,
+      refreshPromotions,
+      subtotal,
+      couponDiscount,
+      promotionDiscount,
+      totalDiscount,
+      total,
+    ],
+  );
 
   return <CartCtx.Provider value={api}>{children}</CartCtx.Provider>;
 }

@@ -4,6 +4,8 @@ import { Product } from "@/models/Product";
 import { promptPayPayload } from "@/lib/promptpay";
 import { Coupon } from "@/models/Coupon";
 import { getPaymentConfig } from "@/lib/paymentConfig";
+import { Promotion } from "@/models/Promotion";
+import { calculateCartPromotions } from "@/lib/promotionUtils";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -15,7 +17,10 @@ function calcDiscount(coupon, subtotal) {
   if (coupon.type === "percent") discount = Math.floor((subtotal * coupon.value) / 100);
   else discount = Math.floor(coupon.value);
   discount = Math.max(0, Math.min(discount, subtotal));
-  return { discount, used: { code: coupon.code, type: coupon.type, value: coupon.value } };
+  return {
+    discount,
+    used: { code: coupon.code, type: coupon.type, value: coupon.value, discount },
+  };
 }
 
 export async function POST(req) {
@@ -46,7 +51,43 @@ export async function POST(req) {
     if (couponCode) {
       coupon = await Coupon.findOne({ code: String(couponCode).toUpperCase().trim() }).lean();
     }
-    const { discount, used } = calcDiscount(coupon, subtotal);
+    const now = new Date();
+    const promotions = await Promotion.find({
+      active: true,
+      $and: [
+        { $or: [{ startAt: null }, { startAt: { $lte: now } }] },
+        { $or: [{ endAt: null }, { endAt: { $gte: now } }] },
+      ],
+    }).lean();
+
+    const promotionCalc = calculateCartPromotions(checked, promotions);
+    const promotionRecords = promotionCalc.applied.map((promo) => ({
+      promotionId: promo.id || promo.promotionId || null,
+      title: promo.title || "",
+      summary: promo.summary || "",
+      description: promo.description || "",
+      type: promo.type || "",
+      discount: Number(promo.discount || 0),
+      freeQty: Number(promo.freeQty || 0),
+      metadata: promo.metadata || null,
+      items: Array.isArray(promo.items)
+        ? promo.items.map((item) => ({
+            productId: item.productId || null,
+            title: item.title || "",
+            freeQty: Number(item.freeQty || 0),
+            unitPrice: Number(item.unitPrice || 0),
+            discount: Number(item.discount || 0),
+          }))
+        : [],
+    }));
+
+    const promotionDiscount = Math.min(
+      subtotal,
+      Math.max(0, Number(promotionCalc.discount || 0)),
+    );
+
+    const { discount: couponDiscount, used } = calcDiscount(coupon, subtotal);
+    const discount = Math.min(subtotal, couponDiscount + promotionDiscount);
     const total = subtotal - discount;
 
     const { promptpayId, bankAccount } = getPaymentConfig();
@@ -57,7 +98,23 @@ export async function POST(req) {
       return NextResponse.json({
         ok: 1,
         method,
-        orderPreview: { items: checked, subtotal, discount, total, coupon: used },
+        orderPreview: {
+          items: checked,
+          subtotal,
+          discount,
+          total,
+          coupon: used,
+          couponDiscount,
+          promotionDiscount,
+          promotions: promotionRecords.map((promo) => ({
+            ...promo,
+            promotionId: promo.promotionId ? String(promo.promotionId) : null,
+            items: promo.items.map((item) => ({
+              ...item,
+              productId: item.productId ? String(item.productId) : item.productId,
+            })),
+          })),
+        },
         promptpay: { payload, amount: total },
       });
     }
@@ -66,7 +123,23 @@ export async function POST(req) {
       return NextResponse.json({
         ok: 1,
         method,
-        orderPreview: { items: checked, subtotal, discount, total, coupon: used },
+        orderPreview: {
+          items: checked,
+          subtotal,
+          discount,
+          total,
+          coupon: used,
+          couponDiscount,
+          promotionDiscount,
+          promotions: promotionRecords.map((promo) => ({
+            ...promo,
+            promotionId: promo.promotionId ? String(promo.promotionId) : null,
+            items: promo.items.map((item) => ({
+              ...item,
+              productId: item.productId ? String(item.productId) : item.productId,
+            })),
+          })),
+        },
         bankAccount,
       });
     }

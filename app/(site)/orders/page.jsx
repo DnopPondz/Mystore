@@ -200,6 +200,11 @@ export default function OrdersPage() {
               const depositAmount = Number(o?.preorder?.depositAmount ?? orderTotal);
               const quotedTotal = Number(o?.preorder?.quotedTotal ?? depositAmount);
               const remaining = Number(o?.preorder?.balanceAmount ?? 0);
+              const promotionDiscount = Number(o?.promotionDiscount || 0);
+              const couponDiscount =
+                o?.coupon?.discount != null
+                  ? Number(o.coupon.discount || 0)
+                  : Math.max(0, Number(o?.discount || 0) - promotionDiscount);
 
               return (
                 <Link
@@ -291,6 +296,18 @@ export default function OrdersPage() {
                       </span>
                     ))}
                   </div>
+                  {promotionDiscount > 0 || couponDiscount > 0 ? (
+                    <div className="mt-2 text-xs text-[var(--color-choco)]/60">
+                      {promotionDiscount > 0 ? (
+                        <span>🎁 โปรโมชัน -{formatCurrency(promotionDiscount)}</span>
+                      ) : null}
+                      {couponDiscount > 0 ? (
+                        <span>
+                          {promotionDiscount > 0 ? " · " : ""}คูปอง -{formatCurrency(couponDiscount)}
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : null}
                   {paymentStatus === "unpaid" ? (
                     <div className="mt-4 text-xs font-semibold text-[var(--color-rose-dark)]/80">
                       แตะเพื่อแนบสลิปและยืนยันการชำระเงิน

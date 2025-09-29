@@ -10,6 +10,7 @@ const items = [
   { href: "/admin/preorders", label: "Pre-order", icon: "📅" },
   { href: "/admin/reviews", label: "รีวิวลูกค้า", icon: "⭐" },
   { href: "/admin/users", label: "ผู้ใช้งาน", icon: "👥" },
+  { href: "/admin/promotions", label: "โปรโมชัน", icon: "🎁" },
   { href: "/admin/coupons", label: "คูปอง", icon: "🎟️" },
 ];
 

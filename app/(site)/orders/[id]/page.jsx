@@ -176,6 +176,35 @@ export default function OrderDetailPage() {
   const depositAmount = Number(order?.preorder?.depositAmount ?? amountDue);
   const balanceAmount = Number(order?.preorder?.balanceAmount ?? 0);
   const preorderSummary = order?.preorder?.summary || "";
+  const promotions = order?.promotions || [];
+  const promotionDiscount = Number(order?.promotionDiscount || 0);
+  const couponDiscount =
+    order?.coupon?.discount != null
+      ? Number(order.coupon.discount || 0)
+      : Math.max(0, Number(order?.discount || 0) - promotionDiscount);
+
+  const freebiesByProduct = useMemo(() => {
+    const map = new Map();
+    promotions.forEach((promotion) => {
+      const items = Array.isArray(promotion?.items) ? promotion.items : [];
+      items.forEach((item) => {
+        const productId = item?.productId;
+        if (!productId) return;
+        const key = String(productId);
+        const prev = map.get(key) || { qty: 0, discount: 0, titles: [] };
+        const freeQty = Number(item?.freeQty || 0);
+        const discount = Number(item?.discount || 0);
+        const label = promotion?.title || promotion?.summary || "โปรโมชั่น";
+        const titles = prev.titles.includes(label) ? prev.titles : [...prev.titles, label];
+        map.set(key, {
+          qty: prev.qty + freeQty,
+          discount: prev.discount + discount,
+          titles,
+        });
+      });
+    });
+    return map;
+  }, [promotions]);
 
   useEffect(() => {
     if (!order) return;
@@ -781,16 +810,38 @@ export default function OrderDetailPage() {
                   <span>รวม</span>
                   <span>{formatCurrency(order.subtotal)}</span>
                 </div>
-                {order.discount ? (
+                {promotionDiscount ? (
+                  <div className="flex justify-between text-[var(--color-rose)]/85">
+                    <span>ส่วนลดโปรโมชันอัตโนมัติ</span>
+                    <span>-{formatCurrency(promotionDiscount)}</span>
+                  </div>
+                ) : null}
+                {couponDiscount ? (
                   <div className="flex justify-between text-[var(--color-gold)]">
-                    <span>ส่วนลด</span>
-                    <span>-{formatCurrency(order.discount)}</span>
+                    <span>
+                      คูปอง {order.coupon?.code}
+                      {order.coupon?.description ? ` (${order.coupon.description})` : ""}
+                    </span>
+                    <span>-{formatCurrency(couponDiscount)}</span>
                   </div>
                 ) : null}
                 <div className="flex justify-between text-base font-semibold text-[var(--color-rose-dark)]">
                   <span>ยอดสุทธิ</span>
                   <span>{formatCurrency(order.total)}</span>
                 </div>
+                {promotions.length ? (
+                  <div className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/35 px-3 py-2 text-xs text-[var(--color-choco)]/70">
+                    <h3 className="text-sm font-semibold text-[var(--color-rose)]">โปรโมชันที่ใช้</h3>
+                    <ul className="mt-1 space-y-1">
+                      {promotions.map((promo, idx) => (
+                        <li key={`${promo.promotionId || promo.title || "promo"}-${idx}`} className="flex items-center justify-between gap-3">
+                          <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
+                          <span className="font-semibold text-[var(--color-rose-dark)]">-{formatCurrency(promo.discount || 0)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -818,20 +869,28 @@ export default function OrderDetailPage() {
             <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายการสินค้า</h2>
               <div className="mt-4 divide-y divide-[var(--color-rose)]/10">
-                {order.items.map((it, idx) => (
-                  <div
-                    key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
-                    className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div>
-                      <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
-                      <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
+                {order.items.map((it, idx) => {
+                  const bonus = freebiesByProduct.get(String(it.productId));
+                  return (
+                    <div
+                      key={`${order.id || order._id}-${it.productId || it.title}-${idx}`}
+                      className="flex flex-col gap-2 py-4 text-sm text-[var(--color-choco)]/80 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div>
+                        <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
+                        <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
+                        {bonus?.qty ? (
+                          <div className="mt-1 text-xs text-[var(--color-rose)]/85">
+                            รับฟรี {bonus.qty} ชิ้น (-{formatCurrency(bonus.discount)}) จากโปร {bonus.titles.join(", ")}
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="text-sm font-semibold text-[var(--color-rose-dark)]">
+                        {formatCurrency((it.price || 0) * (it.qty || 0))}
+                      </div>
                     </div>
-                    <div className="text-sm font-semibold text-[var(--color-rose-dark)]">
-                      {formatCurrency((it.price || 0) * (it.qty || 0))}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </section>

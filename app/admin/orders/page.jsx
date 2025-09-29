@@ -229,6 +229,34 @@ export default function AdminOrdersPage() {
             const isUpdating = updating === order._id;
             const methodDisplay =
               paymentState === "cash" ? "เงินสดหน้างาน" : formatPaymentMethod(order.payment?.method);
+            const promotionDiscount = Number(order.promotionDiscount || 0);
+            const couponDiscount =
+              order.coupon?.discount != null
+                ? Number(order.coupon.discount || 0)
+                : Math.max(0, Number(order.discount || 0) - promotionDiscount);
+            const freebiesByProduct = (() => {
+              const map = new Map();
+              const promos = Array.isArray(order.promotions) ? order.promotions : [];
+              promos.forEach((promo) => {
+                const items = Array.isArray(promo?.items) ? promo.items : [];
+                items.forEach((item) => {
+                  const productId = item?.productId;
+                  if (!productId) return;
+                  const key = String(productId);
+                  const prev = map.get(key) || { qty: 0, discount: 0, titles: [] };
+                  const freeQty = Number(item?.freeQty || 0);
+                  const discount = Number(item?.discount || 0);
+                  const label = promo?.title || promo?.summary || "โปรโมชั่น";
+                  const titles = prev.titles.includes(label) ? prev.titles : [...prev.titles, label];
+                  map.set(key, {
+                    qty: prev.qty + freeQty,
+                    discount: prev.discount + discount,
+                    titles,
+                  });
+                });
+              });
+              return map;
+            })();
 
             return (
               <article
@@ -301,14 +329,26 @@ export default function AdminOrdersPage() {
                         รายการสินค้า
                       </h4>
                       <ul className="mt-3 space-y-2 text-sm text-[var(--color-choco)]">
-                        {order.items.map((item, idx) => (
-                          <li key={`${order._id}-${idx}`} className="flex items-center justify-between gap-3">
-                            <span>
-                              {item.title} × {item.qty}
-                            </span>
-                            <span className="font-semibold">{formatCurrency(item.price * item.qty)}</span>
-                          </li>
-                        ))}
+                        {order.items.map((item, idx) => {
+                          const bonus = freebiesByProduct.get(String(item.productId));
+                          return (
+                            <li key={`${order._id}-${idx}`} className="flex flex-col gap-1">
+                              <div className="flex items-center justify-between gap-3">
+                                <span>
+                                  {item.title} × {item.qty}
+                                </span>
+                                <span className="font-semibold">{formatCurrency(item.price * item.qty)}</span>
+                              </div>
+                              {bonus?.qty ? (
+                                <div className="flex items-center justify-between gap-3 text-xs text-[var(--color-rose)]/80">
+                                  <span>
+                                    รับฟรี {bonus.qty} ชิ้น (-{formatCurrency(bonus.discount)}) จากโปร {bonus.titles.join(", ")}
+                                  </span>
+                                </div>
+                              ) : null}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
 
@@ -337,7 +377,25 @@ export default function AdminOrdersPage() {
                       </h4>
                       <div className="mt-3 space-y-2">
                         <SummaryRow label="ยอดสินค้า" value={formatCurrency(order.subtotal)} />
-                        <SummaryRow label="ส่วนลด" value={formatCurrency(-order.discount)} negative={order.discount > 0} />
+                        {promotionDiscount ? (
+                          <SummaryRow
+                            label="ส่วนลดโปรโมชัน"
+                            value={formatCurrency(-promotionDiscount)}
+                            negative
+                          />
+                        ) : null}
+                        {couponDiscount ? (
+                          <SummaryRow
+                            label="ส่วนลดคูปอง"
+                            value={formatCurrency(-couponDiscount)}
+                            negative
+                          />
+                        ) : null}
+                        <SummaryRow
+                          label="ส่วนลดรวม"
+                          value={formatCurrency(-order.discount)}
+                          negative={order.discount > 0}
+                        />
                         <SummaryRow label="ยอดชำระรวม" value={formatCurrency(order.total)} strong />
                         {order.preorder ? (
                           <>
@@ -349,9 +407,22 @@ export default function AdminOrdersPage() {
                           </>
                         ) : null}
                       </div>
+                      {order.promotions?.length ? (
+                        <div className="mt-3 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-rose)]/10 px-3 py-2 text-xs text-[var(--color-choco)]/70">
+                          <h5 className="font-semibold text-[var(--color-rose)]">โปรโมชันที่ใช้</h5>
+                          <ul className="mt-1 space-y-1">
+                            {order.promotions.map((promo, idx) => (
+                              <li key={`${order._id}-promo-${idx}`} className="flex items-center justify-between gap-3">
+                                <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
+                                <span className="font-semibold text-[var(--color-rose-dark)]">-{formatCurrency(promo.discount || 0)}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                       {order.coupon?.code ? (
                         <p className="mt-3 rounded-full bg-[var(--color-rose)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-rose)]">
-                          ใช้คูปอง {order.coupon.code}
+                          ใช้คูปอง {order.coupon.code} (-{formatCurrency(couponDiscount)})
                         </p>
                       ) : null}
                     </div>

@@ -1,9 +1,20 @@
 "use client";
 import { useCart } from "@/components/cart/CartProvider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import {
+  summarizePromotion,
+  describePromotionUsage,
+  getPromotionProgress,
+} from "@/lib/promotionUtils";
+
+const fmtCurrency = (value) =>
+  Number(value || 0).toLocaleString("th-TH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
 export default function CartPage() {
   const cart = useCart();
@@ -12,6 +23,94 @@ export default function CartPage() {
   const [code, setCode] = useState(cart.coupon?.code || "");
   const [applying, setApplying] = useState(false);
   const [err, setErr] = useState("");
+  const promotions = cart.promotions || {};
+  const promotionsLoading = Boolean(promotions.loading);
+  const promotionsError = promotions.error || "";
+  const appliedPromotions = promotions.applied || [];
+  const activePromotions = promotions.active || [];
+  const couponDiscount = Math.max(
+    0,
+    Number(cart.couponDiscount ?? cart.coupon?.discount ?? 0),
+  );
+  const promotionDiscount = Math.max(
+    0,
+    Number(cart.promotionDiscount ?? promotions.discount ?? 0),
+  );
+  const subtotalValue = Number(cart.subtotal || 0);
+  const totalDiscount = Math.min(
+    subtotalValue,
+    Math.max(0, Number(cart.totalDiscount ?? couponDiscount + promotionDiscount)),
+  );
+  const totalValue = Number(
+    cart.total != null ? cart.total : Math.max(0, subtotalValue - totalDiscount),
+  );
+
+  const freebiesByProduct = useMemo(() => {
+    const map = new Map();
+    appliedPromotions.forEach((promotion) => {
+      (promotion.items || []).forEach((item) => {
+        const productId = item.productId;
+        if (!productId) return;
+        const prev = map.get(String(productId)) || { qty: 0, discount: 0, titles: [] };
+        const freeQty = Number(item.freeQty || 0);
+        const discount = Number(item.discount || 0);
+        const label = promotion.title || promotion.summary || "โปรโมชั่น";
+        const titles = prev.titles.includes(label) ? prev.titles : [...prev.titles, label];
+        map.set(String(productId), {
+          qty: prev.qty + freeQty,
+          discount: prev.discount + discount,
+          titles,
+        });
+      });
+    });
+    return map;
+  }, [appliedPromotions]);
+
+  const cartItems = cart.items || [];
+
+  const promotionStatuses = useMemo(() => {
+    const appliedIds = new Set(
+      appliedPromotions
+        .map((p) => {
+          const id = p.id || p.promotionId;
+          return id ? String(id) : null;
+        })
+        .filter(Boolean),
+    );
+    return activePromotions.map((promotion, index) => {
+      const rawId = promotion._id || promotion.id || promotion.promotionId || index;
+      const id = String(rawId);
+      const summary = summarizePromotion(promotion);
+      const applied = appliedIds.has(id);
+      const progress = getPromotionProgress(promotion, cartItems);
+      let hint = "";
+
+      if (!applied) {
+        if (progress?.type === "buy_x_get_y") {
+          if (!progress.hasAnyQuantity) {
+            hint = describePromotionUsage(promotion);
+          } else if (progress.neededToNextReward > 0) {
+            const productLabel = progress.sampleProductTitle
+              ? `เมนู ${progress.sampleProductTitle}`
+              : "สินค้าเมนูเดียวกัน";
+            hint = `หยิบ ${productLabel} เพิ่มอีก ${progress.neededToNextReward} ชิ้นเพื่อรับฟรี ${progress.get} ชิ้นจากโปรนี้`;
+          }
+        }
+
+        if (!hint) {
+          hint = describePromotionUsage(promotion);
+        }
+      }
+
+      return {
+        id,
+        title: promotion.title || summary || "โปรโมชั่น",
+        summary,
+        applied,
+        hint,
+      };
+    });
+  }, [activePromotions, appliedPromotions, cartItems]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -66,14 +165,87 @@ export default function CartPage() {
     <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-6 text-[var(--color-text)] shadow-lg shadow-black/40 backdrop-blur">
       <div className="flex items-center justify-between text-lg font-semibold text-[var(--color-gold)]">
         <span>ยอดรวม</span>
-        <span>฿{cart.subtotal}</span>
+        <span>฿{fmtCurrency(subtotalValue)}</span>
       </div>
-      {cart.coupon?.discount ? (
+      {promotionDiscount ? (
+        <div className="mt-3 flex items-center justify-between rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/55 px-4 py-2 text-xs text-[var(--color-rose)]/90">
+          <span>ส่วนลดโปรโมชันอัตโนมัติ</span>
+          <span>-฿{fmtCurrency(promotionDiscount)}</span>
+        </div>
+      ) : null}
+      {!promotionDiscount && promotionsLoading ? (
+        <div className="mt-3 rounded-2xl border border-[var(--color-rose)]/15 bg-[var(--color-burgundy-dark)]/50 px-4 py-2 text-xs text-[var(--color-text)]/70">
+          กำลังตรวจสอบโปรโมชันที่ใช้ได้...
+        </div>
+      ) : null}
+      {promotionsError && !promotionsLoading ? (
+        <div className="mt-3 rounded-2xl border border-rose-500/40 bg-rose-500/10 px-4 py-2 text-xs text-rose-200">
+          {promotionsError}
+        </div>
+      ) : null}
+      {couponDiscount ? (
         <div className="mt-3 flex items-center justify-between rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 px-4 py-2 text-xs text-[var(--color-gold)]/85">
           <span>
-            ใช้คูปอง {cart.coupon.code} ({cart.coupon.description})
+            ใช้คูปอง {cart.coupon?.code}
+            {cart.coupon?.description ? ` (${cart.coupon.description})` : ""}
           </span>
-          <span>-฿{cart.coupon.discount}</span>
+          <span>-฿{fmtCurrency(couponDiscount)}</span>
+        </div>
+      ) : null}
+      <div className="mt-4 flex items-center justify-between rounded-2xl bg-[var(--color-burgundy-dark)]/60 px-4 py-3 text-base font-semibold text-[var(--color-gold)]">
+        <span>ยอดต้องชำระ</span>
+        <span>฿{fmtCurrency(totalValue)}</span>
+      </div>
+      {appliedPromotions.length ? (
+        <div className="mt-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/55 px-4 py-3 text-xs text-[var(--color-gold)]/85">
+          <h3 className="text-sm font-semibold text-[var(--color-gold)]">โปรโมชันที่ได้รับ</h3>
+          <ul className="mt-2 space-y-2">
+            {appliedPromotions.map((promo, idx) => (
+              <li
+                key={`${promo.id || promo.title || "promo"}-${idx}`}
+                className="flex flex-col gap-1"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
+                  <span className="font-semibold text-[var(--color-rose)]">-฿{fmtCurrency(promo.discount)}</span>
+                </div>
+                {promo.freeQty ? (
+                  <span className="text-[var(--color-text)]/65">
+                    รับฟรี {promo.freeQty} ชิ้นจากโปรนี้
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {promotionStatuses.length ? (
+        <div className="mt-4 rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/45 px-4 py-3 text-xs text-[var(--color-text)]/75">
+          <h3 className="text-sm font-semibold text-[var(--color-gold)]">โปรโมชันอัตโนมัติในตอนนี้</h3>
+          <ul className="mt-2 space-y-2">
+            {promotionStatuses.map((promo) => (
+              <li key={promo.id} className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-medium text-[var(--color-text)]">{promo.title}</span>
+                  <span
+                    className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
+                      promo.applied
+                        ? "bg-[var(--color-gold)]/20 text-[var(--color-gold)]"
+                        : "bg-[var(--color-rose)]/10 text-[var(--color-rose)]"
+                    }`}
+                  >
+                    {promo.applied ? "ได้รับแล้ว" : "ยังไม่เข้าเงื่อนไข"}
+                  </span>
+                </div>
+                {promo.summary ? (
+                  <span className="text-[var(--color-text)]/60">{promo.summary}</span>
+                ) : null}
+                {!promo.applied && promo.hint ? (
+                  <span className="text-[var(--color-text)]/55">{promo.hint}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
       <div className="mt-6 flex flex-col gap-3">
@@ -150,68 +322,81 @@ export default function CartPage() {
           ) : (
             <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr]">
               <div className="space-y-4">
-                {cart.items.map((it) => (
-                  <div
-                    key={it.productId}
-                    className="flex flex-col gap-3 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/30 backdrop-blur sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div>
-                      <div className="text-lg font-semibold text-[var(--color-gold)]">{it.title}</div>
-                      <div className="text-sm text-[var(--color-text)]/70">฿{it.price} ต่อชิ้น</div>
-                    </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center overflow-hidden rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 shadow-inner shadow-black/30">
-                          <button
-                            type="button"
-                            aria-label="ลดจำนวน"
-                            onClick={() => {
-                              const nextQty = Math.max(1, Number(it.qty || 1) - 1);
-                              cart.setQty(it.productId, nextQty);
-                            }}
-                            className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
-                          >
-                            −
-                          </button>
-                          <div className="min-w-[3rem] px-3 text-center text-sm font-semibold text-[var(--color-gold)]">
-                            {it.qty}
+                {cart.items.map((it) => {
+                  const bonus = freebiesByProduct.get(String(it.productId));
+                  return (
+                    <div
+                      key={it.productId}
+                      className="flex flex-col gap-3 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-6 text-[var(--color-text)] shadow-lg shadow-black/30 backdrop-blur sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div>
+                        <div className="text-lg font-semibold text-[var(--color-gold)]">{it.title}</div>
+                        <div className="text-sm text-[var(--color-text)]/70">฿{fmtCurrency(it.price)} ต่อชิ้น</div>
+                        {bonus?.qty ? (
+                          <div className="mt-2 flex flex-col gap-1 text-xs text-[var(--color-rose)]/85">
+                            <span>
+                              ได้รับฟรี {bonus.qty} ชิ้น (มูลค่า ฿{fmtCurrency(bonus.discount)})
+                            </span>
+                            <span className="text-[var(--color-text)]/60">
+                              จากโปร {bonus.titles.join(", ")}
+                            </span>
                           </div>
-                          <button
-                            type="button"
-                            aria-label="เพิ่มจำนวน"
-                            onClick={() => cart.setQty(it.productId, Number(it.qty || 1) + 1)}
-                            className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
-                          >
-                            +
-                          </button>
-                        </div>
+                        ) : null}
                       </div>
-                      <button
-                        className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-gradient-to-r from-[var(--color-rose)]/20 to-[var(--color-rose-dark)]/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-rose)] transition hover:from-[var(--color-rose)]/35 hover:to-[var(--color-rose-dark)]/35 hover:text-[var(--color-gold)]"
-                        onClick={() => cart.remove(it.productId)}
-                      >
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-rose)] text-[var(--color-burgundy-dark)] shadow-md shadow-[rgba(0,0,0,0.35)]">
-                          <svg
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-3.5 w-3.5"
-                            aria-hidden="true"
-                          >
-                            <path
-                              d="M6 5.5h8m-6.5 0v-1A1.5 1.5 0 0 1 9 3h2a1.5 1.5 0 0 1 1.5 1.5v1M5.5 7h9l-.6 9.02a1.5 1.5 0 0 1-1.49 1.38H7.59a1.5 1.5 0 0 1-1.49-1.38L5.5 7Z"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                        ลบออก
-                      </button>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center overflow-hidden rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 shadow-inner shadow-black/30">
+                            <button
+                              type="button"
+                              aria-label="ลดจำนวน"
+                              onClick={() => {
+                                const nextQty = Math.max(1, Number(it.qty || 1) - 1);
+                                cart.setQty(it.productId, nextQty);
+                              }}
+                              className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                            >
+                              −
+                            </button>
+                            <div className="min-w-[3rem] px-3 text-center text-sm font-semibold text-[var(--color-gold)]">
+                              {it.qty}
+                            </div>
+                            <button
+                              type="button"
+                              aria-label="เพิ่มจำนวน"
+                              onClick={() => cart.setQty(it.productId, Number(it.qty || 1) + 1)}
+                              className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                        <button
+                          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-gradient-to-r from-[var(--color-rose)]/20 to-[var(--color-rose-dark)]/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-rose)] transition hover:from-[var(--color-rose)]/35 hover:to-[var(--color-rose-dark)]/35 hover:text-[var(--color-gold)]"
+                          onClick={() => cart.remove(it.productId)}
+                        >
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-rose)] text-[var(--color-burgundy-dark)] shadow-md shadow-[rgba(0,0,0,0.35)]">
+                            <svg
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3.5 w-3.5"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M6 5.5h8m-6.5 0v-1A1.5 1.5 0 0 1 9 3h2a1.5 1.5 0 0 1 1.5 1.5v1M5.5 7h9l-.6 9.02a1.5 1.5 0 0 1-1.49 1.38H7.59a1.5 1.5 0 0 1-1.49-1.38L5.5 7Z"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          ลบออก
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="space-y-6">
