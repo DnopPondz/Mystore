@@ -24,7 +24,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 bg-[#3c1a09] text-[#ffe37f]">
+    <footer className="mt-20 bg-[#2b0f05] text-[#fdd9a0]">
       <div className="relative">
         {/* <div className="absolute -top-6 left-6 hidden rotate-6 text-5xl opacity-40 md:block">
           🥐
@@ -38,7 +38,7 @@ export default function Footer() {
               <h2 className="text-2xl font-extrabold text-white">
                 Sweet Cravings Bakery
               </h2>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#ffe37f]/80">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#fdd9a0]/80">
                 อบขนมสดใหม่ทุกเช้า ส่งต่อความอบอุ่นแบบโฮมเมดถึงมือคุณ ทั้งครัวซองต์
                 ชีสเค้ก บราวนี่ และเครื่องดื่มซิกเนเจอร์ที่เข้ากับทุกช่วงเวลา
               </p>
@@ -47,7 +47,7 @@ export default function Footer() {
                   <a
                     key={label}
                     href={href}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#5b3dfc] px-4 py-2 font-medium text-white shadow-sm transition hover:bg-[#4a2fe0]"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-[#4c2ffc] px-4 py-2 font-medium text-white shadow-[0_12px_24px_-14px_rgba(76,47,252,0.85)] transition hover:bg-[#3e25d6]"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -61,7 +61,7 @@ export default function Footer() {
             <div className="grid gap-10 sm:grid-cols-2 lg:col-span-2">
               <div>
                 <h3 className="text-lg font-semibold text-white">เมนูด่วน</h3>
-                <ul className="mt-4 space-y-3 text-sm text-[#ffe37f]/80">
+                <ul className="mt-4 space-y-3 text-sm text-[#fdd9a0]/80">
                   {customerLinks.map(({ href, label }) => (
                     <li key={href}>
                       <Link
@@ -77,7 +77,7 @@ export default function Footer() {
 
               <div>
                 <h3 className="text-lg font-semibold text-white">บริการ & ข้อมูล</h3>
-                <ul className="mt-4 space-y-3 text-sm text-[#ffe37f]/80">
+                <ul className="mt-4 space-y-3 text-sm text-[#fdd9a0]/80">
                   {serviceLinks.map(({ href, label }) => (
                     <li key={href}>
                       <Link
@@ -94,18 +94,18 @@ export default function Footer() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-3xl border border-[#f5c486] bg-[#5b3dfc] p-6 shadow-sm shadow-[rgba(0,0,0,0.2)]">
+            <div className="rounded-3xl border border-[#7f6bff]/40 bg-[#4c2ffc] p-6 shadow-[0_24px_44px_-26px_rgba(10,0,70,0.95)]">
               <h3 className="text-lg font-semibold text-white">ติดต่อเรา</h3>
               <ul className="mt-4 space-y-3 text-sm text-white/85">
                 <li>
                   <span className="font-medium text-white">โทร:</span>{" "}
-                  <a href="tel:021234567" className="hover:text-[#ffe37f]">
+                  <a href="tel:021234567" className="hover:text-[#fcd361]">
                     02-123-4567
                   </a>
                 </li>
                 <li>
                   <span className="font-medium text-white">อีเมล:</span>{" "}
-                  <a href="mailto:hello@sweetcravings.co" className="hover:text-[#ffe37f]">
+                  <a href="mailto:hello@sweetcravings.co" className="hover:text-[#fcd361]">
                     hello@sweetcravings.co
                   </a>
                 </li>
@@ -118,7 +118,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-[#f5c486] bg-[#5b3dfc] p-6 shadow-sm shadow-[rgba(0,0,0,0.2)]">
+            <div className="rounded-3xl border border-[#7f6bff]/40 bg-[#4c2ffc] p-6 shadow-[0_24px_44px_-26px_rgba(10,0,70,0.95)]">
               <h3 className="text-lg font-semibold text-white">เวลาเปิดให้บริการ</h3>
               <ul className="mt-4 space-y-3 text-sm text-white/85">
                 <li>จันทร์ - ศุกร์: 07:30 - 18:30 น.</li>
@@ -127,7 +127,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-[#f5c486] bg-[#5b3dfc] p-6 shadow-sm shadow-[rgba(0,0,0,0.2)]">
+            <div className="rounded-3xl border border-[#7f6bff]/40 bg-[#4c2ffc] p-6 shadow-[0_24px_44px_-26px_rgba(10,0,70,0.95)]">
               <h3 className="text-lg font-semibold text-white">รับข่าวสารสุดพิเศษ</h3>
               <p className="mt-4 text-sm text-white/85">
                 ลงทะเบียนเพื่อรับโปรโมชั่นเมนูใหม่ สูตรลับจากเชฟ และเวิร์กช็อปอบขนมก่อนใคร
@@ -144,7 +144,7 @@ export default function Footer() {
                 />
                 <button
                   type="button"
-                  className="rounded-full bg-[#ffe37f] px-5 py-2 text-sm font-semibold text-[#3c1a09] shadow-lg shadow-[rgba(255,227,127,0.4)] transition hover:bg-[#ffd76b]"
+                  className="rounded-full bg-[#fcd361] px-5 py-2 text-sm font-semibold text-[#2b0f05] shadow-lg shadow-[rgba(252,211,97,0.4)] transition hover:bg-[#f7c748]"
                 >
                   ติดตาม
                 </button>
