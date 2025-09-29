@@ -394,6 +394,7 @@ export default function CheckoutPage() {
                   );
                 })}
               </div>
+              {order ? (
                 <p className="text-xs text-[#3c1a09]/60">
                   สร้างคำสั่งซื้อแล้ว สามารถสลับวิธีการชำระเงินได้ตลอดโดยไม่ต้องสร้างคำสั่งซื้อใหม่
                 </p>
