@@ -27,68 +27,68 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
-      <div className="absolute -top-24 left-16 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
-      <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
+    <main className="relative min-h-[70vh] overflow-hidden bg-[#fef3e5]">
+      <div className="absolute inset-0 bg-[#fef3e5]" />
+      <div className="absolute -top-24 left-16 h-64 w-64 rounded-full bg-[#5b3dfc]/18 blur-3xl" />
+      <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[#f7931e]/20 blur-3xl" />
 
       <div className="relative flex items-center justify-center px-6 py-16">
-        <div className="w-full max-w-md rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/80 p-8 shadow-2xl shadow-black/50 backdrop-blur">
+        <div className="w-full max-w-md rounded-3xl border border-[#f5c486] bg-white/90 p-8 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-[var(--color-rose)]">สร้างบัญชีใหม่</h1>
-            <p className="mt-2 text-sm text-[var(--color-text)]/70">
+            <h1 className="text-3xl font-bold text-[#3c1a09]">สร้างบัญชีใหม่</h1>
+            <p className="mt-2 text-sm text-[#3c1a09]/70">
               สมัครสมาชิกเพื่อรับข่าวสาร โปรโมชั่น และสะสมคะแนนสำหรับลูกค้าประจำ
             </p>
           </div>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium">ชื่อ-นามสกุล</label>
+              <label className="mb-1 block text-sm font-medium text-[#3c1a09]/80">ชื่อ-นามสกุล</label>
               <input
                 name="name"
                 placeholder="ชื่อเต็ม"
-                className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/70 px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium">อีเมล</label>
+              <label className="mb-1 block text-sm font-medium text-[#3c1a09]/80">อีเมล</label>
               <input
                 name="email"
                 type="email"
                 placeholder="name@example.com"
-                className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/70 px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium">รหัสผ่าน (6 ตัวอักษรขึ้นไป)</label>
+              <label className="mb-1 block text-sm font-medium text-[#3c1a09]/80">รหัสผ่าน (6 ตัวอักษรขึ้นไป)</label>
               <input
                 name="password"
                 type="password"
                 placeholder="รหัสผ่าน"
                 minLength={6}
-                className="w-full rounded-2xl border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/70 px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
             <button
               disabled={loading}
-              className="w-full rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.4)] transition hover:bg-[#df7f0f] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
             </button>
           </form>
 
           {msg && (
-            <p className={`mt-4 text-sm ${msg.includes("เสร็จ") ? "text-[var(--color-gold)]" : "text-[var(--color-rose)]"}`}>
+            <p className={`mt-4 text-sm ${msg.includes("เสร็จ") ? "text-[#5b3dfc]" : "text-[#b84d4d]"}`}>
               {String(msg)}
             </p>
           )}
 
-          <p className="mt-6 text-center text-sm text-[var(--color-text)]/70">
+          <p className="mt-6 text-center text-sm text-[#3c1a09]/70">
             มีบัญชีอยู่แล้ว?
-            <Link href="/login" className="ml-2 font-semibold text-[var(--color-rose)] hover:text-[var(--color-rose-dark)]">
+            <Link href="/login" className="ml-2 font-semibold text-[#5b3dfc] hover:text-[#4529c4]">
               เข้าสู่ระบบ
             </Link>
           </p>
