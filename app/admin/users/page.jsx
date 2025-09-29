@@ -174,11 +174,11 @@ export default function AdminUsersPage() {
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/70 bg-white/70 shadow-xl shadow-[#f5a25d18] backdrop-blur-sm overflow-hidden">
-        <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+      <section className="rounded-[2rem] border border-white/80 bg-white shadow-xl shadow-[#f5a25d18] overflow-hidden">
+        <header className="flex flex-col gap-2 border-b border-[#f2d3ad] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[var(--color-choco)]">รายการผู้ใช้งาน</h3>
-            <p className="text-xs text-[var(--color-choco)]/60">
+            <p className="text-xs text-[var(--color-choco)]/70">
               สามารถเปลี่ยนสิทธิ์การใช้งานหรือระงับบัญชีชั่วคราวได้จากตารางด้านล่าง
             </p>
           </div>
@@ -204,7 +204,7 @@ export default function AdminUsersPage() {
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-[1.5rem]">
+          <div className="overflow-hidden rounded-[1.5rem] border border-[#f2d3ad]/60 bg-[#fff8ef]">
             {/* Mobile Cards - แสดงเฉพาะใน mobile */}
             <div className="block lg:hidden">
               {filteredUsers.length === 0 ? (
@@ -283,40 +283,40 @@ export default function AdminUsersPage() {
             <div className="hidden lg:block overflow-x-auto">
               <table className="min-w-full text-sm text-[var(--color-choco)]">
                 <thead>
-                  <tr className="bg-gradient-to-r rounded-b-3xl rounded-t-none  from-[#fff5e4] to-[#fef7ed] border-b border-white/40">
-                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                  <tr className="bg-[#fcebd3] text-[var(--color-choco)] border-b border-[#f2d3ad]">
+                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         👤 ชื่อผู้ใช้
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         ✉️ อีเมล
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         🔑 สิทธิ์
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         📊 สถานะ
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         📅 วันที่สร้าง
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-right font-semibold text-[var(--color-choco)]/90 tracking-wide">
+                    <th className="px-6 py-4 text-right font-semibold tracking-wide">
                       <div className="flex items-center justify-end gap-2">
                         ⚙️ จัดการ
                       </div>
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/40">
+                <tbody className="divide-y divide-[#f2d3ad]/60 bg-white">
                   {filteredUsers.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-12 text-center">
@@ -324,11 +324,11 @@ export default function AdminUsersPage() {
                           <div className="mb-4 h-20 w-20 c-full bg-[var(--color-rose)]/10 flex items-center justify-center text-3xl">
                             👤
                           </div>
-                          <div className="text-sm font-medium text-[var(--color-choco)]/60">
+                          <div className="text-sm font-medium text-[var(--color-choco)]/70">
                             {loading ? "กำลังโหลดข้อมูลผู้ใช้..." : "ไม่พบผู้ใช้ที่ตรงกับคำค้นหา"}
                           </div>
                           {!loading && search && (
-                            <div className="mt-2 text-xs text-[var(--color-choco)]/50">
+                            <div className="mt-2 text-xs text-[var(--color-choco)]/60">
                               ลองเปลี่ยนคำค้นหาหรือล้างตัวกรองดู
                             </div>
                           )}
@@ -340,13 +340,11 @@ export default function AdminUsersPage() {
                       const isBusy = !!busy[user.id];
                       const isEven = idx % 2 === 0;
                       return (
-                        <tr 
-                          key={user.id} 
-                          className={`group transition-all duration-200 hover:bg-gradient-to-r hover:shadow-lg ${
-                            isEven 
-                              ? "bg-white/50 hover:from-white/80 hover:to-[#fff9f5]/60" 
-                              : "bg-[#fff7f0]/40 hover:from-[#fff9f5]/70 hover:to-white/50"
-                          } ${user.banned ? 'opacity-75' : ''}`}
+                        <tr
+                          key={user.id}
+                          className={`group transition-colors duration-200 ${
+                            isEven ? "bg-white" : "bg-[#fff3e0]"
+                          } hover:bg-[#ffe3c5] ${user.banned ? 'opacity-80' : ''}`}
                         >
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-3">
@@ -362,7 +360,7 @@ export default function AdminUsersPage() {
                                   {user.name || "ไม่ระบุชื่อ"}
                                 </div>
                                 {user.name && (
-                                  <div className="text-xs text-[var(--color-choco)]/60 mt-0.5">
+                                  <div className="text-xs text-[var(--color-choco)]/70 mt-0.5">
                                     ID: {user.id.slice(0, 8)}...
                                   </div>
                                 )}
@@ -371,13 +369,13 @@ export default function AdminUsersPage() {
                           </td>
                           <td className="px-6 py-5">
                             <div className="font-medium text-[var(--color-choco)]">{user.email}</div>
-                            <div className="text-xs text-[var(--color-choco)]/60 mt-0.5">
+                            <div className="text-xs text-[var(--color-choco)]/70 mt-0.5">
                               {user.emailVerified ? '✅ ยืนยันแล้ว' : '⏳ รอยืนยัน'}
                             </div>
                           </td>
                           <td className="px-6 py-5">
                             <select
-                              className={`rounded-full border border-[var(--color-rose)]/30 bg-white/90 px-3 py-2 text-xs font-semibold shadow-sm transition-all duration-200 focus:border-[var(--color-rose)] focus:outline-none focus:shadow-md hover:shadow-md ${
+                              className={`rounded-full border border-[var(--color-rose)]/40 bg-white px-3 py-2 text-xs font-semibold text-[var(--color-choco)] shadow-sm transition-all duration-200 focus:border-[var(--color-rose)] focus:outline-none focus:shadow-md hover:shadow-md ${
                                 isBusy ? 'opacity-60 cursor-not-allowed' : 'hover:bg-white'
                               }`}
                               value={user.role}
@@ -395,8 +393,8 @@ export default function AdminUsersPage() {
                             <span
                               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-sm ${
                                 user.banned
-                                  ? "bg-gradient-to-r from-rose-100 to-rose-50 text-rose-600 border border-rose-200"
-                                  : "bg-gradient-to-r from-[#e7f8f0] to-[#d1f2e7] text-[var(--color-rose-dark)] border border-green-200"
+                                  ? "bg-rose-100 text-rose-700 border border-rose-200"
+                                  : "bg-[#e8f7f0] text-[var(--color-rose-dark)] border border-[#b8ead7]"
                               }`}
                             >
                               {user.banned ? "🔒 ถูกระงับ" : "✅ ปกติ"}
@@ -412,10 +410,10 @@ export default function AdminUsersPage() {
                               type="button"
                               onClick={() => toggleBan(user)}
                               disabled={isBusy}
-                              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold shadow-sm transition-all duration-200 ${
+                              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold text-[var(--color-choco)] shadow-sm transition-all duration-200 ${
                                 user.banned
-                                  ? "bg-gradient-to-r from-[#7cd1b8]/20 to-[#5fb3a3]/10 text-[#0b7b59] border border-[#7cd1b8]/30 hover:from-[#7cd1b8]/30 hover:to-[#5fb3a3]/20 hover:shadow-md"
-                                  : "bg-gradient-to-r from-rose-100 to-rose-50 text-rose-600 border border-rose-200 hover:from-rose-200 hover:to-rose-100 hover:shadow-md"
+                                  ? "bg-[#d6f1e7] text-[#0b7b59] border border-[#7cd1b8]/40 hover:bg-[#c4e9dd]"
+                                  : "bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200"
                               } ${isBusy ? "opacity-60 cursor-not-allowed" : "hover:scale-105 group-hover:shadow-lg"}`}
                             >
                               {isBusy ? (
