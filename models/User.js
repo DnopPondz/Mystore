@@ -7,6 +7,8 @@ const UserSchema = new Schema(
     passwordHash: String,
     role: { type: String, enum: ["user", "admin"], default: "user", index: true },
     banned: { type: Boolean, default: false, index: true },
+    phone: { type: String, default: "" },
+    address: { type: String, default: "" },
   },
   { timestamps: true }
 );
