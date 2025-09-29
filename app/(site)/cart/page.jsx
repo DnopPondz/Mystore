@@ -160,19 +160,53 @@ export default function CartPage() {
                       <div className="text-sm text-[var(--color-text)]/70">฿{it.price} ต่อชิ้น</div>
                     </div>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <input
-                        type="number"
-                        min={1}
-                        value={it.qty}
-                        onChange={(e) =>
-                          cart.setQty(it.productId, parseInt(e.target.value || "1", 10))
-                        }
-                        className="h-11 w-24 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 px-4 text-center text-sm font-medium text-[var(--color-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
-                      />
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center overflow-hidden rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-burgundy-dark)]/60 shadow-inner shadow-black/30">
+                          <button
+                            type="button"
+                            aria-label="ลดจำนวน"
+                            onClick={() => {
+                              const nextQty = Math.max(1, Number(it.qty || 1) - 1);
+                              cart.setQty(it.productId, nextQty);
+                            }}
+                            className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                          >
+                            −
+                          </button>
+                          <div className="min-w-[3rem] px-3 text-center text-sm font-semibold text-[var(--color-gold)]">
+                            {it.qty}
+                          </div>
+                          <button
+                            type="button"
+                            aria-label="เพิ่มจำนวน"
+                            onClick={() => cart.setQty(it.productId, Number(it.qty || 1) + 1)}
+                            className="h-10 w-10 text-lg font-semibold text-[var(--color-gold)] transition hover:bg-[var(--color-burgundy)]/60"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                       <button
-                        className="text-sm font-medium text-[var(--color-rose)] underline decoration-dotted"
+                        className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-gradient-to-r from-[var(--color-rose)]/20 to-[var(--color-rose-dark)]/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-rose)] transition hover:from-[var(--color-rose)]/35 hover:to-[var(--color-rose-dark)]/35 hover:text-[var(--color-gold)]"
                         onClick={() => cart.remove(it.productId)}
                       >
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-rose)] text-[var(--color-burgundy-dark)] shadow-md shadow-[rgba(0,0,0,0.35)]">
+                          <svg
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3.5 w-3.5"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M6 5.5h8m-6.5 0v-1A1.5 1.5 0 0 1 9 3h2a1.5 1.5 0 0 1 1.5 1.5v1M5.5 7h9l-.6 9.02a1.5 1.5 0 0 1-1.49 1.38H7.59a1.5 1.5 0 0 1-1.49-1.38L5.5 7Z"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
                         ลบออก
                       </button>
                     </div>
