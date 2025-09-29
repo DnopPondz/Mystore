@@ -22,13 +22,43 @@ const OrderSchema = new Schema(
     subtotal: Number,
     discount: Number,
     total: Number,
+    promotionDiscount: { type: Number, default: 0 },
 
     // คูปองที่ใช้ (ถ้ามี)
     coupon: {
       code: String,
       type: String,
       value: Number,
+      discount: Number,
     },
+
+    promotions: [
+      new Schema(
+        {
+          promotionId: { type: Schema.Types.ObjectId, ref: "Promotion" },
+          title: String,
+          summary: String,
+          description: String,
+          type: String,
+          discount: Number,
+          freeQty: Number,
+          metadata: { type: Schema.Types.Mixed, default: null },
+          items: [
+            new Schema(
+              {
+                productId: { type: Schema.Types.ObjectId, ref: "Product" },
+                title: String,
+                freeQty: Number,
+                unitPrice: Number,
+                discount: Number,
+              },
+              { _id: false },
+            ),
+          ],
+        },
+        { _id: false },
+      ),
+    ],
 
     // ข้อมูลลูกค้า/จัดส่ง
     customer: {

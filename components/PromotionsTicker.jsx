@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { summarizePromotion, formatPromotionSchedule } from "@/lib/promotionUtils";
+import {
+  summarizePromotion,
+  formatPromotionSchedule,
+  describePromotionUsage,
+} from "@/lib/promotionUtils";
 
 export default function PromotionsTicker() {
   const [items, setItems] = useState([]);
@@ -69,22 +73,28 @@ export default function PromotionsTicker() {
           🎁 โปรโมชันพิเศษ
         </span>
         <div className="flex flex-1 flex-wrap gap-2">
-          {visiblePromotions.map((promotion) => (
-            <span
-              key={promotion._id}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 px-3 py-1 shadow-inner shadow-black/20"
-            >
-              <span className="font-semibold text-[var(--color-rose)]">
-                {promotion.title}
+          {visiblePromotions.map((promotion) => {
+            const usage = describePromotionUsage(promotion);
+            return (
+              <span
+                key={promotion._id}
+                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 px-3 py-1 shadow-inner shadow-black/20"
+              >
+                <span className="font-semibold text-[var(--color-rose)]">
+                  {promotion.title}
+                </span>
+                <span className="text-[var(--color-gold)]/70">
+                  {summarizePromotion(promotion)}
+                </span>
+                {usage ? (
+                  <span className="text-[var(--color-gold)]/55">{usage}</span>
+                ) : null}
+                <span className="text-[var(--color-gold)]/50">
+                  {formatPromotionSchedule(promotion)}
+                </span>
               </span>
-              <span className="text-[var(--color-gold)]/70">
-                {summarizePromotion(promotion)}
-              </span>
-              <span className="text-[var(--color-gold)]/50">
-                {formatPromotionSchedule(promotion)}
-              </span>
-            </span>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

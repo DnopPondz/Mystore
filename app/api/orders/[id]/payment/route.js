@@ -48,12 +48,47 @@ function buildPreview(order) {
       })
     : [];
 
+  const promotionDiscount = Number(order.promotionDiscount || 0);
+  const promotions = Array.isArray(order.promotions)
+    ? order.promotions.map((promotion) => {
+        const plain =
+          typeof promotion.toObject === "function" ? promotion.toObject() : promotion;
+        const promoItems = Array.isArray(plain?.items)
+          ? plain.items.map((item) => ({
+              productId: item?.productId ? item.productId.toString() : item?.productId || null,
+              title: item?.title || "",
+              freeQty: Number(item?.freeQty || 0),
+              unitPrice: Number(item?.unitPrice || 0),
+              discount: Number(item?.discount || 0),
+            }))
+          : [];
+        return {
+          promotionId: plain?.promotionId ? plain.promotionId.toString() : null,
+          title: plain?.title || "",
+          summary: plain?.summary || "",
+          description: plain?.description || "",
+          type: plain?.type || "",
+          discount: Number(plain?.discount || 0),
+          freeQty: Number(plain?.freeQty || 0),
+          metadata: plain?.metadata || null,
+          items: promoItems,
+        };
+      })
+    : [];
+
+  const couponDiscount = order.coupon?.discount != null
+    ? Number(order.coupon.discount || 0)
+    : Math.max(0, Number(order.discount || 0) - promotionDiscount);
+
   return {
     items,
     subtotal: Number(order.subtotal || 0),
     discount: Number(order.discount || 0),
     total: Number(order.total || 0),
     coupon: order.coupon || null,
+    couponDiscount,
+    promotionDiscount,
+    promotions,
   };
 }
 

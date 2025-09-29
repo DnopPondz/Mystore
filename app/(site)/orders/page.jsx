@@ -291,6 +291,18 @@ export default function OrdersPage() {
                       </span>
                     ))}
                   </div>
+                  {promotionDiscount > 0 || couponDiscount > 0 ? (
+                    <div className="mt-2 text-xs text-[var(--color-choco)]/60">
+                      {promotionDiscount > 0 ? (
+                        <span>🎁 โปรโมชัน -{formatCurrency(promotionDiscount)}</span>
+                      ) : null}
+                      {couponDiscount > 0 ? (
+                        <span>
+                          {promotionDiscount > 0 ? " · " : ""}คูปอง -{formatCurrency(couponDiscount)}
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : null}
                   {paymentStatus === "unpaid" ? (
                     <div className="mt-4 text-xs font-semibold text-[var(--color-rose-dark)]/80">
                       แตะเพื่อแนบสลิปและยืนยันการชำระเงิน

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
 import QrBox from "@/components/QrBox";
@@ -50,16 +50,91 @@ export default function CheckoutPage() {
   const [slipName, setSlipName] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [reference, setReference] = useState("");
+  const promotionsLoading = Boolean(cart.promotions?.loading);
+  const promotionsError = cart.promotions?.error || "";
 
-  const currentTotals = order?.orderPreview ?? {
-    items: cart.items.map((it) => ({ ...it, lineTotal: (it.price || 0) * it.qty })),
-    subtotal: cart.subtotal,
-    discount: cart.coupon?.discount || 0,
-    total: cart.subtotal - (cart.coupon?.discount || 0),
-    coupon: cart.coupon
-      ? { code: cart.coupon.code, description: cart.coupon.description, discount: cart.coupon.discount }
-      : null,
-  };
+  const baseTotals = useMemo(() => {
+    const subtotal = Number(cart.subtotal || 0);
+    const promotionDiscount = Math.max(
+      0,
+      Number(cart.promotionDiscount ?? cart.promotions?.discount ?? 0),
+    );
+    const couponDiscount = Math.max(
+      0,
+      Number(cart.couponDiscount ?? cart.coupon?.discount ?? 0),
+    );
+    const rawTotalDiscount = Math.max(
+      0,
+      Number(cart.totalDiscount ?? couponDiscount + promotionDiscount),
+    );
+    const discount = Math.min(subtotal, rawTotalDiscount);
+    const total = Math.max(0, subtotal - discount);
+
+    return {
+      items: cart.items.map((it) => ({
+        ...it,
+        lineTotal: (Number(it.price) || 0) * Number(it.qty || 0),
+      })),
+      subtotal,
+      discount,
+      total,
+      coupon: cart.coupon
+        ? {
+            code: cart.coupon.code,
+            description: cart.coupon.description,
+            discount: couponDiscount,
+          }
+        : null,
+      couponDiscount,
+      promotionDiscount,
+      promotions: cart.promotions?.applied || [],
+    };
+  }, [
+    cart.items,
+    cart.subtotal,
+    cart.coupon,
+    cart.promotions,
+    cart.couponDiscount,
+    cart.promotionDiscount,
+    cart.totalDiscount,
+  ]);
+
+  const currentTotals = order?.orderPreview
+    ? {
+        ...order.orderPreview,
+        couponDiscount: Number(
+          order.orderPreview.couponDiscount ??
+            order.orderPreview.coupon?.discount ??
+            0,
+        ),
+        promotionDiscount: Number(order.orderPreview.promotionDiscount || 0),
+        promotions: order.orderPreview.promotions || [],
+      }
+    : baseTotals;
+
+  const promotionItems = currentTotals.promotions || [];
+
+  const freebiesByProduct = useMemo(() => {
+    const map = new Map();
+    promotionItems.forEach((promotion) => {
+      (promotion.items || []).forEach((item) => {
+        const productId = item.productId;
+        if (!productId) return;
+        const key = String(productId);
+        const prev = map.get(key) || { qty: 0, discount: 0, titles: [] };
+        const freeQty = Number(item.freeQty || 0);
+        const discount = Number(item.discount || 0);
+        const label = promotion.title || promotion.summary || "โปรโมชั่น";
+        const titles = prev.titles.includes(label) ? prev.titles : [...prev.titles, label];
+        map.set(key, {
+          qty: prev.qty + freeQty,
+          discount: prev.discount + discount,
+          titles,
+        });
+      });
+    });
+    return map;
+  }, [promotionItems]);
 
   useEffect(() => {
     if (order?.orderPreview?.total != null) {
@@ -351,27 +426,57 @@ export default function CheckoutPage() {
             <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">สรุปรายการ</h2>
               <div className="mt-4 space-y-3 text-sm">
-                {currentTotals.items.map((it) => (
-                  <div key={`${it.productId}-${it.title}`} className="flex justify-between">
-                    <span>
-                      {it.title} × {it.qty}
-                    </span>
-                    <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
-                  </div>
-                ))}
+                {currentTotals.items.map((it) => {
+                  const bonus = freebiesByProduct.get(String(it.productId));
+                  return (
+                    <div key={`${it.productId}-${it.title}`} className="flex flex-col gap-1">
+                      <div className="flex justify-between">
+                        <span>
+                          {it.title} × {it.qty}
+                        </span>
+                        <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
+                      </div>
+                      {bonus?.qty ? (
+                        <div className="flex justify-between text-xs text-[var(--color-rose)]/85">
+                          <span>
+                            รับฟรี {bonus.qty} ชิ้นจากโปร {bonus.titles.join(", ")}
+                          </span>
+                          <span>-฿{fmt(bonus.discount)}</span>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
               </div>
               <div className="mt-4 space-y-2 border-t border-[var(--color-rose)]/30 pt-4 text-sm">
                 <div className="flex justify-between text-[var(--color-choco)]/80">
                   <span>รวม</span>
                   <span>฿{fmt(currentTotals.subtotal)}</span>
                 </div>
-                {currentTotals.discount ? (
+                {currentTotals.promotionDiscount ? (
+                  <div className="flex justify-between text-[var(--color-rose)]/85">
+                    <span>ส่วนลดโปรโมชันอัตโนมัติ</span>
+                    <span>-฿{fmt(currentTotals.promotionDiscount)}</span>
+                  </div>
+                ) : null}
+                {!currentTotals.promotionDiscount && promotionsLoading ? (
+                  <div className="flex justify-between text-xs text-[var(--color-choco)]/60">
+                    <span>กำลังตรวจสอบโปรโมชัน...</span>
+                    <span className="font-semibold text-[var(--color-choco)]/70">รอสักครู่</span>
+                  </div>
+                ) : null}
+                {promotionsError && !currentTotals.promotionDiscount && !promotionsLoading ? (
+                  <div className="rounded-2xl bg-rose-500/15 px-3 py-2 text-xs text-rose-200">
+                    {promotionsError}
+                  </div>
+                ) : null}
+                {currentTotals.couponDiscount ? (
                   <div className="flex justify-between text-[var(--color-gold)]">
                     <span>
                       คูปอง {currentTotals.coupon?.code}
                       {currentTotals.coupon?.description ? ` (${currentTotals.coupon.description})` : ""}
                     </span>
-                    <span>-฿{fmt(currentTotals.discount)}</span>
+                    <span>-฿{fmt(currentTotals.couponDiscount)}</span>
                   </div>
                 ) : null}
                 <div className="flex justify-between text-base font-semibold text-[var(--color-rose-dark)]">
@@ -379,6 +484,24 @@ export default function CheckoutPage() {
                   <span>฿{fmt(currentTotals.total)}</span>
                 </div>
               </div>
+              {currentTotals.promotions?.length ? (
+                <div className="mt-4 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/40 px-4 py-3 text-xs text-[var(--color-text)]/80">
+                  <h3 className="text-sm font-semibold text-[var(--color-gold)]">โปรโมชันที่ใช้ในคำสั่งซื้อนี้</h3>
+                  <ul className="mt-2 space-y-2">
+                    {currentTotals.promotions.map((promo, idx) => (
+                      <li key={`${promo.promotionId || promo.id || promo.title || "promo"}-${idx}`} className="flex flex-col gap-1">
+                        <div className="flex items-center justify-between gap-3">
+                          <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
+                          <span className="font-semibold text-[var(--color-rose)]">-฿{fmt(promo.discount)}</span>
+                        </div>
+                        {promo.freeQty ? (
+                          <span className="text-[var(--color-text)]/60">รับฟรี {promo.freeQty} ชิ้น</span>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
 
             <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur space-y-4">
