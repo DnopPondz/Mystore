@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[#3a1010]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-cream-soft)]" />
       <div className="absolute -top-24 left-16 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
       <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 

@@ -3,29 +3,46 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
-/* ---------- Shared UI (match Products page) ---------- */
+const surfaceClass =
+  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] p-8 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.45)]";
+const tableShellClass =
+  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFFBF7] shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)] overflow-hidden";
+
 function StatBubble({ label, value, color }) {
-  const colorConfig = {
-    blue: { bg: "bg-[#E6F3FF]/60", border: "border-[#87CEEB]/40", accent: "bg-[#87CEEB]/20" },
-    green: { bg: "bg-[#F0F8E6]/60", border: "border-[#98FB98]/40", accent: "bg-[#98FB98]/20" },
-    orange: { bg: "bg-[#FFF8E1]/60", border: "border-[#FFB74D]/40", accent: "bg-[#FFB74D]/20" },
-    purple: { bg: "bg-[#F5F0FF]/60", border: "border-[#DDA0DD]/40", accent: "bg-[#DDA0DD]/20" },
+  const palette = {
+    blue: {
+      bg: "bg-[#F1F6FE]",
+      border: "border-[#C8DBF5]",
+      accent: "text-[#2B6AA3]",
+    },
+    green: {
+      bg: "bg-[#F0F9ED]",
+      border: "border-[#C3E7C4]",
+      accent: "text-[#2F7A3D]",
+    },
+    orange: {
+      bg: "bg-[#FFF4E5]",
+      border: "border-[#F5D4A6]",
+      accent: "text-[#C46A1C]",
+    },
+    purple: {
+      bg: "bg-[#F8F2FF]",
+      border: "border-[#DCC7F0]",
+      accent: "text-[#7A4CB7]",
+    },
   };
-  const config = colorConfig[color] || colorConfig.blue;
+  const tone = palette[color] || palette.blue;
   return (
-    <div className={`relative overflow-hidden rounded-[1.5rem] border ${config.border} ${config.bg} p-4 shadow-sm hover:shadow-md transition-shadow backdrop-blur`}>
-      <div className={`absolute -right-4 -top-4 h-16 w-16 rounded-full ${config.accent}`} />
-      <div className="relative">
-        <p className="text-xs uppercase tracking-wide text-[#8B4513]/60 font-semibold">{label}</p>
-        <p className="mt-2 text-xl font-bold text-[#8B4513]">{value}</p>
-      </div>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+      <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
+      <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>
   );
 }
 
 function Field({ label, required, children }) {
   return (
-    <label className="block text-sm font-medium text-[#8B4513]/80">
+    <label className="block text-sm font-medium text-[#3F2A1A]">
       <span className="mb-2 block">
         {label}
         {required ? <span className="ml-1 text-red-500">*</span> : null}
@@ -35,19 +52,18 @@ function Field({ label, required, children }) {
   );
 }
 
-// Same sliding toggle as Products page
 function SlidingToggle({ isActive, onToggle, disabled = false }) {
   return (
     <button
       onClick={onToggle}
       disabled={disabled}
-      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#D2691E] focus:ring-offset-2 ${
-        isActive ? "bg-[#228B22]" : "bg-gray-300"
+      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#C67C45] focus:ring-offset-2 ${
+        isActive ? "bg-[#2F7A3D]" : "bg-[#D4D4D8]"
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       title={isActive ? "คลิกเพื่อปิดการใช้งาน" : "คลิกเพื่อเปิดใช้งาน"}
     >
       <span
-        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition-transform duration-300 ${
+        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform duration-300 ${
           isActive ? "translate-x-7" : "translate-x-1"
         }`}
       >
@@ -59,10 +75,9 @@ function SlidingToggle({ isActive, onToggle, disabled = false }) {
   );
 }
 
-/* ---------- Helpers ---------- */
 const emptyCoupon = {
   code: "",
-  type: "percent", // percent | amount
+  type: "percent",
   value: 10,
   minSubtotal: 0,
   expiresAt: "",
@@ -74,7 +89,6 @@ function formatCurrency(value) {
   return `฿${amount.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-/* ---------- Page ---------- */
 export default function AdminCouponsPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,9 +211,7 @@ export default function AdminCouponsPage() {
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) return items;
-    return items.filter((c) =>
-      `${c.code} ${c.type} ${c.value} ${c.minSubtotal}`.toLowerCase().includes(term)
-    );
+    return items.filter((c) => `${c.code} ${c.type} ${c.value} ${c.minSubtotal}`.toLowerCase().includes(term));
   }, [items, search]);
 
   const activeCount = filtered.filter((c) => c.active).length;
@@ -207,15 +219,12 @@ export default function AdminCouponsPage() {
   const amountCount = filtered.filter((c) => c.type === "amount").length;
 
   return (
-    <main className="space-y-8">
-      {/* Header Section (match products) */}
-      <section className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-xl shadow-[rgba(139,69,19,0.2)] backdrop-blur">
+    <main className="space-y-8 text-[#3F2A1A]">
+      <section className={surfaceClass}>
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[#8B4513]">จัดการคูปอง</h2>
-            <p className="mt-1 text-[#8B4513]/70">
-              สร้าง/แก้ไข และเปิดปิดการใช้งานคูปองให้ตรงกับกลยุทธ์การขาย
-            </p>
+            <h2 className="text-2xl font-bold text-[#3F2A1A]">จัดการคูปอง</h2>
+            <p className="mt-1 text-[#6F4A2E]">สร้าง/แก้ไข และเปิดปิดการใช้งานคูปองให้ตรงกับกลยุทธ์การขาย</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
@@ -224,14 +233,12 @@ export default function AdminCouponsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาโค้ด ประเภท หรือมูลค่า"
-                className="w-60 rounded-full border border-[#D2691E]/30 bg-white/70 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
               />
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8B4513]/50">
-                🔍
-              </span>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
             </div>
             <button
-              className="inline-flex items-center gap-2 rounded-full bg-[#D2691E] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(139,69,19,0.25)] transition hover:bg-[#8B4513]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-5 py-2 text-sm font-semibold text-white shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)] transition hover:bg-[#714528]"
               onClick={startCreate}
             >
               🎉 สร้างคูปองใหม่
@@ -239,7 +246,6 @@ export default function AdminCouponsPage() {
           </div>
         </div>
 
-        {/* Stats (use StatBubble like products) */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatBubble label="คูปองทั้งหมด" value={filtered.length} color="blue" />
           <StatBubble label="เปิดใช้งาน" value={activeCount} color="green" />
@@ -248,69 +254,63 @@ export default function AdminCouponsPage() {
         </div>
       </section>
 
-      {/* Table/Card Section (match products) */}
-      <section className="rounded-[2rem] border border-white/70 bg-white/80 shadow-xl shadow-[rgba(139,69,19,0.15)] backdrop-blur overflow-hidden">
-        <header className="flex flex-col gap-2 border-b border-white/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+      <section className={tableShellClass}>
+        <header className="flex flex-col gap-2 border-b border-[#F3E0C7] bg-[#FFF4E5]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-[#8B4513]">รายการคูปอง</h3>
-            <p className="text-xs text-[#8B4513]/60">แก้ไขเงื่อนไขและเปิด/ปิดการใช้งานได้ทันที</p>
+            <h3 className="text-lg font-bold text-[#3F2A1A]">รายการคูปอง</h3>
+            <p className="text-xs text-[#6F4A2E]">แก้ไขเงื่อนไขและเปิด/ปิดการใช้งานได้ทันที</p>
           </div>
-          <span className="text-xs font-medium uppercase tracking-wide text-[#8B4513]/50">
-            {filtered.length} รายการที่แสดง
-          </span>
+          <span className="text-xs font-medium uppercase tracking-wide text-[#8A5A33]">{filtered.length} รายการที่แสดง</span>
         </header>
 
         {loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="flex items-center gap-3">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#D2691E] border-t-transparent"></div>
-              <span className="text-sm text-[#8B4513]/70">กำลังโหลดข้อมูลคูปอง...</span>
+            <div className="flex items-center gap-3 text-sm text-[#6F4A2E]">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
+              <span>กำลังโหลดข้อมูลคูปอง...</span>
             </div>
           </div>
         )}
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] bg-red-50 border border-red-200 px-6 py-4 text-center">
-              <span className="text-2xl mb-2 block">⚠️</span>
-              <span className="text-sm text-red-600">{err}</span>
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+              <span className="mb-2 block text-2xl">⚠️</span>
+              <span>{err}</span>
             </div>
           </div>
         )}
 
         {!loading && !err && (
           <div className="overflow-hidden">
-            {/* Mobile Cards */}
-            <div className="block lg:hidden p-4 space-y-4">
+            <div className="block space-y-4 p-4 lg:hidden">
               {filtered.length === 0 ? (
-                <div className="text-center py-8">
-                  <span className="text-4xl mb-4 block">🎟️</span>
-                  <span className="text-[#8B4513]/60">ไม่พบคูปองที่ตรงกับคำค้นหา</span>
+                <div className="py-8 text-center text-[#6F4A2E]">
+                  <span className="mb-4 block text-4xl">🎟️</span>
+                  <span>ไม่พบคูปองที่ตรงกับคำค้นหา</span>
                 </div>
               ) : (
                 filtered.map((c) => (
-                  <div key={c._id} className="rounded-[1.5rem] bg-white/90 border border-white/60 p-4 shadow-sm">
+                  <div key={c._id} className="rounded-[1.5rem] border border-[#F3E0C7] bg-white p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h4 className="font-semibold text-[#8B4513] truncate">{c.code}</h4>
-                        <p className="text-xs text-[#8B4513]/50">
+                        <h4 className="truncate font-semibold text-[#3F2A1A]">{c.code}</h4>
+                        <p className="text-xs text-[#6F4A2E]">
                           {c.type === "percent" ? `ส่วนลด ${c.value}%` : `ส่วนลด ${formatCurrency(c.value)}`}
                         </p>
-                        <div className="mt-2 text-sm text-[#8B4513]/80">
-                          ขั้นต่ำ: {formatCurrency(c.minSubtotal)}
-                        </div>
-                        <div className="text-xs text-[#8B4513]/60 mt-1">
+                        <div className="mt-2 text-sm text-[#5B3A21]">ขั้นต่ำ: {formatCurrency(c.minSubtotal)}</div>
+                        <div className="mt-1 text-xs text-[#6F4A2E]">
                           หมดอายุ: {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <div className="flex items-center gap-2">
                           <SlidingToggle isActive={c.active} onToggle={() => toggleActive(c)} />
-                          <span className="text-xs text-[#8B4513]/70">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
+                          <span className="text-xs text-[#6F4A2E]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
                         </div>
                         <div className="flex gap-2">
                           <button
-                            className="rounded-full border border-[#D2691E]/30 px-3 py-1 text-xs font-semibold text-[#D2691E] transition hover:bg-[#D2691E]/10"
+                            className="rounded-full border border-[#E2C39A] px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
                             onClick={() => startEdit(c)}
                           >
                             แก้ไข
@@ -329,27 +329,26 @@ export default function AdminCouponsPage() {
               )}
             </div>
 
-            {/* Desktop Table */}
-            <div className="hidden lg:block overflow-x-auto">
+            <div className="hidden overflow-x-auto lg:block">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="bg-[#F5DEB3]/30 border-b border-white/40">
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">โค้ด</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">ประเภท</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">มูลค่า</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">ขั้นต่ำ</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">หมดอายุ</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#8B4513]">สถานะ</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#8B4513]">จัดการ</th>
+                  <tr className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">โค้ด</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ประเภท</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">มูลค่า</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ขั้นต่ำ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">หมดอายุ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สถานะ</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/40">
+                <tbody className="divide-y divide-[#F3E0C7]">
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center">
+                      <td colSpan={7} className="px-6 py-12 text-center text-[#6F4A2E]">
                         <div className="flex flex-col items-center">
-                          <span className="text-4xl mb-4">🎟️</span>
-                          <span className="text-[#8B4513]/60">ไม่พบคูปองที่ตรงกับคำค้นหา</span>
+                          <span className="mb-4 text-4xl">🎟️</span>
+                          <span>ไม่พบคูปองที่ตรงกับคำค้นหา</span>
                         </div>
                       </td>
                     </tr>
@@ -357,37 +356,33 @@ export default function AdminCouponsPage() {
                     filtered.map((c, idx) => (
                       <tr
                         key={c._id}
-                        className={`transition-colors hover:bg-white/70 ${
-                          idx % 2 === 0 ? "bg-white/50" : "bg-[#FFF8DC]/30"
-                        }`}
+                        className={`${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} transition-colors hover:bg-[#FFEFD8]`}
                       >
-                        <td className="px-6 py-4 font-semibold text-[#8B4513]">{c.code}</td>
-                        <td className="px-6 py-4 text-[#8B4513]">{c.type}</td>
-                        <td className="px-6 py-4 text-[#8B4513]">
+                        <td className="px-6 py-4 font-semibold text-[#3F2A1A]">{c.code}</td>
+                        <td className="px-6 py-4 text-[#5B3A21]">{c.type}</td>
+                        <td className="px-6 py-4 text-[#5B3A21]">
                           {c.type === "percent" ? `${c.value}%` : formatCurrency(c.value)}
                         </td>
-                        <td className="px-6 py-4 text-[#8B4513]">{formatCurrency(c.minSubtotal)}</td>
-                        <td className="px-6 py-4 text-xs text-[#8B4513]/70">
+                        <td className="px-6 py-4 text-[#5B3A21]">{formatCurrency(c.minSubtotal)}</td>
+                        <td className="px-6 py-4 text-xs text-[#6F4A2E]">
                           {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <SlidingToggle isActive={c.active} onToggle={() => toggleActive(c)} />
-                            <span className="text-xs text-[#8B4513]/70">
-                              {c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}
-                            </span>
+                            <span className="text-xs text-[#6F4A2E]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex justify-end gap-2">
                             <button
-                              className="rounded-full border border-[#D2691E]/30 px-4 py-1 text-xs font-semibold text-[#D2691E] transition hover:border-[#D2691E] hover:bg-[#D2691E]/10"
+                              className="rounded-full border border-[#E2C39A] px-4 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
                               onClick={() => startEdit(c)}
                             >
                               แก้ไข
                             </button>
                             <button
-                              className="rounded-full border border-red-200 px-4 py-1 text-xs font-semibold text-red-500 transition hover:border-red-400 hover:bg-red-50"
+                              className="rounded-full border border-red-200 px-4 py-1 text-xs font-semibold text-red-500 transition hover:bg-red-50"
                               onClick={() => onDelete(c)}
                             >
                               ลบ
@@ -404,21 +399,16 @@ export default function AdminCouponsPage() {
         )}
       </section>
 
-      {/* Modal (match products) */}
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/80 bg-white/95 shadow-2xl shadow-[rgba(139,69,19,0.3)] backdrop-blur">
-            <div className="flex items-center justify-between border-b border-white/60 bg-[#F5DEB3]/20 px-6 py-4">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
+            <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
               <div>
-                <h3 className="text-lg font-bold text-[#8B4513]">
-                  {editing?._id ? "แก้ไขคูปอง" : "สร้างคูปองใหม่"}
-                </h3>
-                <p className="text-xs text-[#8B4513]/60">
-                  กำหนดรายละเอียดและเงื่อนไขคูปองให้เหมาะกับแคมเปญของคุณ
-                </p>
+                <h3 className="text-lg font-bold text-[#3F2A1A]">{editing?._id ? "แก้ไขคูปอง" : "สร้างคูปองใหม่"}</h3>
+                <p className="text-xs text-[#6F4A2E]">กำหนดรายละเอียดและเงื่อนไขคูปองให้เหมาะกับแคมเปญของคุณ</p>
               </div>
               <button
-                className="rounded-full border border-[#8B4513]/20 bg-white px-3 py-1 text-xs font-semibold text-[#8B4513]/70 transition hover:border-[#8B4513]/30 hover:text-[#8B4513]"
+                className="rounded-full border border-[#E2C39A] bg-white px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
                 onClick={() => setEditing(null)}
               >
                 ปิด
@@ -429,7 +419,7 @@ export default function AdminCouponsPage() {
               <div className="space-y-4">
                 <Field label="รหัสคูปอง" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.code}
                     onChange={(e) =>
                       setForm((f) => ({ ...f, code: e.target.value.toUpperCase().replace(/\s+/g, "") }))
@@ -440,7 +430,7 @@ export default function AdminCouponsPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="ประเภทส่วนลด">
                     <select
-                      className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.type}
                       onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
                     >
@@ -451,7 +441,7 @@ export default function AdminCouponsPage() {
                   <Field label="มูลค่าส่วนลด">
                     <input
                       type="number"
-                      className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.value}
                       onChange={(e) => setForm((f) => ({ ...f, value: Number(e.target.value || 0) }))}
                     />
@@ -460,7 +450,7 @@ export default function AdminCouponsPage() {
                 <Field label="ยอดสั่งซื้อขั้นต่ำ (บาท)">
                   <input
                     type="number"
-                    className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.minSubtotal}
                     onChange={(e) => setForm((f) => ({ ...f, minSubtotal: Number(e.target.value || 0) }))}
                   />
@@ -471,30 +461,27 @@ export default function AdminCouponsPage() {
                 <Field label="วันหมดอายุ">
                   <input
                     type="datetime-local"
-                    className="w-full rounded-[1rem] border border-[#D2691E]/20 bg-white/80 px-4 py-2 text-sm text-[#8B4513] shadow-inner focus:border-[#D2691E] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.expiresAt}
                     onChange={(e) => setForm((f) => ({ ...f, expiresAt: e.target.value }))}
                   />
                 </Field>
 
                 <div className="flex items-center gap-3">
-                  <SlidingToggle
-                    isActive={form.active}
-                    onToggle={() => setForm((f) => ({ ...f, active: !f.active }))}
-                  />
-                  <label className="text-sm font-medium text-[#8B4513]/80">เปิดใช้งานคูปองทันที</label>
+                  <SlidingToggle isActive={form.active} onToggle={() => setForm((f) => ({ ...f, active: !f.active }))} />
+                  <label className="text-sm font-medium text-[#3F2A1A]">เปิดใช้งานคูปองทันที</label>
                 </div>
 
                 <div className="flex flex-wrap justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    className="rounded-full border border-[#8B4513]/20 px-5 py-2 text-sm font-semibold text-[#8B4513]/70 transition hover:border-[#8B4513]/40 hover:text-[#8B4513]"
+                    className="rounded-full border border-[#E2C39A] px-5 py-2 text-sm font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
                     onClick={() => setEditing(null)}
                   >
                     ยกเลิก
                   </button>
                   <button
-                    className="inline-flex items-center gap-2 rounded-full bg-[#D2691E] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(139,69,19,0.25)] transition hover:bg-[#8B4513] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-5 py-2 text-sm font-semibold text-white shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)] transition hover:bg-[#714528] disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={saving}
                   >
                     {saving ? "กำลังบันทึก..." : editing?._id ? "บันทึกการแก้ไข" : "สร้างคูปอง"}
@@ -508,3 +495,4 @@ export default function AdminCouponsPage() {
     </main>
   );
 }
+

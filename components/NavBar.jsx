@@ -3,14 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 
 const navItems = [
   { href: "/", label: "หน้าหลัก" },
   { href: "/about", label: "เกี่ยวกับเรา" },
   { href: "/preorder", label: "สั่งทำพิเศษ" },
-   { href: "/orders", label: "คำสั่งซื้อ" },
   {
     href: "/cart",
     label: "ตะกร้า",
@@ -18,17 +17,31 @@ const navItems = [
     // icon: "/images/paper-bag.svg",
     iconAlt: "ตะกร้าสินค้า",
   },
- 
 ];
 
 export default function NavBar() {
   const path = usePathname();
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     setMenuOpen(false);
+    setUserMenuOpen(false);
   }, [path]);
+
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    function handleClickOutside(event) {
+      if (!userMenuRef.current) return;
+      if (!userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    }
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  }, [userMenuOpen]);
 
   useEffect(() => {
     if (menuOpen) {
@@ -191,18 +204,66 @@ export default function NavBar() {
                       จัดการร้าน
                     </Link>
                   )}
-                  <span
-                    className="px-5 py-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/50 text-[var(--color-gold)]/90 font-medium shadow-inner"
-                    style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}
-                  >
-                    {session?.user?.name || session?.user?.email}
-                  </span>
-                  <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    className="px-4 py-2 rounded-full font-medium text-white bg-red-500/80 shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
-                  >
-                    ออกจากระบบ
-                  </button>
+                  <div className="relative" ref={userMenuRef}>
+                    <button
+                      type="button"
+                      onClick={() => setUserMenuOpen((v) => !v)}
+                      className="flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 px-4 py-2 text-[var(--color-gold)]/90 shadow-inner transition hover:border-[var(--color-rose)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}
+                      aria-expanded={userMenuOpen}
+                      aria-haspopup="menu"
+                    >
+                      <span className="max-w-[9rem] truncate text-left font-medium">
+                        {session?.user?.name || session?.user?.email}
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className={`h-4 w-4 transition-transform ${userMenuOpen ? "rotate-180" : "rotate-0"}`}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+                      </svg>
+                    </button>
+                    {userMenuOpen && (
+                      <div
+                        role="menu"
+                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/95 p-2 text-[var(--color-gold)] shadow-2xl shadow-black/40 backdrop-blur"
+                      >
+                        <Link
+                          href="/profile"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                          role="menuitem"
+                        >
+                          <span className="text-lg">👤</span>
+                          โปรไฟล์ของฉัน
+                        </Link>
+                        <Link
+                          href="/orders"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                          role="menuitem"
+                        >
+                          <span className="text-lg">🧾</span>
+                          คำสั่งซื้อของฉัน
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            signOut({ callbackUrl: "/" });
+                          }}
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-red-200 transition hover:bg-red-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
+                          role="menuitem"
+                        >
+                          <span className="text-lg">🚪</span>
+                          ออกจากระบบ
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -254,17 +315,35 @@ export default function NavBar() {
                 {session?.user?.role === "admin" && (
                   <Link
                     href="/admin"
+                    onClick={() => setMenuOpen(false)}
                     className="px-4 py-2 rounded-full font-medium text-[var(--color-rose)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                   >
                     จัดการร้าน
                   </Link>
                 )}
-                <span className="px-5 py-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 text-[var(--color-gold)]/90 font-medium shadow-inner"
-      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}>
-  {session?.user?.name || session?.user?.email}
-</span>
+                <div className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-4 text-sm text-[var(--color-gold)]/90 shadow-inner">
+                  <p className="font-semibold">{session?.user?.name || session?.user?.email}</p>
+                  <p className="mt-1 text-xs text-[var(--color-gold)]/70">{session?.user?.email}</p>
+                </div>
+                <Link
+                  href="/profile"
+                  onClick={() => setMenuOpen(false)}
+                  className="px-4 py-2 rounded-full font-medium text-[var(--color-gold)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                >
+                  โปรไฟล์ของฉัน
+                </Link>
+                <Link
+                  href="/orders"
+                  onClick={() => setMenuOpen(false)}
+                  className="px-4 py-2 rounded-full font-medium text-[var(--color-gold)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                >
+                  คำสั่งซื้อของฉัน
+                </Link>
                 <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    signOut({ callbackUrl: "/" });
+                  }}
                   className="px-4 py-2 rounded-full font-medium text-white bg-red-500/80 shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
                 >
                   ออกจากระบบ

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { PreOrder } from "@/models/PreOrder";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { Types } from "mongoose";
 
 function sanitizeText(value) {
   return String(value || "").trim();
@@ -24,6 +27,7 @@ export async function POST(request) {
   const flavourIdeas = sanitizeText(payload.flavourIdeas);
   const notes = sanitizeText(payload.notes);
   const preferredContact = sanitizeText(payload.preferredContact || "phone");
+  const requestedProduct = sanitizeText(payload.productId || payload.requestedProduct || "");
 
   if (!name || !phone || !flavourIdeas) {
     return NextResponse.json(
@@ -47,10 +51,18 @@ export async function POST(request) {
       : "phone",
   };
 
+  if (requestedProduct && Types.ObjectId.isValid(requestedProduct)) {
+    data.requestedProduct = requestedProduct;
+  }
+
   let stored = false;
 
   try {
     await connectToDatabase();
+    const session = await getServerSession(authOptions);
+    if (session?.user?.id && Types.ObjectId.isValid(session.user.id)) {
+      data.userId = session.user.id;
+    }
     await PreOrder.create(data);
     stored = true;
   } catch (error) {

@@ -10,6 +10,17 @@ const ProductSchema = new Schema(
     stock: Number,
     active: { type: Boolean, default: true },
     tags: [String],
+    saleMode: {
+      type: String,
+      enum: ["regular", "preorder", "both"],
+      default: "regular",
+    },
+    preorderDepositType: {
+      type: String,
+      enum: ["full", "half"],
+      default: "full",
+    },
+    preorderNote: { type: String, default: "" },
   },
   { timestamps: true }
 );

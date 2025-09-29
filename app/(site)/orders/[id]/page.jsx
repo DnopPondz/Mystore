@@ -48,6 +48,13 @@ function fmt(n) {
   return Number(n || 0).toLocaleString("th-TH");
 }
 
+function formatCurrency(value) {
+  return `฿${Number(value || 0).toLocaleString("th-TH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 function normalizeStatus(status) {
   const map = { preparing: "pending", shipped: "shipping", done: "success", cancelled: "cancel" };
   return map[status] || status;
@@ -159,6 +166,16 @@ export default function OrderDetailPage() {
   const amountDue = Number(order?.total || 0);
   const awaitingReview = paymentStatus === "verifying";
   const needsAmountInput = amountDue > 0;
+  const isPreorder = Boolean(order?.preorder);
+  const planLabel = order?.preorder?.paymentPlan === "half"
+    ? "มัดจำ 50%"
+    : order?.preorder?.paymentPlan === "full"
+    ? "ชำระเต็มจำนวน"
+    : null;
+  const quotedTotal = Number(order?.preorder?.quotedTotal ?? amountDue);
+  const depositAmount = Number(order?.preorder?.depositAmount ?? amountDue);
+  const balanceAmount = Number(order?.preorder?.balanceAmount ?? 0);
+  const preorderSummary = order?.preorder?.summary || "";
 
   useEffect(() => {
     if (!order) return;
@@ -395,6 +412,12 @@ export default function OrderDetailPage() {
             <p className="mt-1 text-sm text-[var(--color-text)]/70">
               อัปเดตล่าสุดเมื่อ {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : "-"}
             </p>
+            {isPreorder ? (
+              <div className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-full bg-[var(--color-rose)]/15 px-4 py-1.5 text-xs font-semibold text-[var(--color-rose-dark)]">
+                🗓️ คำสั่งซื้อแบบ Pre-order
+                {planLabel ? <span className="rounded-full bg-white/50 px-2 py-0.5 text-[var(--color-burgundy-dark)]">{planLabel}</span> : null}
+              </div>
+            ) : null}
           </div>
           <Link
             href="/orders"
@@ -451,6 +474,28 @@ export default function OrderDetailPage() {
                 </div>
               ) : null}
             </div>
+
+            {isPreorder ? (
+              <div className="mt-4 space-y-3 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/30 px-4 py-3 text-sm text-[var(--color-text)]/75">
+                {preorderSummary ? (
+                  <p className="text-xs text-[var(--color-text)]/65">{preorderSummary}</p>
+                ) : null}
+                <div className="flex items-center justify-between">
+                  <span>ยอดใบเสนอราคา</span>
+                  <span className="font-semibold text-[var(--color-rose)]">{formatCurrency(quotedTotal)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>{planLabel === "มัดจำ 50%" ? "ยอดมัดจำรอบแรก" : "ยอดที่ต้องชำระ"}</span>
+                  <span className="font-semibold text-[var(--color-rose-dark)]">{formatCurrency(depositAmount)}</span>
+                </div>
+                {balanceAmount > 0 ? (
+                  <div className="flex items-center justify-between text-xs text-[var(--color-text)]/70">
+                    <span>ยอดคงเหลือที่ต้องชำระต่อ</span>
+                    <span className="font-semibold text-[var(--color-choco)]">{formatCurrency(balanceAmount)}</span>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
 
             {order.payment?.slip ? (
               <div className="mt-6">
@@ -713,19 +758,38 @@ export default function OrderDetailPage() {
             <div className="rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/60 p-6 shadow-2xl shadow-black/40 backdrop-blur">
               <h2 className="text-lg font-semibold text-[var(--color-choco)]">รายละเอียดยอดชำระ</h2>
               <div className="mt-4 space-y-3 text-sm text-[var(--color-choco)]/80">
+                {isPreorder ? (
+                  <>
+                    <div className="flex justify-between">
+                      <span>ยอดใบเสนอราคา</span>
+                      <span className="font-semibold text-[var(--color-rose)]">{formatCurrency(quotedTotal)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>{planLabel === "มัดจำ 50%" ? "ยอดมัดจำรอบแรก" : "ยอดที่ต้องชำระ"}</span>
+                      <span className="font-semibold text-[var(--color-rose-dark)]">{formatCurrency(depositAmount)}</span>
+                    </div>
+                    {balanceAmount > 0 ? (
+                      <div className="flex justify-between text-xs text-[var(--color-choco)]/65">
+                        <span>ยอดคงเหลือที่ต้องจ่ายต่อ</span>
+                        <span className="font-semibold text-[var(--color-choco)]">{formatCurrency(balanceAmount)}</span>
+                      </div>
+                    ) : null}
+                    <div className="h-px bg-[var(--color-rose)]/20" />
+                  </>
+                ) : null}
                 <div className="flex justify-between">
                   <span>รวม</span>
-                  <span>฿{order.subtotal}</span>
+                  <span>{formatCurrency(order.subtotal)}</span>
                 </div>
                 {order.discount ? (
                   <div className="flex justify-between text-[var(--color-gold)]">
                     <span>ส่วนลด</span>
-                    <span>-฿{order.discount}</span>
+                    <span>-{formatCurrency(order.discount)}</span>
                   </div>
                 ) : null}
                 <div className="flex justify-between text-base font-semibold text-[var(--color-rose-dark)]">
                   <span>ยอดสุทธิ</span>
-                  <span>฿{order.total}</span>
+                  <span>{formatCurrency(order.total)}</span>
                 </div>
               </div>
             </div>
@@ -763,7 +827,9 @@ export default function OrderDetailPage() {
                       <div className="font-medium text-[var(--color-choco)]">{it.title}</div>
                       <div className="text-xs text-[var(--color-choco)]/60">จำนวน {it.qty}</div>
                     </div>
-                    <div className="text-sm font-semibold text-[var(--color-rose-dark)]">฿{(it.price || 0) * (it.qty || 0)}</div>
+                    <div className="text-sm font-semibold text-[var(--color-rose-dark)]">
+                      {formatCurrency((it.price || 0) * (it.qty || 0))}
+                    </div>
                   </div>
                 ))}
               </div>
