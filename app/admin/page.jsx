@@ -1,5 +1,12 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import {
+  adminAccentButton,
+  adminInsetCardShell,
+  adminSoftBadge,
+  adminSubSurfaceShell,
+  adminSurfaceShell,
+} from "@/app/admin/theme";
 
 const statusChips = [
   { key: "todaySales", label: "ยอดขายวันนี้", prefix: "฿" },
@@ -7,11 +14,6 @@ const statusChips = [
   { key: "newOrders", label: "ออเดอร์ใหม่", prefix: "" },
   { key: "lowStock", label: "สินค้าใกล้หมด", prefix: "" },
 ];
-
-const surfaceClass =
-  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] p-8 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.45)]";
-const subSurfaceClass =
-  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFFBF7] p-6 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)]";
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
@@ -62,7 +64,7 @@ export default function AdminDashboardPage() {
     );
   if (!data)
     return (
-      <section className="rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] p-6 text-[#5B3A21] shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)]">
+      <section className={`${adminSurfaceShell} p-6 text-[#5B3A21]`}>
         <div className="flex items-center gap-3">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#D2691E] border-t-transparent" />
           <span>กำลังโหลดข้อมูลร้าน...</span>
@@ -75,7 +77,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 text-[#3F2A1A]">
       {/* Header Section */}
-      <section className={surfaceClass}>
+      <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 className="text-3xl font-bold text-[#3F2A1A]">ภาพรวมร้านวันนี้</h2>
@@ -87,7 +89,7 @@ export default function AdminDashboardPage() {
             {statusChips.map((chip) => (
               <div
                 key={chip.key}
-                className="inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/80 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]"
+                className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]`}
               >
                 <span className="font-medium text-[#8A5A33]">{chip.label}</span>
                 <span className="font-semibold text-[#3F2A1A]">
@@ -133,7 +135,7 @@ export default function AdminDashboardPage() {
 
       <section className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <div className={subSurfaceClass}>
+          <div className={`${adminSubSurfaceShell} p-6`}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="text-xl font-bold text-[#3F2A1A]">สินค้าที่ขายดีที่สุดประจำเดือน</h3>
@@ -141,13 +143,13 @@ export default function AdminDashboardPage() {
               </div>
               <a
                 href="/api/admin/export/sales"
-                className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)] transition hover:bg-[#714528]"
+                className={`${adminAccentButton} px-5 py-2.5 shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)]`}
               >
                 ⬇️ ดาวน์โหลด CSV
               </a>
             </div>
 
-            <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-[#F3E0C7] bg-white shadow-[0_10px_20px_-18px_rgba(63,42,26,0.45)]">
+            <div className={`${adminInsetCardShell} mt-6 overflow-hidden shadow-[0_10px_20px_-18px_rgba(63,42,26,0.45)]`}>
               <table className="w-full text-sm">
                 <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
                   <tr>
@@ -183,7 +185,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className={subSurfaceClass}>
+          <div className={`${adminSubSurfaceShell} p-6`}>
             <h3 className="text-xl font-bold text-[#3F2A1A]">รายการงานด่วนวันนี้</h3>
             <p className="mt-1 text-[#6F4A2E]">จัดลำดับความสำคัญเพื่อให้ทีมในครัวและหน้าร้านทำงานสอดคล้องกัน</p>
             <ul className="mt-6 space-y-4">
@@ -204,7 +206,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <div className={subSurfaceClass}>
+          <div className={`${adminSubSurfaceShell} p-6`}>
             <h3 className="text-lg font-bold text-[#3F2A1A]">โน้ตสำหรับทีมงาน</h3>
             <ul className="mt-4 space-y-4">
               <li className="flex items-start gap-3 rounded-[1rem] border border-[#C7E3FF] bg-[#F0F7FF] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">

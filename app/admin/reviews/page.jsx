@@ -1,6 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  adminAccentButton,
+  adminInsetCardShell,
+  adminSoftBadge,
+  adminSurfaceShell,
+  adminTableShell,
+} from "@/app/admin/theme";
 import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 function extractApiError(error) {
@@ -25,7 +32,7 @@ function extractApiError(error) {
 function RatingPill({ rating }) {
   const value = Number(rating || 0);
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[#E6C79C] bg-[#FFF4E5] px-3 py-1 text-xs font-semibold text-[#8A5A33]">
       <span>⭐</span>
       {value.toFixed(1)}
     </span>
@@ -34,17 +41,18 @@ function RatingPill({ rating }) {
 
 function PublishedBadge({ published }) {
   return published ? (
-    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[#C3E7C4] bg-[#F0F9ED] px-3 py-1 text-xs font-semibold text-[#2F7A3D]">
       <span>🟢</span>
       แสดงบนหน้าเว็บ
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1 rounded-full border border-rose-400/40 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-200">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[#DCC7F0] bg-[#F8F2FF] px-3 py-1 text-xs font-semibold text-[#7A4CB7]">
       <span>⚪️</span>
       ซ่อนอยู่
     </span>
   );
 }
+
 
 export default function AdminReviewsPage() {
   const popup = useAdminPopup();
@@ -158,69 +166,57 @@ export default function AdminReviewsPage() {
   );
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/10 bg-[var(--color-burgundy)]/70 p-6 shadow-xl shadow-black/30 backdrop-blur">
+    <div className="space-y-8 text-[#3F2A1A]">
+      <section className={`${adminSurfaceShell} p-6`}>
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-[var(--color-rose)]">รีวิวจากลูกค้า</h2>
-            <p className="mt-1 text-sm text-[var(--color-gold)]/70">
-              ตรวจสอบเสียงตอบรับและจัดการการแสดงผลรีวิวบนหน้าเว็บไซต์
-            </p>
+            <h2 className="text-2xl font-bold text-[#3F2A1A]">รีวิวจากลูกค้า</h2>
+            <p className="mt-1 text-sm text-[#6F4A2E]">ตรวจสอบเสียงตอบรับและจัดการการแสดงผลรีวิวบนหน้าเว็บไซต์</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy-dark)]/70 px-4 py-3 text-sm text-[var(--color-gold)]/80">
-              รวมทั้งหมด {reviews.length} รีวิว
-            </div>
-            <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-100">
-              เผยแพร่ {totalPublished} รีวิว
-            </div>
-            <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm font-semibold text-amber-100">
-              รีวิวเด่น {featuredCount}
-            </div>
-            <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-rose)]/10 px-4 py-3 text-sm font-semibold text-[var(--color-rose)]/90">
-              ค่าเฉลี่ย {averageRating.toFixed(2)} ⭐
-            </div>
+            <div className={`${adminInsetCardShell} px-4 py-3 text-sm text-[#5B3A21]`}>รวมทั้งหมด {reviews.length} รีวิว</div>
+            <div className={`${adminInsetCardShell} border-[#C3E7C4] bg-[#F0F9ED] px-4 py-3 text-sm font-semibold text-[#2F7A3D]`}>เผยแพร่ {totalPublished} รีวิว</div>
+            <div className={`${adminInsetCardShell} border-[#E6C79C] bg-[#FFF4E5] px-4 py-3 text-sm font-semibold text-[#8A5A33]`}>รีวิวเด่น {featuredCount}</div>
+            <div className={`${adminInsetCardShell} border-[#DCC7F0] bg-[#F8F2FF] px-4 py-3 text-sm font-semibold text-[#7A4CB7]`}>ค่าเฉลี่ย {averageRating.toFixed(2)} ⭐</div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/10 bg-[var(--color-burgundy)]/70 p-6 shadow-xl shadow-black/30 backdrop-blur">
+      <section className={`${adminSurfaceShell} p-6`}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-xl font-semibold text-[var(--color-rose)]">รายการรีวิวทั้งหมด</h3>
-            <p className="text-sm text-[var(--color-gold)]/70">
-              คลิกเพื่อซ่อน/แสดงบนหน้าเว็บหรือจัดการรีวิวที่ไม่เหมาะสม
-            </p>
+            <h3 className="text-xl font-semibold text-[#3F2A1A]">รายการรีวิวทั้งหมด</h3>
+            <p className="text-sm text-[#6F4A2E]">คลิกเพื่อซ่อน/แสดงบนหน้าเว็บหรือจัดการรีวิวที่ไม่เหมาะสม</p>
           </div>
           <button
             type="button"
             onClick={loadReviews}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/70 px-4 py-2 text-sm font-semibold text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy)] disabled:cursor-not-allowed disabled:opacity-60"
+            className={`${adminAccentButton} px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60`}
           >
             🔄 รีเฟรช
           </button>
         </div>
 
         {error && (
-          <div className="mt-4 rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-100">
+          <div className="mt-4 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600 shadow-[0_14px_28px_-24px_rgba(244,63,94,0.35)]">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="mt-8 flex items-center gap-3 rounded-2xl border border-white/20 bg-white/5 px-6 py-5 text-sm text-[var(--color-gold)]/80">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-rose)] border-t-transparent" />
+          <div className="mt-8 flex items-center gap-3 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-5 text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.45)]">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
             กำลังโหลดข้อมูลรีวิว...
           </div>
         ) : reviews.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-white/20 bg-white/5 px-6 py-8 text-center text-sm text-[var(--color-gold)]/70">
+          <div className="mt-8 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-8 text-center text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.4)]">
             ยังไม่มีรีวิวจากลูกค้า
           </div>
         ) : (
-          <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-white/20 bg-white/5">
-            <table className="w-full text-sm text-[var(--color-gold)]/80">
-              <thead className="bg-white/5 text-[var(--color-rose)]">
+          <div className={`${adminTableShell} mt-6`}>
+            <table className="w-full text-sm text-[#5B3A21]">
+              <thead className="bg-[#FFF4E5] text-[#8A5A33]">
                 <tr>
                   <th className="px-5 py-4 text-left">ลูกค้า</th>
                   <th className="px-5 py-4 text-left">คอมเมนต์</th>
@@ -230,21 +226,15 @@ export default function AdminReviewsPage() {
                   <th className="px-5 py-4 text-right">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
-                {reviews.map((review) => (
-                  <tr key={review.id} className="hover:bg-white/5">
-                    <td className="px-5 py-4 align-top text-[var(--color-gold)]">
-                      <div className="font-semibold text-[var(--color-rose)]">
-                        {review.userName || "ลูกค้า"}
-                      </div>
-                      {review.userEmail && (
-                        <div className="text-xs text-[var(--color-gold)]/60">{review.userEmail}</div>
-                      )}
+              <tbody className="divide-y divide-[#F3E0C7]">
+                {reviews.map((review, index) => (
+                  <tr key={review.id} className={`${index % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} transition-colors hover:bg-[#FFEFD8]`}>
+                    <td className="px-5 py-4 align-top">
+                      <div className="font-semibold text-[#3F2A1A]">{review.userName || "ลูกค้า"}</div>
+                      {review.userEmail && <div className="text-xs text-[#8A5A33]/70">{review.userEmail}</div>}
                     </td>
                     <td className="px-5 py-4 align-top">
-                      <p className="max-w-md text-sm leading-relaxed text-[var(--color-gold)]/80 line-clamp-4">
-                        {review.comment || "-"}
-                      </p>
+                      <p className="max-w-md text-sm leading-relaxed text-[#5B3A21] line-clamp-4">{review.comment || "-"}</p>
                     </td>
                     <td className="px-5 py-4 align-top">
                       <RatingPill rating={review.rating} />
@@ -252,7 +242,7 @@ export default function AdminReviewsPage() {
                     <td className="px-5 py-4 align-top">
                       <PublishedBadge published={review.published} />
                     </td>
-                    <td className="px-5 py-4 align-top text-xs text-[var(--color-gold)]/60">
+                    <td className="px-5 py-4 align-top text-xs text-[#8A5A33]/70">
                       {review.updatedAt
                         ? new Date(review.updatedAt).toLocaleString("th-TH", {
                             dateStyle: "medium",
@@ -266,7 +256,7 @@ export default function AdminReviewsPage() {
                           type="button"
                           onClick={() => handleTogglePublished(review)}
                           disabled={updatingId === review.id || removingId === review.id}
-                          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/70 px-4 py-2 text-xs font-semibold text-[var(--color-rose)] transition hover:bg-[var(--color-burgundy)] disabled:cursor-not-allowed disabled:opacity-60"
+                          className={`${adminSoftBadge} px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-60`}
                         >
                           {review.published ? "ซ่อนรีวิว" : "แสดงบนหน้าเว็บ"}
                         </button>
@@ -274,7 +264,7 @@ export default function AdminReviewsPage() {
                           type="button"
                           onClick={() => handleDelete(review)}
                           disabled={removingId === review.id || updatingId === review.id}
-                          className="inline-flex items-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/10 px-4 py-2 text-xs font-semibold text-rose-100 transition hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                          className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-600 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {removingId === review.id ? "กำลังลบ..." : "ลบ"}
                         </button>
