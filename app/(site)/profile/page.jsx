@@ -153,7 +153,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[#3a1010]">
+    <main className="relative overflow-hidden bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-cream-soft)]">
       <div className="absolute inset-0 opacity-40">
         <div className="absolute -top-20 left-16 h-72 w-72 rounded-full bg-[var(--color-rose)]/30 blur-3xl" />
         <div className="absolute -bottom-24 right-16 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/30 blur-3xl" />
