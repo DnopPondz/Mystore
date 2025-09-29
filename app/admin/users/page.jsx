@@ -145,58 +145,65 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-3xl border border-[rgba(229,189,119,0.28)] bg-[rgba(33,24,16,0.78)] p-6 shadow-[0_24px_44px_-32px_rgba(12,8,4,0.85)] backdrop-blur-xl">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-[var(--color-text)]">จัดการผู้ใช้งาน</h2>
-            <p className="mt-1 text-sm text-[rgba(229,189,119,0.75)]">
-              ตรวจสอบสถานะผู้ใช้ ปรับสิทธิ์การเข้าถึง และระงับบัญชีที่มีปัญหาได้จากหน้านี้
-            </p>
+      <section className="rounded-[30px] border border-[rgba(229,189,119,0.38)] bg-gradient-to-br from-[rgba(68,46,30,0.92)] via-[rgba(46,30,20,0.88)] to-[rgba(27,18,12,0.9)] p-6 shadow-[0_34px_68px_-32px_rgba(12,8,4,0.85)] backdrop-blur-xl">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-xl space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[rgba(229,189,119,0.68)]">Sweet Cravings Admin</p>
+            <div>
+              <h2 className="text-3xl font-semibold text-[var(--color-text)]">แผงควบคุมการจัดการร้าน</h2>
+              <p className="mt-2 text-sm leading-relaxed text-[rgba(229,189,119,0.78)]">
+                ตรวจสอบภาพรวมของผู้ใช้งาน ปรับบทบาท หรือจัดการบัญชีที่มีปัญหาให้พร้อมต่อการใช้งานอยู่เสมอ
+              </p>
+            </div>
           </div>
-          <div className="relative">
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="ค้นหาชื่อหรืออีเมลผู้ใช้"
-              className="w-64 rounded-full border border-[rgba(229,189,119,0.35)] bg-[rgba(20,14,9,0.6)] px-4 py-2 text-sm text-[var(--color-text)] shadow-[inset_0_0_0_1px_rgba(229,189,119,0.1)] placeholder:text-[rgba(229,189,119,0.5)] focus:border-[var(--color-rose)] focus:outline-none focus:ring-2 focus:ring-[rgba(229,189,119,0.2)]"
-            />
-            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[rgba(229,189,119,0.45)]">
-              🔍
-            </span>
+          <div className="w-full max-w-xs rounded-2xl border border-[rgba(229,189,119,0.32)] bg-[rgba(22,15,10,0.72)] p-4 shadow-[0_24px_40px_-28px_rgba(9,6,3,0.9)]">
+            <label className="text-xs font-semibold text-[rgba(229,189,119,0.6)]">ค้นหาผู้ใช้</label>
+            <div className="mt-2 flex items-center rounded-full border border-[rgba(229,189,119,0.32)] bg-[rgba(18,12,8,0.7)] px-3 py-1.5 shadow-[inset_0_0_0_1px_rgba(229,189,119,0.08)] focus-within:border-[rgba(229,189,119,0.6)] focus-within:shadow-[0_0_0_3px_rgba(229,189,119,0.15)]">
+              <span className="text-xs text-[rgba(229,189,119,0.55)]">🔍</span>
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="ค้นหาชื่อหรืออีเมลผู้ใช้"
+                className="ml-2 w-full bg-transparent text-sm text-[var(--color-text)] placeholder:text-[rgba(229,189,119,0.45)] focus:outline-none"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <StatCard
             label="ผู้ใช้ทั้งหมด"
+            helper="จำนวนผู้ใช้งานทั้งหมด"
             value={stats.total}
-            tone="bg-gradient-to-br from-[rgba(229,189,119,0.18)] via-[rgba(229,189,119,0.08)] to-transparent"
+            tone="from-[rgba(229,189,119,0.28)] via-[rgba(229,189,119,0.12)] to-[rgba(80,52,34,0.32)]"
           />
           <StatCard
             label="ผู้ดูแลระบบ"
+            helper="สิทธิ์เข้าจัดการหลังบ้าน"
             value={stats.adminCount}
-            tone="bg-gradient-to-br from-[rgba(124,209,184,0.22)] via-[rgba(229,189,119,0.12)] to-transparent"
+            tone="from-[rgba(124,209,184,0.32)] via-[rgba(229,189,119,0.16)] to-[rgba(36,66,56,0.35)]"
           />
           <StatCard
             label="ถูกระงับ"
+            helper="บัญชีที่ปิดใช้งานชั่วคราว"
             value={stats.bannedCount}
-            tone="bg-gradient-to-br from-[rgba(237,143,120,0.22)] via-[rgba(229,189,119,0.12)] to-transparent"
+            tone="from-[rgba(239,120,120,0.35)] via-[rgba(229,189,119,0.16)] to-[rgba(82,34,28,0.35)]"
           />
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-[rgba(229,189,119,0.28)] bg-[rgba(26,18,12,0.82)] shadow-[0_26px_52px_-28px_rgba(10,6,2,0.92)] overflow-hidden backdrop-blur-xl">
-        <header className="flex flex-col gap-2 border-b border-[rgba(229,189,119,0.18)] bg-[rgba(18,12,8,0.55)] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-[34px] border border-[rgba(229,189,119,0.32)] bg-gradient-to-b from-[rgba(44,30,20,0.92)] via-[rgba(32,22,15,0.88)] to-[rgba(20,14,9,0.85)] shadow-[0_34px_64px_-34px_rgba(10,6,2,0.9)] backdrop-blur-xl">
+        <header className="flex flex-col gap-3 border-b border-[rgba(229,189,119,0.18)] bg-[rgba(26,18,12,0.72)] px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text)]">รายการผู้ใช้งาน</h3>
-            <p className="text-xs text-[rgba(229,189,119,0.7)]">
-              สามารถเปลี่ยนสิทธิ์การใช้งานหรือระงับบัญชีชั่วคราวได้จากตารางด้านล่าง
+            <h3 className="text-xl font-semibold text-[var(--color-text)]">รายการผู้ใช้งาน</h3>
+            <p className="text-xs text-[rgba(229,189,119,0.72)]">
+              ตรวจสอบบทบาทและสถานะการใช้งาน พร้อมระงับบัญชีที่ผิดปกติได้จากหน้าจอนี้
             </p>
           </div>
           {loading && (
             <div className="flex items-center gap-2 text-xs text-[rgba(229,189,119,0.65)]">
-              <div className="h-3 w-3 animate-spin rounded-full border-2 border-[rgba(229,189,119,0.25)] border-t-[var(--color-rose)]"></div>
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-[rgba(229,189,119,0.32)] border-t-[var(--color-rose)]"></div>
               กำลังโหลด...
             </div>
           )}
@@ -216,7 +223,7 @@ export default function AdminUsersPage() {
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-[1.5rem] border border-[rgba(229,189,119,0.16)] bg-[rgba(20,14,9,0.55)]">
+          <div className="overflow-hidden rounded-[28px] border border-[rgba(229,189,119,0.18)] bg-[rgba(23,16,11,0.72)]">
             {/* Mobile Cards - แสดงเฉพาะใน mobile */}
             <div className="block lg:hidden">
               {filteredUsers.length === 0 ? (
@@ -300,35 +307,35 @@ export default function AdminUsersPage() {
 
             {/* Desktop Table - แสดงเฉพาะใน desktop */}
             <div className="hidden overflow-x-auto lg:block">
-              <table className="min-w-full text-sm text-[rgba(229,189,119,0.85)]">
+              <table className="min-w-full text-sm text-[rgba(229,189,119,0.86)]">
                 <thead>
-                  <tr className="border-b border-[rgba(229,189,119,0.18)] bg-[rgba(229,189,119,0.12)] text-[var(--color-text)]">
-                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
+                  <tr className="border-b border-[rgba(229,189,119,0.22)] bg-gradient-to-r from-[rgba(229,189,119,0.16)] via-[rgba(229,189,119,0.12)] to-[rgba(229,189,119,0.16)] text-[var(--color-text)]">
+                    <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         👤 ชื่อผู้ใช้
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
+                    <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         ✉️ อีเมล
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
+                    <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         🔑 สิทธิ์
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
+                    <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         📊 สถานะ
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold tracking-wide">
+                    <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         📅 วันที่สร้าง
                       </div>
                     </th>
-                    <th className="px-6 py-4 text-right font-semibold tracking-wide">
+                    <th className="px-6 py-4 text-right text-sm font-semibold tracking-wide">
                       <div className="flex items-center justify-end gap-2">
                         ⚙️ จัดการ
                       </div>
@@ -362,8 +369,10 @@ export default function AdminUsersPage() {
                         <tr
                           key={user.id}
                           className={`group transition-colors duration-200 ${
-                            isEven ? "bg-[rgba(27,18,12,0.82)]" : "bg-[rgba(22,15,10,0.76)]"
-                          } hover:bg-[rgba(33,24,16,0.86)] ${
+                            isEven
+                              ? "bg-[rgba(30,20,14,0.88)]"
+                              : "bg-[rgba(25,17,12,0.82)]"
+                          } hover:bg-[rgba(39,26,18,0.9)] ${
                             user.banned ? "ring-1 ring-[rgba(239,120,120,0.32)]" : ""
                           }`}
                         >
@@ -398,7 +407,7 @@ export default function AdminUsersPage() {
                           </td>
                           <td className="px-6 py-5">
                             <select
-                              className={`rounded-full border border-[rgba(229,189,119,0.28)] bg-[rgba(18,12,8,0.7)] px-3 py-2 text-xs font-semibold text-[var(--color-text)] shadow-[0_10px_18px_-16px_rgba(8,5,2,0.85)] transition-all duration-200 focus:border-[var(--color-rose)] focus:outline-none focus:ring-1 focus:ring-[rgba(229,189,119,0.25)] ${
+                              className={`rounded-full border border-[rgba(229,189,119,0.32)] bg-[rgba(18,12,8,0.72)] px-3 py-2 text-xs font-semibold text-[var(--color-text)] shadow-[0_12px_20px_-18px_rgba(8,5,2,0.86)] transition-all duration-200 focus:border-[rgba(229,189,119,0.6)] focus:outline-none focus:ring-1 focus:ring-[rgba(229,189,119,0.22)] ${
                                 isBusy ? 'cursor-not-allowed opacity-60' : 'hover:-translate-y-0.5'
                               }`}
                               value={user.role}
@@ -412,17 +421,17 @@ export default function AdminUsersPage() {
                               ))}
                             </select>
                           </td>
-                            <td className="px-6 py-5">
-                              <span
-                                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold shadow-[0_12px_20px_-18px_rgba(8,5,2,0.88)] ${
-                                  user.banned
-                                    ? "border-[rgba(239,120,120,0.38)] bg-[rgba(124,38,38,0.5)] text-[rgba(255,221,221,0.92)]"
-                                    : "border-[rgba(124,209,184,0.32)] bg-[rgba(48,94,77,0.5)] text-[rgba(209,248,231,0.95)]"
-                                }`}
-                              >
-                                {user.banned ? "🔒 ถูกระงับ" : "✅ ปกติ"}
-                              </span>
-                            </td>
+                          <td className="px-6 py-5">
+                            <span
+                              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold shadow-[0_14px_22px_-18px_rgba(8,5,2,0.88)] ${
+                                user.banned
+                                  ? "border-[rgba(239,120,120,0.4)] bg-[rgba(124,38,38,0.52)] text-[rgba(255,221,221,0.95)]"
+                                  : "border-[rgba(124,209,184,0.32)] bg-[rgba(48,94,77,0.52)] text-[rgba(209,248,231,0.95)]"
+                              }`}
+                            >
+                              {user.banned ? "🔒 ถูกระงับ" : "✅ ปกติ"}
+                            </span>
+                          </td>
                           <td className="px-6 py-5">
                             <div className="text-xs font-medium text-[rgba(229,189,119,0.74)]">
                               {formatDate(user.createdAt)}
@@ -433,14 +442,14 @@ export default function AdminUsersPage() {
                               type="button"
                               onClick={() => toggleBan(user)}
                               disabled={isBusy}
-                              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold text-[var(--color-text)] shadow-[0_14px_24px_-20px_rgba(8,5,2,0.9)] transition-all duration-200 ${
+                              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold text-[var(--color-text)] shadow-[0_18px_30px_-22px_rgba(8,5,2,0.92)] transition-all duration-200 ${
                                 user.banned
-                                  ? "border-[rgba(124,209,184,0.35)] bg-[rgba(48,94,77,0.5)] text-[rgba(209,248,231,0.95)]"
-                                  : "border-[rgba(239,120,120,0.4)] bg-[rgba(124,38,38,0.55)] text-[rgba(255,221,221,0.95)]"
+                                  ? "border-[rgba(124,209,184,0.35)] bg-[rgba(48,94,77,0.55)] text-[rgba(209,248,231,0.95)]"
+                                  : "border-[rgba(239,120,120,0.45)] bg-[rgba(124,38,38,0.58)] text-[rgba(255,221,221,0.95)]"
                               } ${
                                 isBusy
                                   ? "cursor-not-allowed opacity-60"
-                                  : "hover:-translate-y-0.5 hover:shadow-[0_20px_36px_-24px_rgba(8,5,2,0.9)] group-hover:-translate-y-0.5"
+                                  : "hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-24px_rgba(8,5,2,0.92)] group-hover:-translate-y-0.5"
                               }`}
                             >
                               {isBusy ? (
@@ -469,13 +478,14 @@ export default function AdminUsersPage() {
   );
 }
 
-function StatCard({ label, value, tone }) {
+function StatCard({ label, helper, value, tone }) {
   return (
-    <div className="relative overflow-hidden rounded-[1.5rem] border border-[rgba(229,189,119,0.22)] bg-[rgba(23,16,10,0.72)] p-4 text-center shadow-[0_18px_38px_-26px_rgba(9,6,3,0.9)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_28px_46px_-24px_rgba(9,6,3,0.92)]">
-      {tone ? <div className={`pointer-events-none absolute inset-0 opacity-80 ${tone}`} aria-hidden /> : null}
-      <div className="relative">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[rgba(229,189,119,0.6)]">{label}</p>
-        <p className="mt-2 text-2xl font-semibold text-[var(--color-text)]">{value}</p>
+    <div className="relative overflow-hidden rounded-[26px] border border-[rgba(229,189,119,0.26)] bg-[rgba(27,18,12,0.78)] p-5 text-left shadow-[0_24px_48px_-30px_rgba(9,6,3,0.92)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_32px_52px_-26px_rgba(9,6,3,0.94)]">
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone} opacity-80`} aria-hidden />
+      <div className="relative space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[rgba(229,189,119,0.7)]">{label}</p>
+        <p className="text-3xl font-semibold text-[var(--color-text)]">{value}</p>
+        {helper ? <p className="text-xs text-[rgba(229,189,119,0.68)]">{helper}</p> : null}
       </div>
     </div>
   );
