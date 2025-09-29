@@ -145,7 +145,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-[30px] border border-[rgba(229,189,119,0.38)] bg-gradient-to-br from-[rgba(68,46,30,0.92)] via-[rgba(46,30,20,0.88)] to-[rgba(27,18,12,0.9)] p-6 shadow-[0_34px_68px_-32px_rgba(12,8,4,0.85)] backdrop-blur-xl">
+      <section className="rounded-[30px] border border-[rgba(229,189,119,0.38)] bg-[rgba(46,30,20,0.9)] p-6 shadow-[0_34px_68px_-32px_rgba(12,8,4,0.85)] backdrop-blur-xl">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xl space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[rgba(229,189,119,0.68)]">Sweet Cravings Admin</p>
@@ -176,24 +176,24 @@ export default function AdminUsersPage() {
             label="ผู้ใช้ทั้งหมด"
             helper="จำนวนผู้ใช้งานทั้งหมด"
             value={stats.total}
-            tone="from-[rgba(229,189,119,0.28)] via-[rgba(229,189,119,0.12)] to-[rgba(80,52,34,0.32)]"
+            tone="bg-[rgba(229,189,119,0.28)]"
           />
           <StatCard
             label="ผู้ดูแลระบบ"
             helper="สิทธิ์เข้าจัดการหลังบ้าน"
             value={stats.adminCount}
-            tone="from-[rgba(124,209,184,0.32)] via-[rgba(229,189,119,0.16)] to-[rgba(36,66,56,0.35)]"
+            tone="bg-[rgba(124,209,184,0.32)]"
           />
           <StatCard
             label="ถูกระงับ"
             helper="บัญชีที่ปิดใช้งานชั่วคราว"
             value={stats.bannedCount}
-            tone="from-[rgba(239,120,120,0.35)] via-[rgba(229,189,119,0.16)] to-[rgba(82,34,28,0.35)]"
+            tone="bg-[rgba(239,120,120,0.35)]"
           />
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-[34px] border border-[rgba(229,189,119,0.32)] bg-gradient-to-b from-[rgba(44,30,20,0.92)] via-[rgba(32,22,15,0.88)] to-[rgba(20,14,9,0.85)] shadow-[0_34px_64px_-34px_rgba(10,6,2,0.9)] backdrop-blur-xl">
+      <section className="overflow-hidden rounded-[34px] border border-[rgba(229,189,119,0.32)] bg-[rgba(32,22,15,0.88)] shadow-[0_34px_64px_-34px_rgba(10,6,2,0.9)] backdrop-blur-xl">
         <header className="flex flex-col gap-3 border-b border-[rgba(229,189,119,0.18)] bg-[rgba(26,18,12,0.72)] px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-xl font-semibold text-[var(--color-text)]">รายการผู้ใช้งาน</h3>
@@ -309,7 +309,7 @@ export default function AdminUsersPage() {
             <div className="hidden overflow-x-auto lg:block">
               <table className="min-w-full text-sm text-[rgba(229,189,119,0.86)]">
                 <thead>
-                  <tr className="border-b border-[rgba(229,189,119,0.22)] bg-gradient-to-r from-[rgba(229,189,119,0.16)] via-[rgba(229,189,119,0.12)] to-[rgba(229,189,119,0.16)] text-[var(--color-text)]">
+                  <tr className="border-b border-[rgba(229,189,119,0.22)] bg-[rgba(229,189,119,0.16)] text-[var(--color-text)]">
                     <th className="px-6 py-4 text-left text-sm font-semibold tracking-wide">
                       <div className="flex items-center gap-2">
                         👤 ชื่อผู้ใช้
@@ -381,8 +381,8 @@ export default function AdminUsersPage() {
                               <div
                                 className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold shadow-[0_10px_22px_-16px_rgba(8,5,2,0.85)] ${
                                   user.role === 'admin'
-                                    ? 'bg-gradient-to-br from-[rgba(124,209,184,0.55)] to-[rgba(82,168,142,0.8)] text-[rgba(8,18,14,0.9)]'
-                                    : 'bg-gradient-to-br from-[rgba(229,189,119,0.6)] to-[rgba(214,167,94,0.82)] text-[rgba(29,20,13,0.95)]'
+                                    ? 'bg-[rgba(124,209,184,0.55)] text-[rgba(8,18,14,0.9)]'
+                                    : 'bg-[rgba(229,189,119,0.6)] text-[rgba(29,20,13,0.95)]'
                                 }`}
                               >
                                 {user.role === 'admin' ? '👑' : '👤'}
@@ -481,7 +481,7 @@ export default function AdminUsersPage() {
 function StatCard({ label, helper, value, tone }) {
   return (
     <div className="relative overflow-hidden rounded-[26px] border border-[rgba(229,189,119,0.26)] bg-[rgba(27,18,12,0.78)] p-5 text-left shadow-[0_24px_48px_-30px_rgba(9,6,3,0.92)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_32px_52px_-26px_rgba(9,6,3,0.94)]">
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone} opacity-80`} aria-hidden />
+      <div className={`pointer-events-none absolute inset-0 ${tone} opacity-80`} aria-hidden />
       <div className="relative space-y-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-[rgba(229,189,119,0.7)]">{label}</p>
         <p className="text-3xl font-semibold text-[var(--color-text)]">{value}</p>

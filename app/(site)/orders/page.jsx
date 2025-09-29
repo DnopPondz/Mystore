@@ -112,7 +112,7 @@ export default function OrdersPage() {
   if (needsAuth && status !== "loading") {
     return (
       <main className="relative min-h-[70vh] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.7),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
+        <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
         <div className="relative flex min-h-[60vh] items-center justify-center px-6 py-16">
           <div className="w-full max-w-md rounded-3xl border border-[var(--color-rose)]/25 bg-[var(--color-burgundy)]/75 p-10 text-center text-[var(--color-text)] shadow-2xl shadow-black/40 backdrop-blur">
             <h1 className="text-2xl font-semibold text-[var(--color-rose)]">เข้าสู่ระบบเพื่อดูคำสั่งซื้อ</h1>
@@ -122,7 +122,7 @@ export default function OrdersPage() {
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] hover:shadow-xl"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] hover:shadow-xl"
               >
                 เข้าสู่ระบบ
               </Link>
@@ -148,7 +148,7 @@ export default function OrdersPage() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.65),transparent_55%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 right-20 h-60 w-60 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
       <div className="absolute -bottom-20 left-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
@@ -162,7 +162,7 @@ export default function OrdersPage() {
           </div>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
+            className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-5 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
           >
             เลือกสินค้าเพิ่ม
           </Link>

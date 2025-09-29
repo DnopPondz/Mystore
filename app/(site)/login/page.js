@@ -35,7 +35,7 @@ function LoginContent() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-cream-soft)]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 right-20 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
       <div className="absolute -bottom-28 left-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
@@ -71,7 +71,7 @@ function LoginContent() {
             </div>
             <button
               disabled={loading}
-              className="w-full rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
             </button>

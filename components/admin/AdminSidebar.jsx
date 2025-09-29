@@ -69,7 +69,7 @@ export default function AdminSidebar() {
 
       <aside
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-gradient-to-b from-[var(--color-burgundy)] via-[var(--color-burgundy-dark)] to-[#090101] text-[var(--color-gold)] shadow-[12px_0_40px_-16px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 origin-left transform bg-[var(--color-burgundy-dark)] text-[var(--color-gold)] shadow-[12px_0_40px_-16px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-in-out lg:static lg:block lg:h-auto lg:w-72 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >

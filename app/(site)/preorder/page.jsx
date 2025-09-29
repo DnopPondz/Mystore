@@ -90,7 +90,7 @@ export default function PreOrderPage() {
   return (
     <div className="relative overflow-hidden">
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.9)] to-[var(--color-burgundy)]"
+        className="absolute inset-0 bg-[var(--color-burgundy-dark)]"
         aria-hidden
       />
 
@@ -126,7 +126,7 @@ export default function PreOrderPage() {
             </div>
           </div>
           <div className="flex-1">
-            <div className="rounded-[46%] border border-[var(--color-rose)]/30 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.85)] to-[var(--color-burgundy)] p-10 text-center shadow-2xl shadow-black/45">
+            <div className="rounded-[46%] border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)] p-10 text-center shadow-2xl shadow-black/45">
               <p className="text-sm font-semibold tracking-[0.3em] uppercase text-[var(--color-rose)]">Made to Order</p>
               <p className="mt-3 text-3xl font-black text-[var(--color-choco)]">Pre-order ขนมชิ้นโปรด</p>
               <p className="mt-4 text-sm text-[var(--color-choco)]/70">
@@ -295,7 +295,7 @@ export default function PreOrderPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-8 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-black/45 transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-8 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-black/45 transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "กำลังส่งคำขอ..." : "ส่งคำขอออกแบบเมนู"}
             </button>
@@ -343,7 +343,7 @@ export default function PreOrderPage() {
               </div>
             </a>
           </div>
-          <div className="rounded-3xl bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-5 py-6 text-white shadow-lg shadow-[rgba(240,200,105,0.33)]">
+          <div className="rounded-3xl bg-[var(--color-gold)] px-5 py-6 text-white shadow-lg shadow-[rgba(240,200,105,0.33)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em]">Tip</p>
             <p className="mt-2 text-sm">
               หากมี moodboard หรือรูปตัวอย่างที่ชื่นชอบ สามารถแนบส่งผ่านอีเมลหรือ LINE หลังจากกรอกแบบฟอร์มเพื่อให้ทีมออกแบบได้แม่นยำขึ้น

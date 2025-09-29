@@ -116,7 +116,7 @@ export default function NavBar() {
       </div>
 
       <nav className="shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]">
-        <div className="bg-gradient-to-r from-[var(--color-burgundy-soft)] via-[var(--color-cream-soft)] to-[var(--color-burgundy-soft)]">
+        <div className="bg-[var(--color-cream-soft)]">
           <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-6 px-4 py-4 sm:px-6">
             <Link
               href="/"

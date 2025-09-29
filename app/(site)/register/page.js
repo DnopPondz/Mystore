@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-cream-soft)]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 left-16 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
       <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/20 blur-3xl" />
 
@@ -74,7 +74,7 @@ export default function RegisterPage() {
             </div>
             <button
               disabled={loading}
-              className="w-full rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
             </button>

@@ -56,7 +56,7 @@ export default function AboutPage() {
   return (
     <div className="relative overflow-hidden">
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.92)] to-[var(--color-burgundy)]"
+        className="absolute inset-0 bg-[var(--color-burgundy-dark)]"
         aria-hidden
       />
 
@@ -94,7 +94,7 @@ export default function AboutPage() {
           </div>
 
           <div className="relative flex justify-center">
-            <div className="relative w-full max-w-sm rounded-[48%] border border-[var(--color-rose)]/30 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.85)] to-[var(--color-burgundy)] p-10 shadow-2xl shadow-black/50">
+            <div className="relative w-full max-w-sm rounded-[48%] border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)] p-10 shadow-2xl shadow-black/50">
               <div className="absolute -top-6 right-0 h-20 w-20 rounded-full bg-[var(--color-rose)]/25 blur-2xl" />
               <div className="absolute -bottom-8 left-6 h-24 w-24 rounded-full bg-[var(--color-gold)]/15 blur-2xl" />
               <div className="space-y-4 text-center">
@@ -136,7 +136,7 @@ export default function AboutPage() {
             {milestones.map((item) => (
               <div key={item.year} className="flex gap-6">
                 <div className="flex-shrink-0">
-                  <div className="rounded-full bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow">
+                  <div className="rounded-full bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow">
                     {item.year}
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative bg-gradient-to-r from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.78)] to-[var(--color-burgundy)]">
+      <section className="relative bg-[var(--color-burgundy-dark)]">
         <div className="max-w-screen-xl mx-auto px-6 lg:px-10 py-16 flex flex-col gap-10 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-4">
             <h2 className="text-3xl font-bold text-[var(--color-choco)]">มารู้จักทีมของเรา</h2>

@@ -153,7 +153,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-cream-soft)]">
+    <main className="relative overflow-hidden bg-[var(--color-burgundy-dark)]">
       <div className="absolute inset-0 opacity-40">
         <div className="absolute -top-20 left-16 h-72 w-72 rounded-full bg-[var(--color-rose)]/30 blur-3xl" />
         <div className="absolute -bottom-24 right-16 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/30 blur-3xl" />
@@ -250,7 +250,7 @@ export default function ProfilePage() {
                   <button
                     type="submit"
                     disabled={saving || !isDirty}
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {saving ? "กำลังบันทึก..." : "บันทึกการเปลี่ยนแปลง"}
                   </button>

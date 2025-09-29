@@ -24,7 +24,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[var(--color-burgundy)] to-[var(--color-burgundy-soft)] text-[var(--color-gold)]">
+    <footer className="mt-20 bg-[var(--color-burgundy-dark)] text-[var(--color-gold)]">
       <div className="relative">
         {/* <div className="absolute -top-6 left-6 hidden rotate-6 text-5xl opacity-40 md:block">
           🥐

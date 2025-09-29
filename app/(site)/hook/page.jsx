@@ -5,7 +5,7 @@ export default function HookPage({ searchParams }) {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.88)] to-[var(--color-burgundy)]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 right-12 h-64 w-64 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
       <div className="absolute -bottom-28 left-16 h-72 w-72 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
 
@@ -26,7 +26,7 @@ export default function HookPage({ searchParams }) {
 
           <Link
             href="/"
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:shadow-xl"
+            className="mt-8 inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] hover:shadow-xl"
           >
             กลับสู่หน้าหลัก
           </Link>

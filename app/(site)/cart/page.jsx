@@ -251,7 +251,7 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/checkout"
-          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
+          className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:shadow-xl"
         >
           ไปหน้าชำระเงิน
         </Link>
@@ -296,7 +296,7 @@ export default function CartPage() {
 
   return (
     <main className="relative min-h-[70vh] overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(240,200,105,0.12),transparent_60%),radial-gradient(circle_at_bottom_right,rgba(58,16,16,0.7),transparent_55%),linear-gradient(135deg,rgba(20,2,2,0.95),rgba(58,16,16,0.85))]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 right-8 h-64 w-64 rounded-full bg-[var(--color-rose)]/25 blur-3xl" />
       <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-[var(--color-rose-dark)]/25 blur-3xl" />
 
@@ -371,7 +371,7 @@ export default function CartPage() {
                           </div>
                         </div>
                         <button
-                          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-gradient-to-r from-[var(--color-rose)]/20 to-[var(--color-rose-dark)]/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-rose)] transition hover:from-[var(--color-rose)]/35 hover:to-[var(--color-rose-dark)]/35 hover:text-[var(--color-gold)]"
+                          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/35 bg-[var(--color-rose)]/15 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-rose)] transition hover:bg-[var(--color-rose)]/25 hover:text-[var(--color-gold)]"
                           onClick={() => cart.remove(it.productId)}
                         >
                           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-rose)] text-[var(--color-burgundy-dark)] shadow-md shadow-[rgba(0,0,0,0.35)]">
@@ -413,7 +413,7 @@ export default function CartPage() {
                     <button
                       onClick={applyCoupon}
                       disabled={applying}
-                      className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
                     </button>

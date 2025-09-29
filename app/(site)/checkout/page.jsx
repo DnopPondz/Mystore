@@ -312,7 +312,7 @@ export default function CheckoutPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-burgundy-dark)] via-[rgba(58,16,16,0.9)] to-[var(--color-burgundy)]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[var(--color-rose)]/18 blur-3xl" />
       <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[var(--color-gold)]/18 blur-3xl" />
 
@@ -406,7 +406,7 @@ export default function CheckoutPage() {
                 className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                   creating || cart.items.length === 0 || order
                     ? "bg-[var(--color-burgundy-dark)]/40 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] hover:shadow-xl"
+                    : "bg-[var(--color-rose)] hover:shadow-xl"
                 }`}
               >
                 {order
@@ -578,7 +578,7 @@ export default function CheckoutPage() {
                     className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition ${
                       confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)
                         ? "bg-[var(--color-burgundy-dark)]/40 cursor-not-allowed"
-                        : "bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-gold)] hover:shadow-xl"
+                        : "bg-[var(--color-rose)] hover:shadow-xl"
                     }`}
                   >
                     {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}

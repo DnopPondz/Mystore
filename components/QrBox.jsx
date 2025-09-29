@@ -78,7 +78,7 @@ export default function QrBox({ payload, amount, title = "สแกนจ่า�
   </div> */}
 
   <button
-    className="w-full rounded-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-rose-dark)] px-4 py-2 text-sm font-semibold text-white shadow shadow-[rgba(240,200,105,0.33)] transition hover:shadow-md"
+    className="w-full rounded-full bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow shadow-[rgba(240,200,105,0.33)] transition hover:shadow-md"
     onClick={saveQrCode}
     type="button"
   >

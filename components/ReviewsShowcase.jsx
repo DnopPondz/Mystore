@@ -351,7 +351,7 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
 
   return (
     <section className="relative overflow-hidden py-16">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_90%_10%,rgba(58,16,16,0.7),transparent_60%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(76,25,18,0.85))]" />
+      <div className="absolute inset-0 bg-[var(--color-burgundy-dark)]" />
       <div className="relative mx-auto max-w-screen-xl px-6 lg:px-8">
         <div className="rounded-[2.5rem] border border-[var(--color-rose)]/15 bg-[var(--color-burgundy)]/80 p-8 shadow-2xl shadow-black/40 backdrop-blur">
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1.4fr_0.9fr] lg:items-start">
