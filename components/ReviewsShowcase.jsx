@@ -350,42 +350,44 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
   }, [reviews]);
 
   return (
-    <section className="relative overflow-hidden py-16">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(240,200,105,0.12),transparent_55%),radial-gradient(circle_at_90%_10%,rgba(58,16,16,0.7),transparent_60%),linear-gradient(140deg,rgba(20,2,2,0.95),rgba(76,25,18,0.85))]" />
+    <section className="relative overflow-hidden py-20">
+      <div className="absolute inset-0 bg-[#4c2ffc]" />
+      <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-[#f6be5d]/40 blur-3xl" />
       <div className="relative mx-auto max-w-screen-xl px-6 lg:px-8">
-        <div className="rounded-[2.5rem] border border-[var(--color-rose)]/15 bg-[var(--color-burgundy)]/80 p-8 shadow-2xl shadow-black/40 backdrop-blur">
+        <div className="rounded-[2.5rem] border border-[#fce4a1]/60 bg-[#f6be5d]/90 p-8 shadow-[0_28px_60px_-32px_rgba(20,0,60,0.65)] backdrop-blur">
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1.4fr_0.9fr] lg:items-start">
             <div className="space-y-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--color-rose)]/90">
+                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#4c2ffc]">
                     Our Happy Customers
                   </p>
-                  <h2 className="mt-1 text-3xl font-bold text-[var(--color-rose)]">เสียงตอบรับจากลูกค้า</h2>
+                  <h2 className="mt-1 text-3xl font-bold text-[#2b0f05]">เสียงตอบรับจากลูกค้า</h2>
                 </div>
-                <div className="inline-flex items-center gap-3 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/70 px-4 py-2 shadow-inner">
+                <div className="inline-flex items-center gap-3 rounded-full border border-white/40 bg-white/30 px-4 py-2 text-[#2b0f05] shadow-inner shadow-[#3c1a09]/20">
                   <StarRating value={reviews.length > 0 ? Math.max(3.5, Math.min(5, avgRating)) : 5} />
-                  <span className="text-xs text-[var(--color-gold)]/80">จากลูกค้าที่รักในรสชาติ</span>
+                  <span className="text-xs font-medium text-[#4c2ffc]">จากลูกค้าที่รักในรสชาติ</span>
                 </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {visibleReviews.length === 0 && (
-                  <div className="md:col-span-2 xl:col-span-3 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 p-8 text-center text-[var(--color-gold)]/70 shadow-lg">
+                  <div className="md:col-span-2 xl:col-span-3 rounded-3xl border border-white/40 bg-white/40 p-8 text-center text-[#4c2ffc] shadow-lg shadow-[#3c1a09]/20">
                     ยังไม่มีรีวิวตอนนี้ มาร่วมเป็นคนแรกที่รีวิวความอร่อยกันนะคะ!
                   </div>
                 )}
                 {visibleReviews.map((review) => (
                   <article
                     key={review.id}
-                    className="flex h-full flex-col gap-4 rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 p-6 shadow-lg shadow-black/30"
+                    className="flex h-full flex-col gap-4 rounded-3xl border border-white/40 bg-[#f9cf82]/80 p-6 text-[#2b0f05] shadow-lg shadow-[#3c1a09]/20"
                   >
                     <StarRating value={Number(review.rating || 0)} />
-                    <p className="flex-1 text-sm leading-relaxed text-[var(--color-gold)]/90">“{review.comment}”</p>
-                    <div className="flex items-center justify-between text-sm text-[var(--color-rose)]/80">
+                    <p className="flex-1 text-sm leading-relaxed text-[#3a1c0c]">“{review.comment}”</p>
+                    <div className="flex items-center justify-between text-sm text-[#4c2ffc]">
                       <span className="font-semibold">{review.name}</span>
                       {review.createdAt && (
-                        <time dateTime={review.createdAt} className="text-xs text-[var(--color-gold)]/60">
+                        <time dateTime={review.createdAt} className="text-xs text-[#2b0f05]/70">
                           {new Date(review.createdAt).toLocaleDateString("th-TH", {
                             year: "numeric",
                             month: "short",
@@ -398,22 +400,22 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 p-6 shadow-inner shadow-black/30">
-              <h3 className="text-xl font-semibold text-[var(--color-rose)]">แชร์ประสบการณ์ของคุณ</h3>
-              <p className="mt-2 text-sm text-[var(--color-gold)]/75">
+            <div className="rounded-[2rem] border border-white/40 bg-[#f9cf82]/90 p-6 text-[#2b0f05] shadow-inner shadow-[#3c1a09]/30">
+              <h3 className="text-xl font-semibold text-[#2b0f05]">แชร์ประสบการณ์ของคุณ</h3>
+              <p className="mt-2 text-sm text-[#3a1c0c]/80">
                 รีวิวของคุณช่วยให้เราพัฒนาสูตรให้ดียิ่งขึ้น และเป็นกำลังใจให้ทีมครัวทุกวัน
               </p>
 
               {status === "loading" && (
-                <p className="mt-4 text-xs text-[var(--color-gold)]/70">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
+                <p className="mt-4 text-xs text-[#4c2ffc]">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
               )}
 
               {status === "unauthenticated" && (
-                <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 p-5 text-sm text-[var(--color-gold)]/80">
+                <div className="mt-6 space-y-4 rounded-2xl border border-white/40 bg-white/40 p-5 text-sm text-[#3a1c0c]">
                   <p>ต้องเข้าสู่ระบบก่อนจึงจะสามารถให้คะแนนได้</p>
                   <Link
                     href="/login?redirect=/"
-                    className="inline-flex items-center justify-center rounded-full bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-black/30 transition hover:bg-[var(--color-rose-dark)]"
+                    className="inline-flex items-center justify-center rounded-full bg-[#4c2ffc] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#3a1a66]/40 transition hover:bg-[#4326db]"
                   >
                     เข้าสู่ระบบเพื่อรีวิว
                   </Link>
@@ -423,14 +425,14 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
               {status === "authenticated" && (
                 <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[var(--color-gold)]/90">
+                    <label className="text-sm font-semibold text-[#2b0f05]">
                       ให้คะแนน (1 - 5 ดาว)
                     </label>
-                    <div className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 p-4 shadow-inner">
+                    <div className="rounded-2xl border border-white/40 bg-white/40 p-4 shadow-inner">
                       <div className="flex items-center justify-between gap-3">
                         {/* ใช้ StarRating เพื่อโชว์ค่าปัจจุบัน */}
                         <StarRating value={Number(formRating)} />
-                        <span className="text-xs text-[var(--color-gold)]/70">
+                        <span className="text-xs text-[#4c2ffc]">
                           {Number(formRating).toFixed(1)} ดาว
                         </span>
                       </div>
@@ -448,7 +450,7 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="review-comment" className="text-sm font-semibold text-[var(--color-gold)]/90">
+                    <label htmlFor="review-comment" className="text-sm font-semibold text-[#2b0f05]">
                       รีวิวของคุณ
                     </label>
                     <textarea
@@ -458,10 +460,10 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
                       minLength={5}
                       maxLength={600}
                       rows={5}
-                      className="w-full rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 p-4 text-sm text-[var(--color-gold)]/90 shadow-inner outline-none focus:ring-2 focus:ring-[var(--color-rose)]/40"
+                      className="w-full rounded-2xl border border-white/40 bg-white/40 p-4 text-sm text-[#3a1c0c] shadow-inner outline-none focus:ring-2 focus:ring-[#4c2ffc]/40"
                       placeholder="บอกเล่าความประทับใจของคุณ เช่น รสชาติ ความสดใหม่ หรือการบริการ"
                     />
-                    <p className="text-right text-xs text-[var(--color-gold)]/60">
+                    <p className="text-right text-xs text-[#4c2ffc]">
                       {formComment.length}/600 ตัวอักษร
                     </p>
                   </div>
@@ -470,8 +472,8 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
                     <div
                       className={`rounded-2xl border px-4 py-3 text-sm ${
                         message.type === "success"
-                          ? "border-emerald-200/40 bg-emerald-50/20 text-emerald-200"
-                          : "border-rose-200/40 bg-rose-50/10 text-rose-200"
+                          ? "border-emerald-500/40 bg-emerald-200/30 text-emerald-900"
+                          : "border-rose-500/40 bg-rose-200/30 text-rose-900"
                       }`}
                     >
                       {message.text}
@@ -481,7 +483,7 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full rounded-full bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-[var(--color-burgundy-dark)] shadow-lg shadow-black/40 transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:bg-[var(--color-rose)]/60"
+                    className="w-full rounded-full bg-[#32127b] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1f0a4a]/60 transition hover:bg-[#2a0f63] disabled:cursor-not-allowed disabled:bg-[#32127b]/60"
                   >
                     {submitting ? "กำลังบันทึกรีวิว..." : myReview ? "อัปเดตรีวิว" : "ส่งรีวิว"}
                   </button>

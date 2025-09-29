@@ -49,9 +49,9 @@ export default function PromotionsTicker() {
 
   if (loading && !visiblePromotions.length) {
     return (
-      <div className="bg-[var(--color-burgundy)]/80 py-2 text-xs text-[var(--color-gold)]/70">
+      <div className="bg-[#5b3dfc] py-2 text-xs text-white/80">
         <div className="mx-auto flex max-w-screen-xl items-center justify-center gap-2 px-4">
-          <span className="h-3 w-3 animate-spin rounded-full border border-[var(--color-rose)] border-t-transparent" />
+          <span className="h-3 w-3 animate-spin rounded-full border border-white/60 border-t-transparent" />
           <span>กำลังเตรียมโปรโมชันสำหรับคุณ...</span>
         </div>
       </div>
@@ -67,9 +67,9 @@ export default function PromotionsTicker() {
   }
 
   return (
-    <div className="bg-[var(--color-burgundy)]/80">
-      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center gap-3 px-4 py-2 text-xs text-[var(--color-gold)]/80 sm:text-sm">
-        <span className="flex items-center gap-1 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/70 px-3 py-1 text-[var(--color-rose)]">
+    <div className="bg-[#5b3dfc]">
+      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center gap-3 px-4 py-2 text-xs text-white/85 sm:text-sm">
+        <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-white font-semibold">
           🎁 โปรโมชันพิเศษ
         </span>
         <div className="flex flex-1 flex-wrap gap-2">
@@ -78,18 +78,18 @@ export default function PromotionsTicker() {
             return (
               <span
                 key={promotion._id}
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy-dark)]/60 px-3 py-1 shadow-inner shadow-black/20"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[#3c1a09] shadow-[0_6px_12px_-6px_rgba(0,0,0,0.2)]"
               >
-                <span className="font-semibold text-[var(--color-rose)]">
+                <span className="font-semibold text-[#5b3dfc]">
                   {promotion.title}
                 </span>
-                <span className="text-[var(--color-gold)]/70">
+                <span className="text-[#f7931e]">
                   {summarizePromotion(promotion)}
                 </span>
                 {usage ? (
-                  <span className="text-[var(--color-gold)]/55">{usage}</span>
+                  <span className="text-[#3c1a09]/70">{usage}</span>
                 ) : null}
-                <span className="text-[var(--color-gold)]/50">
+                <span className="text-[#3c1a09]/60">
                   {formatPromotionSchedule(promotion)}
                 </span>
               </span>

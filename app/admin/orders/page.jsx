@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  adminAccentButton,
+  adminFilterPill,
+  adminInsetCardShell,
+  adminSoftBadge,
+  adminSubSurfaceShell,
+  adminSurfaceShell,
+} from "@/app/admin/theme";
 import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const statusOptions = ["all", "new", "pending", "shipping", "success", "cancel"];
@@ -19,15 +27,15 @@ const statusLabels = {
 };
 
 const statusStyles = {
-  new: "bg-[#fff5e4] text-[var(--color-choco)]",
-  pending: "bg-[#f3d36b]/30 text-[var(--color-choco)]",
-  shipping: "bg-[#7cd1b8]/30 text-[#1f7a65]",
-  success: "bg-[#7cd1b8]/40 text-[#1f7a65]",
-  cancel: "bg-rose-100 text-rose-500",
-  preparing: "bg-[#f3d36b]/30 text-[var(--color-choco)]",
-  shipped: "bg-[#7cd1b8]/30 text-[#1f7a65]",
-  done: "bg-[#7cd1b8]/40 text-[#1f7a65]",
-  cancelled: "bg-rose-100 text-rose-500",
+  new: "border border-[#F5D4A6] bg-[#FFF4E5] text-[#8A5A33]",
+  pending: "border border-[#C3E7C4] bg-[#F0F9ED] text-[#2F7A3D]",
+  shipping: "border border-[#C8DBF5] bg-[#F1F6FE] text-[#2B6AA3]",
+  success: "border border-[#BDE5C1] bg-[#EEF9F0] text-[#2F7A3D]",
+  cancel: "border border-rose-200 bg-rose-50 text-rose-600",
+  preparing: "border border-[#C3E7C4] bg-[#F0F9ED] text-[#2F7A3D]",
+  shipped: "border border-[#C8DBF5] bg-[#F1F6FE] text-[#2B6AA3]",
+  done: "border border-[#BDE5C1] bg-[#EEF9F0] text-[#2F7A3D]",
+  cancelled: "border border-rose-200 bg-rose-50 text-rose-600",
 };
 
 const paymentStatusOptions = ["unpaid", "verifying", "paid", "invalid", "cash"];
@@ -43,13 +51,13 @@ const paymentStatusLabels = {
 };
 
 const paymentStatusStyles = {
-  unpaid: "bg-amber-100 text-amber-600",
-  verifying: "bg-[#fff5e4] text-[var(--color-choco)]",
-  paid: "bg-emerald-100 text-emerald-600",
-  invalid: "bg-rose-100 text-rose-600",
-  cash: "bg-sky-100 text-sky-600",
-  pending: "bg-amber-100 text-amber-600",
-  failed: "bg-rose-100 text-rose-600",
+  unpaid: "border border-[#F5D4A6] bg-[#FFF4E5] text-[#8A5A33]",
+  verifying: "border border-[#F5D4A6] bg-[#FFF4E5] text-[#8A5A33]",
+  paid: "border border-[#BDE5C1] bg-[#EEF9F0] text-[#2F7A3D]",
+  invalid: "border border-rose-200 bg-rose-50 text-rose-600",
+  cash: "border border-[#C8DBF5] bg-[#F1F6FE] text-[#2B6AA3]",
+  pending: "border border-[#F5D4A6] bg-[#FFF4E5] text-[#8A5A33]",
+  failed: "border border-rose-200 bg-rose-50 text-rose-600",
 };
 
 const normalizeStatus = (status) => {
@@ -160,35 +168,38 @@ export default function AdminOrdersPage() {
 
   if (loading)
     return (
-      <main className="rounded-3xl border border-white/80 bg-white/80 px-6 py-10 text-[var(--color-choco)]/70 shadow-lg shadow-[rgba(240,200,105,0.08)]">
-        กำลังโหลดคำสั่งซื้อ...
+      <main className={`${adminSurfaceShell} p-8`}>
+        <div className="flex items-center gap-3 text-sm text-[#6F4A2E]">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
+          <span>กำลังโหลดคำสั่งซื้อ...</span>
+        </div>
       </main>
     );
 
   if (err)
     return (
-      <main className="rounded-3xl border border-rose-200 bg-rose-50/80 px-6 py-10 text-rose-600 shadow-lg">
+      <main className="rounded-[2rem] border border-rose-200 bg-rose-50 p-8 text-rose-600 shadow-[0_20px_45px_-25px_rgba(244,63,94,0.3)]">
         {err}
       </main>
     );
 
   return (
-    <main className="space-y-10">
-      <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-[rgba(240,200,105,0.08)] backdrop-blur">
+    <main className="space-y-8 text-[#3F2A1A]">
+      <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-[var(--color-rose-dark)]">คำสั่งซื้อทั้งหมด</h2>
-            <p className="mt-1 text-sm text-[var(--color-choco)]/70">
+            <h2 className="text-2xl font-bold text-[#3F2A1A]">คำสั่งซื้อทั้งหมด</h2>
+            <p className="mt-1 text-sm text-[#6F4A2E]">
               ติดตามสถานะการจ่ายเงิน จัดเตรียมสินค้า และการจัดส่งให้ครบถ้วนในที่เดียว
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/30 bg-white/80 px-4 py-2 text-xs font-semibold text-[var(--color-choco)]/70 shadow-inner">
+            <label className={`${adminFilterPill}`}>
               <span>กรองตามสถานะ</span>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="rounded-full border border-transparent bg-transparent text-[var(--color-rose)] focus:outline-none"
+                className="rounded-full border border-transparent bg-transparent text-[#8A5A33] focus:outline-none"
               >
                 {statusOptions.map((status) => (
                   <option key={status} value={status}>
@@ -197,10 +208,7 @@ export default function AdminOrdersPage() {
                 ))}
               </select>
             </label>
-            <a
-              href="/api/admin/export/orders"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-rose)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(240,200,105,0.33)] transition hover:bg-[var(--color-rose-dark)]"
-            >
+            <a href="/api/admin/export/orders" className={adminAccentButton}>
               ⬇️ ส่งออก CSV
             </a>
           </div>
@@ -216,7 +224,7 @@ export default function AdminOrdersPage() {
 
       <section className="space-y-6">
         {filteredOrders.length === 0 ? (
-          <div className="rounded-3xl border border-white/70 bg-white/70 px-6 py-16 text-center text-[var(--color-choco)]/60 shadow-inner">
+          <div className={`${adminSubSurfaceShell} px-6 py-16 text-center text-[#6F4A2E]`}>
             ยังไม่มีคำสั่งซื้อในสถานะนี้
           </div>
         ) : (
@@ -259,27 +267,26 @@ export default function AdminOrdersPage() {
             })();
 
             return (
-              <article
-                key={order._id}
-                className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl shadow-[rgba(240,200,105,0.08)] backdrop-blur"
-              >
-                <header className="flex flex-col gap-3 border-b border-white/60 pb-4 md:flex-row md:items-center md:justify-between">
+              <article key={order._id} className={`${adminSubSurfaceShell} p-6 shadow-[0_24px_50px_-28px_rgba(63,42,26,0.45)]`}>
+                <header className="flex flex-col gap-3 border-b border-[#F3E0C7] pb-4 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-[var(--color-choco)]/60">คำสั่งซื้อ #{order._id.slice(-6)}</p>
-                    <h3 className="text-xl font-semibold text-[var(--color-choco)]">
+                    <p className="text-sm font-semibold text-[#8A5A33]/70">คำสั่งซื้อ #{order._id.slice(-6)}</p>
+                    <h3 className="text-xl font-semibold text-[#3F2A1A]">
                       {order.customer?.name || "ลูกค้าทั่วไป"}
                     </h3>
-                    <p className="text-xs text-[var(--color-choco)]/50">
+                    <p className="text-xs text-[#6F4A2E]">
                       {new Date(order.createdAt).toLocaleString("th-TH")}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold ${statusStyles[normalizedStatus] || "bg-white"}`}>
+                    <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)] ${
+                      statusStyles[normalizedStatus] || "bg-white text-[#3F2A1A]"
+                    }`}>
                       <span className="text-base">📦</span>
                       {statusLabels[normalizedStatus] || normalizedStatus}
                     </span>
                     {order.preorder ? (
-                      <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-rose)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-rose)]">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-[#DCC7F0] bg-[#F8F2FF] px-3 py-1 text-xs font-semibold text-[#7A4CB7]">
                         🗓️ Pre-order · {order.preorder.paymentPlan === "half" ? "มัดจำ 50%" : "ชำระเต็ม"}
                       </span>
                     ) : null}
@@ -290,8 +297,8 @@ export default function AdminOrdersPage() {
                         disabled={!canAccept || isUpdating}
                         className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                           !canAccept || isUpdating
-                            ? "cursor-not-allowed bg-[var(--color-rose)]/20 text-[var(--color-choco)]/40"
-                            : "bg-[var(--color-rose)] text-white shadow shadow-[rgba(240,200,105,0.33)] hover:bg-[var(--color-rose-dark)]"
+                            ? "cursor-not-allowed border border-[#E6C79C] bg-white/60 text-[#8A5A33]/50"
+                            : "bg-[#8A5A33] text-white shadow-[0_16px_30px_-20px_rgba(63,42,26,0.55)] hover:bg-[#714528]"
                         }`}
                         title={
                           canAccept
@@ -302,12 +309,12 @@ export default function AdminOrdersPage() {
                         {isUpdating ? "กำลังอัปเดต..." : "ยอมรับออเดอร์"}
                       </button>
                     ) : null}
-                    <label className="inline-flex items-center gap-2 rounded-full border border-[var(--color-rose)]/40 bg-white/70 px-3 py-2 text-xs text-[var(--color-choco)]/70">
-                      <span className="font-semibold text-[var(--color-choco)]">อัปเดตสถานะ</span>
+                    <label className={`${adminFilterPill} px-3 py-2`}>
+                      <span className="font-semibold text-[#8A5A33]">อัปเดตสถานะ</span>
                       <select
                         value={normalizedStatus}
                         onChange={(e) => updateStatus(order._id, e.target.value)}
-                        className="rounded-full border border-transparent bg-transparent text-[var(--color-rose)] focus:outline-none"
+                        className="rounded-full border border-transparent bg-transparent text-[#8A5A33] focus:outline-none"
                         disabled={isUpdating}
                       >
                         {statusOptions
@@ -324,11 +331,11 @@ export default function AdminOrdersPage() {
 
                 <div className="mt-4 grid gap-6 lg:grid-cols-[2fr_1fr]">
                   <div className="space-y-4">
-                    <div className="rounded-2xl border border-white/60 bg-white/70 p-4 shadow-inner">
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-choco)]/50">
+                    <div className={`${adminInsetCardShell} p-5`}>
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[#8A5A33]/70">
                         รายการสินค้า
                       </h4>
-                      <ul className="mt-3 space-y-2 text-sm text-[var(--color-choco)]">
+                      <ul className="mt-3 space-y-2 text-sm text-[#3F2A1A]">
                         {order.items.map((item, idx) => {
                           const bonus = freebiesByProduct.get(String(item.productId));
                           return (
@@ -340,7 +347,7 @@ export default function AdminOrdersPage() {
                                 <span className="font-semibold">{formatCurrency(item.price * item.qty)}</span>
                               </div>
                               {bonus?.qty ? (
-                                <div className="flex items-center justify-between gap-3 text-xs text-[var(--color-rose)]/80">
+                                <div className="flex items-center justify-between gap-3 text-xs text-[#7A4CB7]">
                                   <span>
                                     รับฟรี {bonus.qty} ชิ้น (-{formatCurrency(bonus.discount)}) จากโปร {bonus.titles.join(", ")}
                                   </span>
@@ -352,18 +359,18 @@ export default function AdminOrdersPage() {
                       </ul>
                     </div>
 
-                    <div className="rounded-2xl border border-white/60 bg-white/70 p-4 shadow-inner">
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-choco)]/50">
+                    <div className={`${adminInsetCardShell} p-5`}>
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[#8A5A33]/70">
                         ที่อยู่จัดส่ง
                       </h4>
-                      <p className="mt-2 text-sm leading-relaxed text-[var(--color-choco)]/75">
+                      <p className="mt-2 text-sm leading-relaxed text-[#5B3A21]">
                         {order.shipping?.address1}
                         {order.shipping?.address2 ? ` ${order.shipping.address2}` : ""}
                         <br />
                         {order.shipping?.district} {order.shipping?.province} {order.shipping?.postcode}
                       </p>
                       {order.shipping?.note ? (
-                        <p className="mt-2 rounded-2xl bg-[var(--color-rose)]/10 px-3 py-2 text-xs text-[var(--color-rose)]">
+                        <p className="mt-2 rounded-[1rem] border border-[#DCC7F0] bg-[#F8F2FF] px-3 py-2 text-xs text-[#7A4CB7]">
                           บันทึกจากลูกค้า: {order.shipping.note}
                         </p>
                       ) : null}
@@ -371,8 +378,8 @@ export default function AdminOrdersPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-2xl border border-white/60 bg-white/70 p-4 text-sm text-[var(--color-choco)] shadow-inner">
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-choco)]/50">
+                    <div className={`${adminInsetCardShell} p-5 text-sm text-[#5B3A21]`}>
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[#8A5A33]/70">
                         สรุปยอดชำระ
                       </h4>
                       <div className="mt-3 space-y-2">
@@ -408,27 +415,27 @@ export default function AdminOrdersPage() {
                         ) : null}
                       </div>
                       {order.promotions?.length ? (
-                        <div className="mt-3 rounded-2xl border border-[var(--color-rose)]/25 bg-[var(--color-rose)]/10 px-3 py-2 text-xs text-[var(--color-choco)]/70">
-                          <h5 className="font-semibold text-[var(--color-rose)]">โปรโมชันที่ใช้</h5>
+                        <div className="mt-3 rounded-[1.2rem] border border-[#DCC7F0] bg-[#F8F2FF] px-3 py-2 text-xs text-[#5B3A21]">
+                          <h5 className="font-semibold text-[#7A4CB7]">โปรโมชันที่ใช้</h5>
                           <ul className="mt-1 space-y-1">
                             {order.promotions.map((promo, idx) => (
                               <li key={`${order._id}-promo-${idx}`} className="flex items-center justify-between gap-3">
                                 <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
-                                <span className="font-semibold text-[var(--color-rose-dark)]">-{formatCurrency(promo.discount || 0)}</span>
+                                <span className="font-semibold text-[#7A4CB7]">-{formatCurrency(promo.discount || 0)}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                       ) : null}
                       {order.coupon?.code ? (
-                        <p className="mt-3 rounded-full bg-[var(--color-rose)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-rose)]">
+                        <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#DCC7F0] bg-[#F8F2FF] px-3 py-1 text-xs font-semibold text-[#7A4CB7]">
                           ใช้คูปอง {order.coupon.code} (-{formatCurrency(couponDiscount)})
                         </p>
                       ) : null}
                     </div>
 
-                    <div className="rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-rose)]/10 p-4 text-sm text-[var(--color-choco)] shadow-inner">
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-choco)]/50">
+                    <div className={`${adminInsetCardShell} border border-[#E4CFE8] bg-[#FDF9FF] p-5 text-sm text-[#5B3A21]`}>
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-[#7A4CB7]/70">
                         การชำระเงิน
                       </h4>
                       <div className="mt-2 flex flex-col gap-3">
@@ -436,16 +443,18 @@ export default function AdminOrdersPage() {
                           <span>
                             วิธีชำระ: <strong>{methodDisplay}</strong>
                           </span>
-                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${paymentStatusStyles[paymentState] || "bg-white"}`}>
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_22px_-20px_rgba(63,42,26,0.45)] ${
+                            paymentStatusStyles[paymentState] || "border border-[#F3E0C7] bg-white text-[#3F2A1A]"
+                          }`}>
                             {paymentStatusLabels[paymentState] || paymentState}
                           </span>
                         </div>
-                        <label className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-3 py-2 text-xs text-[var(--color-choco)]/70">
-                          <span className="font-semibold text-[var(--color-choco)]">สถานะชำระเงิน</span>
+                        <label className={`${adminFilterPill} px-3 py-2`}>
+                          <span className="font-semibold text-[#8A5A33]">สถานะชำระเงิน</span>
                           <select
                             value={paymentState}
                             onChange={(e) => updatePaymentStatus(order, e.target.value)}
-                            className="rounded-full border border-transparent bg-transparent text-[var(--color-rose)] focus:outline-none"
+                            className="rounded-full border border-transparent bg-transparent text-[#8A5A33] focus:outline-none"
                             disabled={updatingPayment === order._id}
                           >
                             {paymentStatusOptions.map((option) => (
@@ -456,16 +465,16 @@ export default function AdminOrdersPage() {
                           </select>
                         </label>
                         {order.payment?.amountPaid ? (
-                          <p className="text-sm text-[var(--color-choco)]/70">
+                          <p className="text-sm text-[#6F4A2E]">
                             ยอดที่ลูกค้าแจ้ง: {formatCurrency(order.payment.amountPaid)}
                           </p>
                         ) : null}
                         {order.payment?.ref ? (
-                          <p className="text-xs text-[var(--color-choco)]/60">เลขอ้างอิง: {order.payment.ref}</p>
+                          <p className="text-xs text-[#8A5A33]/70">เลขอ้างอิง: {order.payment.ref}</p>
                         ) : null}
                         {order.payment?.slip ? (
                           <button
-                            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[var(--color-rose)] shadow hover:bg-white/90"
+                            className={`${adminSoftBadge} gap-2 px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD]`}
                             onClick={() => setSelectedSlip({
                               slip: order.payment.slip,
                               filename: order.payment.slipFilename || `slip-${order._id}.jpg`,
@@ -475,7 +484,7 @@ export default function AdminOrdersPage() {
                           </button>
                         ) : null}
                         {order.payment?.confirmedAt ? (
-                          <p className="text-xs text-[var(--color-choco)]/60">
+                          <p className="text-xs text-[#8A5A33]/70">
                             แนบสลิปเมื่อ {new Date(order.payment.confirmedAt).toLocaleString("th-TH")}
                           </p>
                         ) : null}
@@ -491,17 +500,17 @@ export default function AdminOrdersPage() {
 
       {selectedSlip ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-10 backdrop-blur"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm"
           onClick={() => setSelectedSlip(null)}
         >
           <div
-            className="max-h-full w-full max-w-xl overflow-hidden rounded-3xl border border-white/70 bg-white shadow-2xl shadow-[rgba(240,200,105,0.3)]"
+            className={`max-h-full w-full max-w-xl overflow-hidden ${adminSubSurfaceShell} shadow-[0_30px_60px_-32px_rgba(63,42,26,0.65)]`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-white/60 bg-[var(--color-rose)]/10 px-5 py-3 text-sm font-semibold text-[var(--color-choco)]">
+            <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-5 py-3 text-sm font-semibold text-[#3F2A1A]">
               สลิปการโอน
               <button
-                className="rounded-full border border-[var(--color-choco)]/20 px-3 py-1 text-xs text-[var(--color-choco)]/70"
+                className="rounded-full border border-[#E6C79C] bg-white/80 px-3 py-1 text-xs text-[#8A5A33] transition hover:bg-[#FFF2DD]"
                 onClick={() => setSelectedSlip(null)}
               >
                 ปิด
@@ -513,7 +522,7 @@ export default function AdminOrdersPage() {
             <a
               href={selectedSlip.slip}
               download={selectedSlip.filename}
-              className="block bg-white px-5 py-3 text-center text-sm font-semibold text-[var(--color-rose)] transition hover:bg-[var(--color-rose)]/10"
+              className="block bg-white px-5 py-3 text-center text-sm font-semibold text-[#8A5A33] transition hover:bg-[#FFF2DD]"
             >
               ดาวน์โหลดสลิป
             </a>
@@ -527,12 +536,12 @@ export default function AdminOrdersPage() {
 function OrderHighlight({ label, value, subtle = false }) {
   return (
     <div
-      className={`rounded-3xl border border-white/70 px-4 py-4 text-sm font-semibold shadow-inner ${
-        subtle ? "bg-white/60 text-[var(--color-choco)]/60" : "bg-white/80 text-[var(--color-choco)]"
+      className={`${adminInsetCardShell} px-4 py-4 text-sm font-semibold shadow-[0_14px_26px_-24px_rgba(63,42,26,0.45)] ${
+        subtle ? "bg-[#FFF5EA] text-[#8A5A33]/70" : "bg-white text-[#3F2A1A]"
       }`}
     >
-      <p className="text-xs uppercase tracking-wide text-[var(--color-choco)]/50">{label}</p>
-      <p className="mt-2 text-xl text-[var(--color-rose-dark)]">{value}</p>
+      <p className="text-xs uppercase tracking-wide text-[#8A5A33]/70">{label}</p>
+      <p className="mt-2 text-xl text-[#3F2A1A]">{value}</p>
     </div>
   );
 }
@@ -540,9 +549,9 @@ function OrderHighlight({ label, value, subtle = false }) {
 function SummaryRow({ label, value, strong = false, negative = false }) {
   return (
     <div className="flex items-center justify-between text-sm">
-      <span className="text-[var(--color-choco)]/60">{label}</span>
+      <span className="text-[#8A5A33]/70">{label}</span>
       <span
-        className={`${strong ? "text-lg font-semibold text-[var(--color-rose-dark)]" : "font-medium text-[var(--color-choco)]"} ${
+        className={`${strong ? "text-lg font-semibold text-[#3F2A1A]" : "font-medium text-[#5B3A21]"} ${
           negative ? "text-rose-500" : ""
         }`}
       >

@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  adminAccentButton,
+  adminInsetCardShell,
+  adminSurfaceShell,
+  adminTableShell,
+} from "@/app/admin/theme";
 import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 import { summarizePromotion, formatPromotionSchedule } from "@/lib/promotionUtils";
-
-const surfaceClass =
-  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] p-8 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.45)]";
-const tableShellClass =
-  "rounded-[2rem] border border-[#F2D5AF] bg-[#FFFBF7] shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)] overflow-hidden";
 
 const emptyPromotion = {
   title: "",
@@ -254,7 +255,7 @@ export default function AdminPromotionsPage() {
 
   return (
     <main className="space-y-8 text-[#3F2A1A]">
-      <section className={surfaceClass}>
+      <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-bold text-[#3F2A1A]">จัดการโปรโมชัน</h2>
@@ -273,10 +274,7 @@ export default function AdminPromotionsPage() {
               />
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
             </div>
-            <button
-              className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-5 py-2 text-sm font-semibold text-white shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)] transition hover:bg-[#714528]"
-              onClick={startCreate}
-            >
+            <button className={adminAccentButton} onClick={startCreate}>
               🎁 สร้างโปรโมชัน
             </button>
           </div>
@@ -290,7 +288,7 @@ export default function AdminPromotionsPage() {
         </div>
       </section>
 
-      <section className={tableShellClass}>
+      <section className={adminTableShell}>
         <header className="flex flex-col gap-2 border-b border-[#F3E0C7] bg-[#FFF4E5]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-bold text-[#3F2A1A]">รายการโปรโมชัน</h3>
@@ -327,7 +325,7 @@ export default function AdminPromotionsPage() {
                 </div>
               ) : (
                 filtered.map((p) => (
-                  <div key={p._id} className="rounded-[1.5rem] border border-[#F3E0C7] bg-white p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]">
+                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
                         <h4 className="truncate font-semibold text-[#3F2A1A]">{p.title}</h4>
@@ -591,10 +589,7 @@ export default function AdminPromotionsPage() {
                   >
                     ยกเลิก
                   </button>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-5 py-2 text-sm font-semibold text-white shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)] transition hover:bg-[#714528] disabled:cursor-not-allowed disabled:opacity-60"
-                    disabled={saving}
-                  >
+                  <button className={`${adminAccentButton} disabled:cursor-not-allowed disabled:opacity-60`} disabled={saving}>
                     {saving ? "กำลังบันทึก..." : editing?._id ? "บันทึกโปรโมชัน" : "สร้างโปรโมชัน"}
                   </button>
                 </div>
