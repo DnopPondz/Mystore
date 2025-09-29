@@ -58,7 +58,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="grid gap-10 sm:grid-cols-2 lg:col-span-2">
+            <div className="grid gap-10 min-[360px]:grid-cols-2 lg:col-span-2">
               <div>
                 <h3 className="text-lg font-semibold text-white">เมนูด่วน</h3>
                 <ul className="mt-4 space-y-3 text-sm text-[#fdd9a0]/80">
