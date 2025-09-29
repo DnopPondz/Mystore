@@ -76,10 +76,10 @@ export default function NavBar() {
       <Link
         key={item.href}
         href={targetHref}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
+        className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
-            ? "bg-[var(--color-burgundy)]/80 text-[var(--color-rose)] shadow-lg shadow-black/30"
-            : "text-[var(--color-gold)]/80 hover:text-[var(--color-rose)]"
+            ? "bg-[#f7931e] text-white shadow-lg shadow-[rgba(247,147,30,0.35)]"
+            : "text-[#3c1a09]/80 hover:text-[#f7931e]"
         }`}
         onClick={() => setMenuOpen(false)}
       >
@@ -104,23 +104,23 @@ export default function NavBar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-[var(--color-burgundy-dark)]/60 backdrop-blur">
-      <div className="hidden md:flex items-center justify-between border-b border-[var(--color-rose)]/15 px-6 py-2 text-xs text-[var(--color-gold)]/80 max-w-screen-xl mx-auto">
+    <header className="sticky top-0 z-30">
+      <div className="hidden md:flex items-center justify-between bg-[#5b3dfc] px-6 py-2 text-xs font-medium text-white max-w-screen-xl mx-auto">
         <span className="tracking-wide">อบสดใหม่ทุกวัน • ส่งฟรีในเมืองเมื่อสั่งครบ ฿800</span>
         <a
           href="tel:021234567"
-          className="font-medium text-[var(--color-gold)]/80 transition-colors hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          className="font-semibold text-white transition-colors hover:text-[#ffe37f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffe37f]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#5b3dfc]"
         >
           โทร. 061-267-4523
         </a>
       </div>
 
-      <nav className="shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]">
-        <div className="bg-[var(--color-cream-soft)]">
+      <nav className="shadow-[0_20px_40px_-20px_rgba(91,61,252,0.25)] bg-white/95 backdrop-blur">
+        <div className="border-b border-[#f1d7b8] bg-white">
           <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-6 px-4 py-4 sm:px-6">
             <Link
               href="/"
-              className="group flex items-center gap-3 rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/70 px-3 py-1 text-[var(--color-gold)] transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+              className="group flex items-center gap-3 rounded-full border border-[#f5c486] bg-[#fff3d6] px-3 py-1 text-[#3c1a09] transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
             >
               {/* <Image
                className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
@@ -132,15 +132,15 @@ export default function NavBar() {
                 alt="logo"
                 width={100}
                 height={100}
-                className="h-10 w-10 rounded-full border border-[var(--color-rose)]/40 bg-[var(--color-burgundy-dark)]/80 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
+                className="h-10 w-10 rounded-full border border-[#f5c486] bg-[#ffe37f] shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
               />
-              <span className="text-xl sm:text-2xl font-extrabold text-[var(--color-rose)] tracking-tight">
+              <span className="text-xl sm:text-2xl font-extrabold text-[#3c1a09] tracking-tight">
                Steaming Bun
               </span>
             </Link>
 
             <button
-              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/80 text-[var(--color-rose)] shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#f5c486] bg-[#ffe37f] text-[#3c1a09] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               type="button"
@@ -170,24 +170,24 @@ export default function NavBar() {
             </button>
 
             <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 px-2 py-1 shadow-inner shadow-black/20">
+              <div className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#fff3d6] px-2 py-1 shadow-inner shadow-[#f5c486]/40">
                 {navItems.map((item) => link(item))}
               </div>
               {status === "loading" && (
-                <span className="text-xs text-[var(--color-gold)]/70">กำลังโหลด...</span>
+                <span className="text-xs text-[#3c1a09]/70">กำลังโหลด...</span>
               )}
 
               {status === "unauthenticated" && (
                 <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="px-4 py-2 rounded-full text-sm font-medium text-[var(--color-rose)] bg-[var(--color-burgundy)]/70 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                    className="px-4 py-2 rounded-full text-sm font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                   >
                     เข้าสู่ระบบ
                   </Link>
                   <Link
                     href="/register"
-                    className="px-4 py-2 rounded-full text-sm font-semibold text-[var(--color-burgundy-dark)] bg-[var(--color-rose)] shadow-lg shadow-[rgba(0,0,0,0.35)] transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f7931e] shadow-lg shadow-[rgba(247,147,30,0.4)] transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     สมัครสมาชิก
                   </Link>
@@ -199,7 +199,7 @@ export default function NavBar() {
                   {session?.user?.role === "admin" && (
                     <Link
                       href="/admin"
-                      className="px-4 py-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 text-[var(--color-rose)] shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                      className="px-4 py-2 rounded-full border border-transparent bg-[#f7931e] text-white shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                     >
                       จัดการร้าน
                     </Link>
@@ -208,8 +208,8 @@ export default function NavBar() {
                     <button
                       type="button"
                       onClick={() => setUserMenuOpen((v) => !v)}
-                      className="flex items-center gap-2 rounded-full border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/60 px-4 py-2 text-[var(--color-gold)]/90 shadow-inner transition hover:border-[var(--color-rose)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
-                      style={{ boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(240,200,105,0.35)" }}
+                      className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#ffe37f] px-4 py-2 text-[#3c1a09] shadow-inner transition hover:border-[#f7931e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                      style={{ boxShadow: "inset 3px 3px 6px rgba(60,26,9,0.1), inset -3px -3px 6px rgba(255,227,127,0.45)" }}
                       aria-expanded={userMenuOpen}
                       aria-haspopup="menu"
                     >
@@ -230,12 +230,12 @@ export default function NavBar() {
                     {userMenuOpen && (
                       <div
                         role="menu"
-                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[var(--color-rose)]/30 bg-[var(--color-burgundy-dark)]/95 p-2 text-[var(--color-gold)] shadow-2xl shadow-black/40 backdrop-blur"
+                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[#f5c486] bg-white p-2 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.2)]"
                       >
                         <Link
                           href="/profile"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
                           role="menuitem"
                         >
                           <span className="text-lg">👤</span>
@@ -244,7 +244,7 @@ export default function NavBar() {
                         <Link
                           href="/orders"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
                           role="menuitem"
                         >
                           <span className="text-lg">🧾</span>
@@ -281,7 +281,7 @@ export default function NavBar() {
 
         <div
           id="mobile-menu"
-          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/95 p-6 text-sm text-[var(--color-gold)] shadow-2xl shadow-black/50 backdrop-blur transition-transform duration-200 ${
+          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl border border-[#f5c486] bg-[#fff3d6] p-6 text-sm text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.25)] backdrop-blur transition-transform duration-200 ${
             menuOpen ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
           }`}
         >
@@ -292,19 +292,19 @@ export default function NavBar() {
               </div>
             ))}
             {status === "loading" && (
-              <span className="text-xs text-[var(--color-gold)]/70">กำลังโหลด...</span>
+              <span className="text-xs text-[#3c1a09]/70">กำลังโหลด...</span>
             )}
             {status === "unauthenticated" && (
               <div className="flex flex-col gap-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 rounded-full font-medium text-[var(--color-rose)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                 >
                   เข้าสู่ระบบ
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-full font-semibold text-[var(--color-burgundy-dark)] bg-[var(--color-rose)] shadow transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                  className="px-4 py-2 rounded-full font-semibold text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                 >
                   สมัครสมาชิก
                 </Link>
@@ -316,26 +316,26 @@ export default function NavBar() {
                   <Link
                     href="/admin"
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-2 rounded-full font-medium text-[var(--color-rose)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                    className="px-4 py-2 rounded-full font-medium text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                   >
                     จัดการร้าน
                   </Link>
                 )}
-                <div className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-burgundy)]/70 p-4 text-sm text-[var(--color-gold)]/90 shadow-inner">
+                <div className="rounded-2xl border border-[#f5c486] bg-white p-4 text-sm text-[#3c1a09] shadow-inner">
                   <p className="font-semibold">{session?.user?.name || session?.user?.email}</p>
-                  <p className="mt-1 text-xs text-[var(--color-gold)]/70">{session?.user?.email}</p>
+                  <p className="mt-1 text-xs text-[#3c1a09]/70">{session?.user?.email}</p>
                 </div>
                 <Link
                   href="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[var(--color-gold)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                 >
                   โปรไฟล์ของฉัน
                 </Link>
                 <Link
                   href="/orders"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[var(--color-gold)] bg-[var(--color-burgundy)]/80 shadow transition hover:bg-[var(--color-burgundy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
                 >
                   คำสั่งซื้อของฉัน
                 </Link>
