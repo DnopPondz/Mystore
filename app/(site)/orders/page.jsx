@@ -200,6 +200,11 @@ export default function OrdersPage() {
               const depositAmount = Number(o?.preorder?.depositAmount ?? orderTotal);
               const quotedTotal = Number(o?.preorder?.quotedTotal ?? depositAmount);
               const remaining = Number(o?.preorder?.balanceAmount ?? 0);
+              const promotionDiscount = Number(o?.promotionDiscount || 0);
+              const couponDiscount =
+                o?.coupon?.discount != null
+                  ? Number(o.coupon.discount || 0)
+                  : Math.max(0, Number(o?.discount || 0) - promotionDiscount);
 
               return (
                 <Link
