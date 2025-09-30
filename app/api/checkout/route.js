@@ -9,6 +9,11 @@ import { authOptions } from "@/lib/auth";
 import { getPaymentConfig } from "@/lib/paymentConfig";
 import { Promotion } from "@/models/Promotion";
 import { calculateCartPromotions } from "@/lib/promotionUtils";
+import {
+  InventoryError,
+  releaseInventory,
+  reserveInventory,
+} from "@/lib/inventory";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -27,6 +32,7 @@ function calcDiscount(coupon, subtotal) {
 }
 
 export async function POST(req) {
+  let deductedStock = [];
   try {
     const {
       items,
@@ -53,6 +59,23 @@ export async function POST(req) {
       const qty = Math.max(1, Number(it.qty || 1));
       checked.push({ productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty });
     }
+
+    const insufficientStock = checked.filter((item) => {
+      const product = byId[item.productId];
+      return typeof product.stock === "number" && product.stock < item.qty;
+    });
+    if (insufficientStock.length > 0) {
+      const first = insufficientStock[0];
+      return NextResponse.json(
+        {
+          error: `Insufficient stock for ${first.title}`,
+          productId: first.productId,
+        },
+        { status: 409 },
+      );
+    }
+
+    deductedStock = await reserveInventory(checked, { productMap: byId });
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
 
@@ -172,6 +195,24 @@ export async function POST(req) {
       bankAccount,
     });
   } catch (e) {
+    if (deductedStock.length > 0) {
+      await releaseInventory(deductedStock, { productMap: byId });
+    }
+
+    if (e instanceof InventoryError && e.code === "INSUFFICIENT_STOCK") {
+      return NextResponse.json(
+        {
+          error: e.productTitle ? `Insufficient stock for ${e.productTitle}` : "Insufficient stock",
+          productId: e.productId,
+        },
+        { status: 409 },
+      );
+    }
+
+    if (e instanceof InventoryError && e.code === "PRODUCT_NOT_FOUND") {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }

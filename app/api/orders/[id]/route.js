@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Order } from "@/models/Order";
-import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { serializeOrder } from "@/lib/serializeOrder";
 import { PreOrder } from "@/models/PreOrder";
+import {
+  InventoryError,
+  normalizeInventoryItems,
+  releaseInventory,
+  reserveInventory,
+} from "@/lib/inventory";
 
 export async function GET(_req, { params }) {
   const { id } = await params;
@@ -61,39 +66,71 @@ export async function PATCH(req, { params }) {
     updatePayload.payment = mergedPayment;
   }
 
-  // ถ้าเปลี่ยนเป็น cancel → คืนสต็อก
-  if (normalizedStatus === "cancel" && normalizedPrev?.status !== "cancel") {
-    await Promise.all(
-      prev.items.map(it =>
-        Product.updateOne(
-          { _id: it.productId },
-          { $inc: { stock: +it.qty } }
-        )
-      )
-    );
-  }
+  const prevStatus = normalizedPrev?.status ?? prev.status;
+  const nextStatus = normalizedStatus || prevStatus;
+  const prevItems = normalizeInventoryItems(prev.items);
 
-  const updated = await Order.findByIdAndUpdate(id, updatePayload, { new: true }).lean();
+  const shouldReleaseStock = prevStatus !== "cancel" && nextStatus === "cancel" && prevItems.length > 0;
+  const shouldReserveStock = prevStatus === "cancel" && nextStatus !== "cancel" && prevItems.length > 0;
 
-  if (updated?.preorder?.preorderId) {
-    try {
-      const normalized = serializeOrder(updated);
-      const paymentStatus = normalized?.payment?.status;
-      if (paymentStatus && ["paid", "cash"].includes(paymentStatus)) {
-        const preorder = await PreOrder.findById(updated.preorder.preorderId);
-        if (preorder && preorder.status !== "confirmed" && preorder.status !== "closed") {
-          preorder.status = "confirmed";
-          preorder.statusHistory = Array.isArray(preorder.statusHistory) ? preorder.statusHistory : [];
-          preorder.statusHistory.push({ status: "confirmed", changedAt: new Date() });
-          if (!preorder.contactedAt) preorder.contactedAt = new Date();
-          if (!preorder.quotedAt) preorder.quotedAt = new Date();
-          await preorder.save();
-        }
-      }
-    } catch (error) {
-      console.error("Failed to sync preorder status", error);
+  let reservedForReactivation = [];
+
+  try {
+    if (shouldReserveStock) {
+      reservedForReactivation = await reserveInventory(prevItems);
     }
-  }
 
-  return NextResponse.json(updated);
+    if (shouldReleaseStock) {
+      await releaseInventory(prevItems);
+    }
+
+    const updated = await Order.findByIdAndUpdate(id, updatePayload, { new: true }).lean();
+
+    if (updated?.preorder?.preorderId) {
+      try {
+        const normalized = serializeOrder(updated);
+        const paymentStatus = normalized?.payment?.status;
+        if (paymentStatus && ["paid", "cash"].includes(paymentStatus)) {
+          const preorder = await PreOrder.findById(updated.preorder.preorderId);
+          if (preorder && preorder.status !== "confirmed" && preorder.status !== "closed") {
+            preorder.status = "confirmed";
+            preorder.statusHistory = Array.isArray(preorder.statusHistory) ? preorder.statusHistory : [];
+            preorder.statusHistory.push({ status: "confirmed", changedAt: new Date() });
+            if (!preorder.contactedAt) preorder.contactedAt = new Date();
+            if (!preorder.quotedAt) preorder.quotedAt = new Date();
+            await preorder.save();
+          }
+        }
+      } catch (error) {
+        console.error("Failed to sync preorder status", error);
+      }
+    }
+
+    return NextResponse.json(updated);
+  } catch (error) {
+    if (reservedForReactivation.length > 0) {
+      await releaseInventory(reservedForReactivation).catch(() => {});
+    }
+    if (shouldReleaseStock) {
+      await reserveInventory(prevItems).catch(() => {});
+    }
+
+    if (error instanceof InventoryError) {
+      if (error.code === "INSUFFICIENT_STOCK") {
+        return NextResponse.json(
+          {
+            error: error.productTitle ? `Insufficient stock for ${error.productTitle}` : "Insufficient stock",
+            productId: error.productId,
+          },
+          { status: 409 },
+        );
+      }
+
+      if (error.code === "PRODUCT_NOT_FOUND") {
+        return NextResponse.json({ error: "Product not found" }, { status: 400 });
+      }
+    }
+
+    return NextResponse.json({ error: String(error?.message || error) }, { status: 500 });
+  }
 }
