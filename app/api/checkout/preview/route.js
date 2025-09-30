@@ -42,10 +42,18 @@ export async function POST(req) {
       const p = byId[it.productId];
       if (!p) return NextResponse.json({ error: `Product not found: ${it.productId}` }, { status: 400 });
       const qty = Math.max(1, Number(it.qty || 1));
-      checked.push({ productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty });
+      checked.push({
+        productId: String(p._id),
+        title: p.title,
+        price: p.price,
+        qty,
+        costPrice: Number(p.costPrice || 0),
+        lineTotal: p.price * qty,
+      });
     }
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
+    const publicItems = checked.map(({ costPrice, ...rest }) => rest);
 
     let coupon = null;
     if (couponCode) {
@@ -99,7 +107,7 @@ export async function POST(req) {
         ok: 1,
         method,
         orderPreview: {
-          items: checked,
+          items: publicItems,
           subtotal,
           discount,
           total,
@@ -124,7 +132,7 @@ export async function POST(req) {
         ok: 1,
         method,
         orderPreview: {
-          items: checked,
+          items: publicItems,
           subtotal,
           discount,
           total,

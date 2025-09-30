@@ -7,6 +7,7 @@ const ProductSchema = new Schema(
     description: String,
     images: [String],
     price: Number,
+    costPrice: { type: Number, default: 0 },
     stock: Number,
     active: { type: Boolean, default: true },
     tags: [String],

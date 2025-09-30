@@ -39,8 +39,10 @@ function buildPreview(order) {
         const plain = typeof item.toObject === "function" ? item.toObject() : item;
         const price = Number(plain.price || 0);
         const qty = Number(plain.qty || 0);
+        const rest = { ...plain };
+        delete rest.costPrice;
         return {
-          ...plain,
+          ...rest,
           _id: plain._id ? plain._id.toString() : plain._id,
           productId: plain.productId ? plain.productId.toString() : plain.productId,
           lineTotal: price * qty,

@@ -13,6 +13,7 @@ import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 const emptyProduct = {
   title: "",
   price: 0,
+  costPrice: 0,
   stock: 0,
   description: "",
   image: "",
@@ -26,6 +27,13 @@ const emptyProduct = {
 
 function toSlug(s) {
   return slugify(String(s || ""), { lower: true, strict: true, trim: true });
+}
+
+function formatCurrency(value) {
+  return Number(value || 0).toLocaleString("th-TH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function SlidingToggle({ isActive, onToggle, disabled = false }) {
@@ -92,6 +100,7 @@ export default function AdminProductsPage() {
     setForm({
       title: p.title || "",
       price: Number(p.price || 0),
+      costPrice: Number(p.costPrice || 0),
       stock: Number(p.stock || 0),
       description: p.description || "",
       image: Array.isArray(p.images) && p.images[0] ? p.images[0] : "",
@@ -124,6 +133,7 @@ export default function AdminProductsPage() {
       description: form.description,
       images: form.image ? [form.image] : [],
       price: Number(form.price || 0),
+      costPrice: Number(form.costPrice || 0),
       stock: Number(form.stock || 0),
       active: Boolean(form.active),
       tags: String(form.tags || "")
@@ -289,8 +299,9 @@ export default function AdminProductsPage() {
                       <div className="min-w-0 flex-1">
                         <h4 className="truncate font-semibold text-[#3F2A1A]">{p.title}</h4>
                         <p className="truncate text-xs text-[#6F4A2E]">{p.slug}</p>
-                        <div className="mt-2 flex items-center gap-4 text-sm">
-                          <span className="font-semibold text-[#3F2A1A]">฿{p.price}</span>
+                        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                          <span className="font-semibold text-[#3F2A1A]">ราคาขาย: ฿{formatCurrency(p.price)}</span>
+                          <span className="text-[#5B3A21]">ต้นทุน: ฿{formatCurrency(p.costPrice)}</span>
                           <span className="text-[#5B3A21]">สต็อก: {p.stock}</span>
                         </div>
                         <div className="mt-3 flex items-center justify-between">
@@ -326,6 +337,7 @@ export default function AdminProductsPage() {
                   <tr className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สินค้า</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ราคา</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ต้นทุน</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สต็อก</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สถานะ</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">แท็ก</th>
@@ -335,7 +347,7 @@ export default function AdminProductsPage() {
                 <tbody className="divide-y divide-[#F3E0C7]">
                   {filteredItems.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center text-[#6F4A2E]">
+                      <td colSpan={7} className="px-6 py-12 text-center text-[#6F4A2E]">
                         <div className="flex flex-col items-center">
                           <span className="mb-4 text-4xl">🛍️</span>
                           <span>ไม่พบสินค้าที่ตรงกับคำค้นหา</span>
@@ -363,7 +375,8 @@ export default function AdminProductsPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 font-semibold text-[#3F2A1A]">฿{p.price}</td>
+                        <td className="px-6 py-4 font-semibold text-[#3F2A1A]">฿{formatCurrency(p.price)}</td>
+                        <td className="px-6 py-4 text-[#5B3A21]">฿{formatCurrency(p.costPrice)}</td>
                         <td className="px-6 py-4 text-[#5B3A21]">{p.stock}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
@@ -439,7 +452,7 @@ export default function AdminProductsPage() {
                     onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                   />
                 </Field>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-3">
                   <Field label="ราคา">
                     <input
                       type="number"
@@ -447,6 +460,15 @@ export default function AdminProductsPage() {
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.price}
                       onChange={(e) => setForm((f) => ({ ...f, price: Number(e.target.value || 0) }))}
+                    />
+                  </Field>
+                  <Field label="ต้นทุนต่อหน่วย">
+                    <input
+                      type="number"
+                      min={0}
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      value={form.costPrice}
+                      onChange={(e) => setForm((f) => ({ ...f, costPrice: Number(e.target.value || 0) }))}
                     />
                   </Field>
                   <Field label="สต็อก">
