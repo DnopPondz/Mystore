@@ -6,8 +6,8 @@ const ProductSchema = new Schema(
     slug: { type: String, unique: true, index: true },
     description: String,
     images: [String],
-    price: Number,
-    costPrice: { type: Number, default: 0 },
+    price: { type: Number, default: 0, min: 0 },
+    costPrice: { type: Number, default: 0, min: 0 },
     stock: Number,
     active: { type: Boolean, default: true },
     tags: [String],
@@ -25,5 +25,12 @@ const ProductSchema = new Schema(
   },
   { timestamps: true }
 );
+
+if (models.Product) {
+  const hasCostPrice = Boolean(models.Product.schema?.path("costPrice"));
+  if (!hasCostPrice) {
+    delete models.Product;
+  }
+}
 
 export const Product = models.Product || model("Product", ProductSchema);
