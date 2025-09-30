@@ -81,7 +81,8 @@ export default function AdminDashboardPage() {
       </section>
     );
 
-  const { cards, topProducts, profitSummary = {} } = data;
+  const { cards, topProducts: topProductsRaw = [], profitSummary = {} } = data;
+  const topProducts = Array.isArray(topProductsRaw) ? topProductsRaw : [];
   const monthLabel = (() => {
     try {
       return new Intl.DateTimeFormat("th-TH", {
@@ -251,22 +252,26 @@ export default function AdminDashboardPage() {
                       </td>
                     </tr>
                   ) : (
-                    topProducts.map((p, idx) => (
-                      <tr
-                        key={p._id}
-                        className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
-                      >
-                        <td className="px-6 py-4 font-medium text-[#3F2A1A]">{p._id}</td>
-                        <td className="px-6 py-4 text-right text-[#5B3A21]">{formatInteger(p.qty)}</td>
-                        <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.revenue)}</td>
-                        <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.cost)}</td>
-                        <td
-                          className={`px-6 py-4 text-right font-semibold ${Number(p.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"}`}
+                    topProducts.map((p, idx) => {
+                      const productName = p.title || p.name || p._id || "ไม่ทราบชื่อ";
+                      const rowKey = p.productId || p._id || `product-${idx}`;
+                      return (
+                        <tr
+                          key={rowKey}
+                          className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
                         >
-                          ฿{formatCurrency(p.profit)}
-                        </td>
-                      </tr>
-                    ))
+                          <td className="px-6 py-4 font-medium text-[#3F2A1A]">{productName}</td>
+                          <td className="px-6 py-4 text-right text-[#5B3A21]">{formatInteger(p.qty)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.revenue)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.cost)}</td>
+                          <td
+                            className={`px-6 py-4 text-right font-semibold ${Number(p.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"}`}
+                          >
+                            ฿{formatCurrency(p.profit)}
+                          </td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>

@@ -6,6 +6,122 @@ import { PreOrder } from "@/models/PreOrder";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+const CANCELLED_STATUS_TOKENS = ["cancel", "void", "refund"];
+
+const roundMoney = (value) => {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return 0;
+  return Math.round(num * 100) / 100;
+};
+
+const toSafeNumber = (value) => {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+};
+
+const toDate = (value) => {
+  if (value instanceof Date) return value;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const normalizeStatus = (value) => String(value || "").toLowerCase();
+
+const isCancelledStatus = (value) => {
+  const normalized = normalizeStatus(value);
+  return CANCELLED_STATUS_TOKENS.some((token) => normalized.includes(token));
+};
+
+const sumOrderFrame = (orders) => {
+  let revenue = 0;
+  let cost = 0;
+
+  for (const order of orders) {
+    revenue += toSafeNumber(order.total);
+
+    const items = Array.isArray(order.items) ? order.items : [];
+    for (const item of items) {
+      const qty = toSafeNumber(item.qty);
+      if (qty <= 0) continue;
+      const unitCost = toSafeNumber(item.costPrice);
+      cost += unitCost * qty;
+    }
+  }
+
+  const profit = revenue - cost;
+  return {
+    revenue: roundMoney(revenue),
+    cost: roundMoney(cost),
+    profit: roundMoney(profit),
+  };
+};
+
+const buildTopProducts = (orders) => {
+  const productTotals = new Map();
+
+  for (const order of orders) {
+    const items = Array.isArray(order.items) ? order.items : [];
+    if (items.length === 0) continue;
+
+    const grossTotal = items.reduce((sum, item) => {
+      const qty = toSafeNumber(item.qty);
+      if (qty <= 0) return sum;
+      const price = toSafeNumber(item.price);
+      return sum + price * qty;
+    }, 0);
+
+    const orderTotal = toSafeNumber(order.total);
+    const netTotal = orderTotal > 0 ? orderTotal : grossTotal;
+    const scale = grossTotal > 0 ? netTotal / grossTotal : 0;
+
+    for (const item of items) {
+      const qty = toSafeNumber(item.qty);
+      if (qty <= 0) continue;
+
+      const price = toSafeNumber(item.price);
+      const costPrice = toSafeNumber(item.costPrice);
+      const gross = price * qty;
+      const revenue = scale > 0 ? gross * scale : gross;
+      const cost = costPrice * qty;
+      const profit = revenue - cost;
+
+      const key = item.productId ? String(item.productId) : item._id ? String(item._id) : item.title || `product-${productTotals.size}`;
+      const title = item.title || key;
+
+      const existing = productTotals.get(key) || {
+        _id: title,
+        productId: item.productId ? String(item.productId) : null,
+        title,
+        qty: 0,
+        revenue: 0,
+        cost: 0,
+        profit: 0,
+      };
+
+      existing.qty += qty;
+      existing.revenue += revenue;
+      existing.cost += cost;
+      existing.profit = existing.revenue - existing.cost;
+
+      productTotals.set(key, existing);
+    }
+  }
+
+  return Array.from(productTotals.values())
+    .map((product) => ({
+      ...product,
+      qty: Math.round(product.qty),
+      revenue: roundMoney(product.revenue),
+      cost: roundMoney(product.cost),
+      profit: roundMoney(product.profit),
+    }))
+    .sort((a, b) => {
+      if (b.qty !== a.qty) return b.qty - a.qty;
+      return b.revenue - a.revenue;
+    })
+    .slice(0, 10);
+};
+
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -20,88 +136,13 @@ export async function GET() {
   const monthStart = new Date(todayStart);
   monthStart.setDate(1);
 
-  const activeStatusFilter = { $nin: ["cancel", "cancelled"] };
-  const timeframes = [
-    { key: "today", start: todayStart },
-    { key: "week", start: weekStart },
-    { key: "month", start: monthStart },
-  ];
-
-  const profitPromise = Promise.all(
-    timeframes.map(({ start }) =>
-      Order.aggregate([
-        { $match: { createdAt: { $gte: start }, status: activeStatusFilter } },
-        { $unwind: "$items" },
-        {
-          $group: {
-            _id: null,
-            revenue: { $sum: { $multiply: ["$items.price", "$items.qty"] } },
-            cost: {
-              $sum: {
-                $multiply: [{ $ifNull: ["$items.costPrice", 0] }, "$items.qty"],
-              },
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            revenue: { $ifNull: ["$revenue", 0] },
-            cost: { $ifNull: ["$cost", 0] },
-            profit: {
-              $subtract: [
-                { $ifNull: ["$revenue", 0] },
-                { $ifNull: ["$cost", 0] },
-              ],
-            },
-          },
-        },
-      ]),
-    ),
+  const earliestStart = new Date(
+    Math.min(todayStart.getTime(), weekStart.getTime(), monthStart.getTime()),
   );
 
-  const [todayAgg, newOrdersCount, lowStockCount, topProducts, preorderToday, profitAggs] = await Promise.all([
-    Order.aggregate([
-      { $match: { createdAt: { $gte: todayStart }, status: activeStatusFilter } },
-      { $group: { _id: null, total: { $sum: "$total" } } },
-    ]),
-    Order.countDocuments({
-      createdAt: { $gte: todayStart },
-      status: { $in: ["new", "pending", "preparing"] },
-    }),
+  const [rawOrders, lowStockCount, preorderToday] = await Promise.all([
+    Order.find({ createdAt: { $gte: earliestStart } }).lean(),
     Product.countDocuments({ stock: { $lt: 5 } }),
-    Order.aggregate([
-      { $match: { status: activeStatusFilter } },
-      { $unwind: "$items" },
-      {
-        $group: {
-          _id: "$items.title",
-          qty: { $sum: "$items.qty" },
-          revenue: { $sum: { $multiply: ["$items.price", "$items.qty"] } },
-          cost: {
-            $sum: {
-              $multiply: [{ $ifNull: ["$items.costPrice", 0] }, "$items.qty"],
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          profit: { $subtract: ["$revenue", "$cost"] },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          qty: 1,
-          revenue: { $round: ["$revenue", 2] },
-          cost: { $round: ["$cost", 2] },
-          profit: { $round: ["$profit", 2] },
-        },
-      },
-      { $sort: { qty: -1 } },
-      { $limit: 10 },
-    ]),
     PreOrder.aggregate([
       {
         $match: {
@@ -116,25 +157,36 @@ export async function GET() {
         },
       },
     ]),
-    profitPromise,
   ]);
 
-  const profitSummary = timeframes.reduce((acc, frame, index) => {
-    const doc = profitAggs?.[index]?.[0] || { revenue: 0, cost: 0, profit: 0 };
-    const revenue = Number(doc.revenue || 0);
-    const cost = Number(doc.cost || 0);
-    const profit = Number(doc.profit != null ? doc.profit : revenue - cost);
-    acc[frame.key] = {
-      revenue: Math.round(revenue * 100) / 100,
-      cost: Math.round(cost * 100) / 100,
-      profit: Math.round(profit * 100) / 100,
-    };
-    return acc;
-  }, {});
+  const orders = rawOrders
+    .map((order) => {
+      const createdAt = toDate(order.createdAt);
+      if (!createdAt) return null;
+      return { ...order, createdAt };
+    })
+    .filter(Boolean)
+    .filter((order) => !isCancelledStatus(order.status));
 
-  const todaySales = todayAgg?.[0]?.total || 0;
-  const preorderPipeline = preorderToday?.[0]?.total || 0;
-  const todayProfit = profitSummary.today?.profit || 0;
+  const getFrameOrders = (start) => orders.filter((order) => order.createdAt >= start);
+
+  const profitSummary = {
+    today: sumOrderFrame(getFrameOrders(todayStart)),
+    week: sumOrderFrame(getFrameOrders(weekStart)),
+    month: sumOrderFrame(getFrameOrders(monthStart)),
+  };
+
+  const todaySales = profitSummary.today.revenue;
+  const todayProfit = profitSummary.today.profit;
+
+  const newOrdersCount = orders.filter((order) => {
+    const status = normalizeStatus(order.status);
+    return (status === "new" || status === "pending") && order.createdAt >= todayStart;
+  }).length;
+
+  const topProducts = buildTopProducts(getFrameOrders(monthStart));
+
+  const preorderPipeline = roundMoney(preorderToday?.[0]?.total || 0);
 
   return NextResponse.json({
     cards: {
