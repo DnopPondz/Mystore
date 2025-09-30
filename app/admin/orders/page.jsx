@@ -242,11 +242,11 @@ export default function AdminOrdersPage() {
               order.coupon?.discount != null
                 ? Number(order.coupon.discount || 0)
                 : Math.max(0, Number(order.discount || 0) - promotionDiscount);
-            const freebiesByProduct = (() => {
-              const map = new Map();
-              const promos = Array.isArray(order.promotions) ? order.promotions : [];
-              promos.forEach((promo) => {
-                const items = Array.isArray(promo?.items) ? promo.items : [];
+          const freebiesByProduct = (() => {
+            const map = new Map();
+            const promos = Array.isArray(order.promotions) ? order.promotions : [];
+            promos.forEach((promo) => {
+              const items = Array.isArray(promo?.items) ? promo.items : [];
                 items.forEach((item) => {
                   const productId = item?.productId;
                   if (!productId) return;
@@ -265,6 +265,23 @@ export default function AdminOrdersPage() {
               });
               return map;
             })();
+
+            const { totalCost, totalProfit } = Array.isArray(order.items)
+              ? order.items.reduce(
+                  (acc, item) => {
+                    const qty = Number(item?.qty || 0);
+                    const unitPrice = Number(item?.price || 0);
+                    const unitCost = Number(item?.cost || 0);
+                    const revenue = unitPrice * qty;
+                    const costTotal = unitCost * qty;
+                    return {
+                      totalCost: acc.totalCost + costTotal,
+                      totalProfit: acc.totalProfit + (revenue - costTotal),
+                    };
+                  },
+                  { totalCost: 0, totalProfit: 0 },
+                )
+              : { totalCost: 0, totalProfit: 0 };
 
             return (
               <article key={order._id} className={`${adminSubSurfaceShell} p-6 shadow-[0_24px_50px_-28px_rgba(63,42,26,0.45)]`}>
@@ -338,13 +355,19 @@ export default function AdminOrdersPage() {
                       <ul className="mt-3 space-y-2 text-sm text-[#3F2A1A]">
                         {order.items.map((item, idx) => {
                           const bonus = freebiesByProduct.get(String(item.productId));
+                          const qty = Number(item?.qty || 0);
+                          const unitPrice = Number(item?.price || 0);
+                          const unitCost = Number(item?.cost || 0);
+                          const revenue = unitPrice * qty;
+                          const costTotal = unitCost * qty;
+                          const profit = revenue - costTotal;
                           return (
                             <li key={`${order._id}-${idx}`} className="flex flex-col gap-1">
                               <div className="flex items-center justify-between gap-3">
                                 <span>
                                   {item.title} × {item.qty}
                                 </span>
-                                <span className="font-semibold">{formatCurrency(item.price * item.qty)}</span>
+                                <span className="font-semibold">{formatCurrency(unitPrice * qty)}</span>
                               </div>
                               {bonus?.qty ? (
                                 <div className="flex items-center justify-between gap-3 text-xs text-[#7A4CB7]">
@@ -353,6 +376,17 @@ export default function AdminOrdersPage() {
                                   </span>
                                 </div>
                               ) : null}
+                              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6F4A2E]">
+                                <span>
+                                  ต้นทุนรวม: {formatCurrency(costTotal)}
+                                </span>
+                                <span
+                                  className={`font-semibold ${profit >= 0 ? "text-[#2F7A3D]" : "text-rose-600"}`}
+                                  title="กำไรสุทธิของรายการนี้"
+                                >
+                                  กำไร: {formatCurrency(profit)}
+                                </span>
+                              </div>
                             </li>
                           );
                         })}
@@ -384,6 +418,13 @@ export default function AdminOrdersPage() {
                       </h4>
                       <div className="mt-3 space-y-2">
                         <SummaryRow label="ยอดสินค้า" value={formatCurrency(order.subtotal)} />
+                        <SummaryRow label="ต้นทุนรวม" value={formatCurrency(totalCost)} />
+                        <SummaryRow
+                          label="กำไรคำสั่งซื้อ"
+                          value={formatCurrency(totalProfit)}
+                          positive={totalProfit > 0}
+                          negative={totalProfit < 0}
+                        />
                         {promotionDiscount ? (
                           <SummaryRow
                             label="ส่วนลดโปรโมชัน"
@@ -546,15 +587,19 @@ function OrderHighlight({ label, value, subtle = false }) {
   );
 }
 
-function SummaryRow({ label, value, strong = false, negative = false }) {
+function SummaryRow({ label, value, strong = false, negative = false, positive = false }) {
+  let valueClass = strong ? "text-lg font-semibold text-[#3F2A1A]" : "font-medium text-[#5B3A21]";
+  if (negative) {
+    valueClass = "font-semibold text-rose-500";
+  } else if (positive) {
+    valueClass = strong
+      ? "text-lg font-semibold text-[#2F7A3D]"
+      : "font-semibold text-[#2F7A3D]";
+  }
   return (
     <div className="flex items-center justify-between text-sm">
       <span className="text-[#8A5A33]/70">{label}</span>
-      <span
-        className={`${strong ? "text-lg font-semibold text-[#3F2A1A]" : "font-medium text-[#5B3A21]"} ${
-          negative ? "text-rose-500" : ""
-        }`}
-      >
+      <span className={valueClass}>
         {value}
       </span>
     </div>

@@ -10,7 +10,11 @@ export async function GET(_req, { params }) {
   await connectToDatabase();
   const p = await Product.findById(id).lean();
   if (!p) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(p);
+  const normalized = {
+    ...p,
+    cost: typeof p.cost === "number" ? p.cost : 0,
+  };
+  return NextResponse.json(normalized);
 }
 
 export async function PATCH(req, { params }) {

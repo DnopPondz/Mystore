@@ -28,6 +28,7 @@ export async function GET() {
 
 export async function POST(req) {
   let deductedStock = [];
+  let productMap = {};
   try {
     const { items, payment = { method: "promptpay" } } = await req.json();
     if (!Array.isArray(items) || items.length === 0) {
@@ -38,6 +39,7 @@ export async function POST(req) {
     const ids = items.map((x) => x.productId);
     const docs = await Product.find({ _id: { $in: ids }, active: true }).lean();
     const byId = Object.fromEntries(docs.map((d) => [String(d._id), d]));
+    productMap = byId;
     for (const it of items) {
       if (!byId[it.productId]) {
         return NextResponse.json({ error: `Product not found: ${it.productId}` }, { status: 400 });
@@ -47,7 +49,16 @@ export async function POST(req) {
     const checked = items.map((it) => {
       const p = byId[it.productId];
       const qty = Math.max(1, Number(it.qty || 1));
-      return { productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty };
+      const price = Number.isFinite(p.price) ? Number(p.price) : 0;
+      const cost = Number.isFinite(p.cost) ? Number(p.cost) : 0;
+      return {
+        productId: String(p._id),
+        title: p.title,
+        price,
+        cost,
+        qty,
+        lineTotal: price * qty,
+      };
     });
 
     const insufficientStock = checked.filter((it) => {
@@ -79,9 +90,11 @@ export async function POST(req) {
     const fallbackStatus = total > 0 ? "unpaid" : "paid";
     const initialStatus = allowedPaymentStatuses.has(requestedStatus) ? requestedStatus : fallbackStatus;
 
+    const orderItems = checked.map(({ lineTotal, ...rest }) => rest);
+
     const order = await Order.create({
       userId,
-      items: checked.map(({ lineTotal, ...rest }) => rest),
+      items: orderItems,
       subtotal, discount, total,
       payment: {
         method: payment.method || "promptpay",
@@ -96,7 +109,7 @@ export async function POST(req) {
     return NextResponse.json({ ok: 1, id: String(order._id) }, { status: 201 });
   } catch (e) {
     if (deductedStock.length > 0) {
-      await releaseInventory(deductedStock, { productMap: byId });
+      await releaseInventory(deductedStock, { productMap });
     }
 
     if (e instanceof InventoryError && e.code === "INSUFFICIENT_STOCK") {

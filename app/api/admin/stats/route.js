@@ -36,8 +36,13 @@ export async function GET() {
     },
     {
       $addFields: {
+        product: { $arrayElemAt: ["$product", 0] },
+        unitPrice: { $ifNull: ["$items.price", 0] },
         unitCost: {
-          $ifNull: [{ $arrayElemAt: ["$product.cost", 0] }, 0],
+          $ifNull: [
+            "$items.cost",
+            { $ifNull: ["$product.cost", 0] },
+          ],
         },
       },
     },
@@ -47,7 +52,7 @@ export async function GET() {
         profit: {
           $sum: {
             $multiply: [
-              { $subtract: ["$items.price", "$unitCost"] },
+              { $subtract: ["$unitPrice", "$unitCost"] },
               "$items.qty",
             ],
           },
@@ -95,17 +100,9 @@ export async function GET() {
       { $unwind: "$items" },
       { $match: { "items.productId": { $ne: null } } },
       {
-        $group: {
-          _id: "$items.productId",
-          qty: { $sum: "$items.qty" },
-          revenue: { $sum: { $multiply: ["$items.price", "$items.qty"] } },
-          fallbackTitle: { $first: "$items.title" },
-        },
-      },
-      {
         $lookup: {
           from: "products",
-          localField: "_id",
+          localField: "items.productId",
           foreignField: "_id",
           as: "product",
         },
@@ -113,35 +110,43 @@ export async function GET() {
       {
         $addFields: {
           product: { $arrayElemAt: ["$product", 0] },
-        },
-      },
-      {
-        $addFields: {
-          title: { $ifNull: ["$product.title", "$fallbackTitle"] },
-          unitCost: { $ifNull: ["$product.cost", 0] },
-        },
-      },
-      {
-        $addFields: {
-          profit: {
-            $subtract: [
-              "$revenue",
-              { $multiply: ["$unitCost", "$qty"] },
+          unitPrice: { $ifNull: ["$items.price", 0] },
+          unitCost: {
+            $ifNull: [
+              "$items.cost",
+              { $ifNull: ["$product.cost", 0] },
             ],
           },
         },
       },
       {
+        $group: {
+          _id: "$items.productId",
+          qty: { $sum: "$items.qty" },
+          revenue: { $sum: { $multiply: ["$unitPrice", "$items.qty"] } },
+          cost: { $sum: { $multiply: ["$unitCost", "$items.qty"] } },
+          fallbackTitle: { $first: "$items.title" },
+          product: { $first: "$product" },
+        },
+      },
+      {
         $addFields: {
+          title: { $ifNull: ["$product.title", "$fallbackTitle"] },
           revenue: { $round: ["$revenue", 2] },
-          profit: { $round: ["$profit", 2] },
+          cost: { $round: ["$cost", 2] },
+          profit: {
+            $round: [
+              { $subtract: ["$revenue", "$cost"] },
+              2,
+            ],
+          },
         },
       },
       {
         $project: {
           product: 0,
           fallbackTitle: 0,
-          unitCost: 0,
+          cost: 0,
         },
       },
       { $sort: { qty: -1 } },
