@@ -14,6 +14,7 @@ const OrderSchema = new Schema(
         productId: { type: Schema.Types.ObjectId, ref: "Product" },
         title: String,
         price: Number,
+        cost: { type: Number, default: 0 },
         qty: Number,
       },
     ],
@@ -113,7 +114,9 @@ if (models.Order) {
     ? PAYMENT_METHODS.every((value) => methodPath.enumValues.includes(value))
     : false;
 
-  if (!hasAllMethods) {
+  const hasCostField = Boolean(models.Order.schema?.path("items.cost"));
+
+  if (!hasAllMethods || !hasCostField) {
     delete models.Order;
   }
 }

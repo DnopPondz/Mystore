@@ -8,11 +8,30 @@ import {
   adminSurfaceShell,
 } from "@/app/admin/theme";
 
+const numberFormatter = new Intl.NumberFormat("th-TH");
+const currencyFormatter = new Intl.NumberFormat("th-TH", {
+  style: "currency",
+  currency: "THB",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+function formatCurrency(value) {
+  return currencyFormatter.format(Number(value || 0));
+}
+
+function formatNumber(value) {
+  return numberFormatter.format(Number(value || 0));
+}
+
 const statusChips = [
-  { key: "todaySales", label: "ยอดขายวันนี้", prefix: "฿" },
-  { key: "preorderPipeline", label: "ใบเสนอราคาวันนี้", prefix: "฿" },
-  { key: "newOrders", label: "ออเดอร์ใหม่", prefix: "" },
-  { key: "lowStock", label: "สินค้าใกล้หมด", prefix: "" },
+  { key: "todaySales", label: "ยอดขายวันนี้", formatter: formatCurrency },
+  { key: "todayProfit", label: "กำไรวันนี้", formatter: formatCurrency },
+  { key: "monthSales", label: "ยอดขายเดือนนี้", formatter: formatCurrency },
+  { key: "monthProfit", label: "กำไรเดือนนี้", formatter: formatCurrency },
+  { key: "preorderPipeline", label: "ใบเสนอราคาวันนี้", formatter: formatCurrency },
+  { key: "newOrders", label: "ออเดอร์ใหม่", formatter: formatNumber },
+  { key: "lowStock", label: "สินค้าใกล้หมด", formatter: formatNumber },
 ];
 
 export default function AdminDashboardPage() {
@@ -39,7 +58,7 @@ export default function AdminDashboardPage() {
     if (lowStock > 0) {
       list.push({
         title: "เติมสต็อกสินค้ายอดนิยม",
-        detail: `มี ${lowStock} รายการที่กำลังจะหมด เลือกเติมสต็อกก่อนเวลาเปิดร้านพรุ่งนี้`,
+        detail: `มี ${formatNumber(lowStock)} รายการที่กำลังจะหมด เลือกเติมสต็อกก่อนเวลาเปิดร้านพรุ่งนี้`,
       });
     }
     list.push({
@@ -72,7 +91,7 @@ export default function AdminDashboardPage() {
       </section>
     );
 
-  const { cards, topProducts } = data;
+  const { cards = {}, topProducts = [] } = data;
 
   return (
     <div className="space-y-8 text-[#3F2A1A]">
@@ -93,39 +112,59 @@ export default function AdminDashboardPage() {
               >
                 <span className="font-medium text-[#8A5A33]">{chip.label}</span>
                 <span className="font-semibold text-[#3F2A1A]">
-                  {chip.prefix}
-                  {cards[chip.key]}
+                  {chip.formatter ? chip.formatter(cards[chip.key]) : cards[chip.key]}
                 </span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           <StatCard
             title="ยอดขายวันนี้"
-            value={`฿${cards.todaySales}`}
+            value={formatCurrency(cards.todaySales)}
             caption="เปรียบเทียบจากยอดรวมที่ยืนยันแล้ว"
             color="green"
             icon="💰"
           />
           <StatCard
-            title="ยอดเสนอราคาใหม่"
-            value={`฿${cards.preorderPipeline}`}
-            caption="รวมยอดใบเสนอราคาที่ออกภายในวันนี้"
+            title="กำไรวันนี้"
+            value={formatCurrency(cards.todayProfit)}
+            caption="หลังหักต้นทุนสินค้าในคำสั่งซื้อวันนี้"
             color="purple"
+            icon="📈"
+          />
+          <StatCard
+            title="ยอดเสนอราคาใหม่"
+            value={formatCurrency(cards.preorderPipeline)}
+            caption="รวมยอดใบเสนอราคาที่ออกภายในวันนี้"
+            color="blue"
             icon="📝"
           />
           <StatCard
+            title="ยอดขายเดือนนี้"
+            value={formatCurrency(cards.monthSales)}
+            caption="รวมยอดคำสั่งซื้อที่ไม่ถูกยกเลิกตั้งแต่ต้นเดือน"
+            color="teal"
+            icon="🗓️"
+          />
+          <StatCard
+            title="กำไรเดือนนี้"
+            value={formatCurrency(cards.monthProfit)}
+            caption="หลังหักต้นทุนสินค้าในคำสั่งซื้อเดือนนี้"
+            color="gold"
+            icon="💼"
+          />
+          <StatCard
             title="ออเดอร์ใหม่"
-            value={cards.newOrders}
+            value={formatNumber(cards.newOrders)}
             caption="ตรวจสอบรายละเอียดก่อน 18:00 น. เพื่อจัดส่งทันวันถัดไป"
             color="blue"
             icon="📦"
           />
           <StatCard
             title="สินค้าใกล้หมด"
-            value={cards.lowStock}
+            value={formatNumber(cards.lowStock)}
             caption="เติมสต็อกล่วงหน้าเพื่อไม่ให้ยอดขายสะดุด"
             color="orange"
             icon="📊"
@@ -155,13 +194,14 @@ export default function AdminDashboardPage() {
                   <tr>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สินค้า</th>
                     <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จำนวนที่ขาย</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F8E7D1]">
                   {topProducts.length === 0 ? (
                     <tr>
-                      <td colSpan={3} className="px-6 py-8 text-center">
+                      <td colSpan={4} className="px-6 py-8 text-center">
                         <div className="flex flex-col items-center">
                           <span className="mb-2 text-4xl">📈</span>
                           <span className="text-[#6F4A2E]">ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้</span>
@@ -171,12 +211,13 @@ export default function AdminDashboardPage() {
                   ) : (
                     topProducts.map((p, idx) => (
                       <tr
-                        key={p._id}
+                        key={p._id || p.title || idx}
                         className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
                       >
-                        <td className="px-6 py-4 font-medium text-[#3F2A1A]">{p._id}</td>
-                        <td className="px-6 py-4 text-right text-[#5B3A21]">{p.qty}</td>
-                        <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">{p.revenue}</td>
+                        <td className="px-6 py-4 font-medium text-[#3F2A1A]">{p.title || p._id}</td>
+                        <td className="px-6 py-4 text-right text-[#5B3A21]">{formatNumber(p.qty)}</td>
+                        <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">{formatCurrency(p.revenue)}</td>
+                        <td className="px-6 py-4 text-right font-semibold text-[#2F7A3D]">{formatCurrency(p.profit)}</td>
                       </tr>
                     ))
                   )}
@@ -297,6 +338,20 @@ function StatCard({ title, value, caption, color, icon }) {
       text: "text-[#7A4CB7]",
       value: "text-[#2F2A1F]",
       accent: "bg-[#E8DBFB]",
+    },
+    teal: {
+      bg: "bg-[#E9FBF7]",
+      border: "border-[#BCE7DF]",
+      text: "text-[#0F766E]",
+      value: "text-[#2F2A1F]",
+      accent: "bg-[#C7F0E6]",
+    },
+    gold: {
+      bg: "bg-[#FFF9E5]",
+      border: "border-[#F3E1AA]",
+      text: "text-[#C47F17]",
+      value: "text-[#2F2A1F]",
+      accent: "bg-[#FFE8B8]",
     },
   };
 
