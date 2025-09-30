@@ -4,18 +4,24 @@
 @tailwind utilities;
 
 :root {
-  --color-cream: #fef3e5;
-  --color-cream-soft: #f7d8b3;
-  --color-rose: #3c1a09;
-  --color-rose-dark: #2a1005;
-  --color-gold: #f7931e;
-  --color-text: #2f2015;
-  --color-choco: #fff7eb;
-  --color-burgundy: #f7c948;
-  --color-burgundy-soft: #ffd36b;
-  --color-burgundy-dark: #5b3dfc;
-  --surface-strong: rgba(255, 255, 255, 0.95);
-  --surface-soft: rgba(255, 255, 255, 0.88);
+  --color-primary: #663d14;
+  --color-primary-dark: #4b2b0f;
+  --color-accent: #fef3e5;
+  --color-accent-soft: #f8e3c8;
+  --color-text-primary: #f7931e;
+  --color-text-secondary: #f7c948;
+  --color-cream: var(--color-accent);
+  --color-cream-soft: var(--color-accent-soft);
+  --color-rose: var(--color-primary);
+  --color-rose-dark: var(--color-primary-dark);
+  --color-gold: var(--color-text-primary);
+  --color-text: var(--color-text-primary);
+  --color-choco: rgba(254, 243, 229, 0.94);
+  --color-burgundy: var(--color-text-secondary);
+  --color-burgundy-soft: rgba(247, 201, 72, 0.85);
+  --color-burgundy-dark: var(--color-primary);
+  --surface-strong: rgba(254, 243, 229, 0.96);
+  --surface-soft: rgba(254, 243, 229, 0.88);
   --layout-max: 1200px;
 }
 
@@ -26,8 +32,8 @@ body {
 
 body {
   margin: 0;
-  background-color: var(--color-cream);
-  color: var(--color-text);
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
   font-family: "Poppins", "Prompt", "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -40,11 +46,12 @@ a:hover {
 } */
 
 ::selection {
-  background: rgba(255, 111, 123, 0.45);
+  background: rgba(247, 147, 30, 0.4);
+  color: var(--color-accent);
 }
 
 label {
-  color: rgba(31, 58, 55, 0.75);
+  color: rgba(247, 201, 72, 0.75);
 }
 
 @layer base {
@@ -53,34 +60,298 @@ label {
   }
 
   * {
-    border-color: rgba(31, 58, 55, 0.16);
+    border-color: rgba(247, 201, 72, 0.24);
   }
 
   input,
   textarea,
   select {
-    background-color: rgba(255, 255, 255, 0.94);
-    color: var(--color-text);
+    background-color: rgba(254, 243, 229, 0.94);
+    color: var(--color-text-primary);
     border-radius: 14px;
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: rgba(31, 58, 55, 0.5);
+    color: rgba(247, 201, 72, 0.55);
   }
 }
 
 :is(.bg-white, .bg-white\/95, .bg-white\/90, .bg-white\/85) {
   background-color: var(--surface-strong) !important;
-  color: var(--color-text) !important;
-  border-color: rgba(31, 58, 55, 0.12) !important;
-  box-shadow: 0 22px 46px -28px rgba(15, 87, 79, 0.35);
+  color: var(--color-text-primary) !important;
+  border-color: rgba(247, 201, 72, 0.18) !important;
+  box-shadow: 0 22px 46px -28px rgba(102, 61, 20, 0.35);
   backdrop-filter: blur(16px);
 }
 
 :is(.bg-white\/80, .bg-white\/70, .bg-white\/60) {
   background-color: var(--surface-soft) !important;
-  color: var(--color-text) !important;
-  border-color: rgba(31, 58, 55, 0.1) !important;
+  color: var(--color-text-primary) !important;
+  border-color: rgba(247, 201, 72, 0.14) !important;
   backdrop-filter: blur(14px);
+}
+
+@layer base {
+  .bg-\[\#4c2ffc\],
+  .bg-\[\#5b3dfc\],
+  .bg-\[\#3e25d6\],
+  .bg-\[\#4326db\],
+  .bg-\[\#32127b\],
+  .bg-\[\#2b0f05\],
+  .bg-\[\#2a0f63\],
+  .bg-\[\#8A5A33\],
+  .bg-\[\#663d14\] {
+    background-color: var(--color-primary) !important;
+  }
+
+  .bg-\[\#5b3dfc\]\/10 {
+    background-color: rgba(102, 61, 20, 0.1) !important;
+  }
+
+  .bg-\[\#5b3dfc\]\/12 {
+    background-color: rgba(102, 61, 20, 0.12) !important;
+  }
+
+  .bg-\[\#5b3dfc\]\/15 {
+    background-color: rgba(102, 61, 20, 0.15) !important;
+  }
+
+  .bg-\[\#5b3dfc\]\/18 {
+    background-color: rgba(102, 61, 20, 0.18) !important;
+  }
+
+  .bg-\[\#5b3dfc\]\/20,
+  .bg-\[\#32127b\]\/60,
+  .bg-\[\#8A5A33\]\/10 {
+    background-color: rgba(102, 61, 20, 0.2) !important;
+  }
+
+  .bg-\[\#714528\] {
+    background-color: #4b2b0f !important;
+  }
+
+  .bg-\[\#df7f0f\] {
+    background-color: #b66a1a !important;
+  }
+
+  .bg-\[\#fff3d6\],
+  .bg-\[\#FFF3D6\],
+  .bg-\[\#fff3d6\]\/70,
+  .bg-\[\#fff7eb\],
+  .bg-\[\#FFF7EB\],
+  .bg-\[\#fff7eb\]\/90,
+  .bg-\[\#fff7ea\],
+  .bg-\[\#FFF7EA\],
+  .bg-\[\#fff0d4\],
+  .bg-\[\#FFF0D4\],
+  .bg-\[\#f5edff\],
+  .bg-\[\#F5EDFF\],
+  .bg-\[\#fef3e5\],
+  .bg-\[\#FFF3E0\],
+  .bg-\[\#fff3e0\],
+  .bg-\[\#fff4e5\],
+  .bg-\[\#FFF4E5\],
+  .bg-\[\#fff4e5\]\/60,
+  .bg-\[\#fff4e5\]\/70,
+  .bg-\[\#fff5ea\],
+  .bg-\[\#FFF5EA\],
+  .bg-\[\#fff6eb\]\/90,
+  .bg-\[\#fff6eb\]\/95,
+  .bg-\[\#FFF6EB\]\/90,
+  .bg-\[\#FFF6EB\]\/95,
+  .bg-\[\#fff9f3\],
+  .bg-\[\#FFF9F3\],
+  .bg-\[\#fffbf7\],
+  .bg-\[\#FFFBF7\],
+  .bg-\[\#fff2dd\],
+  .bg-\[\#FFF2DD\],
+  .bg-\[\#fff2dd\]\/95,
+  .bg-\[\#FFF2DD\]\/95,
+  .bg-\[\#ffefd8\],
+  .bg-\[\#FFEFD8\],
+  .bg-\[\#fff0da\],
+  .bg-\[\#FFF0DA\],
+  .bg-\[\#fff6eb\]\/90,
+  .bg-\[\#fff6eb\]\/95,
+  .bg-\[\#FFF6EB\]\/90,
+  .bg-\[\#FFF6EB\]\/95,
+  .bg-\[\#fce5c7\] {
+    background-color: var(--color-accent) !important;
+  }
+
+  .bg-\[\#fcd361\],
+  .bg-\[\#FCD361\],
+  .bg-\[\#f7c748\],
+  .bg-\[\#F7C748\],
+  .bg-\[\#f7931e\],
+  .bg-\[\#F7931E\],
+  .bg-\[\#f7931e\]\/15,
+  .bg-\[\#f7931e\]\/18,
+  .bg-\[\#f7931e\]\/20,
+  .bg-\[\#f7931e\]\/22,
+  .bg-\[\#f7931e\]\/25,
+  .bg-\[\#f9cf82\]\/80,
+  .bg-\[\#F9CF82\]\/80,
+  .bg-\[\#f9cf82\]\/90,
+  .bg-\[\#F9CF82\]\/90,
+  .bg-\[\#f6be5d\]\/40,
+  .bg-\[\#F6BE5D\]\/40,
+  .bg-\[\#f6be5d\]\/90,
+  .bg-\[\#F6BE5D\]\/90,
+  .bg-\[\#ffe37f\],
+  .bg-\[\#FFE37F\],
+  .bg-\[\#ffe37f\]\/35,
+  .bg-\[\#FFE37F\]\/35,
+  .bg-\[\#ffe37f\]\/40,
+  .bg-\[\#FFE37F\]\/40,
+  .bg-\[\#ffd76b\],
+  .bg-\[\#FFD76B\] {
+    background-color: var(--color-text-secondary) !important;
+  }
+
+  .text-\[\#3c1a09\],
+  .text-\[\#3C1A09\],
+  .text-\[\#3a1c0c\],
+  .text-\[\#3A1C0C\],
+  .text-\[\#2b0f05\],
+  .text-\[\#2B0F05\],
+  .text-\[\#3f2a1a\],
+  .text-\[\#3F2A1A\],
+  .text-\[\#6f4a2e\],
+  .text-\[\#6F4A2E\],
+  .text-\[\#8a5a33\],
+  .text-\[\#8A5A33\],
+  .text-\[\#c08b4d\],
+  .text-\[\#C08B4D\],
+  .text-\[\#c46a1c\],
+  .text-\[\#C46A1C\],
+  .text-\[\#b8743b\],
+  .text-\[\#B8743B\] {
+    color: var(--color-text-primary) !important;
+  }
+
+  .text-\[\#3c1a09\]\/50 { color: rgba(247, 147, 30, 0.5) !important; }
+  .text-\[\#3C1A09\]\/50 { color: rgba(247, 147, 30, 0.5) !important; }
+  .text-\[\#3c1a09\]\/55 { color: rgba(247, 147, 30, 0.55) !important; }
+  .text-\[\#3c1a09\]\/60 { color: rgba(247, 147, 30, 0.6) !important; }
+  .text-\[\#3c1a09\]\/70 { color: rgba(247, 147, 30, 0.7) !important; }
+  .text-\[\#3c1a09\]\/75 { color: rgba(247, 147, 30, 0.75) !important; }
+  .text-\[\#3c1a09\]\/80,
+  .text-\[\#3C1A09\]\/80,
+  .text-\[\#3a1c0c\]\/80,
+  .text-\[\#3A1C0C\]\/80 { color: rgba(247, 147, 30, 0.8) !important; }
+  .text-\[\#3c1a09\]\/90 { color: rgba(247, 147, 30, 0.9) !important; }
+  .text-\[\#2b0f05\]\/70,
+  .text-\[\#2B0F05\]\/70 { color: rgba(247, 147, 30, 0.7) !important; }
+  .text-\[\#8a5a33\]\/50,
+  .text-\[\#8A5A33\]\/50 { color: rgba(247, 147, 30, 0.5) !important; }
+  .text-\[\#8a5a33\]\/70,
+  .text-\[\#8A5A33\]\/70 { color: rgba(247, 147, 30, 0.7) !important; }
+  .text-\[\#8a5a33\]\/80,
+  .text-\[\#8A5A33\]\/80 { color: rgba(247, 147, 30, 0.8) !important; }
+  .text-\[\#c08b4d\]\/60,
+  .text-\[\#C08B4D\]\/60 { color: rgba(247, 147, 30, 0.6) !important; }
+  .text-\[\#5b3dfc\]\/80,
+  .text-\[\#5B3DFC\]\/80 { color: rgba(247, 201, 72, 0.8) !important; }
+
+  .text-white { color: var(--color-text-primary) !important; }
+  .text-white\/85 { color: rgba(247, 147, 30, 0.85) !important; }
+  .text-white\/80 { color: rgba(247, 147, 30, 0.8) !important; }
+  .text-white\/70 { color: rgba(247, 147, 30, 0.7) !important; }
+  .text-white\/60 { color: rgba(247, 147, 30, 0.6) !important; }
+
+  .hover\:text-white:hover { color: var(--color-text-primary) !important; }
+
+  .text-\[\#5b3dfc\],
+  .text-\[\#5B3DFC\],
+  .text-\[\#4c2ffc\],
+  .text-\[\#4C2FFC\],
+  .text-\[\#fdd9a0\],
+  .text-\[\#FDD9A0\],
+  .text-\[\#ffe37f\],
+  .text-\[\#FFE37F\],
+  .text-\[\#fcd361\],
+  .text-\[\#FCD361\],
+  .text-\[\#4529c4\],
+  .text-\[\#32127b\],
+  .text-\[\#32127B\],
+  .text-\[\#7a4cb7\],
+  .text-\[\#7A4CB7\],
+  .text-\[\#f7931e\],
+  .text-\[\#F7931E\] {
+    color: var(--color-text-secondary) !important;
+  }
+
+  .text-\[\#fdd9a0\]\/80,
+  .text-\[\#FDD9A0\]\/80 { color: rgba(247, 201, 72, 0.8) !important; }
+  .text-\[\#7a4cb7\]\/70,
+  .text-\[\#7A4CB7\]\/70 { color: rgba(247, 201, 72, 0.7) !important; }
+
+  .border-\[\#5b3dfc\],
+  .border-\[\#5B3DFC\],
+  .border-\[\#5b3dfc\]\/20,
+  .border-\[\#5b3dfc\]\/30,
+  .border-\[\#5b3dfc\]\/40,
+  .border-\[\#7f6bff\]\/40,
+  .border-\[\#F1D7B8\],
+  .border-\[\#f1d7b8\],
+  .border-\[\#f5c486\],
+  .border-\[\#F5C486\],
+  .border-\[\#f5c486\]\/60,
+  .border-\[\#f5c486\]\/70,
+  .border-\[\#f5c486\]\/80,
+  .border-\[\#fce4a1\]\/60,
+  .border-\[\#FCE4A1\]\/60,
+  .border-\[\#f3e0c7\],
+  .border-\[\#F3E0C7\],
+  .border-\[\#f2d5af\],
+  .border-\[\#F2D5AF\],
+  .border-\[\#f5d4a6\],
+  .border-\[\#F5D4A6\],
+  .border-\[\#e2c39a\],
+  .border-\[\#E2C39A\],
+  .border-\[\#e6c79c\],
+  .border-\[\#E6C79C\],
+  .border-\[\#f0cfa3\],
+  .border-\[\#F0CFA3\] {
+    border-color: var(--color-text-secondary) !important;
+  }
+
+  .border-\[\#7f6bff\]\/40,
+  .border-\[\#5b3dfc\]\/20,
+  .border-\[\#5b3dfc\]\/30,
+  .border-\[\#5b3dfc\]\/40 {
+    border-color: rgba(102, 61, 20, 0.35) !important;
+  }
+
+  .ring-\[\#5b3dfc\]\/30 {
+    --tw-ring-color: rgba(102, 61, 20, 0.3) !important;
+  }
+
+  .ring-\[\#4c2ffc\]\/40 {
+    --tw-ring-color: rgba(102, 61, 20, 0.4) !important;
+  }
+
+  .ring-\[\#ffe37f\]\/60,
+  .ring-\[\#f7931e\]\/30,
+  .ring-\[\#f7931e\]\/40 {
+    --tw-ring-color: rgba(247, 201, 72, 0.5) !important;
+  }
+
+  .shadow-\[\#5b3dfc\]\/25,
+  .shadow-\[\#5b3dfc\]\/40,
+  .shadow-\[\#3c1a09\]\/20,
+  .shadow-\[\#3c1a09\]\/30,
+  .shadow-\[\#3a1a66\]\/40,
+  .shadow-\[\#1f0a4a\]\/60 {
+    --tw-shadow-color: rgba(102, 61, 20, 0.35) !important;
+    --tw-shadow: var(--tw-shadow-colored) !important;
+  }
+
+  .shadow-\[\#f5c486\]\/40,
+  .shadow-\[\#f7931e\]\/35 {
+    --tw-shadow-color: rgba(247, 201, 72, 0.45) !important;
+    --tw-shadow: var(--tw-shadow-colored) !important;
+  }
 }
