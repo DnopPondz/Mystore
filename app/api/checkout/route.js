@@ -9,6 +9,11 @@ import { authOptions } from "@/lib/auth";
 import { getPaymentConfig } from "@/lib/paymentConfig";
 import { Promotion } from "@/models/Promotion";
 import { calculateCartPromotions } from "@/lib/promotionUtils";
+import {
+  InventoryError,
+  releaseInventory,
+  reserveInventory,
+} from "@/lib/inventory";
 
 function calcDiscount(coupon, subtotal) {
   if (!coupon) return { discount: 0, used: null };
@@ -27,7 +32,7 @@ function calcDiscount(coupon, subtotal) {
 }
 
 export async function POST(req) {
-  const deductedStock = [];
+  let deductedStock = [];
   try {
     const {
       items,
@@ -70,23 +75,7 @@ export async function POST(req) {
       );
     }
 
-    for (const item of checked) {
-      const product = byId[item.productId];
-      if (typeof product.stock !== "number") continue;
-      const updated = await Product.findOneAndUpdate(
-        { _id: item.productId, stock: { $gte: item.qty } },
-        { $inc: { stock: -item.qty } },
-      ).lean();
-      if (!updated) {
-        const err = new Error(`Insufficient stock for ${item.productId}`);
-        err.code = "INSUFFICIENT_STOCK";
-        err.productId = item.productId;
-        err.productTitle = product.title;
-        throw err;
-      }
-      deductedStock.push({ productId: item.productId, qty: item.qty });
-      byId[item.productId] = { ...product, stock: typeof product.stock === "number" ? product.stock - item.qty : product.stock };
-    }
+    deductedStock = await reserveInventory(checked, { productMap: byId });
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
 
@@ -207,14 +196,10 @@ export async function POST(req) {
     });
   } catch (e) {
     if (deductedStock.length > 0) {
-      await Promise.allSettled(
-        deductedStock.map((item) =>
-          Product.updateOne({ _id: item.productId }, { $inc: { stock: item.qty } }),
-        ),
-      );
+      await releaseInventory(deductedStock, { productMap: byId });
     }
 
-    if (e?.code === "INSUFFICIENT_STOCK") {
+    if (e instanceof InventoryError && e.code === "INSUFFICIENT_STOCK") {
       return NextResponse.json(
         {
           error: e.productTitle ? `Insufficient stock for ${e.productTitle}` : "Insufficient stock",
@@ -222,6 +207,10 @@ export async function POST(req) {
         },
         { status: 409 },
       );
+    }
+
+    if (e instanceof InventoryError && e.code === "PRODUCT_NOT_FOUND") {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
     return NextResponse.json({ error: String(e) }, { status: 500 });

@@ -5,6 +5,11 @@ import { Product } from "@/models/Product";
 import { Order } from "@/models/Order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import {
+  InventoryError,
+  releaseInventory,
+  reserveInventory,
+} from "@/lib/inventory";
 
 
 export async function GET() {
@@ -60,22 +65,7 @@ export async function POST(req) {
       );
     }
 
-    for (const item of checked) {
-      const product = byId[item.productId];
-      if (typeof product.stock !== "number") continue;
-      const updated = await Product.findOneAndUpdate(
-        { _id: item.productId, stock: { $gte: item.qty } },
-        { $inc: { stock: -item.qty } },
-      ).lean();
-      if (!updated) {
-        const err = new Error(`Insufficient stock for ${item.productId}`);
-        err.code = "INSUFFICIENT_STOCK";
-        err.productId = item.productId;
-        err.productTitle = product.title;
-        throw err;
-      }
-      deductedStock.push({ productId: item.productId, qty: item.qty });
-    }
+    deductedStock = await reserveInventory(checked, { productMap: byId });
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
     const discount = 0;
@@ -106,14 +96,10 @@ export async function POST(req) {
     return NextResponse.json({ ok: 1, id: String(order._id) }, { status: 201 });
   } catch (e) {
     if (deductedStock.length > 0) {
-      await Promise.allSettled(
-        deductedStock.map((item) =>
-          Product.updateOne({ _id: item.productId }, { $inc: { stock: item.qty } }),
-        ),
-      );
+      await releaseInventory(deductedStock, { productMap: byId });
     }
 
-    if (e?.code === "INSUFFICIENT_STOCK") {
+    if (e instanceof InventoryError && e.code === "INSUFFICIENT_STOCK") {
       return NextResponse.json(
         {
           error: e.productTitle ? `Insufficient stock for ${e.productTitle}` : "Insufficient stock",
@@ -121,6 +107,10 @@ export async function POST(req) {
         },
         { status: 409 },
       );
+    }
+
+    if (e instanceof InventoryError && e.code === "PRODUCT_NOT_FOUND") {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
     return NextResponse.json({ error: String(e) }, { status: 500 });
