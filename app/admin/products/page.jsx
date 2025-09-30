@@ -12,8 +12,8 @@ import { useAdminPopup } from "@/components/admin/AdminPopupProvider";
 
 const emptyProduct = {
   title: "",
-  price: 0,
-  costPrice: 0,
+  price: "",
+  costPrice: "",
   stock: 0,
   description: "",
   image: "",
@@ -34,6 +34,26 @@ function formatCurrency(value) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+}
+
+function formatInputAmount(value) {
+  if (value === null || value === undefined) return "";
+  const num = Number(value);
+  if (!Number.isFinite(num)) return "";
+  return num.toString();
+}
+
+function normalizeAmountInput(value) {
+  if (typeof value === "number") {
+    if (!Number.isFinite(value) || value < 0) return 0;
+    return Math.round(value * 100) / 100;
+  }
+  const cleaned = String(value || "").replace(/[^0-9.,-]/g, "").replace(/,/g, "");
+  const parsed = Number.parseFloat(cleaned);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0;
+  }
+  return Math.round(parsed * 100) / 100;
 }
 
 function SlidingToggle({ isActive, onToggle, disabled = false }) {
@@ -92,15 +112,15 @@ export default function AdminProductsPage() {
 
   function startCreate() {
     setEditing({});
-    setForm(emptyProduct);
+    setForm({ ...emptyProduct });
   }
 
   function startEdit(p) {
     setEditing(p);
     setForm({
       title: p.title || "",
-      price: Number(p.price || 0),
-      costPrice: Number(p.costPrice || 0),
+      price: formatInputAmount(p.price),
+      costPrice: formatInputAmount(p.costPrice),
       stock: Number(p.stock || 0),
       description: p.description || "",
       image: Array.isArray(p.images) && p.images[0] ? p.images[0] : "",
@@ -132,8 +152,8 @@ export default function AdminProductsPage() {
       slug: form.slug || toSlug(form.title),
       description: form.description,
       images: form.image ? [form.image] : [],
-      price: Number(form.price || 0),
-      costPrice: Number(form.costPrice || 0),
+      price: normalizeAmountInput(form.price),
+      costPrice: normalizeAmountInput(form.costPrice),
       stock: Number(form.stock || 0),
       active: Boolean(form.active),
       tags: String(form.tags || "")
@@ -457,18 +477,22 @@ export default function AdminProductsPage() {
                     <input
                       type="number"
                       min={0}
+                      step="0.01"
+                      inputMode="decimal"
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.price}
-                      onChange={(e) => setForm((f) => ({ ...f, price: Number(e.target.value || 0) }))}
+                      onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                     />
                   </Field>
                   <Field label="ต้นทุนต่อหน่วย">
                     <input
                       type="number"
                       min={0}
+                      step="0.01"
+                      inputMode="decimal"
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.costPrice}
-                      onChange={(e) => setForm((f) => ({ ...f, costPrice: Number(e.target.value || 0) }))}
+                      onChange={(e) => setForm((f) => ({ ...f, costPrice: e.target.value }))}
                     />
                   </Field>
                   <Field label="สต็อก">
