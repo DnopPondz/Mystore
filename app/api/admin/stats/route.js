@@ -168,7 +168,46 @@ export async function GET() {
     .filter(Boolean)
     .filter((order) => !isCancelledStatus(order.status));
 
-  const getFrameOrders = (start) => orders.filter((order) => order.createdAt >= start);
+  const productCostMap = new Map();
+  const productIdSet = new Set();
+  for (const order of orders) {
+    const items = Array.isArray(order.items) ? order.items : [];
+    for (const item of items) {
+      const productId = item?.productId || item?._id;
+      if (productId) {
+        productIdSet.add(String(productId));
+      }
+    }
+  }
+
+  if (productIdSet.size > 0) {
+    const docs = await Product.find({ _id: { $in: Array.from(productIdSet) } })
+      .select({ costPrice: 1 })
+      .lean();
+    for (const doc of docs) {
+      productCostMap.set(String(doc._id), toSafeNumber(doc.costPrice));
+    }
+  }
+
+  const resolvedOrders = orders.map((order) => ({
+    ...order,
+    items: Array.isArray(order.items)
+      ? order.items.map((item) => {
+          const rawCost = toSafeNumber(item?.costPrice);
+          if (rawCost > 0) {
+            return { ...item, costPrice: rawCost };
+          }
+          const lookupId = item?.productId || item?._id;
+          const fallbackCost = lookupId ? productCostMap.get(String(lookupId)) : undefined;
+          return {
+            ...item,
+            costPrice: toSafeNumber(fallbackCost),
+          };
+        })
+      : [],
+  }));
+
+  const getFrameOrders = (start) => resolvedOrders.filter((order) => order.createdAt >= start);
 
   const profitSummary = {
     today: sumOrderFrame(getFrameOrders(todayStart)),
