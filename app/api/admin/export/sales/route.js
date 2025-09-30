@@ -9,15 +9,31 @@ export async function GET() {
   if (session?.user?.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await connectToDatabase();
-  const rows = await Order.find({}).lean();
+  const rows = await Order.find({ status: { $nin: ["cancel", "cancelled"] } }).lean();
 
-  const header = ["date","orderId","total","status"].join(",");
-  const lines = rows.map(r => [
-    new Date(r.createdAt).toISOString(),
-    String(r._id),
-    r.total,
-    r.status
-  ].join(","));
+  const header = ["date","orderId","total","status","revenue","cost","profit"].join(",");
+  const lines = rows.map((r) => {
+    const items = Array.isArray(r.items) ? r.items : [];
+    const revenue = items.reduce(
+      (sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0),
+      0,
+    );
+    const cost = items.reduce(
+      (sum, item) => sum + Number(item.costPrice || 0) * Number(item.qty || 0),
+      0,
+    );
+    const profit = revenue - cost;
+
+    return [
+      new Date(r.createdAt).toISOString(),
+      String(r._id),
+      Number(r.total || 0).toFixed(2),
+      r.status,
+      revenue.toFixed(2),
+      cost.toFixed(2),
+      profit.toFixed(2),
+    ].join(",");
+  });
   const csv = [header, ...lines].join("\n");
 
   return new NextResponse(csv, {

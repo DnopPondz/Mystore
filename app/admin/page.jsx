@@ -8,8 +8,17 @@ import {
   adminSurfaceShell,
 } from "@/app/admin/theme";
 
+const formatCurrency = (value) =>
+  Number(value || 0).toLocaleString("th-TH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+const formatInteger = (value) => Number(value || 0).toLocaleString("th-TH");
+
 const statusChips = [
   { key: "todaySales", label: "ยอดขายวันนี้", prefix: "฿" },
+  { key: "todayProfit", label: "กำไรวันนี้", prefix: "฿" },
   { key: "preorderPipeline", label: "ใบเสนอราคาวันนี้", prefix: "฿" },
   { key: "newOrders", label: "ออเดอร์ใหม่", prefix: "" },
   { key: "lowStock", label: "สินค้าใกล้หมด", prefix: "" },
@@ -72,7 +81,40 @@ export default function AdminDashboardPage() {
       </section>
     );
 
-  const { cards, topProducts } = data;
+  const { cards, topProducts: topProductsRaw = [], profitSummary = {} } = data;
+  const topProducts = Array.isArray(topProductsRaw) ? topProductsRaw : [];
+  const monthLabel = (() => {
+    try {
+      return new Intl.DateTimeFormat("th-TH", {
+        month: "long",
+        year: "numeric",
+      }).format(new Date());
+    } catch (error) {
+      return "เดือนนี้";
+    }
+  })();
+
+  const defaultSummary = { revenue: 0, cost: 0, profit: 0 };
+  const profitTiles = [
+    {
+      key: "today",
+      title: "รายวัน",
+      subtitle: "ตั้งแต่ 00:00 น.",
+      summary: profitSummary.today ?? defaultSummary,
+    },
+    {
+      key: "week",
+      title: "7 วันล่าสุด",
+      subtitle: "รวมยอดตั้งแต่วันนี้ย้อนหลัง",
+      summary: profitSummary.week ?? defaultSummary,
+    },
+    {
+      key: "month",
+      title: monthLabel,
+      subtitle: "ยอดสะสมตั้งแต่ต้นเดือน",
+      summary: profitSummary.month ?? defaultSummary,
+    },
+  ];
 
   return (
     <div className="space-y-8 text-[#3F2A1A]">
@@ -86,50 +128,89 @@ export default function AdminDashboardPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            {statusChips.map((chip) => (
-              <div
-                key={chip.key}
-                className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]`}
-              >
-                <span className="font-medium text-[#8A5A33]">{chip.label}</span>
-                <span className="font-semibold text-[#3F2A1A]">
-                  {chip.prefix}
-                  {cards[chip.key]}
-                </span>
-              </div>
-            ))}
+            {statusChips.map((chip) => {
+              const rawValue = cards?.[chip.key] ?? 0;
+              const displayValue =
+                chip.prefix === "฿" ? formatCurrency(rawValue) : formatInteger(rawValue);
+              return (
+                <div
+                  key={chip.key}
+                  className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]`}
+                >
+                  <span className="font-medium text-[#8A5A33]">{chip.label}</span>
+                  <span className="font-semibold text-[#3F2A1A]">
+                    {chip.prefix}
+                    {displayValue}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="ยอดขายวันนี้"
-            value={`฿${cards.todaySales}`}
+            value={`฿${formatCurrency(cards.todaySales)}`}
             caption="เปรียบเทียบจากยอดรวมที่ยืนยันแล้ว"
             color="green"
             icon="💰"
           />
           <StatCard
+            title="กำไรวันนี้"
+            value={`฿${formatCurrency(cards.todayProfit)}`}
+            caption="หลังหักต้นทุนสินค้าในวันนี้"
+            color="emerald"
+            icon="📈"
+          />
+          <StatCard
             title="ยอดเสนอราคาใหม่"
-            value={`฿${cards.preorderPipeline}`}
+            value={`฿${formatCurrency(cards.preorderPipeline)}`}
             caption="รวมยอดใบเสนอราคาที่ออกภายในวันนี้"
             color="purple"
             icon="📝"
           />
           <StatCard
             title="ออเดอร์ใหม่"
-            value={cards.newOrders}
+            value={formatInteger(cards.newOrders)}
             caption="ตรวจสอบรายละเอียดก่อน 18:00 น. เพื่อจัดส่งทันวันถัดไป"
             color="blue"
             icon="📦"
           />
           <StatCard
             title="สินค้าใกล้หมด"
-            value={cards.lowStock}
+            value={formatInteger(cards.lowStock)}
             caption="เติมสต็อกล่วงหน้าเพื่อไม่ให้ยอดขายสะดุด"
             color="orange"
             icon="📊"
           />
+        </div>
+      </section>
+
+      <section className={`${adminSubSurfaceShell} p-6`}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-xl font-bold text-[#3F2A1A]">สรุปกำไร / ขาดทุน</h3>
+            <p className="text-sm text-[#6F4A2E]">
+              วิเคราะห์รายได้และต้นทุนเพื่อวางแผนยอดขายในแต่ละช่วงเวลา
+            </p>
+          </div>
+          <span className="rounded-full border border-[#E2C39A] bg-white px-4 py-1 text-xs font-semibold text-[#8A5A33]">
+            อัปเดตเรียลไทม์จากคำสั่งซื้อ
+          </span>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {profitTiles.map((tile) => (
+            <ProfitSummaryCard
+              key={tile.key}
+              title={tile.title}
+              subtitle={tile.subtitle}
+              revenue={tile.summary.revenue}
+              cost={tile.summary.cost}
+              profit={tile.summary.profit}
+            />
+          ))}
         </div>
       </section>
 
@@ -156,12 +237,14 @@ export default function AdminDashboardPage() {
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สินค้า</th>
                     <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จำนวนที่ขาย</th>
                     <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">ต้นทุน (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร (฿)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F8E7D1]">
                   {topProducts.length === 0 ? (
                     <tr>
-                      <td colSpan={3} className="px-6 py-8 text-center">
+                      <td colSpan={5} className="px-6 py-8 text-center">
                         <div className="flex flex-col items-center">
                           <span className="mb-2 text-4xl">📈</span>
                           <span className="text-[#6F4A2E]">ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้</span>
@@ -169,16 +252,26 @@ export default function AdminDashboardPage() {
                       </td>
                     </tr>
                   ) : (
-                    topProducts.map((p, idx) => (
-                      <tr
-                        key={p._id}
-                        className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
-                      >
-                        <td className="px-6 py-4 font-medium text-[#3F2A1A]">{p._id}</td>
-                        <td className="px-6 py-4 text-right text-[#5B3A21]">{p.qty}</td>
-                        <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">{p.revenue}</td>
-                      </tr>
-                    ))
+                    topProducts.map((p, idx) => {
+                      const productName = p.title || p.name || p._id || "ไม่ทราบชื่อ";
+                      const rowKey = p.productId || p._id || `product-${idx}`;
+                      return (
+                        <tr
+                          key={rowKey}
+                          className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
+                        >
+                          <td className="px-6 py-4 font-medium text-[#3F2A1A]">{productName}</td>
+                          <td className="px-6 py-4 text-right text-[#5B3A21]">{formatInteger(p.qty)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.revenue)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.cost)}</td>
+                          <td
+                            className={`px-6 py-4 text-right font-semibold ${Number(p.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"}`}
+                          >
+                            ฿{formatCurrency(p.profit)}
+                          </td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>
@@ -298,6 +391,13 @@ function StatCard({ title, value, caption, color, icon }) {
       value: "text-[#2F2A1F]",
       accent: "bg-[#E8DBFB]",
     },
+    emerald: {
+      bg: "bg-[#ECFDF5]",
+      border: "border-[#BBF7D0]",
+      text: "text-[#047857]",
+      value: "text-[#14532D]",
+      accent: "bg-[#D1FAE5]",
+    },
   };
 
   const config = colorConfig[color] || colorConfig.blue;
@@ -315,6 +415,42 @@ function StatCard({ title, value, caption, color, icon }) {
         <p className={`mb-2 text-3xl font-bold ${config.value}`}>{value}</p>
         <p className="text-xs leading-relaxed text-[#5B3A21]">{caption}</p>
       </div>
+    </div>
+  );
+}
+
+function ProfitSummaryCard({ title, subtitle, revenue = 0, cost = 0, profit = 0 }) {
+  const profitLabel = profit >= 0 ? "กำไร" : "ขาดทุน";
+  const profitTone = profit >= 0 ? "text-[#047857]" : "text-[#B91C1C]";
+  const badgeClass =
+    profit >= 0
+      ? "bg-[#D1FAE5] text-[#047857]"
+      : "bg-[#FEE2E2] text-[#B91C1C]";
+
+  return (
+    <div className={`${adminInsetCardShell} bg-white/95 p-5 shadow-[0_16px_32px_-24px_rgba(63,42,26,0.45)]`}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h4 className="text-lg font-semibold text-[#3F2A1A]">{title}</h4>
+          <p className="text-xs text-[#6F4A2E]">{subtitle}</p>
+        </div>
+        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeClass}`}>{profitLabel}</span>
+      </div>
+
+      <dl className="mt-4 space-y-3 text-sm">
+        <div className="flex items-center justify-between text-[#5B3A21]">
+          <dt>รายได้</dt>
+          <dd className="font-semibold text-[#3F2A1A]">฿{formatCurrency(revenue)}</dd>
+        </div>
+        <div className="flex items-center justify-between text-[#5B3A21]">
+          <dt>ต้นทุนสินค้า</dt>
+          <dd className="font-semibold text-[#3F2A1A]">฿{formatCurrency(cost)}</dd>
+        </div>
+        <div className="flex items-center justify-between text-[#5B3A21]">
+          <dt>กำไรสุทธิ</dt>
+          <dd className={`font-semibold ${profitTone}`}>฿{formatCurrency(profit)}</dd>
+        </div>
+      </dl>
     </div>
   );
 }
