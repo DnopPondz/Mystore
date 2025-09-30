@@ -82,18 +82,16 @@ export default function AdminDashboardPage() {
     );
 
   const { cards, topProducts, profitSummary = {} } = data;
-
-  const now = useMemo(() => new Date(), []);
-  const monthLabel = useMemo(() => {
+  const monthLabel = (() => {
     try {
       return new Intl.DateTimeFormat("th-TH", {
         month: "long",
         year: "numeric",
-      }).format(now);
+      }).format(new Date());
     } catch (error) {
       return "เดือนนี้";
     }
-  }, [now]);
+  })();
 
   const defaultSummary = { revenue: 0, cost: 0, profit: 0 };
   const profitTiles = [
