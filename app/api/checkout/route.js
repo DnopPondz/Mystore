@@ -33,6 +33,7 @@ function calcDiscount(coupon, subtotal) {
 
 export async function POST(req) {
   let deductedStock = [];
+  let productMap = {};
   try {
     const {
       items,
@@ -51,13 +52,21 @@ export async function POST(req) {
     const ids = items.map((x) => x.productId);
     const docs = await Product.find({ _id: { $in: ids }, active: true }).lean();
     const byId = Object.fromEntries(docs.map((d) => [String(d._id), d]));
+    productMap = byId;
 
     const checked = [];
     for (const it of items) {
       const p = byId[it.productId];
       if (!p) return NextResponse.json({ error: `Product not found: ${it.productId}` }, { status: 400 });
       const qty = Math.max(1, Number(it.qty || 1));
-      checked.push({ productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty });
+      checked.push({
+        productId: String(p._id),
+        title: p.title,
+        price: p.price,
+        qty,
+        costPrice: Number(p.costPrice || 0),
+        lineTotal: p.price * qty,
+      });
     }
 
     const insufficientStock = checked.filter((item) => {
@@ -75,9 +84,10 @@ export async function POST(req) {
       );
     }
 
-    deductedStock = await reserveInventory(checked, { productMap: byId });
+    deductedStock = await reserveInventory(checked, { productMap });
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
+    const publicItems = checked.map(({ costPrice, ...rest }) => rest);
 
     // validate coupon
     let coupon = null;
@@ -175,7 +185,7 @@ export async function POST(req) {
       method,
       orderId: String(order._id),
       orderPreview: {
-        items: checked,
+        items: publicItems,
         subtotal,
         discount,
         total,
@@ -196,7 +206,7 @@ export async function POST(req) {
     });
   } catch (e) {
     if (deductedStock.length > 0) {
-      await releaseInventory(deductedStock, { productMap: byId });
+      await releaseInventory(deductedStock, { productMap });
     }
 
     if (e instanceof InventoryError && e.code === "INSUFFICIENT_STOCK") {
