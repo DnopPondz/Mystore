@@ -27,6 +27,7 @@ function calcDiscount(coupon, subtotal) {
 }
 
 export async function POST(req) {
+  const deductedStock = [];
   try {
     const {
       items,
@@ -52,6 +53,39 @@ export async function POST(req) {
       if (!p) return NextResponse.json({ error: `Product not found: ${it.productId}` }, { status: 400 });
       const qty = Math.max(1, Number(it.qty || 1));
       checked.push({ productId: String(p._id), title: p.title, price: p.price, qty, lineTotal: p.price * qty });
+    }
+
+    const insufficientStock = checked.filter((item) => {
+      const product = byId[item.productId];
+      return typeof product.stock === "number" && product.stock < item.qty;
+    });
+    if (insufficientStock.length > 0) {
+      const first = insufficientStock[0];
+      return NextResponse.json(
+        {
+          error: `Insufficient stock for ${first.title}`,
+          productId: first.productId,
+        },
+        { status: 409 },
+      );
+    }
+
+    for (const item of checked) {
+      const product = byId[item.productId];
+      if (typeof product.stock !== "number") continue;
+      const updated = await Product.findOneAndUpdate(
+        { _id: item.productId, stock: { $gte: item.qty } },
+        { $inc: { stock: -item.qty } },
+      ).lean();
+      if (!updated) {
+        const err = new Error(`Insufficient stock for ${item.productId}`);
+        err.code = "INSUFFICIENT_STOCK";
+        err.productId = item.productId;
+        err.productTitle = product.title;
+        throw err;
+      }
+      deductedStock.push({ productId: item.productId, qty: item.qty });
+      byId[item.productId] = { ...product, stock: typeof product.stock === "number" ? product.stock - item.qty : product.stock };
     }
 
     const subtotal = checked.reduce((n, x) => n + x.lineTotal, 0);
@@ -172,6 +206,24 @@ export async function POST(req) {
       bankAccount,
     });
   } catch (e) {
+    if (deductedStock.length > 0) {
+      await Promise.allSettled(
+        deductedStock.map((item) =>
+          Product.updateOne({ _id: item.productId }, { $inc: { stock: item.qty } }),
+        ),
+      );
+    }
+
+    if (e?.code === "INSUFFICIENT_STOCK") {
+      return NextResponse.json(
+        {
+          error: e.productTitle ? `Insufficient stock for ${e.productTitle}` : "Insufficient stock",
+          productId: e.productId,
+        },
+        { status: 409 },
+      );
+    }
+
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }
