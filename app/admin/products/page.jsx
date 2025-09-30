@@ -21,20 +21,44 @@ function formatCurrency(value) {
   return currencyFormatter.format(Number(value || 0));
 }
 
-const emptyProduct = {
-  title: "",
-  price: 0,
-  cost: 0,
-  stock: 0,
-  description: "",
-  image: "",
-  slug: "",
-  active: true,
-  tags: "",
-  saleMode: "regular",
-  preorderDepositType: "full",
-  preorderNote: "",
-};
+function toInputNumberValue(value) {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "number" && Number.isNaN(value)) return "";
+  return String(value);
+}
+
+function parseCurrencyInput(value) {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === "number") return Number.isFinite(value) ? Math.max(0, value) : 0;
+  const normalized = value.replace(/,/g, "").trim();
+  if (!normalized) return 0;
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.max(0, parsed);
+}
+
+function parseStockInput(value) {
+  const parsed = parseCurrencyInput(value);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.max(0, Math.round(parsed));
+}
+
+function createEmptyProduct() {
+  return {
+    title: "",
+    price: "",
+    cost: "",
+    stock: "",
+    description: "",
+    image: "",
+    slug: "",
+    active: true,
+    tags: "",
+    saleMode: "regular",
+    preorderDepositType: "full",
+    preorderNote: "",
+  };
+}
 
 function toSlug(s) {
   return slugify(String(s || ""), { lower: true, strict: true, trim: true });
@@ -68,7 +92,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyProduct);
+  const [form, setForm] = useState(() => createEmptyProduct());
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const popup = useAdminPopup();
@@ -96,16 +120,16 @@ export default function AdminProductsPage() {
 
   function startCreate() {
     setEditing({});
-    setForm(emptyProduct);
+    setForm(createEmptyProduct());
   }
 
   function startEdit(p) {
     setEditing(p);
     setForm({
       title: p.title || "",
-      price: Number(p.price || 0),
-      cost: Number(p.cost || 0),
-      stock: Number(p.stock || 0),
+      price: toInputNumberValue(p.price),
+      cost: toInputNumberValue(p.cost),
+      stock: toInputNumberValue(p.stock),
       description: p.description || "",
       image: Array.isArray(p.images) && p.images[0] ? p.images[0] : "",
       slug: p.slug || toSlug(p.title || ""),
@@ -131,14 +155,21 @@ export default function AdminProductsPage() {
     if (saving) return;
     setSaving(true);
 
+    const title = String(form.title || "").trim();
+    const slug = String(form.slug || "").trim();
+    const imageUrl = String(form.image || "").trim();
+    const priceValue = parseCurrencyInput(form.price);
+    const costValue = parseCurrencyInput(form.cost);
+    const stockValue = parseStockInput(form.stock);
+
     const payload = {
-      title: form.title,
-      slug: form.slug || toSlug(form.title),
-      description: form.description,
-      images: form.image ? [form.image] : [],
-      price: Number(form.price || 0),
-      cost: Number(form.cost || 0),
-      stock: Number(form.stock || 0),
+      title,
+      slug: slug || toSlug(title),
+      description: String(form.description || "").trim(),
+      images: imageUrl ? [imageUrl] : [],
+      price: priceValue,
+      cost: costValue,
+      stock: stockValue,
       active: Boolean(form.active),
       tags: String(form.tags || "")
         .split(",")
@@ -148,7 +179,7 @@ export default function AdminProductsPage() {
       preorderDepositType: ["full", "half"].includes(form.preorderDepositType)
         ? form.preorderDepositType
         : "full",
-      preorderNote: String(form.preorderNote || ""),
+      preorderNote: String(form.preorderNote || "").trim(),
     };
 
     const url = isEdit ? `/api/products/${editing._id}` : "/api/products";
@@ -461,27 +492,33 @@ export default function AdminProductsPage() {
                     <input
                       type="number"
                       min={0}
+                      step="0.01"
+                      inputMode="decimal"
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.price}
-                      onChange={(e) => setForm((f) => ({ ...f, price: Number(e.target.value || 0) }))}
+                      onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                     />
                   </Field>
                   <Field label="ต้นทุนต่อหน่วย">
                     <input
                       type="number"
                       min={0}
+                      step="0.01"
+                      inputMode="decimal"
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.cost}
-                      onChange={(e) => setForm((f) => ({ ...f, cost: Number(e.target.value || 0) }))}
+                      onChange={(e) => setForm((f) => ({ ...f, cost: e.target.value }))}
                     />
                   </Field>
                   <Field label="สต็อก">
                     <input
                       type="number"
                       min={0}
+                      step="1"
+                      inputMode="numeric"
                       className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.stock}
-                      onChange={(e) => setForm((f) => ({ ...f, stock: Number(e.target.value || 0) }))}
+                      onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                     />
                   </Field>
                 </div>

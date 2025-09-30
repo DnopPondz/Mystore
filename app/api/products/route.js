@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { normalizeProductPayload } from "./utils";
 
 export async function GET() {
   await connectToDatabase();
@@ -19,6 +20,7 @@ export async function POST(req) {
   }
   await connectToDatabase();
   const data = await req.json();
-  const created = await Product.create(data);
+  const payload = normalizeProductPayload(data);
+  const created = await Product.create(payload);
   return NextResponse.json(created, { status: 201 });
 }

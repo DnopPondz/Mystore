@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { normalizeProductPayload } from "../utils";
 
 export async function GET(_req, { params }) {
   const { id } = await params;            // ✅ ต้อง await
@@ -20,7 +21,8 @@ export async function PATCH(req, { params }) {
   }
   await connectToDatabase();
   const data = await req.json();
-  const updated = await Product.findByIdAndUpdate(id, data, { new: true }).lean();
+  const payload = normalizeProductPayload(data);
+  const updated = await Product.findByIdAndUpdate(id, payload, { new: true }).lean();
   if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(updated);
 }
