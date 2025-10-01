@@ -6,22 +6,9 @@ import { Coupon } from "@/models/Coupon";
 import { getPaymentConfig } from "@/lib/paymentConfig";
 import { Promotion } from "@/models/Promotion";
 import { calculateCartPromotions } from "@/lib/promotionUtils";
-
-function calcDiscount(coupon, subtotal) {
-  if (!coupon) return { discount: 0, used: null };
-  if (!coupon.active) return { discount: 0, used: null };
-  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) return { discount: 0, used: null };
-  if (subtotal < (coupon.minSubtotal || 0)) return { discount: 0, used: null };
-
-  let discount = 0;
-  if (coupon.type === "percent") discount = Math.floor((subtotal * coupon.value) / 100);
-  else discount = Math.floor(coupon.value);
-  discount = Math.max(0, Math.min(discount, subtotal));
-  return {
-    discount,
-    used: { code: coupon.code, type: coupon.type, value: coupon.value, discount },
-  };
-}
+import { evaluateCouponForUser } from "@/lib/couponUsage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req) {
   try {
@@ -94,7 +81,33 @@ export async function POST(req) {
       Math.max(0, Number(promotionCalc.discount || 0)),
     );
 
-    const { discount: couponDiscount, used } = calcDiscount(coupon, subtotal);
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id || null;
+
+    let couponDiscount = 0;
+    let used = null;
+    if (coupon) {
+      const evaluation = await evaluateCouponForUser({ coupon, subtotal, userId });
+      if (evaluation.ok) {
+        couponDiscount = evaluation.discount;
+        used = evaluation.used;
+      } else if (evaluation.reason === "LOGIN_REQUIRED") {
+        return NextResponse.json(
+          { error: "กรุณาเข้าสู่ระบบเพื่อใช้คูปองนี้", code: "LOGIN_REQUIRED" },
+          { status: 401 },
+        );
+      } else if (evaluation.reason === "LIMIT_REACHED") {
+        return NextResponse.json(
+          {
+            error: "คุณใช้คูปองนี้ครบจำนวนครั้งแล้ว",
+            code: "LIMIT_REACHED",
+            maxUses: evaluation.usage?.maxUses ?? null,
+          },
+          { status: 400 },
+        );
+      }
+    }
+
     const discount = Math.min(subtotal, couponDiscount + promotionDiscount);
     const total = subtotal - discount;
 

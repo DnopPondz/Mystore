@@ -24,6 +24,8 @@ export async function POST(req) {
   data.code = String(data.code || "").toUpperCase().trim();
   if (!data.code) return NextResponse.json({ error: "CODE required" }, { status: 400 });
 
+  const limit = Number(data.maxUsesPerUser);
+
   const created = await Coupon.create({
     code: data.code,
     type: data.type,
@@ -31,6 +33,7 @@ export async function POST(req) {
     minSubtotal: Number(data.minSubtotal || 0),
     expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
     active: Boolean(data.active ?? true),
+    maxUsesPerUser: Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : null,
   });
   return NextResponse.json(created, { status: 201 });
 }

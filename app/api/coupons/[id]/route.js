@@ -24,6 +24,10 @@ export async function PATCH(req, { params }) {
   await connectToDatabase();
   if (data.code) data.code = String(data.code).toUpperCase().trim();
   if (data.expiresAt === "") data.expiresAt = null;
+  if (Object.prototype.hasOwnProperty.call(data, "maxUsesPerUser")) {
+    const limit = Number(data.maxUsesPerUser);
+    data.maxUsesPerUser = Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : null;
+  }
 
   const updated = await Coupon.findByIdAndUpdate(id, data, { new: true }).lean();
   if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
