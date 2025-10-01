@@ -26,7 +26,7 @@ export default function HookPage({ searchParams }) {
 
           <Link
             href="/"
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.4)] transition hover:bg-[#b6791c]"
+            className="mt-8 inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.4)] transition hover:bg-[#b6791c]"
           >
             กลับสู่หน้าหลัก
           </Link>

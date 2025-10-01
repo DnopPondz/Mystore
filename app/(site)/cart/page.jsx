@@ -249,7 +249,7 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/checkout"
-          className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c]"
+          className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.35)] transition hover:bg-[#b6791c]"
         >
           ไปหน้าชำระเงิน
         </Link>
@@ -372,7 +372,7 @@ export default function CartPage() {
                           className="inline-flex items-center gap-2 rounded-full border border-[#e6c688] bg-[#fff3d6] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#f6d889] transition hover:bg-white hover:text-[#5b3dfc]"
                           onClick={() => cart.remove(it.productId)}
                         >
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f1c154] text-white shadow-md shadow-[rgba(241,193,84,0.35)]">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f1c154] text-white shadow-md shadow-[rgba(247,201,72,0.35)]">
                             <svg
                               viewBox="0 0 20 20"
                               fill="none"
@@ -411,7 +411,7 @@ export default function CartPage() {
                     <button
                       onClick={applyCoupon}
                       disabled={applying}
-                      className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
                     </button>

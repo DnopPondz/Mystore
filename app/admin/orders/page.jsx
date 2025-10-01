@@ -267,7 +267,7 @@ export default function AdminOrdersPage() {
             })();
 
             return (
-              <article key={order._id} className={`${adminSubSurfaceShell} p-6 shadow-[0_24px_50px_-28px_rgba(63,42,26,0.45)]`}>
+              <article key={order._id} className={`${adminSubSurfaceShell} p-6 shadow-[0_24px_50px_-28px_rgba(102,61,20,0.45)]`}>
                 <header className="flex flex-col gap-3 border-b border-[#F3E0C7] pb-4 md:flex-row md:items-center md:justify-between">
                   <div>
                     <p className="text-sm font-semibold text-[#8A5A33]/70">คำสั่งซื้อ #{order._id.slice(-6)}</p>
@@ -279,7 +279,7 @@ export default function AdminOrdersPage() {
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)] ${
+                    <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)] ${
                       statusStyles[normalizedStatus] || "bg-white text-[#3F2A1A]"
                     }`}>
                       <span className="text-base">📦</span>
@@ -298,7 +298,7 @@ export default function AdminOrdersPage() {
                         className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                           !canAccept || isUpdating
                             ? "cursor-not-allowed border border-[#E6C79C] bg-white/60 text-[#8A5A33]/50"
-                            : "bg-[#8A5A33] text-white shadow-[0_16px_30px_-20px_rgba(63,42,26,0.55)] hover:bg-[#714528]"
+                            : "bg-[#8A5A33] text-white shadow-[0_16px_30px_-20px_rgba(102,61,20,0.55)] hover:bg-[#714528]"
                         }`}
                         title={
                           canAccept
@@ -443,7 +443,7 @@ export default function AdminOrdersPage() {
                           <span>
                             วิธีชำระ: <strong>{methodDisplay}</strong>
                           </span>
-                          <span className={`rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_22px_-20px_rgba(63,42,26,0.45)] ${
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_22px_-20px_rgba(102,61,20,0.45)] ${
                             paymentStatusStyles[paymentState] || "border border-[#F3E0C7] bg-white text-[#3F2A1A]"
                           }`}>
                             {paymentStatusLabels[paymentState] || paymentState}
@@ -474,7 +474,7 @@ export default function AdminOrdersPage() {
                         ) : null}
                         {order.payment?.slip ? (
                           <button
-                            className={`${adminSoftBadge} gap-2 px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD]`}
+                            className={`${adminSoftBadge} gap-2 px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#FFF2DD]`}
                             onClick={() => setSelectedSlip({
                               slip: order.payment.slip,
                               filename: order.payment.slipFilename || `slip-${order._id}.jpg`,
@@ -504,7 +504,7 @@ export default function AdminOrdersPage() {
           onClick={() => setSelectedSlip(null)}
         >
           <div
-            className={`max-h-full w-full max-w-xl overflow-hidden ${adminSubSurfaceShell} shadow-[0_30px_60px_-32px_rgba(63,42,26,0.65)]`}
+            className={`max-h-full w-full max-w-xl overflow-hidden ${adminSubSurfaceShell} shadow-[0_30px_60px_-32px_rgba(102,61,20,0.65)]`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-5 py-3 text-sm font-semibold text-[#3F2A1A]">
@@ -536,7 +536,7 @@ export default function AdminOrdersPage() {
 function OrderHighlight({ label, value, subtle = false }) {
   return (
     <div
-      className={`${adminInsetCardShell} px-4 py-4 text-sm font-semibold shadow-[0_14px_26px_-24px_rgba(63,42,26,0.45)] ${
+      className={`${adminInsetCardShell} px-4 py-4 text-sm font-semibold shadow-[0_14px_26px_-24px_rgba(102,61,20,0.45)] ${
         subtle ? "bg-[#FFF5EA] text-[#8A5A33]/70" : "bg-white text-[#3F2A1A]"
       }`}
     >

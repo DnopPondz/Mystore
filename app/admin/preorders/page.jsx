@@ -353,7 +353,7 @@ export default function AdminPreordersPage() {
                     setSelectedId(item._id);
                     fetchDetail(item._id);
                   }}
-                  className={`${adminSubSurfaceShell} rounded-2xl px-4 py-3 text-left transition-all shadow-[0_16px_30px_-24px_rgba(63,42,26,0.45)] ${
+                  className={`${adminSubSurfaceShell} rounded-2xl px-4 py-3 text-left transition-all shadow-[0_16px_30px_-24px_rgba(102,61,20,0.45)] ${
                     active
                       ? "border border-[#E6C79C] bg-[#FFF2DD] text-[#3F2A1A]"
                       : "border border-transparent bg-white/80 text-[#6F4A2E] hover:border-[#E6C79C]"
@@ -364,7 +364,7 @@ export default function AdminPreordersPage() {
                       <p className="font-semibold text-[#3F2A1A]">{item.name}</p>
                       <p className="text-xs text-[#8A5A33]/70">{item.phone}</p>
                     </div>
-                    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)] ${badgeClass}`}>
+                    <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)] ${badgeClass}`}>
                       {statusLabels[item.status] || item.status}
                     </span>
                   </div>
@@ -391,7 +391,7 @@ export default function AdminPreordersPage() {
           <div className="text-sm text-[#6F4A2E]">เลือกคำขอจากด้านซ้ายเพื่อดูรายละเอียด</div>
         ) : (
           <div className="space-y-6">
-            <header className="flex flex-col gap-3 rounded-[1.5rem] border border-[#F2D5AF] bg-[#FFF4E5]/70 px-5 py-4 text-sm text-[#5B3A21] shadow-[0_16px_32px_-26px_rgba(63,42,26,0.45)]">
+            <header className="flex flex-col gap-3 rounded-[1.5rem] border border-[#F2D5AF] bg-[#FFF4E5]/70 px-5 py-4 text-sm text-[#5B3A21] shadow-[0_16px_32px_-26px_rgba(102,61,20,0.45)]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-[#3F2A1A]">{selected.name}</h3>
@@ -400,7 +400,7 @@ export default function AdminPreordersPage() {
                     {selected.email ? ` · ${selected.email}` : ""}
                   </p>
                 </div>
-                <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)] ${
+                <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)] ${
                   statusStyles[selected.status] || "border border-[#F3E0C7] bg-white text-[#3F2A1A]"
                 }`}>
                   {statusLabels[selected.status] || selected.status}
@@ -439,7 +439,7 @@ export default function AdminPreordersPage() {
                       step="0.01"
                       value={quoteForm.quotedTotal}
                       onChange={(e) => setQuoteForm((prev) => ({ ...prev, quotedTotal: e.target.value }))}
-                      className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                      className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                     />
                   </label>
                   <label className="flex flex-col gap-1 font-medium text-[#3F2A1A]">
@@ -447,7 +447,7 @@ export default function AdminPreordersPage() {
                     <select
                       value={quoteForm.paymentPlan}
                       onChange={(e) => setQuoteForm((prev) => ({ ...prev, paymentPlan: e.target.value }))}
-                      className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                      className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                     >
                       <option value="full">ชำระเต็มจำนวน</option>
                       <option value="half">มัดจำ 50%</option>
@@ -459,7 +459,7 @@ export default function AdminPreordersPage() {
                       rows={3}
                       value={quoteForm.quoteSummary}
                       onChange={(e) => setQuoteForm((prev) => ({ ...prev, quoteSummary: e.target.value }))}
-                      className="rounded-[1rem] border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                      className="rounded-[1rem] border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                     />
                   </label>
                   <label className="flex flex-col gap-1 font-medium text-[#3F2A1A]">
@@ -468,7 +468,7 @@ export default function AdminPreordersPage() {
                       rows={3}
                       value={quoteForm.internalNotes}
                       onChange={(e) => setQuoteForm((prev) => ({ ...prev, internalNotes: e.target.value }))}
-                      className="rounded-[1rem] border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                      className="rounded-[1rem] border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                     />
                   </label>
                   <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -484,7 +484,7 @@ export default function AdminPreordersPage() {
                       type="button"
                       onClick={() => changeStatus("quoted")}
                       disabled={savingStatus || selected.status === "quoted"}
-                      className={`${adminSoftBadge} px-4 py-2 text-sm shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-50`}
+                      className={`${adminSoftBadge} px-4 py-2 text-sm shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-50`}
                     >
                       📤 ตั้งค่าสถานะเป็น "ส่งใบเสนอราคา"
                     </button>
@@ -518,7 +518,7 @@ export default function AdminPreordersPage() {
                   type="button"
                   onClick={() => changeStatus("contacted")}
                   disabled={savingStatus || selected.status === "contacted"}
-                  className={`${adminSoftBadge} px-4 py-2 text-sm shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-50`}
+                  className={`${adminSoftBadge} px-4 py-2 text-sm shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-50`}
                 >
                   ☎️ ตั้งค่าสถานะเป็น "ติดต่อแล้ว"
                 </button>
@@ -526,7 +526,7 @@ export default function AdminPreordersPage() {
                   type="button"
                   onClick={() => changeStatus("confirmed")}
                   disabled={savingStatus || selected.status === "confirmed"}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#C3E7C4] bg-[#F0F9ED] px-4 py-2 text-sm font-semibold text-[#2F7A3D] shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#E6F4E4] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#C3E7C4] bg-[#F0F9ED] px-4 py-2 text-sm font-semibold text-[#2F7A3D] shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#E6F4E4] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   ✅ ยืนยันว่าลูกค้าชำระแล้ว
                 </button>
@@ -534,7 +534,7 @@ export default function AdminPreordersPage() {
                   type="button"
                   onClick={() => changeStatus("closed")}
                   disabled={savingStatus || selected.status === "closed"}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E4E0] bg-[#FAF7F2] px-4 py-2 text-sm font-semibold text-[#6B7280] shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#E5E4E0] bg-[#FAF7F2] px-4 py-2 text-sm font-semibold text-[#6B7280] shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   🏁 ปิดงาน
                 </button>
@@ -565,13 +565,13 @@ export default function AdminPreordersPage() {
                   <div className="flex flex-wrap items-center gap-3">
                     <Link
                       href={`/orders/${selected.order._id}`}
-                      className={`${adminSoftBadge} px-3 py-1 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] hover:bg-[#FFF2DD]`}
+                      className={`${adminSoftBadge} px-3 py-1 text-xs shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] hover:bg-[#FFF2DD]`}
                     >
                       🔍 เปิดหน้าลูกค้า
                     </Link>
                     <Link
                       href="/admin/orders"
-                      className={`${adminSoftBadge} px-3 py-1 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] hover:bg-[#FFF2DD]`}
+                      className={`${adminSoftBadge} px-3 py-1 text-xs shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] hover:bg-[#FFF2DD]`}
                     >
                       📄 ไปยังหน้าคำสั่งซื้อทั้งหมด
                     </Link>
@@ -585,7 +585,7 @@ export default function AdminPreordersPage() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setSlipFile(e.target.files?.[0] || null)}
-                          className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                          className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                         />
                       </label>
                       <label className="flex flex-col gap-1 text-xs font-medium text-[#3F2A1A]">
@@ -596,7 +596,7 @@ export default function AdminPreordersPage() {
                           min={0}
                           value={slipAmount}
                           onChange={(e) => setSlipAmount(e.target.value)}
-                          className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                          className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                         />
                       </label>
                     </div>
@@ -605,7 +605,7 @@ export default function AdminPreordersPage() {
                       <input
                         value={slipRef}
                         onChange={(e) => setSlipRef(e.target.value)}
-                        className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                        className="rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                         placeholder="อ้างอิงโอนเงิน (ถ้ามี)"
                       />
                     </label>
@@ -614,7 +614,7 @@ export default function AdminPreordersPage() {
                         type="button"
                         onClick={handleUploadSlip}
                         disabled={uploadingSlip}
-                        className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_30px_-20px_rgba(63,42,26,0.55)] transition hover:bg-[#714528] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_30px_-20px_rgba(102,61,20,0.55)] transition hover:bg-[#714528] disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         📎 แนบสลิป
                       </button>
@@ -624,7 +624,7 @@ export default function AdminPreordersPage() {
                           setSlipFile(null);
                           setSlipRef("");
                         }}
-                        className="inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/85 px-4 py-2 text-sm font-semibold text-[#8A5A33] shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] hover:bg-[#FFF2DD]"
+                        className="inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/85 px-4 py-2 text-sm font-semibold text-[#8A5A33] shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] hover:bg-[#FFF2DD]"
                       >
                         ล้างข้อมูล
                       </button>

@@ -78,7 +78,7 @@ export default function NavBar() {
         href={targetHref}
         className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
-            ? "bg-[#f1c154] text-white shadow-lg shadow-[rgba(241,193,84,0.35)]"
+            ? "bg-[#f1c154] text-white shadow-lg shadow-[rgba(247,201,72,0.35)]"
             : "text-[#3c1a09]/80 hover:text-[#f6d889]"
         }`}
         onClick={() => setMenuOpen(false)}
@@ -187,7 +187,7 @@ export default function NavBar() {
                   </Link>
                   <Link
                     href="/register"
-                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f1c154] shadow-lg shadow-[rgba(241,193,84,0.4)] transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f1c154] shadow-lg shadow-[rgba(247,201,72,0.4)] transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     สมัครสมาชิก
                   </Link>

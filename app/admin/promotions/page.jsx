@@ -54,7 +54,7 @@ function StatBubble({ label, value, color }) {
   };
   const tone = palette[color] || palette.blue;
   return (
-    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(102,61,20,0.5)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
       <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>
@@ -270,7 +270,7 @@ export default function AdminPromotionsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาชื่อหรือเงื่อนไขโปรโมชัน"
-                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
               />
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
             </div>
@@ -308,7 +308,7 @@ export default function AdminPromotionsPage() {
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(102,61,20,0.35)]">
               <span className="mb-2 block text-2xl">⚠️</span>
               <span>{err}</span>
             </div>
@@ -325,7 +325,7 @@ export default function AdminPromotionsPage() {
                 </div>
               ) : (
                 filtered.map((p) => (
-                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
+                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)]`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
                         <h4 className="truncate font-semibold text-[#3F2A1A]">{p.title}</h4>
@@ -430,7 +430,7 @@ export default function AdminPromotionsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
+          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(102,61,20,0.6)]">
             <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
               <div>
                 <h3 className="text-lg font-bold text-[#3F2A1A]">{editing?._id ? "แก้ไขโปรโมชัน" : "สร้างโปรโมชัน"}</h3>
@@ -450,7 +450,7 @@ export default function AdminPromotionsPage() {
               <div className="space-y-4">
                 <Field label="ชื่อโปรโมชัน" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.title}
                     onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
                     required
@@ -458,14 +458,14 @@ export default function AdminPromotionsPage() {
                 </Field>
                 <Field label="คำอธิบายเพิ่มเติม">
                   <textarea
-                    className="h-32 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="h-32 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                   />
                 </Field>
                 <Field label="ประเภทโปรโมชัน">
                   <select
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.type}
                     onChange={(e) => {
                       const nextType = e.target.value;
@@ -515,7 +515,7 @@ export default function AdminPromotionsPage() {
                       <input
                         type="number"
                         min={1}
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                         value={form.buyQuantity}
                         onChange={(e) => setForm((f) => ({ ...f, buyQuantity: Number(e.target.value || 0) }))}
                         required
@@ -525,7 +525,7 @@ export default function AdminPromotionsPage() {
                       <input
                         type="number"
                         min={1}
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                         value={form.getQuantity}
                         onChange={(e) => setForm((f) => ({ ...f, getQuantity: Number(e.target.value || 0) }))}
                         required
@@ -540,7 +540,7 @@ export default function AdminPromotionsPage() {
                       <input
                         type="number"
                         min={1}
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                         value={form.stampGoal}
                         onChange={(e) => setForm((f) => ({ ...f, stampGoal: Number(e.target.value || 0) }))}
                         required
@@ -549,7 +549,7 @@ export default function AdminPromotionsPage() {
                     <Field label="ของรางวัล">
                       <input
                         type="text"
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                         value={form.stampReward}
                         onChange={(e) => setForm((f) => ({ ...f, stampReward: e.target.value }))}
                       />
@@ -562,7 +562,7 @@ export default function AdminPromotionsPage() {
                 <Field label="วัน/เวลาเริ่มต้น">
                   <input
                     type="datetime-local"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.startAt}
                     onChange={(e) => setForm((f) => ({ ...f, startAt: e.target.value }))}
                   />
@@ -570,7 +570,7 @@ export default function AdminPromotionsPage() {
                 <Field label="วัน/เวลาสิ้นสุด">
                   <input
                     type="datetime-local"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.endAt}
                     onChange={(e) => setForm((f) => ({ ...f, endAt: e.target.value }))}
                   />

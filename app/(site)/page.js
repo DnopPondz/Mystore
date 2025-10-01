@@ -64,7 +64,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               <a
                 href="#menu"
-                className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.4)] hover:bg-[#b6791c]"
+                className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.4)] hover:bg-[#b6791c]"
               >
                 เลือกซาลาเปาเลย
               </a>

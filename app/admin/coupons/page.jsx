@@ -34,7 +34,7 @@ function StatBubble({ label, value, color }) {
   };
   const tone = palette[color] || palette.blue;
   return (
-    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(102,61,20,0.5)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
       <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>
@@ -234,7 +234,7 @@ export default function AdminCouponsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาโค้ด ประเภท หรือมูลค่า"
-                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
               />
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
             </div>
@@ -272,7 +272,7 @@ export default function AdminCouponsPage() {
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(102,61,20,0.35)]">
               <span className="mb-2 block text-2xl">⚠️</span>
               <span>{err}</span>
             </div>
@@ -289,7 +289,7 @@ export default function AdminCouponsPage() {
                 </div>
               ) : (
                   filtered.map((c) => (
-                    <div key={c._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
+                    <div key={c._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)]`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
                         <h4 className="truncate font-semibold text-[#3F2A1A]">{c.code}</h4>
@@ -399,7 +399,7 @@ export default function AdminCouponsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(102,61,20,0.6)]">
             <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
               <div>
                 <h3 className="text-lg font-bold text-[#3F2A1A]">{editing?._id ? "แก้ไขคูปอง" : "สร้างคูปองใหม่"}</h3>
@@ -417,7 +417,7 @@ export default function AdminCouponsPage() {
               <div className="space-y-4">
                 <Field label="รหัสคูปอง" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.code}
                     onChange={(e) =>
                       setForm((f) => ({ ...f, code: e.target.value.toUpperCase().replace(/\s+/g, "") }))
@@ -428,7 +428,7 @@ export default function AdminCouponsPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="ประเภทส่วนลด">
                     <select
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.type}
                       onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
                     >
@@ -439,7 +439,7 @@ export default function AdminCouponsPage() {
                   <Field label="มูลค่าส่วนลด">
                     <input
                       type="number"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.value}
                       onChange={(e) => setForm((f) => ({ ...f, value: Number(e.target.value || 0) }))}
                     />
@@ -448,7 +448,7 @@ export default function AdminCouponsPage() {
                 <Field label="ยอดสั่งซื้อขั้นต่ำ (บาท)">
                   <input
                     type="number"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.minSubtotal}
                     onChange={(e) => setForm((f) => ({ ...f, minSubtotal: Number(e.target.value || 0) }))}
                   />
@@ -459,7 +459,7 @@ export default function AdminCouponsPage() {
                 <Field label="วันหมดอายุ">
                   <input
                     type="datetime-local"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.expiresAt}
                     onChange={(e) => setForm((f) => ({ ...f, expiresAt: e.target.value }))}
                   />

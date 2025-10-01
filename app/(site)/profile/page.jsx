@@ -254,7 +254,7 @@ export default function ProfilePage() {
                   <button
                     type="submit"
                     disabled={saving || !isDirty}
-                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition ${
+                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.35)] transition ${
                       saving || !isDirty
                         ? "bg-white/60 text-[#3c1a09]/50 cursor-not-allowed"
                         : "bg-[#f1c154] hover:bg-[#b6791c]"

@@ -158,9 +158,9 @@ export default function AdminUsersPage() {
               </p>
             </div>
           </div>
-          <div className="w-full max-w-xs rounded-[1.5rem] border border-[#F2D5AF] bg-white/90 p-4 shadow-[0_16px_32px_-24px_rgba(63,42,26,0.45)]">
+          <div className="w-full max-w-xs rounded-[1.5rem] border border-[#F2D5AF] bg-white/90 p-4 shadow-[0_16px_32px_-24px_rgba(102,61,20,0.45)]">
             <label className="text-xs font-semibold text-[#8A5A33]">ค้นหาผู้ใช้</label>
-            <div className="mt-2 flex items-center rounded-full border border-[#E6C79C] bg-white px-3 py-1.5 shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus-within:border-[#C67C45]">
+            <div className="mt-2 flex items-center rounded-full border border-[#E6C79C] bg-white px-3 py-1.5 shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus-within:border-[#C67C45]">
               <span className="text-xs text-[#C08B4D]">🔍</span>
               <input
                 type="search"
@@ -222,7 +222,7 @@ export default function AdminUsersPage() {
                   {filteredUsers.map((user) => {
                     const isBusy = !!busy[user.id];
                     return (
-                      <div key={user.id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_16px_30px_-24px_rgba(63,42,26,0.45)]`}>
+                      <div key={user.id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_16px_30px_-24px_rgba(102,61,20,0.45)]`}>
                         <div className="mb-3 flex items-start justify-between">
                           <div>
                             <h4 className="font-semibold text-[#3F2A1A]">{user.name || "ไม่ระบุชื่อ"}</h4>
@@ -243,7 +243,7 @@ export default function AdminUsersPage() {
                           <div>
                             <span className="font-semibold text-[#8A5A33]">สิทธิ์:</span>
                             <select
-                              className="ml-2 rounded-full border border-[#E6C79C] bg-white px-2 py-1 text-xs font-semibold text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] focus:border-[#C67C45] focus:outline-none"
+                              className="ml-2 rounded-full border border-[#E6C79C] bg-white px-2 py-1 text-xs font-semibold text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] focus:border-[#C67C45] focus:outline-none"
                               value={user.role}
                               disabled={isBusy}
                               onChange={(e) => handleRoleChange(user, e.target.value)}
@@ -307,7 +307,7 @@ export default function AdminUsersPage() {
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-3">
                               <div
-                                className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold shadow-[0_10px_22px_-16px_rgba(63,42,26,0.4)] ${
+                                className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold shadow-[0_10px_22px_-16px_rgba(102,61,20,0.4)] ${
                                   user.role === "admin" ? "bg-[#F0F9ED] text-[#2F7A3D]" : "bg-[#FFF4E5] text-[#8A5A33]"
                                 }`}
                               >
@@ -325,7 +325,7 @@ export default function AdminUsersPage() {
                           </td>
                           <td className="px-6 py-5">
                             <select
-                              className={`rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-xs font-semibold text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)] transition ${
+                              className={`rounded-full border border-[#E6C79C] bg-white px-3 py-2 text-xs font-semibold text-[#3F2A1A] shadow-[inset_0_1px_4px_rgba(102,61,20,0.08)] transition ${
                                 isBusy ? "cursor-not-allowed opacity-60" : "hover:-translate-y-0.5"
                               }`}
                               value={user.role}
@@ -356,7 +356,7 @@ export default function AdminUsersPage() {
                               type="button"
                               onClick={() => toggleBan(user)}
                               disabled={isBusy}
-                              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold shadow-[0_16px_30px_-24px_rgba(63,42,26,0.45)] ${
+                              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold shadow-[0_16px_30px_-24px_rgba(102,61,20,0.45)] ${
                                 user.banned
                                   ? "border-[#C3E7C4] bg-[#F0F9ED] text-[#2F7A3D]"
                                   : "border-rose-200 bg-rose-50 text-rose-600"
@@ -413,7 +413,7 @@ function StatCard({ label, helper, value, tone = "peach" }) {
   };
   const theme = palette[tone] || palette.peach;
   return (
-    <div className={`rounded-[1.5rem] border ${theme.border} ${theme.bg} p-5 text-left shadow-[0_16px_30px_-24px_rgba(63,42,26,0.45)]`}>
+    <div className={`rounded-[1.5rem] border ${theme.border} ${theme.bg} p-5 text-left shadow-[0_16px_30px_-24px_rgba(102,61,20,0.45)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${theme.accent}`}>{label}</p>
       <p className="text-3xl font-bold text-[#3F2A1A]">{value}</p>
       {helper ? <p className="text-xs text-[#6F4A2E]">{helper}</p> : null}

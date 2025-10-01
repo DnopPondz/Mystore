@@ -24,13 +24,13 @@ export default function AdminLayout({ children }) {
               <div className="flex flex-wrap items-center gap-3">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/80 px-4 py-2 text-sm font-semibold text-[#8A5A33] shadow-[0_12px_28px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/80 px-4 py-2 text-sm font-semibold text-[#8A5A33] shadow-[0_12px_28px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#FFF2DD]"
                 >
                   🏬 กลับหน้าร้าน
                 </Link>
                 <Link
                   href="/orders"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_30px_-20px_rgba(63,42,26,0.55)] transition hover:bg-[#714528]"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#8A5A33] px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_30px_-20px_rgba(102,61,20,0.55)] transition hover:bg-[#714528]"
                 >
                   🛒 ดูร้านแบบลูกค้า
                 </Link>

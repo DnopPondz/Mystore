@@ -64,7 +64,7 @@ export default function AdminDashboardPage() {
 
   if (err)
     return (
-      <section className="rounded-[2rem] border border-red-200/80 bg-red-50 p-6 text-red-700 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.35)]">
+      <section className="rounded-[2rem] border border-red-200/80 bg-red-50 p-6 text-red-700 shadow-[0_20px_45px_-25px_rgba(102,61,20,0.35)]">
         <div className="flex items-center gap-3">
           <span className="text-2xl">⚠️</span>
           <span>{err}</span>
@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
               return (
                 <div
                   key={chip.key}
-                  className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]`}
+                  className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(102,61,20,0.45)]`}
                 >
                   <span className="font-medium text-[#8A5A33]">{chip.label}</span>
                   <span className="font-semibold text-[#3F2A1A]">
@@ -224,13 +224,13 @@ export default function AdminDashboardPage() {
               </div>
               <a
                 href="/api/admin/export/sales"
-                className={`${adminAccentButton} px-5 py-2.5 shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)]`}
+                className={`${adminAccentButton} px-5 py-2.5 shadow-[0_14px_24px_-18px_rgba(102,61,20,0.65)]`}
               >
                 ⬇️ ดาวน์โหลด CSV
               </a>
             </div>
 
-            <div className={`${adminInsetCardShell} mt-6 overflow-hidden shadow-[0_10px_20px_-18px_rgba(63,42,26,0.45)]`}>
+            <div className={`${adminInsetCardShell} mt-6 overflow-hidden shadow-[0_10px_20px_-18px_rgba(102,61,20,0.45)]`}>
               <table className="w-full text-sm">
                 <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
                   <tr>
@@ -285,7 +285,7 @@ export default function AdminDashboardPage() {
               {reminders.map((item, index) => (
                 <li
                   key={`${item.title}-${index}`}
-                  className="rounded-[1.5rem] border border-[#F0CFA3] bg-[#FFF2DD] p-5 shadow-[0_16px_30px_-24px_rgba(63,42,26,0.5)] transition-all hover:-translate-y-0.5"
+                  className="rounded-[1.5rem] border border-[#F0CFA3] bg-[#FFF2DD] p-5 shadow-[0_16px_30px_-24px_rgba(102,61,20,0.5)] transition-all hover:-translate-y-0.5"
                 >
                   <p className="flex items-center gap-2 font-semibold text-[#3F2A1A]">
                     <span className="text-[#B8743B]">⚡</span>
@@ -302,19 +302,19 @@ export default function AdminDashboardPage() {
           <div className={`${adminSubSurfaceShell} p-6`}>
             <h3 className="text-lg font-bold text-[#3F2A1A]">โน้ตสำหรับทีมงาน</h3>
             <ul className="mt-4 space-y-4">
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#C7E3FF] bg-[#F0F7FF] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#C7E3FF] bg-[#F0F7FF] p-3 shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)]">
                 <span className="text-2xl">🕒</span>
                 <span className="leading-relaxed text-[#5B3A21]">
                   จัดรอบอบขนมปังเพิ่มในช่วงบ่าย หากยอดขายยังคงสูงกว่าวันปกติ
                 </span>
               </li>
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#BDE5C1] bg-[#EEF9F0] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#BDE5C1] bg-[#EEF9F0] p-3 shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)]">
                 <span className="text-2xl">💬</span>
                 <span className="leading-relaxed text-[#5B3A21]">
                   ตอบแชทลูกค้าจาก Facebook &amp; LINE ให้ครบถ้วน เพื่อไม่ให้พลาดโอกาสขาย
                 </span>
               </li>
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#DCC8F0] bg-[#F6F1FF] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#DCC8F0] bg-[#F6F1FF] p-3 shadow-[0_12px_24px_-20px_rgba(102,61,20,0.4)]">
                 <span className="text-2xl">🚚</span>
                 <span className="leading-relaxed text-[#5B3A21]">
                   ตรวจสอบที่อยู่จัดส่งใหม่และยืนยันรอบรับสินค้ากับบริษัทขนส่ง
@@ -323,12 +323,12 @@ export default function AdminDashboardPage() {
             </ul>
           </div>
 
-          <div className="rounded-[2rem] border border-[#F0CFA3] bg-[#FFF2DD] p-6 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)]">
+          <div className="rounded-[2rem] border border-[#F0CFA3] bg-[#FFF2DD] p-6 shadow-[0_20px_45px_-25px_rgba(102,61,20,0.4)]">
             <h3 className="text-lg font-bold text-[#3F2A1A]">ลิงก์ด่วน</h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
                   href="/admin/products"
                 >
                   <span className="text-xl">➕</span>
@@ -337,7 +337,7 @@ export default function AdminDashboardPage() {
               </li>
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
                   href="/admin/orders"
                 >
                   <span className="text-xl">📦</span>
@@ -346,7 +346,7 @@ export default function AdminDashboardPage() {
               </li>
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
                   href="/admin/coupons"
                 >
                   <span className="text-xl">🎉</span>
@@ -404,7 +404,7 @@ function StatCard({ title, value, caption, color, icon }) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.5rem] border ${config.border} ${config.bg} p-6 shadow-[0_18px_35px_-28px_rgba(63,42,26,0.55)] transition-transform duration-200 hover:-translate-y-1`}
+      className={`relative overflow-hidden rounded-[1.5rem] border ${config.border} ${config.bg} p-6 shadow-[0_18px_35px_-28px_rgba(102,61,20,0.55)] transition-transform duration-200 hover:-translate-y-1`}
     >
       <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full ${config.accent}`} />
       <div className="relative">
@@ -428,7 +428,7 @@ function ProfitSummaryCard({ title, subtitle, revenue = 0, cost = 0, profit = 0 
       : "bg-[#FEE2E2] text-[#B91C1C]";
 
   return (
-    <div className={`${adminInsetCardShell} bg-white/95 p-5 shadow-[0_16px_32px_-24px_rgba(63,42,26,0.45)]`}>
+    <div className={`${adminInsetCardShell} bg-white/95 p-5 shadow-[0_16px_32px_-24px_rgba(102,61,20,0.45)]`}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <h4 className="text-lg font-semibold text-[#3F2A1A]">{title}</h4>

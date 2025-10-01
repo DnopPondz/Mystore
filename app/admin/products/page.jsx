@@ -295,7 +295,7 @@ export default function AdminProductsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาสินค้า ชื่อ หรือแท็ก"
-                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
               />
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
             </div>
@@ -333,7 +333,7 @@ export default function AdminProductsPage() {
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(102,61,20,0.35)]">
               <span className="mb-2 block text-2xl">⚠️</span>
               <span>{err}</span>
             </div>
@@ -350,7 +350,7 @@ export default function AdminProductsPage() {
                 </div>
               ) : (
                 filteredItems.map((p) => (
-                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
+                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(102,61,20,0.5)]`}>
                     <div className="flex items-start gap-4">
                       <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#F3E0C7] bg-[#FFF4E5]">
                         {p.images?.[0] ? (
@@ -478,7 +478,7 @@ export default function AdminProductsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
+          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(102,61,20,0.6)]">
             <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
               <div>
                 <h3 className="text-lg font-bold text-[#3F2A1A]">{isEdit ? "แก้ไขสินค้า" : "เพิ่มสินค้าใหม่"}</h3>
@@ -496,7 +496,7 @@ export default function AdminProductsPage() {
               <div className="space-y-4">
                 <Field label="ชื่อสินค้า" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.title}
                     onChange={(e) =>
                       setForm((f) => ({
@@ -510,7 +510,7 @@ export default function AdminProductsPage() {
                 </Field>
                 <Field label="Slug">
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.slug}
                     onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                   />
@@ -522,7 +522,7 @@ export default function AdminProductsPage() {
                       min={0}
                       step="0.01"
                       inputMode="decimal"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.price}
                       onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                     />
@@ -533,7 +533,7 @@ export default function AdminProductsPage() {
                       min={0}
                       step="0.01"
                       inputMode="decimal"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.costPrice}
                       onChange={(e) => setForm((f) => ({ ...f, costPrice: e.target.value }))}
                     />
@@ -542,7 +542,7 @@ export default function AdminProductsPage() {
                     <input
                       type="number"
                       min={0}
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       value={form.stock}
                       onChange={(e) => setForm((f) => ({ ...f, stock: Number(e.target.value || 0) }))}
                     />
@@ -550,7 +550,7 @@ export default function AdminProductsPage() {
                 </div>
                 <Field label="แท็ก (คั่นด้วย ,)">
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.tags}
                     onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
                   />
@@ -561,7 +561,7 @@ export default function AdminProductsPage() {
                 </div>
                 <Field label="โหมดการขาย">
                   <select
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.saleMode}
                     onChange={(e) => setForm((f) => ({ ...f, saleMode: e.target.value }))}
                   >
@@ -571,7 +571,7 @@ export default function AdminProductsPage() {
                   </select>
                 </Field>
                 {form.saleMode !== "regular" ? (
-                  <div className="rounded-[1.2rem] border border-[#F2D5AF] bg-[#FFF2DD] p-4 text-sm text-[#5B3A21] shadow-[inset_0_1px_3px_rgba(63,42,26,0.08)]">
+                  <div className="rounded-[1.2rem] border border-[#F2D5AF] bg-[#FFF2DD] p-4 text-sm text-[#5B3A21] shadow-[inset_0_1px_3px_rgba(102,61,20,0.08)]">
                     <p className="font-semibold text-[#3F2A1A]">การรับชำระสำหรับ Pre-order</p>
                     <div className="mt-3 flex flex-col gap-2">
                       <label className="inline-flex items-center gap-2">
@@ -596,7 +596,7 @@ export default function AdminProductsPage() {
                       </label>
                     </div>
                     <textarea
-                      className="mt-3 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-3 py-2 text-xs text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="mt-3 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-3 py-2 text-xs text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                       rows={3}
                       placeholder="บันทึกเงื่อนไขหรือรายละเอียดพิเศษสำหรับการสั่งแบบ Pre-order"
                       value={form.preorderNote}
@@ -609,7 +609,7 @@ export default function AdminProductsPage() {
               <div className="space-y-4">
                 <Field label="คำอธิบาย">
                   <textarea
-                    className="h-32 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="h-32 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                   />
@@ -642,7 +642,7 @@ export default function AdminProductsPage() {
                         className="w-full rounded-[1rem] border border-dashed border-[#E2C39A] bg-white px-4 py-3 text-sm text-[#5B3A21] file:mr-4 file:rounded-full file:border-0 file:bg-[#8A5A33]/10 file:px-4 file:py-2 file:text-[#8A5A33]"
                       />
                       <input
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(102,61,20,0.12)] focus:border-[#C67C45] focus:outline-none"
                         value={form.image}
                         onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
                         placeholder="หรือวางลิงก์รูปสินค้า"
@@ -696,7 +696,7 @@ function StatBubble({ label, value, color }) {
   };
   const tone = palette[color] || palette.blue;
   return (
-    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(102,61,20,0.5)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
       <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>

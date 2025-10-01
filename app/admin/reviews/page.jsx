@@ -205,12 +205,12 @@ export default function AdminReviewsPage() {
         )}
 
         {loading ? (
-          <div className="mt-8 flex items-center gap-3 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-5 text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.45)]">
+          <div className="mt-8 flex items-center gap-3 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-5 text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(102,61,20,0.45)]">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
             กำลังโหลดข้อมูลรีวิว...
           </div>
         ) : reviews.length === 0 ? (
-          <div className="mt-8 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-8 text-center text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.4)]">
+          <div className="mt-8 rounded-[1.5rem] border border-[#F3E0C7] bg-white/70 px-6 py-8 text-center text-sm text-[#6F4A2E] shadow-[0_14px_28px_-24px_rgba(102,61,20,0.4)]">
             ยังไม่มีรีวิวจากลูกค้า
           </div>
         ) : (
@@ -256,7 +256,7 @@ export default function AdminReviewsPage() {
                           type="button"
                           onClick={() => handleTogglePublished(review)}
                           disabled={updatingId === review.id || removingId === review.id}
-                          className={`${adminSoftBadge} px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(63,42,26,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-60`}
+                          className={`${adminSoftBadge} px-4 py-2 text-xs shadow-[0_12px_24px_-20px_rgba(102,61,20,0.45)] transition hover:bg-[#FFF2DD] disabled:cursor-not-allowed disabled:opacity-60`}
                         >
                           {review.published ? "ซ่อนรีวิว" : "แสดงบนหน้าเว็บ"}
                         </button>

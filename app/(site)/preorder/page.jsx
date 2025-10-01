@@ -294,7 +294,7 @@ export default function PreOrderPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {submitting ? "กำลังส่งคำขอ..." : "ส่งคำขอสั่งทำพิเศษ"}
           </button>

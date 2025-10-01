@@ -71,7 +71,7 @@ function LoginContent() {
             </div>
             <button
               disabled={loading}
-              className="w-full rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.4)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,201,72,0.4)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
             </button>
