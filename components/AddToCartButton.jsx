@@ -93,7 +93,7 @@ export default function AddToCartButton({ product }) {
           max="99"
           value={quantity}
           onChange={handleQuantityChange}
-          className="h-9 w-12 border-x border-[#f5c486] bg-transparent text-center text-sm font-semibold focus:outline-none"
+          className="h-9 w-12 border-x border-[#f5c486] bg-transparent text-center text-sm font-semibold focus:outline-none appearance-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
         <button
           type="button"
