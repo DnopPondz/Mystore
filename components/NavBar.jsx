@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
+import { useCart } from "@/components/cart/CartProvider";
 
 
 const navItems = [
@@ -25,6 +26,8 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
+  const cart = useCart();
+  const cartCount = cart?.count ?? 0;
 
   useEffect(() => {
     setMenuOpen(false);
@@ -72,15 +75,18 @@ export default function NavBar() {
         ? `/login?callbackUrl=${encodeURIComponent(item.href)}`
         : item.href;
     const active = path === item.href && (!item.requiresAuth || status === "authenticated");
+    const isCartLink = item.href === "/cart";
+    const showBadge = isCartLink && cartCount > 0;
+    const badgeCount = cartCount > 99 ? "99+" : cartCount;
     return (
       <Link
         key={item.href}
         href={targetHref}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
+        className={`relative flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
             ? "bg-[#f7931e] text-white shadow-lg shadow-[rgba(247,147,30,0.35)]"
             : "text-[#3c1a09]/80 hover:text-[#f7931e]"
-        }`}
+        } ${showBadge ? "pr-6" : ""}`}
         onClick={() => setMenuOpen(false)}
       >
         {item.icon ? (
@@ -99,6 +105,11 @@ export default function NavBar() {
         ) : (
           item.label
         )}
+        {showBadge ? (
+          <span className="pointer-events-none absolute -top-1.5 -right-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[#f7931e] px-1.5 text-[0.65rem] font-bold text-white shadow-lg shadow-[rgba(247,147,30,0.45)]">
+            {badgeCount}
+          </span>
+        ) : null}
       </Link>
     );
   };

@@ -10,6 +10,7 @@ export function CartProvider({ children }) {
   const [promotionList, setPromotionList] = useState([]);
   const [promotionError, setPromotionError] = useState("");
   const [promotionLoading, setPromotionLoading] = useState(false);
+  const [lastAddedItem, setLastAddedItem] = useState(null);
   const aliveRef = useRef(true);
 
   useEffect(() => {
@@ -60,6 +61,8 @@ export function CartProvider({ children }) {
     }
   }, []);
 
+  const clearLastAdded = useCallback(() => setLastAddedItem(null), []);
+
   useEffect(() => {
     refreshPromotions().catch(() => {});
     const interval = setInterval(() => {
@@ -98,6 +101,7 @@ export function CartProvider({ children }) {
       clear: () => {
         setItems([]);
         setCoupon(null);
+        setLastAddedItem(null);
       },
       remove: (productId) => setItems((prev) => prev.filter((x) => x.productId !== productId)),
       add: ({ productId, title, price }, qty = 1) =>
@@ -115,10 +119,31 @@ export function CartProvider({ children }) {
               price: normalizePrice(current?.price),
               qty: normalizeQty(current?.qty) + normalizedQty,
             };
-            next[i] = sanitizeItem({ ...merged, productId });
+            const sanitized = sanitizeItem({ ...merged, productId });
+            if (!sanitized) return prev;
+            next[i] = sanitized;
+            setLastAddedItem({
+              productId: sanitized.productId,
+              title: sanitized.title,
+              qtyAdded: normalizedQty,
+              totalQty: sanitized.qty,
+            });
             return next;
           }
-          return [...prev, sanitizeItem({ productId, title, price: normalizedPrice, qty: normalizedQty })];
+          const sanitized = sanitizeItem({
+            productId,
+            title,
+            price: normalizedPrice,
+            qty: normalizedQty,
+          });
+          if (!sanitized) return prev;
+          setLastAddedItem({
+            productId: sanitized.productId,
+            title: sanitized.title,
+            qtyAdded: sanitized.qty,
+            totalQty: sanitized.qty,
+          });
+          return [...prev, sanitized];
         }),
       setQty: (productId, qty) =>
         setItems((prev) =>
@@ -128,6 +153,8 @@ export function CartProvider({ children }) {
       promotionDiscount,
       totalDiscount,
       total,
+      lastAddedItem,
+      clearLastAdded,
     }),
     [
       items,
@@ -139,6 +166,8 @@ export function CartProvider({ children }) {
       promotionDiscount,
       totalDiscount,
       total,
+      lastAddedItem,
+      clearLastAdded,
     ],
   );
 
