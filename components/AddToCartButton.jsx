@@ -41,6 +41,7 @@ export default function AddToCartButton({ product }) {
       { productId: product._id, title: product.title, price: product.price },
       quantity,
     );
+    setQuantity(1);
   }
 
   function adjustQuantity(delta) {
