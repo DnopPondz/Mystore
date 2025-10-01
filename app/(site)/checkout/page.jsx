@@ -314,7 +314,7 @@ export default function CheckoutPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#fff7eb]">
       <div className="absolute inset-0 bg-[#fff7eb]" />
       <div className="absolute -top-24 left-20 h-64 w-64 rounded-full bg-[#5b3dfc]/18 blur-3xl" />
-      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[#f7931e]/18 blur-3xl" />
+      <div className="absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-[#f1c154]/18 blur-3xl" />
 
       <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-16">
         <div className="max-w-2xl">
@@ -326,7 +326,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-          <section className="rounded-3xl border border-[#f5c486] bg-white/95 p-8 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur space-y-6">
+          <section className="rounded-3xl border border-[#e6c688] bg-white/95 p-8 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur space-y-6">
             <div>
               <h2 className="text-xl font-semibold text-[#3c1a09]">ข้อมูลผู้รับและที่อยู่</h2>
               <p className="mt-1 text-xs text-[#3c1a09]/70">ช่องที่มีเครื่องหมาย * จำเป็นต้องกรอก</p>
@@ -355,8 +355,8 @@ export default function CheckoutPage() {
                       : "หมายเหตุถึงร้าน"}
                   </label>
                   <input
-                    className={`w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30 ${
-                      REQUIRED_FIELDS.includes(key) && !form[key] ? "border-[#f5c486]" : ""
+                    className={`w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30 ${
+                      REQUIRED_FIELDS.includes(key) && !form[key] ? "border-[#e6c688]" : ""
                     }`}
                     value={form[key]}
                     onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
@@ -365,7 +365,7 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            <div className="space-y-4 border-t border-[#f5c486]/60 pt-4">
+            <div className="space-y-4 border-t border-[#e6c688]/60 pt-4">
               <div>
                 <h3 className="text-lg font-semibold text-[#3c1a09]">เลือกวิธีการชำระเงิน</h3>
                 <p className="mt-1 text-xs text-[#3c1a09]/70">
@@ -385,7 +385,7 @@ export default function CheckoutPage() {
                       className={`rounded-2xl border px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30 ${
                         active
                           ? "border-[#5b3dfc] bg-[#f5edff] text-[#5b3dfc] shadow-lg shadow-[rgba(90,70,220,0.18)]"
-                          : "border-[#f5c486] bg-white/80 text-[#3c1a09]/80"
+                          : "border-[#e6c688] bg-white/80 text-[#3c1a09]/80"
                       } ${updatingMethod ? "cursor-wait" : ""}`}
                     >
                       <div className="text-sm font-semibold">{option.label}</div>
@@ -403,10 +403,10 @@ export default function CheckoutPage() {
               <button
                 onClick={placeOrder}
                 disabled={creating || cart.items.length === 0 || Boolean(order)}
-                className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition ${
+                className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition ${
                   creating || cart.items.length === 0 || order
                     ? "bg-white/60 text-[#3c1a09]/50 cursor-not-allowed"
-                    : "bg-[#f7931e] hover:bg-[#df7f0f]"
+                    : "bg-[#f1c154] hover:bg-[#b6791c]"
                 }`}
               >
                 {order
@@ -423,7 +423,7 @@ export default function CheckoutPage() {
           </section>
 
           <section className="space-y-6">
-            <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
+            <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
               <h2 className="text-lg font-semibold text-[#5b3dfc]">สรุปรายการ</h2>
               <div className="mt-4 space-y-3 text-sm">
                 {currentTotals.items.map((it) => {
@@ -437,7 +437,7 @@ export default function CheckoutPage() {
                         <span>฿{fmt(it.lineTotal ?? (it.price || 0) * it.qty)}</span>
                       </div>
                       {bonus?.qty ? (
-                        <div className="flex justify-between text-xs text-[#f7931e]">
+                        <div className="flex justify-between text-xs text-[#f6d889]">
                           <span>
                             รับฟรี {bonus.qty} ชิ้นจากโปร {bonus.titles.join(", ")}
                           </span>
@@ -448,13 +448,13 @@ export default function CheckoutPage() {
                   );
                 })}
               </div>
-              <div className="mt-4 space-y-2 border-t border-[#f5c486]/60 pt-4 text-sm">
+              <div className="mt-4 space-y-2 border-t border-[#e6c688]/60 pt-4 text-sm">
                 <div className="flex justify-between text-[#3c1a09]/80">
                   <span>รวม</span>
                   <span>฿{fmt(currentTotals.subtotal)}</span>
                 </div>
                 {currentTotals.promotionDiscount ? (
-                  <div className="flex justify-between text-[#f7931e]">
+                  <div className="flex justify-between text-[#f6d889]">
                     <span>ส่วนลดโปรโมชันอัตโนมัติ</span>
                     <span>-฿{fmt(currentTotals.promotionDiscount)}</span>
                   </div>
@@ -485,14 +485,14 @@ export default function CheckoutPage() {
                 </div>
               </div>
               {currentTotals.promotions?.length ? (
-                <div className="mt-4 rounded-2xl border border-[#f5c486] bg-[#fff3d6] px-4 py-3 text-xs text-[#3c1a09]/80">
+                <div className="mt-4 rounded-2xl border border-[#e6c688] bg-[#fff3d6] px-4 py-3 text-xs text-[#3c1a09]/80">
                   <h3 className="text-sm font-semibold text-[#5b3dfc]">โปรโมชันที่ใช้ในคำสั่งซื้อนี้</h3>
                   <ul className="mt-2 space-y-2">
                     {currentTotals.promotions.map((promo, idx) => (
                       <li key={`${promo.promotionId || promo.id || promo.title || "promo"}-${idx}`} className="flex flex-col gap-1">
                         <div className="flex items-center justify-between gap-3">
                           <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
-                          <span className="font-semibold text-[#f7931e]">-฿{fmt(promo.discount)}</span>
+                          <span className="font-semibold text-[#f6d889]">-฿{fmt(promo.discount)}</span>
                         </div>
                         {promo.freeQty ? (
                           <span className="text-[#3c1a09]/60">รับฟรี {promo.freeQty} ชิ้น</span>
@@ -504,11 +504,11 @@ export default function CheckoutPage() {
               ) : null}
             </div>
 
-            <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur space-y-4">
+            <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur space-y-4">
               <h2 className="text-lg font-semibold text-[#5b3dfc]">ยืนยันการโอน</h2>
               {order ? (
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-[#f5c486] bg-[#fff3d6] px-4 py-3 text-sm text-[#f7931e]">
+                  <div className="rounded-2xl border border-[#e6c688] bg-[#fff3d6] px-4 py-3 text-sm text-[#f6d889]">
                     สร้างคำสั่งซื้อ #{order.orderId} แล้ว กรุณาชำระเงินและแนบสลิปเพื่อยืนยัน ระบบจะตรวจสอบยอดที่ชำระให้อัตโนมัติ
                   </div>
                   {order.promptpay ? (
@@ -518,7 +518,7 @@ export default function CheckoutPage() {
                       title="สแกนเพื่อชำระเงิน"
                     />
                   ) : paymentMethod === "bank" && order.bankAccount ? (
-                    <div className="space-y-3 rounded-2xl border border-[#f5c486] bg-[#fff3d6] p-4 text-sm text-[#3c1a09]">
+                    <div className="space-y-3 rounded-2xl border border-[#e6c688] bg-[#fff3d6] p-4 text-sm text-[#3c1a09]">
                       <div className="font-semibold text-[#5b3dfc]">รายละเอียดบัญชีสำหรับโอน</div>
                       <div>ธนาคาร: {order.bankAccount.bank}</div>
                       <div>เลขบัญชี: {order.bankAccount.number}</div>
@@ -540,13 +540,13 @@ export default function CheckoutPage() {
                         type="text"
                         value={transferAmount}
                         onChange={(e) => setTransferAmount(e.target.value)}
-                        className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-2 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                        className="w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-2 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                         placeholder={`ยอดที่ต้องชำระ ฿${fmt(order.orderPreview.total)}`}
                       />
                       <p className="text-xs text-[#3c1a09]/60">ยอดที่ต้องชำระทั้งหมด ฿{fmt(order.orderPreview.total)}</p>
                     </div>
                   ) : (
-                    <div className="rounded-2xl border border-[#f5c486]/70 bg-white/80 px-4 py-3 text-sm text-[#3c1a09]/75">
+                    <div className="rounded-2xl border border-[#e6c688]/70 bg-white/80 px-4 py-3 text-sm text-[#3c1a09]/75">
                       ออเดอร์นี้ไม่มียอดที่ต้องชำระเพิ่มเติม
                     </div>
                   )}
@@ -557,7 +557,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={reference}
                       onChange={(e) => setReference(e.target.value)}
-                      className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-2 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-2 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                       placeholder="เช่น เลขที่รายการ หรือเลขอ้างอิงจากแอปธนาคาร"
                     />
                   </div>
@@ -575,10 +575,10 @@ export default function CheckoutPage() {
                   <button
                     onClick={confirmPayment}
                     disabled={confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)}
-                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition ${
+                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition ${
                       confirming || updatingMethod || !slipData || (needsPayment && !transferAmount)
                         ? "bg-white/60 text-[#3c1a09]/50 cursor-not-allowed"
-                        : "bg-[#f7931e] hover:bg-[#df7f0f]"
+                        : "bg-[#f1c154] hover:bg-[#b6791c]"
                     }`}
                   >
                     {confirming ? "กำลังยืนยัน..." : updatingMethod ? "กำลังอัปเดตวิธีชำระเงิน..." : "ยืนยันการชำระเงิน"}

@@ -76,10 +76,10 @@ export default function NavBar() {
       <Link
         key={item.href}
         href={targetHref}
-        className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
+        className={`flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
-            ? "bg-[#f7931e] text-white shadow-lg shadow-[rgba(247,147,30,0.35)]"
-            : "text-[#3c1a09]/80 hover:text-[#f7931e]"
+            ? "bg-[#f1c154] text-white shadow-lg shadow-[rgba(241,193,84,0.35)]"
+            : "text-[#3c1a09]/80 hover:text-[#f6d889]"
         }`}
         onClick={() => setMenuOpen(false)}
       >
@@ -120,7 +120,7 @@ export default function NavBar() {
           <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-6 px-4 py-4 sm:px-6">
             <Link
               href="/"
-              className="group flex items-center gap-3 rounded-full border border-[#f5c486] bg-[#fff3d6] px-3 py-1 text-[#3c1a09] transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+              className="group flex items-center gap-3 rounded-full border border-[#e6c688] bg-[#fff3d6] px-3 py-1 text-[#3c1a09] transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
             >
               {/* <Image
                className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
@@ -132,7 +132,7 @@ export default function NavBar() {
                 alt="logo"
                 width={100}
                 height={100}
-                className="h-10 w-10 rounded-full border border-[#f5c486] bg-[#ffe37f] shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
+                className="h-10 w-10 rounded-full border border-[#e6c688] bg-[#ffe37f] shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
               />
               <span className="text-xl sm:text-2xl font-extrabold text-[#3c1a09] tracking-tight">
                Steaming Bun
@@ -140,7 +140,7 @@ export default function NavBar() {
             </Link>
 
             <button
-              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#f5c486] bg-[#ffe37f] text-[#3c1a09] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#e6c688] bg-[#ffe37f] text-[#3c1a09] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
               type="button"
@@ -170,7 +170,7 @@ export default function NavBar() {
             </button>
 
             <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#fff3d6] px-2 py-1 shadow-inner shadow-[#f5c486]/40">
+              <div className="flex items-center gap-2 rounded-full border border-[#e6c688] bg-[#fff3d6] px-2 py-1 shadow-inner shadow-[#e6c688]/40">
                 {navItems.map((item) => link(item))}
               </div>
               {status === "loading" && (
@@ -181,13 +181,13 @@ export default function NavBar() {
                 <div className="flex items-center gap-2">
                   <Link
                     href="/login"
-                    className="px-4 py-2 rounded-full text-sm font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                    className="px-4 py-2 rounded-full text-sm font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                   >
                     เข้าสู่ระบบ
                   </Link>
                   <Link
                     href="/register"
-                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f7931e] shadow-lg shadow-[rgba(247,147,30,0.4)] transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f1c154] shadow-lg shadow-[rgba(241,193,84,0.4)] transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     สมัครสมาชิก
                   </Link>
@@ -199,7 +199,7 @@ export default function NavBar() {
                   {session?.user?.role === "admin" && (
                     <Link
                       href="/admin"
-                      className="px-4 py-2 rounded-full border border-transparent bg-[#f7931e] text-white shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                      className="px-4 py-2 rounded-full border border-transparent bg-[#f1c154] text-white shadow transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                     >
                       จัดการร้าน
                     </Link>
@@ -208,7 +208,7 @@ export default function NavBar() {
                     <button
                       type="button"
                       onClick={() => setUserMenuOpen((v) => !v)}
-                      className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#ffe37f] px-4 py-2 text-[#3c1a09] shadow-inner transition hover:border-[#f7931e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                      className="flex items-center gap-2 rounded-full border border-[#e6c688] bg-[#ffe37f] px-4 py-2 text-[#3c1a09] shadow-inner transition hover:border-[#f1c154] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                       style={{ boxShadow: "inset 3px 3px 6px rgba(60,26,9,0.1), inset -3px -3px 6px rgba(255,227,127,0.45)" }}
                       aria-expanded={userMenuOpen}
                       aria-haspopup="menu"
@@ -230,12 +230,12 @@ export default function NavBar() {
                     {userMenuOpen && (
                       <div
                         role="menu"
-                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[#f5c486] bg-white p-2 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.2)]"
+                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[#e6c688] bg-white p-2 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.2)]"
                       >
                         <Link
                           href="/profile"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/30"
                           role="menuitem"
                         >
                           <span className="text-lg">👤</span>
@@ -244,7 +244,7 @@ export default function NavBar() {
                         <Link
                           href="/orders"
                           onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/30"
                           role="menuitem"
                         >
                           <span className="text-lg">🧾</span>
@@ -281,7 +281,7 @@ export default function NavBar() {
 
         <div
           id="mobile-menu"
-          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl border border-[#f5c486] bg-[#fff3d6] p-6 text-sm text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.25)] backdrop-blur transition-transform duration-200 ${
+          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl border border-[#e6c688] bg-[#fff3d6] p-6 text-sm text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.25)] backdrop-blur transition-transform duration-200 ${
             menuOpen ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
           }`}
         >
@@ -298,13 +298,13 @@ export default function NavBar() {
               <div className="flex flex-col gap-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                 >
                   เข้าสู่ระบบ
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-full font-semibold text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="px-4 py-2 rounded-full font-semibold text-white bg-[#f1c154] shadow transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                 >
                   สมัครสมาชิก
                 </Link>
@@ -316,26 +316,26 @@ export default function NavBar() {
                   <Link
                     href="/admin"
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-2 rounded-full font-medium text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                    className="px-4 py-2 rounded-full font-medium text-white bg-[#f1c154] shadow transition hover:bg-[#b6791c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                   >
                     จัดการร้าน
                   </Link>
                 )}
-                <div className="rounded-2xl border border-[#f5c486] bg-white p-4 text-sm text-[#3c1a09] shadow-inner">
+                <div className="rounded-2xl border border-[#e6c688] bg-white p-4 text-sm text-[#3c1a09] shadow-inner">
                   <p className="font-semibold">{session?.user?.name || session?.user?.email}</p>
                   <p className="mt-1 text-xs text-[#3c1a09]/70">{session?.user?.email}</p>
                 </div>
                 <Link
                   href="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                 >
                   โปรไฟล์ของฉัน
                 </Link>
                 <Link
                   href="/orders"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f1c154]/40"
                 >
                   คำสั่งซื้อของฉัน
                 </Link>

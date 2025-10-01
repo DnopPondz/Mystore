@@ -57,7 +57,7 @@ export default function AboutPage() {
     <div className="relative overflow-hidden bg-[#fff7eb] text-[#3c1a09]">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-20 right-10 h-72 w-72 rounded-full bg-[#5b3dfc]/15 blur-3xl" />
-        <div className="absolute -bottom-24 left-0 h-80 w-80 rounded-full bg-[#f7931e]/15 blur-3xl" />
+        <div className="absolute -bottom-24 left-0 h-80 w-80 rounded-full bg-[#f1c154]/15 blur-3xl" />
         <div className="absolute top-1/3 left-1/3 h-40 w-40 rounded-full border-4 border-dashed border-[#5b3dfc]/30" />
       </div>
 
@@ -77,13 +77,13 @@ export default function AboutPage() {
               ร้านของเราตั้งอยู่ที่อำเภอเมือง จังหวัดลำพูน 51000 พร้อมต้อนรับและจัดส่งความอร่อยถึงหน้าบ้านคุณ
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
-              <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+              <div className="rounded-3xl border border-[#e6c688] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
                 <h2 className="text-xl font-semibold">ปรัชญาของเรา</h2>
                 <p className="mt-3 text-sm text-[#3c1a09]/70">
                   นึ่งด้วยหัวใจ เลือกเนื้อหมูและกุ้งสดใหม่ และรักษามาตรฐานความสะอาดในทุกขั้นตอน
                 </p>
               </div>
-              <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+              <div className="rounded-3xl border border-[#e6c688] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
                 <h2 className="text-xl font-semibold">บริการของเรา</h2>
                 <ul className="mt-3 space-y-2 list-inside list-disc text-sm text-[#3c1a09]/70">
                   <li>ซาลาเปาและขนมจีบประจำวัน พร้อมไส้ตามฤดูกาล</li>
@@ -95,9 +95,9 @@ export default function AboutPage() {
           </div>
 
           <div className="relative flex justify-center">
-            <div className="relative w-full max-w-sm rounded-[48%] border border-[#f5c486] bg-white p-10 text-center shadow-2xl shadow-[rgba(60,26,9,0.2)]">
+            <div className="relative w-full max-w-sm rounded-[48%] border border-[#e6c688] bg-white p-10 text-center shadow-2xl shadow-[rgba(60,26,9,0.2)]">
               <div className="absolute -top-6 right-0 h-20 w-20 rounded-full bg-[#5b3dfc]/20 blur-2xl" />
-              <div className="absolute -bottom-8 left-6 h-24 w-24 rounded-full bg-[#f7931e]/20 blur-2xl" />
+              <div className="absolute -bottom-8 left-6 h-24 w-24 rounded-full bg-[#f1c154]/20 blur-2xl" />
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">Since 2014</p>
               <p className="mt-3 text-3xl font-black">นึ่งทุกเข่งด้วยความตั้งใจ</p>
               <p className="mt-4 text-sm text-[#3c1a09]/70">
@@ -115,7 +115,7 @@ export default function AboutPage() {
             {highlights.map((item) => (
               <div
                 key={item.title}
-                className="flex flex-col gap-4 rounded-3xl border border-[#f5c486] bg-white/95 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur"
+                className="flex flex-col gap-4 rounded-3xl border border-[#e6c688] bg-white/95 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur"
               >
                 <span className="text-3xl">{item.icon}</span>
                 <h3 className="text-xl font-semibold">{item.title}</h3>
@@ -127,7 +127,7 @@ export default function AboutPage() {
       </section>
 
       <section className="relative mx-auto max-w-screen-xl px-6 py-16 lg:px-10">
-        <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-10 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
+        <div className="rounded-3xl border border-[#e6c688] bg-white/90 p-10 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
           <h2 className="text-3xl font-bold">เส้นทางของเรา</h2>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             {milestones.map((item) => (
@@ -147,7 +147,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative bg-[#fef3e5]">
+      <section className="relative bg-[#f0d6a1]">
         <div className="mx-auto flex max-w-screen-xl flex-col gap-10 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
           <div className="flex-1 space-y-4">
             <h2 className="text-3xl font-bold">มารู้จักทีมของเรา</h2>
@@ -161,7 +161,7 @@ export default function AboutPage() {
             </ul>
           </div>
           <div className="flex-1">
-            <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
+            <div className="rounded-3xl border border-[#e6c688] bg-white/90 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
               <h3 className="text-xl font-semibold">อยากร่วมงานกับเรา?</h3>
               <p className="mt-3 text-sm text-[#3c1a09]/70">
                 เรากำลังมองหาพาร์ตเนอร์ด้านวัตถุดิบ เครื่องนึ่ง และทีมจัดส่งในลำพูนที่อยากเติบโตไปด้วยกัน ติดต่อเราได้ที่

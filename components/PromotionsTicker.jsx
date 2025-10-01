@@ -83,7 +83,7 @@ export default function PromotionsTicker() {
                 <span className="font-semibold text-[#5b3dfc]">
                   {promotion.title}
                 </span>
-                <span className="text-[#f7931e]">
+                <span className="text-[#f6d889]">
                   {summarizePromotion(promotion)}
                 </span>
                 {usage ? (

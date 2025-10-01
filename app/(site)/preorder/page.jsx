@@ -91,7 +91,7 @@ export default function PreOrderPage() {
     <div className="relative overflow-hidden bg-[#fff7eb] text-[#3c1a09]">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 right-16 h-72 w-72 rounded-full bg-[#5b3dfc]/15 blur-3xl" />
-        <div className="absolute -bottom-24 left-10 h-80 w-80 rounded-full bg-[#f7931e]/18 blur-3xl" />
+        <div className="absolute -bottom-24 left-10 h-80 w-80 rounded-full bg-[#f1c154]/18 blur-3xl" />
       </div>
 
       <section className="relative mx-auto max-w-screen-xl px-6 pb-10 pt-16 lg:px-10">
@@ -105,7 +105,7 @@ export default function PreOrderPage() {
               ไม่ว่าจะเป็นงานวันเกิด งานหมั้น งานองค์กร หรือของฝากพิเศษ ทีมเชฟของเราพร้อมช่วยออกแบบเมนูตามความต้องการ พร้อมที่ปรึกษาด้านรสชาติและงบประมาณ
             </p>
             <div className="grid gap-4 sm:grid-cols-2 text-sm text-[#3c1a09]/70">
-              <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-5 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+              <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-5 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
                 <p className="font-semibold text-[#5b3dfc]">บริการที่ได้รับ</p>
                 <ul className="mt-3 space-y-2 list-inside list-disc">
                   <li>ออกแบบรสชาติและหน้าตาขนม</li>
@@ -113,7 +113,7 @@ export default function PreOrderPage() {
                   <li>จัดส่งและจัดเซตในสถานที่</li>
                 </ul>
               </div>
-              <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-5 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+              <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-5 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
                 <p className="font-semibold text-[#5b3dfc]">ระยะเวลาแนะนำ</p>
                 <ul className="mt-3 space-y-2 list-inside list-disc">
                   <li>แจ้งล่วงหน้าอย่างน้อย 3-5 วัน</li>
@@ -124,7 +124,7 @@ export default function PreOrderPage() {
             </div>
           </div>
           <div className="flex-1">
-            <div className="rounded-[46%] border border-[#f5c486] bg-white p-10 text-center shadow-2xl shadow-[rgba(60,26,9,0.2)]">
+            <div className="rounded-[46%] border border-[#e6c688] bg-white p-10 text-center shadow-2xl shadow-[rgba(60,26,9,0.2)]">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#5b3dfc]">Made to Order</p>
               <p className="mt-3 text-3xl font-black">Pre-order ขนมชิ้นโปรด</p>
               <p className="mt-4 text-sm text-[#3c1a09]/70">
@@ -138,7 +138,7 @@ export default function PreOrderPage() {
       <section className="relative mx-auto grid max-w-screen-xl gap-8 px-6 pb-20 lg:grid-cols-[2fr_1fr] lg:px-10">
         <form
           onSubmit={handleSubmit}
-          className="rounded-3xl border border-[#f5c486] bg-white/95 p-8 shadow-2xl shadow-[rgba(60,26,9,0.15)] backdrop-blur space-y-6"
+          className="rounded-3xl border border-[#e6c688] bg-white/95 p-8 shadow-2xl shadow-[rgba(60,26,9,0.15)] backdrop-blur space-y-6"
         >
           <div>
             <h2 className="text-2xl font-semibold text-[#5b3dfc]">กรอกรายละเอียดสำหรับสั่งทำพิเศษ</h2>
@@ -160,13 +160,13 @@ export default function PreOrderPage() {
           )}
 
           {productInfo ? (
-            <div className="rounded-2xl border border-[#f5c486] bg-[#fff3d6] px-4 py-3 text-sm text-[#3c1a09]/80">
+            <div className="rounded-2xl border border-[#e6c688] bg-[#fff3d6] px-4 py-3 text-sm text-[#3c1a09]/80">
               <p className="font-semibold text-[#5b3dfc]">สั่งทำสำหรับสินค้า:</p>
               <p className="mt-1 text-[#3c1a09]">{productInfo.title}</p>
               <p className="text-xs text-[#3c1a09]/60">ราคาเริ่มต้น {Number(productInfo.price || 0).toLocaleString("th-TH")} บาท</p>
             </div>
           ) : form.productId ? (
-            <div className="rounded-2xl border border-[#f5c486]/70 bg-white/80 px-4 py-3 text-xs text-[#3c1a09]/70">
+            <div className="rounded-2xl border border-[#e6c688]/70 bg-white/80 px-4 py-3 text-xs text-[#3c1a09]/70">
               กำลังตรวจสอบรายละเอียดสินค้าแบบ Pre-order...
             </div>
           ) : null}
@@ -178,7 +178,7 @@ export default function PreOrderPage() {
                 type="text"
                 value={form.name}
                 onChange={updateField("name")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="ชื่อผู้ติดต่อ"
                 required
               />
@@ -189,7 +189,7 @@ export default function PreOrderPage() {
                 type="tel"
                 value={form.phone}
                 onChange={updateField("phone")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="0X-XXX-XXXX"
                 required
               />
@@ -200,7 +200,7 @@ export default function PreOrderPage() {
                 type="email"
                 value={form.email}
                 onChange={updateField("email")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="name@example.com"
               />
             </label>
@@ -210,7 +210,7 @@ export default function PreOrderPage() {
                 type="number"
                 value={form.servings}
                 onChange={updateField("servings")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="เช่น 50 ชิ้น"
               />
             </label>
@@ -220,7 +220,7 @@ export default function PreOrderPage() {
                 type="date"
                 value={form.eventDate}
                 onChange={updateField("eventDate")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm font-medium">
@@ -229,7 +229,7 @@ export default function PreOrderPage() {
                 type="time"
                 value={form.eventTime}
                 onChange={updateField("eventTime")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
               />
             </label>
             <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
@@ -238,7 +238,7 @@ export default function PreOrderPage() {
                 type="text"
                 value={form.budget}
                 onChange={updateField("budget")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="เช่น 1,500 บาท"
               />
             </label>
@@ -250,7 +250,7 @@ export default function PreOrderPage() {
               <textarea
                 value={form.flavourIdeas}
                 onChange={updateField("flavourIdeas")}
-                className="min-h-[120px] rounded-3xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="min-h-[120px] rounded-3xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="ระบุไส้ รสชาติ สี หรือธีมของขนมที่อยากได้"
                 required
               />
@@ -260,7 +260,7 @@ export default function PreOrderPage() {
               <textarea
                 value={form.notes}
                 onChange={updateField("notes")}
-                className="min-h-[100px] rounded-3xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="min-h-[100px] rounded-3xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="แจ้งแพ็กเกจจิ้ง การจัดเซต หรือข้อจำกัดด้านอาหาร"
               />
             </label>
@@ -272,7 +272,7 @@ export default function PreOrderPage() {
               <select
                 value={form.preferredContact}
                 onChange={updateField("preferredContact")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
               >
                 <option value="phone">โทรกลับ</option>
                 <option value="line">LINE Official</option>
@@ -285,7 +285,7 @@ export default function PreOrderPage() {
                 type="text"
                 value={form.productId}
                 onChange={updateField("productId")}
-                className="rounded-full border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="rounded-full border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 placeholder="กรอกรหัสสินค้าจากหน้าเมนู"
               />
             </label>
@@ -294,14 +294,14 @@ export default function PreOrderPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center justify-center rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition hover:bg-[#df7f0f] disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {submitting ? "กำลังส่งคำขอ..." : "ส่งคำขอสั่งทำพิเศษ"}
           </button>
         </form>
 
         <aside className="space-y-6">
-          <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+          <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
             <h3 className="text-lg font-semibold text-[#5b3dfc]">ไอเดียเมนูยอดนิยม</h3>
             <ul className="mt-4 space-y-3 text-sm text-[#3c1a09]/75">
               <li>เซตซาลาเปาหลากรส 3 ไส้ สำหรับงานประชุม</li>
@@ -309,7 +309,7 @@ export default function PreOrderPage() {
               <li>มินิซาลาเปาไส้หวานสีพาสเทลสำหรับงานเด็ก</li>
             </ul>
           </div>
-          <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
+          <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
             <h3 className="text-lg font-semibold text-[#5b3dfc]">ช่องทางติดต่อด่วน</h3>
             <p className="mt-2 text-sm text-[#3c1a09]/70">
               โทร 08X-XXX-XXXX หรือ LINE: @baolamphun หากต้องการให้ทีมงานช่วยแนะนำเมนูด่วน

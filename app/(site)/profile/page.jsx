@@ -170,7 +170,7 @@ export default function ProfilePage() {
     <main className="relative overflow-hidden bg-[#fff7eb] text-[#3c1a09]">
       <div className="absolute inset-0">
         <div className="absolute -top-28 left-12 h-72 w-72 rounded-full bg-[#5b3dfc]/15 blur-3xl" />
-        <div className="absolute -bottom-24 right-16 h-72 w-72 rounded-full bg-[#f7931e]/18 blur-3xl" />
+        <div className="absolute -bottom-24 right-16 h-72 w-72 rounded-full bg-[#f1c154]/18 blur-3xl" />
       </div>
       <div className="relative mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         <header className="mb-10 text-center">
@@ -183,8 +183,8 @@ export default function ProfilePage() {
           )}
         </header>
 
-        <section className="rounded-[2.5rem] border border-[#f5c486] bg-white/95 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
-          <div className="border-b border-[#f5c486]/60 px-6 py-5 sm:px-10">
+        <section className="rounded-[2.5rem] border border-[#e6c688] bg-white/95 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
+          <div className="border-b border-[#e6c688]/60 px-6 py-5 sm:px-10">
             <h2 className="text-lg font-semibold text-[#5b3dfc]">ข้อมูลส่วนตัว</h2>
             <p className="mt-1 text-xs text-[#3c1a09]/70">อัปเดตชื่อ อีเมล และข้อมูลติดต่อของคุณได้ที่นี่</p>
           </div>
@@ -208,7 +208,7 @@ export default function ProfilePage() {
                       value={form.name}
                       onChange={(e) => updateField("name", e.target.value)}
                       required
-                      className="rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                       placeholder="ชื่อที่จะแสดงในคำสั่งซื้อ"
                     />
                   </label>
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                       value={form.email}
                       onChange={(e) => updateField("email", e.target.value)}
                       required
-                      className="rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                       placeholder="name@example.com"
                     />
                   </label>
@@ -231,7 +231,7 @@ export default function ProfilePage() {
                     <input
                       value={form.phone}
                       onChange={(e) => updateField("phone", e.target.value)}
-                      className="rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                       placeholder="0X-XXX-XXXX"
                     />
                   </label>
@@ -240,7 +240,7 @@ export default function ProfilePage() {
                     <textarea
                       value={form.address}
                       onChange={(e) => updateField("address", e.target.value)}
-                      className="min-h-[100px] rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="min-h-[100px] rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                       placeholder="บ้านเลขที่ ซอย ถนน ตำบล/อำเภอ จังหวัด รหัสไปรษณีย์"
                     />
                   </label>
@@ -254,10 +254,10 @@ export default function ProfilePage() {
                   <button
                     type="submit"
                     disabled={saving || !isDirty}
-                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition ${
+                    className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition ${
                       saving || !isDirty
                         ? "bg-white/60 text-[#3c1a09]/50 cursor-not-allowed"
-                        : "bg-[#f7931e] hover:bg-[#df7f0f]"
+                        : "bg-[#f1c154] hover:bg-[#b6791c]"
                     }`}
                   >
                     {saving ? "กำลังบันทึก..." : "บันทึกข้อมูล"}

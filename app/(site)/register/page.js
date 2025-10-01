@@ -27,13 +27,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative min-h-[70vh] overflow-hidden bg-[#fef3e5]">
-      <div className="absolute inset-0 bg-[#fef3e5]" />
+    <main className="relative min-h-[70vh] overflow-hidden bg-[#f0d6a1]">
+      <div className="absolute inset-0 bg-[#f0d6a1]" />
       <div className="absolute -top-24 left-16 h-64 w-64 rounded-full bg-[#5b3dfc]/18 blur-3xl" />
-      <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[#f7931e]/20 blur-3xl" />
+      <div className="absolute -bottom-28 right-12 h-72 w-72 rounded-full bg-[#f1c154]/20 blur-3xl" />
 
       <div className="relative flex items-center justify-center px-6 py-16">
-        <div className="w-full max-w-md rounded-3xl border border-[#f5c486] bg-white/90 p-8 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
+        <div className="w-full max-w-md rounded-3xl border border-[#e6c688] bg-white/90 p-8 shadow-2xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-[#3c1a09]">สร้างบัญชีใหม่</h1>
             <p className="mt-2 text-sm text-[#3c1a09]/70">
@@ -47,7 +47,7 @@ export default function RegisterPage() {
               <input
                 name="name"
                 placeholder="ชื่อเต็ม"
-                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
@@ -57,7 +57,7 @@ export default function RegisterPage() {
                 name="email"
                 type="email"
                 placeholder="name@example.com"
-                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
@@ -68,13 +68,13 @@ export default function RegisterPage() {
                 type="password"
                 placeholder="รหัสผ่าน"
                 minLength={6}
-                className="w-full rounded-2xl border border-[#f5c486] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                className="w-full rounded-2xl border border-[#e6c688] bg-white/80 px-4 py-3 text-sm text-[#3c1a09] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                 required
               />
             </div>
             <button
               disabled={loading}
-              className="w-full rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.4)] transition hover:bg-[#df7f0f] disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.4)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
             </button>

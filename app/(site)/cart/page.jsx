@@ -162,19 +162,19 @@ export default function CartPage() {
   }
 
   const summary = (
-    <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
+    <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
       <div className="flex items-center justify-between text-lg font-semibold text-[#5b3dfc]">
         <span>ยอดรวม</span>
         <span>฿{fmtCurrency(subtotalValue)}</span>
       </div>
       {promotionDiscount ? (
-        <div className="mt-3 flex items-center justify-between rounded-2xl border border-[#f5c486]/70 bg-[#fef3e5] px-4 py-2 text-xs text-[#3c1a09]">
+        <div className="mt-3 flex items-center justify-between rounded-2xl border border-[#e6c688]/70 bg-[#f0d6a1] px-4 py-2 text-xs text-[#3c1a09]">
           <span>ส่วนลดโปรโมชันอัตโนมัติ</span>
           <span>-฿{fmtCurrency(promotionDiscount)}</span>
         </div>
       ) : null}
       {!promotionDiscount && promotionsLoading ? (
-        <div className="mt-3 rounded-2xl border border-[#f5c486]/60 bg-white/80 px-4 py-2 text-xs text-[#3c1a09]/70">
+        <div className="mt-3 rounded-2xl border border-[#e6c688]/60 bg-white/80 px-4 py-2 text-xs text-[#3c1a09]/70">
           กำลังตรวจสอบโปรโมชันที่ใช้ได้...
         </div>
       ) : null}
@@ -197,7 +197,7 @@ export default function CartPage() {
         <span>฿{fmtCurrency(totalValue)}</span>
       </div>
       {appliedPromotions.length ? (
-        <div className="mt-4 rounded-2xl border border-[#f5c486] bg-[#fff3d6] px-4 py-3 text-xs text-[#3c1a09]">
+        <div className="mt-4 rounded-2xl border border-[#e6c688] bg-[#fff3d6] px-4 py-3 text-xs text-[#3c1a09]">
           <h3 className="text-sm font-semibold text-[#5b3dfc]">โปรโมชันที่ได้รับ</h3>
           <ul className="mt-2 space-y-2">
             {appliedPromotions.map((promo, idx) => (
@@ -207,7 +207,7 @@ export default function CartPage() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span>{promo.title || promo.summary || "โปรโมชั่น"}</span>
-                  <span className="font-semibold text-[#f7931e]">-฿{fmtCurrency(promo.discount)}</span>
+                  <span className="font-semibold text-[#f6d889]">-฿{fmtCurrency(promo.discount)}</span>
                 </div>
                 {promo.freeQty ? (
                   <span className="text-[#3c1a09]/60">รับฟรี {promo.freeQty} ชิ้นจากโปรนี้</span>
@@ -218,7 +218,7 @@ export default function CartPage() {
         </div>
       ) : null}
       {promotionStatuses.length ? (
-        <div className="mt-4 rounded-2xl border border-[#f5c486]/80 bg-white/90 px-4 py-3 text-xs text-[#3c1a09]/80">
+        <div className="mt-4 rounded-2xl border border-[#e6c688]/80 bg-white/90 px-4 py-3 text-xs text-[#3c1a09]/80">
           <h3 className="text-sm font-semibold text-[#5b3dfc]">โปรโมชันอัตโนมัติในตอนนี้</h3>
           <ul className="mt-2 space-y-2">
             {promotionStatuses.map((promo) => (
@@ -229,7 +229,7 @@ export default function CartPage() {
                     className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
                       promo.applied
                         ? "bg-[#5b3dfc]/15 text-[#5b3dfc]"
-                        : "bg-[#f7931e]/15 text-[#f7931e]"
+                        : "bg-[#f1c154]/15 text-[#f6d889]"
                     }`}
                   >
                     {promo.applied ? "ได้รับแล้ว" : "ยังไม่เข้าเงื่อนไข"}
@@ -249,7 +249,7 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/checkout"
-          className="inline-flex items-center justify-center rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition hover:bg-[#df7f0f]"
+          className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c]"
         >
           ไปหน้าชำระเงิน
         </Link>
@@ -266,7 +266,7 @@ export default function CartPage() {
   if (status === "loading") {
     return (
       <main className="flex min-h-[70vh] items-center justify-center bg-[#fff7eb]">
-        <div className="rounded-full border border-[#f5c486] bg-white/95 px-6 py-3 text-sm text-[#5b3dfc] shadow">
+        <div className="rounded-full border border-[#e6c688] bg-white/95 px-6 py-3 text-sm text-[#5b3dfc] shadow">
           กำลังตรวจสอบสถานะการเข้าสู่ระบบ...
         </div>
       </main>
@@ -276,13 +276,13 @@ export default function CartPage() {
   if (status === "unauthenticated") {
     return (
       <main className="flex min-h-[70vh] items-center justify-center bg-[#fff7eb]">
-        <div className="rounded-3xl border border-[#f5c486] bg-white/95 px-8 py-10 text-center text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
+        <div className="rounded-3xl border border-[#e6c688] bg-white/95 px-8 py-10 text-center text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
           <p className="text-lg font-semibold text-[#5b3dfc]">กรุณาเข้าสู่ระบบเพื่อเปิดตะกร้าสินค้า</p>
           <p className="mt-3 text-sm text-[#3c1a09]/70">
             ระบบกำลังพาไปยังหน้าเข้าสู่ระบบอัตโนมัติ หากไม่เปลี่ยนหน้า
             <Link
               href={`/login?callbackUrl=${encodeURIComponent("/cart")}`}
-              className="ml-1 font-semibold text-[#f7931e] underline"
+              className="ml-1 font-semibold text-[#f6d889] underline"
             >
               คลิกที่นี่เพื่อเข้าสู่ระบบ
             </Link>
@@ -296,7 +296,7 @@ export default function CartPage() {
     <main className="relative min-h-[70vh] overflow-hidden bg-[#fff7eb]">
       <div className="absolute inset-0 bg-[#fff7eb]" />
       <div className="absolute -top-24 right-8 h-64 w-64 rounded-full bg-[#5b3dfc]/18 blur-3xl" />
-      <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-[#f7931e]/18 blur-3xl" />
+      <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-[#f1c154]/18 blur-3xl" />
 
       <div className="relative mx-auto max-w-screen-xl px-6 py-16 lg:px-8">
         <div className="flex flex-col gap-6">
@@ -308,11 +308,11 @@ export default function CartPage() {
           </div>
 
           {cart.items.length === 0 ? (
-            <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-10 text-center text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
+            <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-10 text-center text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.18)] backdrop-blur">
               <p className="text-lg font-medium text-[#5b3dfc]">ตะกร้าของคุณยังว่าง</p>
               <p className="mt-2 text-sm text-[#3c1a09]/70">
                 ลองกลับไปเลือกเมนูโปรดดูนะคะ —
-                <Link href="/" className="ml-1 font-semibold text-[#f7931e] underline">
+                <Link href="/" className="ml-1 font-semibold text-[#f6d889] underline">
                   หน้าร้านหลัก
                 </Link>
               </p>
@@ -325,13 +325,13 @@ export default function CartPage() {
                   return (
                     <div
                       key={it.productId}
-                      className="flex flex-col gap-3 rounded-3xl border border-[#f5c486] bg-white/95 p-6 text-[#3c1a09] shadow-lg shadow-[rgba(60,26,9,0.15)] backdrop-blur sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-3 rounded-3xl border border-[#e6c688] bg-white/95 p-6 text-[#3c1a09] shadow-lg shadow-[rgba(60,26,9,0.15)] backdrop-blur sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div>
                         <div className="text-lg font-semibold text-[#5b3dfc]">{it.title}</div>
                         <div className="text-sm text-[#3c1a09]/70">฿{fmtCurrency(it.price)} ต่อชิ้น</div>
                         {bonus?.qty ? (
-                          <div className="mt-2 flex flex-col gap-1 text-xs text-[#f7931e]">
+                          <div className="mt-2 flex flex-col gap-1 text-xs text-[#f6d889]">
                             <span>
                               ได้รับฟรี {bonus.qty} ชิ้น (มูลค่า ฿{fmtCurrency(bonus.discount)})
                             </span>
@@ -343,7 +343,7 @@ export default function CartPage() {
                       </div>
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <div className="flex items-center gap-2">
-                          <div className="flex items-center overflow-hidden rounded-full border border-[#f5c486] bg-[#fff3d6] shadow-inner">
+                          <div className="flex items-center overflow-hidden rounded-full border border-[#e6c688] bg-[#fff3d6] shadow-inner">
                             <button
                               type="button"
                               aria-label="ลดจำนวน"
@@ -369,10 +369,10 @@ export default function CartPage() {
                           </div>
                         </div>
                         <button
-                          className="inline-flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#fff3d6] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#f7931e] transition hover:bg-white hover:text-[#5b3dfc]"
+                          className="inline-flex items-center gap-2 rounded-full border border-[#e6c688] bg-[#fff3d6] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#f6d889] transition hover:bg-white hover:text-[#5b3dfc]"
                           onClick={() => cart.remove(it.productId)}
                         >
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f7931e] text-white shadow-md shadow-[rgba(247,147,30,0.35)]">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f1c154] text-white shadow-md shadow-[rgba(241,193,84,0.35)]">
                             <svg
                               viewBox="0 0 20 20"
                               fill="none"
@@ -398,7 +398,7 @@ export default function CartPage() {
               </div>
 
               <div className="space-y-6">
-                <div className="rounded-3xl border border-[#f5c486] bg-white/95 p-6 text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
+                <div className="rounded-3xl border border-[#e6c688] bg-white/95 p-6 text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
                   <h2 className="text-lg font-semibold text-[#5b3dfc]">ใช้คูปอง</h2>
                   <p className="mt-1 text-xs text-[#3c1a09]/70">กรอกโค้ดเพื่อรับส่วนลดพิเศษ</p>
                   <div className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -406,12 +406,12 @@ export default function CartPage() {
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
                       placeholder="เช่น SWEET10"
-                      className="flex-1 rounded-full border border-[#f5c486] bg-white/80 px-5 py-3 text-sm text-[#3c1a09] focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
+                      className="flex-1 rounded-full border border-[#e6c688] bg-white/80 px-5 py-3 text-sm text-[#3c1a09] focus:outline-none focus:ring-2 focus:ring-[#5b3dfc]/30"
                     />
                     <button
                       onClick={applyCoupon}
                       disabled={applying}
-                      className="inline-flex items-center justify-center rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.35)] transition hover:bg-[#df7f0f] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-full bg-[#f1c154] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(241,193,84,0.35)] transition hover:bg-[#b6791c] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {applying ? "กำลังตรวจสอบ..." : "ใช้คูปอง"}
                     </button>
