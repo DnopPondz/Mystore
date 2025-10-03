@@ -4,6 +4,11 @@ import { Review } from "@/models/Review";
 import AddToCartButton from "@/components/AddToCartButton";
 import ReviewsShowcase from "@/components/ReviewsShowcase";
 
+const saleModeCopy = {
+  preorder: "Pre-order เท่านั้น",
+  both: "มีทั้งพร้อมส่ง & Pre-order",
+};
+
 export default async function HomePage() {
   let products = [];
   let featuredReviews = [];
@@ -11,24 +16,26 @@ export default async function HomePage() {
   try {
     if (process.env.MONGODB_URI) {
       await connectToDatabase();
-      const docs = await Product.find({ active: true })
-        .sort({ createdAt: -1 })
-        .lean();
+
+      const [docs, reviews] = await Promise.all([
+        Product.find({ active: true }).sort({ createdAt: -1 }).lean(),
+        Review.find({
+          published: true,
+          rating: { $gte: 3.5 },
+        })
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean(),
+      ]);
+
       products = (docs || []).map((d) => ({
         _id: String(d._id),
         title: d.title || "",
         description: d.description || "",
         price: d.price ?? 0,
-        images: d.images || [],
+        images: Array.isArray(d.images) ? d.images : [],
+        saleMode: d.saleMode || null,
       }));
-
-      const reviews = await Review.find({
-        published: true,
-        rating: { $gte: 3.5 },
-      })
-        .sort({ createdAt: -1 })
-        .limit(50)
-        .lean();
 
       featuredReviews = (reviews || []).map((r) => ({
         id: String(r._id),
@@ -159,7 +166,9 @@ export default async function HomePage() {
                       {p.images?.[0] ? (
                         <img
                           src={p.images[0]}
-                          alt={p.title}
+                          alt={p.title || "ภาพเมนูซาลาเปา"}
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -167,11 +176,7 @@ export default async function HomePage() {
                       )}
                     </div>
                     <div className="absolute top-4 left-4 rounded-full border border-[#5b3dfc]/40 bg-white px-3 py-1 text-xs font-semibold text-[#5b3dfc] shadow">
-                      {p.saleMode === "preorder"
-                        ? "Pre-order เท่านั้น"
-                        : p.saleMode === "both"
-                        ? "มีทั้งพร้อมส่ง & Pre-order"
-                        : "เมนูแนะนำ"}
+                      {saleModeCopy[p.saleMode] ?? "เมนูแนะนำ"}
                     </div>
                   </div>
                   <div className="flex flex-1 flex-col gap-3 p-6">
@@ -185,7 +190,7 @@ export default async function HomePage() {
                     </div>
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <span className="text-lg font-bold text-[#f7931e]">
-                        ฿{p.price}
+                        ฿{Number.isFinite(p.price) ? p.price.toLocaleString("th-TH") : "-"}
                       </span>
                       <AddToCartButton product={p} />
                     </div>
