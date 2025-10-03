@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 const items = [
   { href: "/admin", label: "แดชบอร์ด", icon: "📊" },
+  { href: "/admin/sales", label: "ยอดขายย้อนหลัง", icon: "💹" },
   { href: "/admin/products", label: "จัดการสินค้า", icon: "🧁" },
   { href: "/admin/orders", label: "คำสั่งซื้อ", icon: "🧾" },
   { href: "/admin/preorders", label: "Pre-order", icon: "📅" },

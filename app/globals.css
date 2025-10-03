@@ -28,7 +28,7 @@ body {
   margin: 0;
   background-color: var(--color-cream);
   color: var(--color-text);
-  font-family: "Poppins", "Prompt", "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Itim", "Prompt", "Kanit", cursive, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* a {
