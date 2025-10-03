@@ -22,11 +22,32 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  await connectToDatabase();
-  const review = await Review.findOne({ user: session.user.id }).lean();
-  if (!review) {
-    return NextResponse.json({ review: null });
+  if (!process.env.MONGODB_URI) {
+    return NextResponse.json(
+      {
+        review: null,
+        demo: true,
+      },
+      { headers: { "x-demo-data": "true" } },
+    );
   }
 
-  return NextResponse.json({ review: serialize(review) });
+  try {
+    await connectToDatabase();
+    const review = await Review.findOne({ user: session.user.id }).lean();
+    if (!review) {
+      return NextResponse.json({ review: null });
+    }
+
+    return NextResponse.json({ review: serialize(review) });
+  } catch (error) {
+    console.error("โหลดรีวิวของผู้ใช้ไม่สำเร็จ", error);
+    return NextResponse.json(
+      {
+        review: null,
+        demo: true,
+      },
+      { headers: { "x-demo-data": "true" } },
+    );
+  }
 }

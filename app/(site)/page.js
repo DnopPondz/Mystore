@@ -3,6 +3,7 @@ import { Product } from "@/models/Product";
 import { Review } from "@/models/Review";
 import AddToCartButton from "@/components/AddToCartButton";
 import ReviewsShowcase from "@/components/ReviewsShowcase";
+import { getSampleProducts, getSampleReviews } from "@/lib/sampleData";
 
 const saleModeCopy = {
   preorder: "Pre-order เท่านั้น",
@@ -12,6 +13,7 @@ const saleModeCopy = {
 export default async function HomePage() {
   let products = [];
   let featuredReviews = [];
+  let usingDemoData = false;
 
   try {
     if (process.env.MONGODB_URI) {
@@ -49,8 +51,40 @@ export default async function HomePage() {
     console.error("โหลดสินค้าไม่สำเร็จ", error);
   }
 
+  if (!process.env.MONGODB_URI || (!products.length && !featuredReviews.length)) {
+    usingDemoData = true;
+    const demoProducts = getSampleProducts();
+    const demoReviews = getSampleReviews({ minRating: 3.5, limit: 6 });
+
+    products = demoProducts.map((item) => ({
+      ...item,
+      _id: String(item._id),
+    }));
+
+    featuredReviews = demoReviews.map((item) => ({
+      id: String(item.id || item._id),
+      name: item.userName || "ลูกค้า",
+      rating: Number(item.rating || 0),
+      comment: item.comment || "",
+      createdAt: item.createdAt || null,
+    }));
+  }
+
   return (
     <main className="min-h-screen">
+      {usingDemoData ? (
+        <div className="bg-[#fff3d6] border-b border-[#f5c486] text-[#3c1a09]">
+          <div className="mx-auto flex max-w-screen-xl flex-col gap-2 px-6 py-4 text-sm lg:px-8">
+            <strong className="text-[#5b3dfc]">โหมดตัวอย่างกำลังทำงาน</strong>
+            <p>
+              เว็บไซต์นี้ยังไม่ได้เชื่อมต่อฐานข้อมูลจริง จึงแสดงสินค้า โปรโมชัน และรีวิวตัวอย่างเพื่อให้
+              ทีมงานเห็นหน้าตาเว็บไซต์ก่อนเปิดขายจริง กรุณาตั้งค่า <code className="rounded bg-white px-2 py-0.5">.env.local</code>
+              และ seed ข้อมูลตามเช็กลิสต์ในเอกสารเพื่อปิดโหมดตัวอย่าง
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[#fef3e5]" />
         <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-[#5b3dfc]/10 blur-3xl" />
@@ -237,7 +271,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <ReviewsShowcase reviews={featuredReviews} />
+      <ReviewsShowcase reviews={featuredReviews} demoMode={usingDemoData} />
 
     </main>
   );

@@ -209,7 +209,7 @@ function extractErrorMessage(error) {
   return "ส่งรีวิวไม่สำเร็จ";
 }
 
-export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
+export default function ReviewsShowcase({ reviews: initialReviews = [], demoMode = false }) {
   const { data: session, status } = useSession();
   const [reviews, setReviews] = useState(initialReviews);
   const [currentStart, setCurrentStart] = useState(0);
@@ -218,11 +218,15 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
   const [formComment, setFormComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+  const [isDemoMode, setIsDemoMode] = useState(Boolean(demoMode));
 
   const loadFeatured = useCallback(async () => {
     try {
       const res = await fetch("/api/reviews?featured=true", { cache: "no-store" });
       if (!res.ok) return;
+      if (res.headers?.get("x-demo-data") === "true") {
+        setIsDemoMode(true);
+      }
       const data = await res.json();
       if (Array.isArray(data?.reviews)) {
         setReviews(data.reviews);
@@ -237,6 +241,10 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
   }, [initialReviews]);
 
   useEffect(() => {
+    setIsDemoMode(Boolean(demoMode));
+  }, [demoMode]);
+
+  useEffect(() => {
     let active = true;
     (async () => {
       if (status !== "authenticated") {
@@ -249,6 +257,9 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
         if (!active) return;
         if (!res.ok) {
           throw new Error(data?.error || "โหลดรีวิวของฉันไม่สำเร็จ");
+        }
+        if (res.headers?.get("x-demo-data") === "true" || data?.demo) {
+          setIsDemoMode(true);
         }
         if (data?.review) {
           setMyReview(data.review);
@@ -308,6 +319,10 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
+      if (isDemoMode) {
+        setMessage({ type: "error", text: "โหมดตัวอย่าง: ยังไม่สามารถส่งรีวิวได้" });
+        return;
+      }
       if (status !== "authenticated") {
         setMessage({ type: "error", text: "กรุณาเข้าสู่ระบบก่อนรีวิว" });
         return;
@@ -340,7 +355,7 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
         setSubmitting(false);
       }
     },
-    [status, formRating, formComment, loadFeatured]
+    [status, formRating, formComment, loadFeatured, isDemoMode]
   );
 
   const avgRating = useMemo(() => {
@@ -358,6 +373,12 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
         <div className="rounded-[2.5rem] border border-[#fce4a1]/60 bg-[#f6be5d]/90 p-8 shadow-[0_28px_60px_-32px_rgba(20,0,60,0.65)] backdrop-blur">
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1.4fr_0.9fr] lg:items-start">
             <div className="space-y-6">
+              {isDemoMode ? (
+                <div className="rounded-3xl border border-white/40 bg-white/25 px-4 py-3 text-sm text-[#2b0f05] shadow-lg shadow-[#3c1a09]/20">
+                  โหมดตัวอย่าง: ระบบกำลังแสดงรีวิวตัวอย่าง เนื่องจากยังไม่เชื่อมต่อฐานข้อมูลและการเข้าสู่ระบบจริง
+                  กรุณาตั้งค่า <code className="rounded bg-white/60 px-2 py-0.5 text-xs text-[#4c2ffc]">.env.local</code> และ seed ข้อมูลตามเช็กลิสต์ก่อนเปิดให้ลูกค้าส่งรีวิว
+                </div>
+              ) : null}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#4c2ffc]">
@@ -482,10 +503,16 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
 
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || isDemoMode}
                     className="w-full rounded-full bg-[#32127b] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1f0a4a]/60 transition hover:bg-[#2a0f63] disabled:cursor-not-allowed disabled:bg-[#32127b]/60"
                   >
-                    {submitting ? "กำลังบันทึกรีวิว..." : myReview ? "อัปเดตรีวิว" : "ส่งรีวิว"}
+                    {submitting
+                      ? "กำลังบันทึกรีวิว..."
+                      : isDemoMode
+                      ? "โหมดตัวอย่าง"
+                      : myReview
+                      ? "อัปเดตรีวิว"
+                      : "ส่งรีวิว"}
                   </button>
                 </form>
               )}

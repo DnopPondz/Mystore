@@ -6,6 +6,7 @@ import {
   formatPromotionSchedule,
   describePromotionUsage,
 } from "@/lib/promotionUtils";
+import { getActiveSamplePromotions } from "@/lib/sampleData";
 
 export default function PromotionsTicker() {
   const [items, setItems] = useState([]);
@@ -27,6 +28,7 @@ export default function PromotionsTicker() {
       } catch (err) {
         if (active) {
           setError(String(err.message || err));
+          setItems((prev) => (prev.length ? prev : getActiveSamplePromotions()));
         }
       } finally {
         if (active) setLoading(false);

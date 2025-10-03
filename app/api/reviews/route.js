@@ -5,6 +5,7 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { Review } from "@/models/Review";
+import { getSampleReviews } from "@/lib/sampleData";
 
 const createSchema = z.object({
   rating: z.coerce.number().min(1).max(5),
@@ -55,13 +56,44 @@ export async function GET(req) {
     filter.rating = { $gte: minRating };
   }
 
-  await connectToDatabase();
-  const query = Review.find(filter).sort({ createdAt: -1 }).limit(limit);
-  const docs = await query.lean();
+  if (!process.env.MONGODB_URI) {
+    return NextResponse.json(
+      {
+        reviews: getSampleReviews({ minRating, limit }).map((item) => ({
+          id: String(item.id || item._id),
+          name: item.userName || "ลูกค้า",
+          rating: Number(item.rating || 0),
+          comment: item.comment || "",
+          createdAt: item.createdAt || null,
+        })),
+      },
+      { headers: { "x-demo-data": "true" } },
+    );
+  }
 
-  return NextResponse.json({
-    reviews: docs.map(serializePublicReview),
-  });
+  try {
+    await connectToDatabase();
+    const query = Review.find(filter).sort({ createdAt: -1 }).limit(limit);
+    const docs = await query.lean();
+
+    return NextResponse.json({
+      reviews: docs.map(serializePublicReview),
+    });
+  } catch (error) {
+    console.error("โหลดรีวิวจากฐานข้อมูลไม่สำเร็จ", error);
+    return NextResponse.json(
+      {
+        reviews: getSampleReviews({ minRating, limit }).map((item) => ({
+          id: String(item.id || item._id),
+          name: item.userName || "ลูกค้า",
+          rating: Number(item.rating || 0),
+          comment: item.comment || "",
+          createdAt: item.createdAt || null,
+        })),
+      },
+      { headers: { "x-demo-data": "true" } },
+    );
+  }
 }
 
 export async function POST(req) {

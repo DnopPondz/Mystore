@@ -4,17 +4,14 @@ import { Product } from "@/models/Product";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { buildProductPayload } from "./helpers";
+import { getSampleProducts } from "@/lib/sampleData";
 
-export async function GET() {
-  await connectToDatabase();
-  const session = await getServerSession(authOptions);
-  const filter = session?.user?.role === "admin" ? {} : { active: true };
-  const products = await Product.find(filter).sort({ createdAt: -1 }).limit(200).lean();
-  const isAdmin = session?.user?.role === "admin";
-  const sanitized = products.map((product) => {
+function formatProductsForRole(products, { isAdmin }) {
+  return products.map((product) => {
     const base = { ...product, _id: String(product._id) };
     const priceSource = base.price ?? base.unitPrice ?? 0;
-    const costSource = base.costPrice ?? base.cost ?? (base.pricing && typeof base.pricing === "object" ? base.pricing.cost : undefined);
+    const costSource =
+      base.costPrice ?? base.cost ?? (base.pricing && typeof base.pricing === "object" ? base.pricing.cost : undefined);
     if (isAdmin) {
       const priceValue = Number(priceSource);
       const costValue = Number(costSource);
@@ -27,7 +24,38 @@ export async function GET() {
     const { costPrice: _ignoredCostPrice, cost: _ignoredCost, pricing: _ignoredPricing, ...rest } = base;
     return rest;
   });
-  return NextResponse.json(sanitized);
+}
+
+function respondWithSampleProducts({ isAdmin }) {
+  const sample = getSampleProducts({ activeOnly: !isAdmin });
+  return NextResponse.json(formatProductsForRole(sample, { isAdmin }), {
+    headers: { "x-demo-data": "true" },
+  });
+}
+
+export async function GET() {
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.warn("ไม่สามารถอ่าน session ได้สำหรับ /api/products", error);
+  }
+
+  const isAdmin = session?.user?.role === "admin";
+
+  if (!process.env.MONGODB_URI) {
+    return respondWithSampleProducts({ isAdmin });
+  }
+
+  try {
+    await connectToDatabase();
+    const filter = isAdmin ? {} : { active: true };
+    const products = await Product.find(filter).sort({ createdAt: -1 }).limit(200).lean();
+    return NextResponse.json(formatProductsForRole(products, { isAdmin }));
+  } catch (error) {
+    console.error("โหลดรายการสินค้าไม่สำเร็จ", error);
+    return respondWithSampleProducts({ isAdmin });
+  }
 }
 
 export async function POST(req) {

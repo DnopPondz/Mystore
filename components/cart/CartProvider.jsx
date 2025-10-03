@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { calculateCartPromotions } from "@/lib/promotionUtils";
+import { getActiveSamplePromotions } from "@/lib/sampleData";
 
 const CartCtx = createContext();
 
@@ -53,9 +54,11 @@ export function CartProvider({ children }) {
       const data = await res.json();
       if (!aliveRef.current) return;
       setPromotionList(Array.isArray(data) ? data : []);
+      setPromotionError("");
     } catch (error) {
       if (!aliveRef.current) return;
       setPromotionError(String(error?.message || error) || "โหลดโปรโมชันไม่สำเร็จ");
+      setPromotionList((prev) => (prev.length ? prev : getActiveSamplePromotions()));
     } finally {
       if (aliveRef.current) setPromotionLoading(false);
     }
