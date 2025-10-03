@@ -139,6 +139,178 @@ export default function SalesHistoryPage() {
   const topProducts = Array.isArray(data?.topProducts) ? data.topProducts : [];
   const orderStats = data?.orders ?? { count: 0, averageValue: 0 };
 
+  const SalesTrendChart = ({ timeline }) => {
+    if (!timeline.length) {
+      return (
+        <div className="flex h-48 items-center justify-center rounded-3xl border border-[#F3E0C7] bg-white/90 px-4 text-sm text-[#6F4A2E]">
+          ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้
+        </div>
+      );
+    }
+
+    const revenueValues = timeline.map((day) => Number(day.revenue || 0));
+    const profitValues = timeline.map((day) => Number(day.profit || 0));
+    const maxValue = Math.max(...revenueValues, ...profitValues, 1);
+
+    const viewWidth = 100;
+    const viewHeight = 60;
+    const paddingX = 8;
+    const paddingY = 8;
+    const usableWidth = viewWidth - paddingX * 2;
+    const usableHeight = viewHeight - paddingY * 2;
+
+    const getPoints = (values) => {
+      if (timeline.length === 1) {
+        const y = viewHeight - paddingY - (values[0] / maxValue) * usableHeight;
+        const x = viewWidth / 2;
+        return `${x},${y}`;
+      }
+
+      return values
+        .map((value, index) => {
+          const x = paddingX + (usableWidth / (timeline.length - 1)) * index;
+          const y = viewHeight - paddingY - (value / maxValue) * usableHeight;
+          return `${x},${y}`;
+        })
+        .join(" ");
+    };
+
+    const revenuePoints = getPoints(revenueValues);
+    const profitPoints = getPoints(profitValues);
+    const labels = timeline.map((day) => thaiShortDate(new Date(day.date)));
+    const ySteps = 4;
+
+    const formatChartCurrency = (value) =>
+      Number(value || 0).toLocaleString("th-TH", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#F97316]" />
+            <span className="text-xs font-semibold text-[#6F4A2E]">รายได้</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#059669]" />
+            <span className="text-xs font-semibold text-[#6F4A2E]">กำไร</span>
+          </div>
+        </div>
+
+        <div className="relative">
+          <svg
+            viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+            role="img"
+            aria-label="กราฟแสดงรายได้และกำไรตามวัน"
+            className="h-56 w-full"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="revenueGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="rgba(249, 115, 22, 0.28)" />
+                <stop offset="100%" stopColor="rgba(249, 115, 22, 0)" />
+              </linearGradient>
+              <linearGradient id="profitGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="rgba(5, 150, 105, 0.32)" />
+                <stop offset="100%" stopColor="rgba(5, 150, 105, 0)" />
+              </linearGradient>
+            </defs>
+
+            {[...Array(ySteps + 1)].map((_, index) => {
+              const y = paddingY + (usableHeight / ySteps) * index;
+              const value = maxValue - (maxValue / ySteps) * index;
+              return (
+                <g key={index}>
+                  <line
+                    x1={paddingX}
+                    x2={viewWidth - paddingX}
+                    y1={y}
+                    y2={y}
+                    stroke="#F3E0C7"
+                    strokeWidth={index === 0 ? 1.5 : 1}
+                    strokeDasharray={index === 0 ? "" : "3 4"}
+                  />
+                  {index !== ySteps && (
+                    <text
+                      x={paddingX - 2}
+                      y={y + 3}
+                      textAnchor="end"
+                      fontSize="3"
+                      fill="#8A5A33"
+                    >
+                      ฿{formatChartCurrency(value)}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            <polyline
+              points={revenuePoints}
+              fill="url(#revenueGradient)"
+              stroke="none"
+              vectorEffect="non-scaling-stroke"
+            />
+            <polyline
+              points={profitPoints}
+              fill="url(#profitGradient)"
+              stroke="none"
+              vectorEffect="non-scaling-stroke"
+            />
+            <polyline
+              points={revenuePoints}
+              fill="none"
+              stroke="#F97316"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            <polyline
+              points={profitPoints}
+              fill="none"
+              stroke="#059669"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+
+            {timeline.map((day, index) => {
+              const revenue = revenueValues[index];
+              const profit = profitValues[index];
+              const x =
+                timeline.length === 1
+                  ? viewWidth / 2
+                  : paddingX + (usableWidth / (timeline.length - 1)) * index;
+              const revenueY =
+                viewHeight - paddingY - (revenue / maxValue) * usableHeight;
+              const profitY =
+                viewHeight - paddingY - (profit / maxValue) * usableHeight;
+              return (
+                <g key={day.date}>
+                  <circle cx={x} cy={revenueY} r="1.4" fill="#F97316" />
+                  <circle cx={x} cy={profitY} r="1.4" fill="#059669" />
+                </g>
+              );
+            })}
+          </svg>
+
+          <div
+            className="mt-2 grid"
+            style={{ gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr))` }}
+          >
+            {labels.map((label, index) => (
+              <div key={index} className="text-center text-[10px] font-semibold text-[#8A5A33]">
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8 text-[#3F2A1A]">
       <section className={`${adminSurfaceShell} p-8`}>
@@ -268,50 +440,54 @@ export default function SalesHistoryPage() {
               </div>
             </div>
 
-            <div className={`${adminInsetCardShell} mt-5 overflow-hidden`}>
-              <table className="min-w-full text-sm">
-                <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
-                  <tr>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">วันที่</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">ต้นทุน (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร (฿)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#F8E7D1]">
-                  {timeline.length === 0 ? (
+            <div className={`${adminInsetCardShell} mt-5 space-y-6 overflow-hidden p-6`}>
+              <SalesTrendChart timeline={timeline} />
+
+              <div className="rounded-3xl border border-[#F3E0C7]" role="region" aria-live="polite">
+                <table className="min-w-full overflow-hidden rounded-3xl text-sm">
+                  <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
                     <tr>
-                      <td className="px-6 py-6 text-center text-[#6F4A2E]" colSpan={4}>
-                        ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้
-                      </td>
+                      <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">วันที่</th>
+                      <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
+                      <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">ต้นทุน (฿)</th>
+                      <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร (฿)</th>
                     </tr>
-                  ) : (
-                    timeline.map((day) => {
-                      const dayDate = new Date(day.date);
-                      return (
-                        <tr key={day.date} className="bg-white odd:bg-[#FFF7EA]">
-                          <td className="px-6 py-4 font-medium text-[#3F2A1A]">
-                            {thaiShortDate(dayDate)}
-                          </td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
-                            ฿{formatCurrency(day.revenue)}
-                          </td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
-                            ฿{formatCurrency(day.cost)}
-                          </td>
-                          <td
-                            className={`px-6 py-4 text-right font-semibold ${
-                              Number(day.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"
-                            }`}
-                          >
-                            ฿{formatCurrency(day.profit)}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-[#F8E7D1]">
+                    {timeline.length === 0 ? (
+                      <tr>
+                        <td className="px-6 py-6 text-center text-[#6F4A2E]" colSpan={4}>
+                          ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้
+                        </td>
+                      </tr>
+                    ) : (
+                      timeline.map((day) => {
+                        const dayDate = new Date(day.date);
+                        return (
+                          <tr key={day.date} className="bg-white odd:bg-[#FFF7EA]">
+                            <td className="px-6 py-4 font-medium text-[#3F2A1A]">
+                              {thaiShortDate(dayDate)}
+                            </td>
+                            <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
+                              ฿{formatCurrency(day.revenue)}
+                            </td>
+                            <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
+                              ฿{formatCurrency(day.cost)}
+                            </td>
+                            <td
+                              className={`px-6 py-4 text-right font-semibold ${
+                                Number(day.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"
+                              }`}
+                            >
+                              ฿{formatCurrency(day.profit)}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
