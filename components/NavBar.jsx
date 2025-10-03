@@ -264,6 +264,7 @@ export default function NavBar() {
                         <button
                           onClick={() => {
                             setUserMenuOpen(false);
+                            cart?.clear?.();
                             signOut({ callbackUrl: "/" });
                           }}
                           className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-red-200 transition hover:bg-red-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
@@ -353,6 +354,7 @@ export default function NavBar() {
                 <button
                   onClick={() => {
                     setMenuOpen(false);
+                    cart?.clear?.();
                     signOut({ callbackUrl: "/" });
                   }}
                   className="px-4 py-2 rounded-full font-medium text-white bg-red-500/80 shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
