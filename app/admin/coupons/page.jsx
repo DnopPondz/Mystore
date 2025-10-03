@@ -81,6 +81,7 @@ const emptyCoupon = {
   type: "percent",
   value: 10,
   minSubtotal: 0,
+  maxUsesPerUser: "",
   expiresAt: "",
   active: true,
 };
@@ -131,6 +132,7 @@ export default function AdminCouponsPage() {
       type: c.type || "percent",
       value: Number(c.value || 0),
       minSubtotal: Number(c.minSubtotal || 0),
+      maxUsesPerUser: c.maxUsesPerUser ? String(c.maxUsesPerUser) : "",
       expiresAt: c.expiresAt ? new Date(c.expiresAt).toISOString().slice(0, 16) : "",
       active: !!c.active,
     });
@@ -146,6 +148,11 @@ export default function AdminCouponsPage() {
       type: form.type,
       value: Number(form.value || 0),
       minSubtotal: Number(form.minSubtotal || 0),
+      maxUsesPerUser: (() => {
+        if (form.maxUsesPerUser === "" || form.maxUsesPerUser === null) return null;
+        const limit = Number(form.maxUsesPerUser);
+        return Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : null;
+      })(),
       expiresAt: form.expiresAt || "",
       active: Boolean(form.active),
     };
@@ -212,7 +219,11 @@ export default function AdminCouponsPage() {
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) return items;
-    return items.filter((c) => `${c.code} ${c.type} ${c.value} ${c.minSubtotal}`.toLowerCase().includes(term));
+    return items.filter((c) =>
+      `${c.code} ${c.type} ${c.value} ${c.minSubtotal} ${c.maxUsesPerUser ?? ""}`
+        .toLowerCase()
+        .includes(term),
+    );
   }, [items, search]);
 
   const activeCount = filtered.filter((c) => c.active).length;
@@ -298,6 +309,9 @@ export default function AdminCouponsPage() {
                         </p>
                         <div className="mt-2 text-sm text-[#5B3A21]">ขั้นต่ำ: {formatCurrency(c.minSubtotal)}</div>
                         <div className="mt-1 text-xs text-[#6F4A2E]">
+                          จำกัด: {c.maxUsesPerUser ? `${c.maxUsesPerUser} ครั้ง/ผู้ใช้` : "ไม่จำกัด"}
+                        </div>
+                        <div className="mt-1 text-xs text-[#6F4A2E]">
                           หมดอายุ: {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </div>
                       </div>
@@ -335,6 +349,7 @@ export default function AdminCouponsPage() {
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ประเภท</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">มูลค่า</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ขั้นต่ำ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">จำกัด/ผู้ใช้</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">หมดอายุ</th>
                     <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สถานะ</th>
                     <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จัดการ</th>
@@ -343,7 +358,7 @@ export default function AdminCouponsPage() {
                 <tbody className="divide-y divide-[#F3E0C7]">
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center text-[#6F4A2E]">
+                      <td colSpan={8} className="px-6 py-12 text-center text-[#6F4A2E]">
                         <div className="flex flex-col items-center">
                           <span className="mb-4 text-4xl">🎟️</span>
                           <span>ไม่พบคูปองที่ตรงกับคำค้นหา</span>
@@ -362,6 +377,9 @@ export default function AdminCouponsPage() {
                           {c.type === "percent" ? `${c.value}%` : formatCurrency(c.value)}
                         </td>
                         <td className="px-6 py-4 text-[#5B3A21]">{formatCurrency(c.minSubtotal)}</td>
+                        <td className="px-6 py-4 text-[#5B3A21]">
+                          {c.maxUsesPerUser ? `${c.maxUsesPerUser} ครั้ง` : "ไม่จำกัด"}
+                        </td>
                         <td className="px-6 py-4 text-xs text-[#6F4A2E]">
                           {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </td>
@@ -451,6 +469,21 @@ export default function AdminCouponsPage() {
                     className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
                     value={form.minSubtotal}
                     onChange={(e) => setForm((f) => ({ ...f, minSubtotal: Number(e.target.value || 0) }))}
+                  />
+                </Field>
+                <Field label="จำกัดจำนวนครั้งต่อผู้ใช้">
+                  <input
+                    type="number"
+                    min={1}
+                    placeholder="เว้นว่าง = ไม่จำกัด"
+                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    value={form.maxUsesPerUser}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        maxUsesPerUser: e.target.value === "" ? "" : e.target.value.replace(/[^0-9]/g, ""),
+                      }))
+                    }
                   />
                 </Field>
               </div>

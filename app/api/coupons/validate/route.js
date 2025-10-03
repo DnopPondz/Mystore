@@ -1,22 +1,14 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Coupon } from "@/models/Coupon";
-
-function applyCoupon(coupon, subtotal) {
-  if (!coupon) return { discount: 0, reason: "NOT_FOUND" };
-  if (!coupon.active) return { discount: 0, reason: "INACTIVE" };
-  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) return { discount: 0, reason: "EXPIRED" };
-  if (subtotal < (coupon.minSubtotal || 0)) return { discount: 0, reason: "MIN_SUBTOTAL" };
-
-  let discount = 0;
-  if (coupon.type === "percent") discount = Math.floor((subtotal * coupon.value) / 100);
-  else discount = Math.floor(coupon.value);
-  discount = Math.max(0, Math.min(discount, subtotal));
-  return { discount, reason: "OK" };
-}
+import { evaluateCouponForUser } from "@/lib/couponUsage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req) {
   try {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id || null;
     const { code, subtotal } = await req.json();
     const normalized = String(code || "").toUpperCase().trim();
     const sub = Number(subtotal || 0);
@@ -25,16 +17,30 @@ export async function POST(req) {
     await connectToDatabase();
     const coupon = await Coupon.findOne({ code: normalized }).lean();
 
-    const { discount, reason } = applyCoupon(coupon, sub);
-    if (reason !== "OK") return NextResponse.json({ ok: 0, reason }, { status: 200 });
+    const evaluation = await evaluateCouponForUser({ coupon, subtotal: sub, userId });
+    if (!evaluation.ok) {
+      const payload = { ok: 0, reason: evaluation.reason };
+      if (evaluation.usage?.maxUses != null) {
+        payload.maxUses = evaluation.usage.maxUses;
+        payload.usedCount = evaluation.usage.usedCount;
+      }
+      return NextResponse.json(payload, { status: 200 });
+    }
+
+    const maxUses = evaluation.usage?.maxUses ?? null;
+    const usedCount = evaluation.usage?.usedCount ?? 0;
+    const remaining = maxUses != null ? Math.max(maxUses - usedCount, 0) : null;
 
     return NextResponse.json({
       ok: 1,
       code: coupon.code,
       type: coupon.type,
       value: coupon.value,
-      discount,
+      discount: evaluation.discount,
       description: coupon.type === "percent" ? `${coupon.value}% off` : `฿${coupon.value} off`,
+      maxUses,
+      usedCount,
+      remaining,
     });
   } catch (e) {
     // สำคัญ: อย่าปล่อยให้ตกและตอบว่าง ให้ส่ง JSON กลับเสมอ

@@ -4,6 +4,16 @@ const PAYMENT_METHODS = ["promptpay", "bank"];
 const PAYMENT_STATUSES = ["unpaid", "verifying", "paid", "invalid", "cash"];
 const FULFILLMENT_STATUSES = ["new", "pending", "shipping", "success", "cancel"];
 
+const CouponUsageSchema = new Schema(
+  {
+    code: String,
+    type: String,
+    value: Number,
+    discount: Number,
+  },
+  { _id: false }
+);
+
 const OrderSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User" },
@@ -26,12 +36,7 @@ const OrderSchema = new Schema(
     promotionDiscount: { type: Number, default: 0 },
 
     // คูปองที่ใช้ (ถ้ามี)
-    coupon: {
-      code: String,
-      type: String,
-      value: Number,
-      discount: Number,
-    },
+    coupon: { type: CouponUsageSchema, default: null },
 
     promotions: [
       new Schema(
@@ -109,12 +114,19 @@ const OrderSchema = new Schema(
 );
 
 if (models.Order) {
-  const methodPath = models.Order.schema?.path("payment.method");
+  const schema = models.Order.schema;
+  const methodPath = schema?.path("payment.method");
   const hasAllMethods = Array.isArray(methodPath?.enumValues)
     ? PAYMENT_METHODS.every((value) => methodPath.enumValues.includes(value))
     : false;
 
-  if (!hasAllMethods) {
+  const couponPath = schema?.path("coupon");
+  const hasCouponSubfields =
+    couponPath?.instance === "Embedded" &&
+    typeof couponPath.schema?.path === "function" &&
+    !!couponPath.schema.path("code");
+
+  if (!hasAllMethods || !hasCouponSubfields) {
     delete models.Order;
   }
 }
