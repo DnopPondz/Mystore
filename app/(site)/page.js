@@ -448,7 +448,7 @@ export default async function HomePage() {
 
       <section id="menu" className="relative px-6 py-20 lg:px-10">
         <div className="absolute inset-x-0 top-0 -z-10 h-64 bg-gradient-to-b from-white/0 via-white/60 to-white" />
-        <div className="mx-auto grid max-w-screen-xl gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="mx-auto grid max-w-screen-2xl gap-12 lg:grid-cols-[0.9fr_1.1fr] 2xl:grid-cols-[0.8fr_1.2fr]">
           <aside className="space-y-6">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--color-rose)]">
               Bao & Dim Sum
@@ -464,7 +464,7 @@ export default async function HomePage() {
               </p>
             </div>
           </aside>
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {products.length === 0 ? (
               <div className="col-span-full rounded-3xl border border-dashed border-[var(--color-rose)]/30 bg-white/85 p-12 text-center text-[var(--color-rose-dark)]/70 shadow-[0_24px_48px_-32px_rgba(20,95,75,0.2)]">
                 เมนูกำลังนึ่งอยู่ กลับมาเช็กใหม่อีกครั้งในอีกไม่กี่นาที 🥟
