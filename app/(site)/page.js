@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { Review } from "@/models/Review";
+import { isNewArrival } from "@/lib/productUtils";
 import AddToCartButton from "@/components/AddToCartButton";
 import ReviewsShowcase from "@/components/ReviewsShowcase";
 
@@ -133,14 +134,22 @@ export default async function HomePage() {
           .lean(),
       ]);
 
-      products = (docs || []).map((d) => ({
-        _id: String(d._id),
-        title: d.title || "",
-        description: d.description || "",
-        price: d.price ?? 0,
-        images: Array.isArray(d.images) ? d.images : [],
-        saleMode: d.saleMode || null,
-      }));
+      const now = new Date();
+
+      products = (docs || []).map((d) => {
+        const createdAt = d.createdAt ? new Date(d.createdAt) : null;
+
+        return {
+          _id: String(d._id),
+          title: d.title || "",
+          description: d.description || "",
+          price: d.price ?? 0,
+          images: Array.isArray(d.images) ? d.images : [],
+          saleMode: d.saleMode || null,
+          createdAt: createdAt ? createdAt.toISOString() : null,
+          isNewArrival: isNewArrival({ createdAt }, { now }),
+        };
+      });
 
       featuredReviews = (reviews || []).map((r) => ({
         id: String(r._id),
@@ -517,6 +526,11 @@ export default async function HomePage() {
                         <span className="text-6xl opacity-30">🥟</span>
                       )}
                     </div>
+                    {p.isNewArrival && (
+                      <div className="absolute left-3 top-3 rounded-full bg-[var(--color-rose)] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
+                        ใหม่!
+                      </div>
+                    )}
                     {p.saleMode === "preorder" && (
                       <div className="absolute right-3 top-3 rounded-full bg-amber-400 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-amber-900">
                         Pre-order
