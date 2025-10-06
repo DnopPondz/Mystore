@@ -11,19 +11,11 @@ export default function AddToCartButton({ product }) {
   const [quantity, setQuantity] = useState(1);
 
   const saleMode = product?.saleMode || "regular";
+  const isAuthenticated = status === "authenticated";
 
   function redirectToPreorder() {
     const target = product?._id ? `/preorder?product=${product._id}` : "/preorder";
     router.push(target);
-  }
-
-  function ensureAuthenticated() {
-    const path =
-      typeof window !== "undefined"
-        ? `${window.location.pathname}${window.location.search}`
-        : "/";
-    const redirect = encodeURIComponent(path || "/");
-    router.push(`/login?redirect=${redirect}`);
   }
 
   function handleAddToCart() {
@@ -32,8 +24,13 @@ export default function AddToCartButton({ product }) {
       return;
     }
 
-    if (status !== "authenticated") {
-      ensureAuthenticated();
+    if (!product?._id) {
+      console.warn("Product is missing an identifier; cannot add to cart.");
+      return;
+    }
+
+    if (!cart) {
+      console.warn("Cart context is unavailable; unable to add product to cart.");
       return;
     }
 
@@ -42,6 +39,16 @@ export default function AddToCartButton({ product }) {
       quantity,
     );
     setQuantity(1);
+
+    if (!isAuthenticated) {
+      const target =
+        typeof window !== "undefined"
+          ? `/login?redirect=${encodeURIComponent(
+              `${window.location.pathname}${window.location.search}` || "/",
+            )}`
+          : "/login";
+      router.prefetch(target);
+    }
   }
 
   function adjustQuantity(delta) {
@@ -69,6 +76,7 @@ export default function AddToCartButton({ product }) {
   if (saleMode === "preorder") {
     return (
       <button
+        type="button"
         className="rounded-2xl bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(12,116,108,0.32)] transition hover:-translate-y-0.5 hover:bg-[var(--color-rose-dark)]"
         onClick={handleAddToCart}
       >
@@ -106,6 +114,7 @@ export default function AddToCartButton({ product }) {
         </button>
       </div>
       <button
+        type="button"
         className="rounded-2xl bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(255,135,70,0.32)] transition hover:-translate-y-0.5 hover:bg-[#ff7125]"
         onClick={handleAddToCart}
       >
