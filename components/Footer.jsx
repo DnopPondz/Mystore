@@ -99,7 +99,7 @@ export default function Footer() {
                 <li className="flex items-start gap-3">
                   <span aria-hidden>📍</span>
                   <span>
-                    88/8 ถนนตลาดสด ตำบลในเมือง อำเภอเมือง จังหวัดลำพูน 51000
+                    71/1 ตำบลริมปิง อำเภอเมือง จังหวัดลำพูน 51000
                   </span>
                 </li>
               </ul>
