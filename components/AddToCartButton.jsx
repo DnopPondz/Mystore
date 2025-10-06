@@ -86,8 +86,8 @@ export default function AddToCartButton({ product }) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center rounded-full border border-[var(--color-burgundy)] bg-white text-[var(--color-rose-dark)] shadow-[inset_0_1px_3px_rgba(12,116,108,0.12)]">
+    <div className="flex flex-wrap items-center justify-end gap-2">
+      <div className="flex flex-shrink-0 items-center rounded-full border border-[var(--color-burgundy)] bg-white text-[var(--color-rose-dark)] shadow-[inset_0_1px_3px_rgba(12,116,108,0.12)]">
         <button
           type="button"
           aria-label="ลดจำนวน"
@@ -115,7 +115,7 @@ export default function AddToCartButton({ product }) {
       </div>
       <button
         type="button"
-        className="rounded-2xl bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(255,135,70,0.32)] transition hover:-translate-y-0.5 hover:bg-[#ff7125]"
+        className="w-full flex-1 rounded-2xl bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(255,135,70,0.32)] transition hover:-translate-y-0.5 hover:bg-[#ff7125] sm:w-auto sm:flex-none"
         onClick={handleAddToCart}
       >
         เพิ่มลงตะกร้า

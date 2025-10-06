@@ -498,7 +498,7 @@ export default async function HomePage() {
                       <h3 className="text-lg font-semibold">{p.title}</h3>
                       <p className="mt-2 text-sm text-[var(--color-rose-dark)]/70 line-clamp-3">{p.description}</p>
                     </div>
-                    <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                    <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
                       <span className="text-lg font-bold text-[var(--color-rose)]">
                         ฿{Number.isFinite(p.price) ? p.price.toLocaleString("th-TH") : "-"}
                       </span>
