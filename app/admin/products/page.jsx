@@ -61,7 +61,7 @@ function SlidingToggle({ isActive, onToggle, disabled = false }) {
     <button
       onClick={onToggle}
       disabled={disabled}
-      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#C67C45] focus:ring-offset-2 ${
+      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0ea5a0] focus:ring-offset-2 ${
         isActive ? "bg-[#2F7A3D]" : "bg-[#D4D4D8]"
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       title={isActive ? "คลิกเพื่อซ่อนสินค้า" : "คลิกเพื่อแสดงสินค้า"}
@@ -281,12 +281,12 @@ export default function AdminProductsPage() {
   const hiddenCount = filteredItems.length - activeCount;
 
   return (
-    <main className="space-y-8 text-[#3F2A1A]">
+    <main className="space-y-8 text-[#0b3b31]">
       <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[#3F2A1A]">จัดการสินค้า</h2>
-            <p className="mt-1 text-[#6F4A2E]">เพิ่ม แก้ไข และควบคุมการแสดงผลสินค้าให้ตรงกับสต็อกจริงในร้าน</p>
+            <h2 className="text-2xl font-bold text-[#0b3b31]">จัดการสินค้า</h2>
+            <p className="mt-1 text-[#145f4b]">เพิ่ม แก้ไข และควบคุมการแสดงผลสินค้าให้ตรงกับสต็อกจริงในร้าน</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
@@ -295,9 +295,9 @@ export default function AdminProductsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาสินค้า ชื่อ หรือแท็ก"
-                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                className="w-60 rounded-full border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
               />
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#0ea5a0]">🔍</span>
             </div>
             <button className={adminAccentButton} onClick={startCreate}>
               ➕ เพิ่มสินค้าใหม่
@@ -314,18 +314,18 @@ export default function AdminProductsPage() {
       </section>
 
       <section className={adminTableShell}>
-        <header className="flex flex-col gap-2 border-b border-[#F3E0C7] bg-[#FFF4E5]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <header className="flex flex-col gap-2 border-b border-[#c9f6ef] bg-[#eaf8f4]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-[#3F2A1A]">รายการสินค้า</h3>
-            <p className="text-xs text-[#6F4A2E]">อัปเดตสต็อกและราคาได้ทันที ตารางรองรับการเลื่อนในแนวนอนได้บนมือถือ</p>
+            <h3 className="text-lg font-bold text-[#0b3b31]">รายการสินค้า</h3>
+            <p className="text-xs text-[#145f4b]">อัปเดตสต็อกและราคาได้ทันที ตารางรองรับการเลื่อนในแนวนอนได้บนมือถือ</p>
           </div>
-          <span className="text-xs font-medium uppercase tracking-wide text-[#8A5A33]">{filteredItems.length} รายการที่แสดง</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-[#0ea5a0]">{filteredItems.length} รายการที่แสดง</span>
         </header>
 
         {loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="flex items-center gap-3 text-sm text-[#6F4A2E]">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
+            <div className="flex items-center gap-3 text-sm text-[#145f4b]">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#0ea5a0] border-t-transparent" />
               <span>กำลังโหลดข้อมูลสินค้า...</span>
             </div>
           </div>
@@ -333,7 +333,7 @@ export default function AdminProductsPage() {
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(10,83,73,0.35)]">
               <span className="mb-2 block text-2xl">⚠️</span>
               <span>{err}</span>
             </div>
@@ -344,37 +344,37 @@ export default function AdminProductsPage() {
           <div className="overflow-hidden">
             <div className="block space-y-4 p-4 lg:hidden">
               {filteredItems.length === 0 ? (
-                <div className="py-8 text-center text-[#6F4A2E]">
+                <div className="py-8 text-center text-[#145f4b]">
                   <span className="mb-4 block text-4xl">🛍️</span>
                   <span>ไม่พบสินค้าที่ตรงกับคำค้นหา</span>
                 </div>
               ) : (
                 filteredItems.map((p) => (
-                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
+                  <div key={p._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(10,83,73,0.5)]`}>
                     <div className="flex items-start gap-4">
-                      <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#F3E0C7] bg-[#FFF4E5]">
+                      <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#c9f6ef] bg-[#eaf8f4]">
                         {p.images?.[0] ? (
                           <img src={p.images[0]} alt={p.title} className="h-full w-full object-cover" />
                         ) : (
-                          <span className="text-xs text-[#8A5A33]">ไม่มีรูป</span>
+                          <span className="text-xs text-[#0ea5a0]">ไม่มีรูป</span>
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4 className="truncate font-semibold text-[#3F2A1A]">{p.title}</h4>
-                        <p className="truncate text-xs text-[#6F4A2E]">{p.slug}</p>
+                        <h4 className="truncate font-semibold text-[#0b3b31]">{p.title}</h4>
+                        <p className="truncate text-xs text-[#145f4b]">{p.slug}</p>
                         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-                          <span className="font-semibold text-[#3F2A1A]">ราคาขาย: ฿{formatCurrency(p.price)}</span>
-                          <span className="text-[#5B3A21]">ต้นทุน: ฿{formatCurrency(p.costPrice)}</span>
-                          <span className="text-[#5B3A21]">สต็อก: {p.stock}</span>
+                          <span className="font-semibold text-[#0b3b31]">ราคาขาย: ฿{formatCurrency(p.price)}</span>
+                          <span className="text-[#0f5349]">ต้นทุน: ฿{formatCurrency(p.costPrice)}</span>
+                          <span className="text-[#0f5349]">สต็อก: {p.stock}</span>
                         </div>
                         <div className="mt-3 flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <SlidingToggle isActive={p.active} onToggle={() => toggleActive(p)} />
-                            <span className="text-xs text-[#6F4A2E]">{p.active ? "กำลังขาย" : "ซ่อนอยู่"}</span>
+                            <span className="text-xs text-[#145f4b]">{p.active ? "กำลังขาย" : "ซ่อนอยู่"}</span>
                           </div>
                           <div className="flex gap-2">
                             <button
-                              className="rounded-full border border-[#E2C39A] px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                              className="rounded-full border border-[#a4ebdf] px-3 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                               onClick={() => startEdit(p)}
                             >
                               แก้ไข
@@ -397,20 +397,20 @@ export default function AdminProductsPage() {
             <div className="hidden overflow-x-auto lg:block">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สินค้า</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ราคา</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ต้นทุน</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สต็อก</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สถานะ</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">แท็ก</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จัดการ</th>
+                  <tr className="border-b border-[#c9f6ef] bg-[#FFF3E0]">
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">สินค้า</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">ราคา</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">ต้นทุน</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">สต็อก</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">สถานะ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">แท็ก</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F3E0C7]">
+                <tbody className="divide-y divide-[#c9f6ef]">
                   {filteredItems.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center text-[#6F4A2E]">
+                      <td colSpan={7} className="px-6 py-12 text-center text-[#145f4b]">
                         <div className="flex flex-col items-center">
                           <span className="mb-4 text-4xl">🛍️</span>
                           <span>ไม่พบสินค้าที่ตรงกับคำค้นหา</span>
@@ -425,35 +425,35 @@ export default function AdminProductsPage() {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#F3E0C7] bg-[#FFF4E5]">
+                            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#c9f6ef] bg-[#eaf8f4]">
                               {p.images?.[0] ? (
                                 <img src={p.images[0]} alt={p.title} className="h-full w-full object-cover" />
                               ) : (
-                                <span className="text-xs text-[#8A5A33]">ไม่มีรูป</span>
+                                <span className="text-xs text-[#0ea5a0]">ไม่มีรูป</span>
                               )}
                             </div>
                             <div>
-                              <p className="font-semibold text-[#3F2A1A]">{p.title}</p>
-                              <p className="text-xs text-[#6F4A2E]">{p.slug}</p>
+                              <p className="font-semibold text-[#0b3b31]">{p.title}</p>
+                              <p className="text-xs text-[#145f4b]">{p.slug}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 font-semibold text-[#3F2A1A]">฿{formatCurrency(p.price)}</td>
-                        <td className="px-6 py-4 text-[#5B3A21]">฿{formatCurrency(p.costPrice)}</td>
-                        <td className="px-6 py-4 text-[#5B3A21]">{p.stock}</td>
+                        <td className="px-6 py-4 font-semibold text-[#0b3b31]">฿{formatCurrency(p.price)}</td>
+                        <td className="px-6 py-4 text-[#0f5349]">฿{formatCurrency(p.costPrice)}</td>
+                        <td className="px-6 py-4 text-[#0f5349]">{p.stock}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <SlidingToggle isActive={p.active} onToggle={() => toggleActive(p)} />
-                            <span className="text-xs text-[#6F4A2E]">{p.active ? "กำลังขาย" : "ซ่อนอยู่"}</span>
+                            <span className="text-xs text-[#145f4b]">{p.active ? "กำลังขาย" : "ซ่อนอยู่"}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-xs text-[#6F4A2E]">
+                        <td className="px-6 py-4 text-xs text-[#145f4b]">
                           {Array.isArray(p.tags) && p.tags.length > 0 ? p.tags.join(", ") : "-"}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex justify-end gap-2">
                             <button
-                              className="rounded-full border border-[#E2C39A] px-4 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                              className="rounded-full border border-[#a4ebdf] px-4 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                               onClick={() => startEdit(p)}
                             >
                               แก้ไข
@@ -478,14 +478,14 @@ export default function AdminProductsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
-            <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
+          <div className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#bff4ec] bg-[#f2fbf8] shadow-[0_30px_60px_-30px_rgba(10,83,73,0.6)]">
+            <div className="flex items-center justify-between border-b border-[#c9f6ef] bg-[#eaf8f4]/70 px-6 py-4">
               <div>
-                <h3 className="text-lg font-bold text-[#3F2A1A]">{isEdit ? "แก้ไขสินค้า" : "เพิ่มสินค้าใหม่"}</h3>
-                <p className="text-xs text-[#6F4A2E]">กรอกข้อมูลให้ครบถ้วนเพื่อให้หน้าเว็บแสดงผลสวยงามและถูกต้อง</p>
+                <h3 className="text-lg font-bold text-[#0b3b31]">{isEdit ? "แก้ไขสินค้า" : "เพิ่มสินค้าใหม่"}</h3>
+                <p className="text-xs text-[#145f4b]">กรอกข้อมูลให้ครบถ้วนเพื่อให้หน้าเว็บแสดงผลสวยงามและถูกต้อง</p>
               </div>
               <button
-                className="rounded-full border border-[#E2C39A] bg-white px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                className="rounded-full border border-[#a4ebdf] bg-white px-3 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                 onClick={() => setEditing(null)}
               >
                 ปิด
@@ -496,7 +496,7 @@ export default function AdminProductsPage() {
               <div className="space-y-4">
                 <Field label="ชื่อสินค้า" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.title}
                     onChange={(e) =>
                       setForm((f) => ({
@@ -510,7 +510,7 @@ export default function AdminProductsPage() {
                 </Field>
                 <Field label="Slug">
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.slug}
                     onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                   />
@@ -522,7 +522,7 @@ export default function AdminProductsPage() {
                       min={0}
                       step="0.01"
                       inputMode="decimal"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       value={form.price}
                       onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                     />
@@ -533,7 +533,7 @@ export default function AdminProductsPage() {
                       min={0}
                       step="0.01"
                       inputMode="decimal"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       value={form.costPrice}
                       onChange={(e) => setForm((f) => ({ ...f, costPrice: e.target.value }))}
                     />
@@ -542,7 +542,7 @@ export default function AdminProductsPage() {
                     <input
                       type="number"
                       min={0}
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       value={form.stock}
                       onChange={(e) => setForm((f) => ({ ...f, stock: Number(e.target.value || 0) }))}
                     />
@@ -550,18 +550,18 @@ export default function AdminProductsPage() {
                 </div>
                 <Field label="แท็ก (คั่นด้วย ,)">
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.tags}
                     onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
                   />
                 </Field>
                 <div className="flex items-center gap-3">
                   <SlidingToggle isActive={form.active} onToggle={() => setForm((f) => ({ ...f, active: !f.active }))} />
-                  <label className="text-sm font-medium text-[#3F2A1A]">แสดงสินค้าบนหน้าร้าน</label>
+                  <label className="text-sm font-medium text-[#0b3b31]">แสดงสินค้าบนหน้าร้าน</label>
                 </div>
                 <Field label="โหมดการขาย">
                   <select
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.saleMode}
                     onChange={(e) => setForm((f) => ({ ...f, saleMode: e.target.value }))}
                   >
@@ -571,8 +571,8 @@ export default function AdminProductsPage() {
                   </select>
                 </Field>
                 {form.saleMode !== "regular" ? (
-                  <div className="rounded-[1.2rem] border border-[#F2D5AF] bg-[#FFF2DD] p-4 text-sm text-[#5B3A21] shadow-[inset_0_1px_3px_rgba(63,42,26,0.08)]">
-                    <p className="font-semibold text-[#3F2A1A]">การรับชำระสำหรับ Pre-order</p>
+                  <div className="rounded-[1.2rem] border border-[#bff4ec] bg-[#e5f8f3] p-4 text-sm text-[#0f5349] shadow-[inset_0_1px_3px_rgba(10,83,73,0.08)]">
+                    <p className="font-semibold text-[#0b3b31]">การรับชำระสำหรับ Pre-order</p>
                     <div className="mt-3 flex flex-col gap-2">
                       <label className="inline-flex items-center gap-2">
                         <input
@@ -596,7 +596,7 @@ export default function AdminProductsPage() {
                       </label>
                     </div>
                     <textarea
-                      className="mt-3 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-3 py-2 text-xs text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="mt-3 w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-3 py-2 text-xs text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       rows={3}
                       placeholder="บันทึกเงื่อนไขหรือรายละเอียดพิเศษสำหรับการสั่งแบบ Pre-order"
                       value={form.preorderNote}
@@ -609,18 +609,18 @@ export default function AdminProductsPage() {
               <div className="space-y-4">
                 <Field label="คำอธิบาย">
                   <textarea
-                    className="h-32 w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="h-32 w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                   />
                 </Field>
                 <Field label="รูปสินค้า">
                   <div className="flex flex-col gap-4 sm:flex-row">
-                    <div className="flex h-28 w-28 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#F3E0C7] bg-[#FFF4E5]">
+                    <div className="flex h-28 w-28 flex-shrink-0 items-center justify-center overflow-hidden rounded-[1rem] border border-[#c9f6ef] bg-[#eaf8f4]">
                       {form.image ? (
                         <img src={form.image} alt="preview" className="h-full w-full object-cover" />
                       ) : (
-                        <span className="text-xs text-[#8A5A33]">รออัปโหลด</span>
+                        <span className="text-xs text-[#0ea5a0]">รออัปโหลด</span>
                       )}
                     </div>
                     <div className="flex-1 space-y-3 text-sm">
@@ -639,10 +639,10 @@ export default function AdminProductsPage() {
                             });
                           }
                         }}
-                        className="w-full rounded-[1rem] border border-dashed border-[#E2C39A] bg-white px-4 py-3 text-sm text-[#5B3A21] file:mr-4 file:rounded-full file:border-0 file:bg-[#8A5A33]/10 file:px-4 file:py-2 file:text-[#8A5A33]"
+                        className="w-full rounded-[1rem] border border-dashed border-[#a4ebdf] bg-white px-4 py-3 text-sm text-[#0f5349] file:mr-4 file:rounded-full file:border-0 file:bg-[#0ea5a0]/10 file:px-4 file:py-2 file:text-[#0ea5a0]"
                       />
                       <input
-                        className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                        className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                         value={form.image}
                         onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
                         placeholder="หรือวางลิงก์รูปสินค้า"
@@ -653,7 +653,7 @@ export default function AdminProductsPage() {
                 <div className="flex flex-wrap justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    className="rounded-full border border-[#E2C39A] px-5 py-2 text-sm font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                    className="rounded-full border border-[#a4ebdf] px-5 py-2 text-sm font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                     onClick={() => setEditing(null)}
                   >
                     ยกเลิก
@@ -679,12 +679,12 @@ function StatBubble({ label, value, color }) {
       accent: "text-[#2B6AA3]",
     },
     green: {
-      bg: "bg-[#F0F9ED]",
+      bg: "bg-[#e2faf5]",
       border: "border-[#C3E7C4]",
       accent: "text-[#2F7A3D]",
     },
     orange: {
-      bg: "bg-[#FFF4E5]",
+      bg: "bg-[#eaf8f4]",
       border: "border-[#F5D4A6]",
       accent: "text-[#C46A1C]",
     },
@@ -696,7 +696,7 @@ function StatBubble({ label, value, color }) {
   };
   const tone = palette[color] || palette.blue;
   return (
-    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(10,83,73,0.5)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
       <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>
@@ -705,7 +705,7 @@ function StatBubble({ label, value, color }) {
 
 function Field({ label, required, children }) {
   return (
-    <label className="block text-sm font-medium text-[#3F2A1A]">
+    <label className="block text-sm font-medium text-[#0b3b31]">
       <span className="mb-2 block">
         {label}
         {required ? <span className="ml-1 text-red-500">*</span> : null}
