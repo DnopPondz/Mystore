@@ -351,145 +351,140 @@ export default function ReviewsShowcase({ reviews: initialReviews = [] }) {
 
   return (
     <section className="relative overflow-hidden py-20">
-      <div className="absolute inset-0 bg-[#4c2ffc]" />
-      <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-      <div className="absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-[#f6be5d]/40 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_5%_5%,rgba(14,165,160,0.35),transparent_55%),radial-gradient(circle_at_95%_10%,rgba(255,135,70,0.28),transparent_60%),linear-gradient(135deg,#0f766e,#145f4b)]" />
+      <div className="absolute -top-24 right-6 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
+      <div className="absolute -bottom-32 left-10 h-72 w-72 rounded-full bg-[var(--color-gold)]/30 blur-3xl" />
       <div className="relative mx-auto max-w-screen-xl px-6 lg:px-8">
-        <div className="rounded-[2.5rem] border border-[#fce4a1]/60 bg-[#f6be5d]/90 p-8 shadow-[0_28px_60px_-32px_rgba(20,0,60,0.65)] backdrop-blur">
-          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1.4fr_0.9fr] lg:items-start">
-            <div className="space-y-6">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#4c2ffc]">
-                    Our Happy Customers
-                  </p>
-                  <h2 className="mt-1 text-3xl font-bold text-[#2b0f05]">เสียงตอบรับจากลูกค้า</h2>
-                </div>
-                <div className="inline-flex items-center gap-3 rounded-full border border-white/40 bg-white/30 px-4 py-2 text-[#2b0f05] shadow-inner shadow-[#3c1a09]/20">
-                  <StarRating value={reviews.length > 0 ? Math.max(3.5, Math.min(5, avgRating)) : 5} />
-                  <span className="text-xs font-medium text-[#4c2ffc]">จากลูกค้าที่รักในรสชาติ</span>
-                </div>
+        <div className="grid gap-10 rounded-[2.5rem] border border-white/20 bg-white/10 p-8 text-[var(--color-rose-dark)] shadow-[0_32px_68px_-30px_rgba(6,78,59,0.55)] backdrop-blur lg:grid-cols-[1.3fr_0.9fr]">
+          <div className="space-y-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.32em] text-white/70">
+                  Voices from customers
+                </p>
+                <h2 className="mt-2 text-3xl font-bold text-white">เสียงตอบรับจากลูกค้า</h2>
               </div>
+              <div className="inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/20 px-4 py-2 text-sm text-white shadow-inner">
+                <StarRating value={reviews.length > 0 ? Math.max(3.5, Math.min(5, avgRating)) : 5} />
+                <span className="text-xs font-medium text-white/80">ลูกค้าจริง {reviews.length} รีวิว</span>
+              </div>
+            </div>
 
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {visibleReviews.length === 0 && (
-                  <div className="md:col-span-2 xl:col-span-3 rounded-3xl border border-white/40 bg-white/40 p-8 text-center text-[#4c2ffc] shadow-lg shadow-[#3c1a09]/20">
-                    ยังไม่มีรีวิวตอนนี้ มาร่วมเป็นคนแรกที่รีวิวความอร่อยกันนะคะ!
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {visibleReviews.length === 0 && (
+                <div className="md:col-span-2 xl:col-span-3 rounded-3xl border border-white/30 bg-white/20 p-8 text-center text-white">
+                  ยังไม่มีรีวิวตอนนี้ มาร่วมเป็นคนแรกที่รีวิวความอร่อยกันนะคะ!
+                </div>
+              )}
+              {visibleReviews.map((review) => (
+                <article
+                  key={review.id}
+                  className="flex h-full flex-col gap-4 rounded-3xl border border-white/30 bg-white/90 p-6 text-[var(--color-rose-dark)] shadow-[0_24px_48px_-28px_rgba(12,116,108,0.35)]"
+                >
+                  <StarRating value={Number(review.rating || 0)} />
+                  <p className="flex-1 text-sm leading-relaxed text-[var(--color-rose-dark)]/80">“{review.comment}”</p>
+                  <div className="flex items-center justify-between text-sm text-[var(--color-rose)]">
+                    <span className="font-semibold">{review.name}</span>
+                    {review.createdAt && (
+                      <time dateTime={review.createdAt} className="text-xs text-[var(--color-rose-dark)]/60">
+                        {new Date(review.createdAt).toLocaleDateString("th-TH", {
+                          year: "numeric",
+                          month: "short",
+                        })}
+                      </time>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/30 bg-white/85 p-6 shadow-[0_30px_60px_-32px_rgba(12,116,108,0.35)] backdrop-blur">
+            <h3 className="text-xl font-semibold text-[var(--color-rose-dark)]">แชร์ประสบการณ์ของคุณ</h3>
+            <p className="mt-2 text-sm text-[var(--color-rose-dark)]/70">
+              รีวิวของคุณช่วยให้เราพัฒนาสูตรให้ดีขึ้น และเป็นกำลังใจให้ทีมครัวทุกเช้า
+            </p>
+
+            {status === "loading" && (
+              <p className="mt-4 text-xs text-[var(--color-rose)]/80">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
+            )}
+
+            {status === "unauthenticated" && (
+              <div className="mt-6 space-y-4 rounded-2xl border border-[var(--color-burgundy)]/30 bg-[var(--color-cream-soft)] p-5 text-sm text-[var(--color-rose-dark)]">
+                <p>ต้องเข้าสู่ระบบก่อนจึงจะสามารถให้คะแนนได้</p>
+                <Link
+                  href="/login?redirect=/"
+                  className="inline-flex items-center justify-center rounded-2xl bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[rgba(12,116,108,0.35)] transition hover:bg-[var(--color-rose-dark)]"
+                >
+                  เข้าสู่ระบบเพื่อรีวิว
+                </Link>
+              </div>
+            )}
+
+            {status === "authenticated" && (
+              <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-[var(--color-rose-dark)]">
+                    ให้คะแนน (1 - 5 ดาว)
+                  </label>
+                  <div className="rounded-2xl border border-[var(--color-burgundy)]/30 bg-white/70 p-4 shadow-inner">
+                    <div className="flex items-center justify-between gap-3">
+                      <StarRating value={Number(formRating)} />
+                      <span className="text-xs text-[var(--color-rose)]">
+                        {Number(formRating).toFixed(1)} ดาว
+                      </span>
+                    </div>
+                    <div className="mt-3">
+                      <StarPicker
+                        value={Number(formRating)}
+                        onChange={(v) => setFormRating(Number(v))}
+                        size={26}
+                        aria-label="เลือกคะแนนรีวิว"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="review-comment" className="text-sm font-semibold text-[var(--color-rose-dark)]">
+                    รีวิวของคุณ
+                  </label>
+                  <textarea
+                    id="review-comment"
+                    value={formComment}
+                    onChange={(event) => setFormComment(event.target.value)}
+                    minLength={5}
+                    maxLength={600}
+                    rows={5}
+                    className="w-full rounded-2xl border border-[var(--color-burgundy)]/30 bg-white/70 p-4 text-sm text-[var(--color-rose-dark)] shadow-inner outline-none focus:ring-2 focus:ring-[var(--color-rose)]/30"
+                    placeholder="บอกเล่าความประทับใจของคุณ เช่น รสชาติ ความสดใหม่ หรือการบริการ"
+                  />
+                  <p className="text-right text-xs text-[var(--color-rose)]/70">
+                    {formComment.length}/600 ตัวอักษร
+                  </p>
+                </div>
+
+                {message && (
+                  <div
+                    className={`rounded-2xl border px-4 py-3 text-sm ${
+                      message.type === "success"
+                        ? "border-emerald-500/30 bg-emerald-100/40 text-emerald-900"
+                        : "border-rose-500/30 bg-rose-100/40 text-rose-900"
+                    }`}
+                  >
+                    {message.text}
                   </div>
                 )}
-                {visibleReviews.map((review) => (
-                  <article
-                    key={review.id}
-                    className="flex h-full flex-col gap-4 rounded-3xl border border-white/40 bg-[#f9cf82]/80 p-6 text-[#2b0f05] shadow-lg shadow-[#3c1a09]/20"
-                  >
-                    <StarRating value={Number(review.rating || 0)} />
-                    <p className="flex-1 text-sm leading-relaxed text-[#3a1c0c]">“{review.comment}”</p>
-                    <div className="flex items-center justify-between text-sm text-[#4c2ffc]">
-                      <span className="font-semibold">{review.name}</span>
-                      {review.createdAt && (
-                        <time dateTime={review.createdAt} className="text-xs text-[#2b0f05]/70">
-                          {new Date(review.createdAt).toLocaleDateString("th-TH", {
-                            year: "numeric",
-                            month: "short",
-                          })}
-                        </time>
-                      )}
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
 
-            <div className="rounded-[2rem] border border-white/40 bg-[#f9cf82]/90 p-6 text-[#2b0f05] shadow-inner shadow-[#3c1a09]/30">
-              <h3 className="text-xl font-semibold text-[#2b0f05]">แชร์ประสบการณ์ของคุณ</h3>
-              <p className="mt-2 text-sm text-[#3a1c0c]/80">
-                รีวิวของคุณช่วยให้เราพัฒนาสูตรให้ดียิ่งขึ้น และเป็นกำลังใจให้ทีมครัวทุกวัน
-              </p>
-
-              {status === "loading" && (
-                <p className="mt-4 text-xs text-[#4c2ffc]">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
-              )}
-
-              {status === "unauthenticated" && (
-                <div className="mt-6 space-y-4 rounded-2xl border border-white/40 bg-white/40 p-5 text-sm text-[#3a1c0c]">
-                  <p>ต้องเข้าสู่ระบบก่อนจึงจะสามารถให้คะแนนได้</p>
-                  <Link
-                    href="/login?redirect=/"
-                    className="inline-flex items-center justify-center rounded-full bg-[#4c2ffc] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#3a1a66]/40 transition hover:bg-[#4326db]"
-                  >
-                    เข้าสู่ระบบเพื่อรีวิว
-                  </Link>
-                </div>
-              )}
-
-              {status === "authenticated" && (
-                <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[#2b0f05]">
-                      ให้คะแนน (1 - 5 ดาว)
-                    </label>
-                    <div className="rounded-2xl border border-white/40 bg-white/40 p-4 shadow-inner">
-                      <div className="flex items-center justify-between gap-3">
-                        {/* ใช้ StarRating เพื่อโชว์ค่าปัจจุบัน */}
-                        <StarRating value={Number(formRating)} />
-                        <span className="text-xs text-[#4c2ffc]">
-                          {Number(formRating).toFixed(1)} ดาว
-                        </span>
-                      </div>
-
-                      {/* ตัวเลือกแบบกดดาวแทนสไลด์ */}
-                      <div className="mt-3">
-                        <StarPicker
-                          value={Number(formRating)}
-                          onChange={(v) => setFormRating(Number(v))}
-                          size={26}
-                          aria-label="เลือกคะแนนรีวิว"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="review-comment" className="text-sm font-semibold text-[#2b0f05]">
-                      รีวิวของคุณ
-                    </label>
-                    <textarea
-                      id="review-comment"
-                      value={formComment}
-                      onChange={(event) => setFormComment(event.target.value)}
-                      minLength={5}
-                      maxLength={600}
-                      rows={5}
-                      className="w-full rounded-2xl border border-white/40 bg-white/40 p-4 text-sm text-[#3a1c0c] shadow-inner outline-none focus:ring-2 focus:ring-[#4c2ffc]/40"
-                      placeholder="บอกเล่าความประทับใจของคุณ เช่น รสชาติ ความสดใหม่ หรือการบริการ"
-                    />
-                    <p className="text-right text-xs text-[#4c2ffc]">
-                      {formComment.length}/600 ตัวอักษร
-                    </p>
-                  </div>
-
-                  {message && (
-                    <div
-                      className={`rounded-2xl border px-4 py-3 text-sm ${
-                        message.type === "success"
-                          ? "border-emerald-500/40 bg-emerald-200/30 text-emerald-900"
-                          : "border-rose-500/40 bg-rose-200/30 text-rose-900"
-                      }`}
-                    >
-                      {message.text}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full rounded-full bg-[#32127b] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1f0a4a]/60 transition hover:bg-[#2a0f63] disabled:cursor-not-allowed disabled:bg-[#32127b]/60"
-                  >
-                    {submitting ? "กำลังบันทึกรีวิว..." : myReview ? "อัปเดตรีวิว" : "ส่งรีวิว"}
-                  </button>
-                </form>
-              )}
-            </div>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full rounded-2xl bg-[var(--color-rose)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(12,116,108,0.35)] transition hover:bg-[var(--color-rose-dark)] disabled:cursor-not-allowed disabled:bg-[var(--color-rose)]/60"
+                >
+                  {submitting ? "กำลังบันทึกรีวิว..." : myReview ? "อัปเดตรีวิว" : "ส่งรีวิว"}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

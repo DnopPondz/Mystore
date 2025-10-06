@@ -58,14 +58,14 @@ export default function CartToast() {
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-auto max-w-xs rounded-2xl border border-[#f5c486] bg-white/95 px-5 py-4 text-sm text-[#3c1a09] shadow-xl shadow-[rgba(60,26,9,0.2)]"
+        className="pointer-events-auto max-w-xs rounded-2xl border border-[var(--color-burgundy)] bg-white/95 px-5 py-4 text-sm text-[var(--color-rose-dark)] shadow-xl shadow-[rgba(12,116,108,0.28)]"
       >
         <p className="font-semibold">เพิ่มสินค้าในตะกร้าแล้ว</p>
         <p className="mt-1 text-sm font-medium">
           {productLabel} × {addedQty}
         </p>
         {qtySummary ? (
-          <p className="mt-1 text-xs text-[#3c1a09]/70">{qtySummary}</p>
+          <p className="mt-1 text-xs text-[var(--color-rose-dark)]/70">{qtySummary}</p>
         ) : null}
       </div>
     </div>

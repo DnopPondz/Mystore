@@ -4,18 +4,18 @@
 @tailwind utilities;
 
 :root {
-  --color-cream: #fef3e5;
-  --color-cream-soft: #f7d8b3;
-  --color-rose: #3c1a09;
-  --color-rose-dark: #2a1005;
-  --color-gold: #f7931e;
-  --color-text: #2f2015;
-  --color-choco: #fff7eb;
-  --color-burgundy: #f7c948;
-  --color-burgundy-soft: #ffd36b;
-  --color-burgundy-dark: #5b3dfc;
-  --surface-strong: rgba(255, 255, 255, 0.95);
-  --surface-soft: rgba(255, 255, 255, 0.88);
+  --color-cream: #f5f4ef;
+  --color-cream-soft: #e8f4f1;
+  --color-rose: #145f4b;
+  --color-rose-dark: #0b3b31;
+  --color-gold: #ff8746;
+  --color-text: #1f1a16;
+  --color-choco: #ffffff;
+  --color-burgundy: #0ea5a0;
+  --color-burgundy-soft: #b7efe4;
+  --color-burgundy-dark: #0c746c;
+  --surface-strong: rgba(255, 255, 255, 0.94);
+  --surface-soft: rgba(255, 255, 255, 0.86);
   --layout-max: 1200px;
 }
 
@@ -26,9 +26,11 @@ body {
 
 body {
   margin: 0;
-  background-color: var(--color-cream);
+  background: radial-gradient(circle at 10% 10%, rgba(185, 239, 225, 0.45), transparent 55%),
+    radial-gradient(circle at 80% 0, rgba(255, 186, 130, 0.35), transparent 55%), var(--color-cream);
   color: var(--color-text);
-  font-family: "Itim", "Prompt", "Kanit", cursive, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Prompt", "Kanit", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* a {
@@ -40,11 +42,11 @@ a:hover {
 } */
 
 ::selection {
-  background: rgba(255, 111, 123, 0.45);
+  background: rgba(20, 95, 75, 0.25);
 }
 
 label {
-  color: rgba(31, 58, 55, 0.75);
+  color: rgba(20, 95, 75, 0.7);
 }
 
 @layer base {
@@ -53,34 +55,34 @@ label {
   }
 
   * {
-    border-color: rgba(31, 58, 55, 0.16);
+    border-color: rgba(12, 116, 108, 0.14);
   }
 
   input,
   textarea,
   select {
-    background-color: rgba(255, 255, 255, 0.94);
+    background-color: rgba(255, 255, 255, 0.92);
     color: var(--color-text);
     border-radius: 14px;
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: rgba(31, 58, 55, 0.5);
+    color: rgba(12, 116, 108, 0.5);
   }
 }
 
 :is(.bg-white, .bg-white\/95, .bg-white\/90, .bg-white\/85) {
   background-color: var(--surface-strong) !important;
   color: var(--color-text) !important;
-  border-color: rgba(31, 58, 55, 0.12) !important;
-  box-shadow: 0 22px 46px -28px rgba(15, 87, 79, 0.35);
-  backdrop-filter: blur(16px);
+  border-color: rgba(12, 116, 108, 0.12) !important;
+  box-shadow: 0 22px 42px -28px rgba(12, 116, 108, 0.28);
+  backdrop-filter: blur(18px);
 }
 
 :is(.bg-white\/80, .bg-white\/70, .bg-white\/60) {
   background-color: var(--surface-soft) !important;
   color: var(--color-text) !important;
-  border-color: rgba(31, 58, 55, 0.1) !important;
+  border-color: rgba(12, 116, 108, 0.1) !important;
   backdrop-filter: blur(14px);
 }

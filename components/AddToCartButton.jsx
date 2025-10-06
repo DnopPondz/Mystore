@@ -69,7 +69,7 @@ export default function AddToCartButton({ product }) {
   if (saleMode === "preorder") {
     return (
       <button
-        className="px-4 py-2 rounded-full bg-[#ffe37f] text-[#3c1a09] text-sm font-semibold shadow-lg shadow-[rgba(91,61,252,0.2)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_30px_-16px_rgba(60,26,9,0.4)]"
+        className="rounded-2xl bg-[var(--color-rose)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(12,116,108,0.32)] transition hover:-translate-y-0.5 hover:bg-[var(--color-rose-dark)]"
         onClick={handleAddToCart}
       >
         สั่ง Pre-order
@@ -79,12 +79,12 @@ export default function AddToCartButton({ product }) {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center rounded-full border border-[#f5c486] bg-white text-[#3c1a09] shadow-sm">
+      <div className="flex items-center rounded-full border border-[var(--color-burgundy)] bg-white text-[var(--color-rose-dark)] shadow-[inset_0_1px_3px_rgba(12,116,108,0.12)]">
         <button
           type="button"
           aria-label="ลดจำนวน"
           onClick={() => adjustQuantity(-1)}
-          className="h-9 w-9 text-lg leading-none text-[#3c1a09]/80 transition-colors hover:text-[#3c1a09]"
+          className="h-9 w-9 text-lg leading-none text-[var(--color-rose-dark)]/80 transition-colors hover:text-[var(--color-rose-dark)]"
         >
           −
         </button>
@@ -94,19 +94,19 @@ export default function AddToCartButton({ product }) {
           max="99"
           value={quantity}
           onChange={handleQuantityChange}
-          className="h-9 w-12 border-x border-[#f5c486] bg-transparent text-center text-sm font-semibold focus:outline-none appearance-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          className="h-9 w-12 border-x border-[var(--color-burgundy)] bg-transparent text-center text-sm font-semibold focus:outline-none appearance-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
         <button
           type="button"
           aria-label="เพิ่มจำนวน"
           onClick={() => adjustQuantity(1)}
-          className="h-9 w-9 text-lg leading-none text-[#3c1a09]/80 transition-colors hover:text-[#3c1a09]"
+          className="h-9 w-9 text-lg leading-none text-[var(--color-rose-dark)]/80 transition-colors hover:text-[var(--color-rose-dark)]"
         >
           +
         </button>
       </div>
       <button
-        className="px-4 py-2 rounded-full bg-[#ffe37f] text-[#3c1a09] text-sm font-semibold shadow-lg shadow-[rgba(91,61,252,0.2)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_30px_-16px_rgba(60,26,9,0.4)]"
+        className="rounded-2xl bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(255,135,70,0.32)] transition hover:-translate-y-0.5 hover:bg-[#ff7125]"
         onClick={handleAddToCart}
       >
         เพิ่มลงตะกร้า
