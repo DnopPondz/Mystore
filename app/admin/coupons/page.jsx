@@ -17,12 +17,12 @@ function StatBubble({ label, value, color }) {
       accent: "text-[#2B6AA3]",
     },
     green: {
-      bg: "bg-[#F0F9ED]",
+      bg: "bg-[#e2faf5]",
       border: "border-[#C3E7C4]",
       accent: "text-[#2F7A3D]",
     },
     orange: {
-      bg: "bg-[#FFF4E5]",
+      bg: "bg-[#eaf8f4]",
       border: "border-[#F5D4A6]",
       accent: "text-[#C46A1C]",
     },
@@ -34,7 +34,7 @@ function StatBubble({ label, value, color }) {
   };
   const tone = palette[color] || palette.blue;
   return (
-    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(63,42,26,0.5)]`}>
+    <div className={`rounded-[1.5rem] border ${tone.border} ${tone.bg} p-4 shadow-[0_14px_26px_-24px_rgba(10,83,73,0.5)]`}>
       <p className={`text-xs font-semibold uppercase tracking-wide ${tone.accent}`}>{label}</p>
       <p className="mt-2 text-2xl font-bold text-[#2F2A1F]">{value}</p>
     </div>
@@ -43,7 +43,7 @@ function StatBubble({ label, value, color }) {
 
 function Field({ label, required, children }) {
   return (
-    <label className="block text-sm font-medium text-[#3F2A1A]">
+    <label className="block text-sm font-medium text-[#0b3b31]">
       <span className="mb-2 block">
         {label}
         {required ? <span className="ml-1 text-red-500">*</span> : null}
@@ -58,7 +58,7 @@ function SlidingToggle({ isActive, onToggle, disabled = false }) {
     <button
       onClick={onToggle}
       disabled={disabled}
-      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#C67C45] focus:ring-offset-2 ${
+      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0ea5a0] focus:ring-offset-2 ${
         isActive ? "bg-[#2F7A3D]" : "bg-[#D4D4D8]"
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       title={isActive ? "คลิกเพื่อปิดการใช้งาน" : "คลิกเพื่อเปิดใช้งาน"}
@@ -231,12 +231,12 @@ export default function AdminCouponsPage() {
   const amountCount = filtered.filter((c) => c.type === "amount").length;
 
   return (
-    <main className="space-y-8 text-[#3F2A1A]">
+    <main className="space-y-8 text-[#0b3b31]">
       <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[#3F2A1A]">จัดการคูปอง</h2>
-            <p className="mt-1 text-[#6F4A2E]">สร้าง/แก้ไข และเปิดปิดการใช้งานคูปองให้ตรงกับกลยุทธ์การขาย</p>
+            <h2 className="text-2xl font-bold text-[#0b3b31]">จัดการคูปอง</h2>
+            <p className="mt-1 text-[#145f4b]">สร้าง/แก้ไข และเปิดปิดการใช้งานคูปองให้ตรงกับกลยุทธ์การขาย</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
@@ -245,9 +245,9 @@ export default function AdminCouponsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="ค้นหาโค้ด ประเภท หรือมูลค่า"
-                className="w-60 rounded-full border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                className="w-60 rounded-full border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
               />
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8A5A33]">🔍</span>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#0ea5a0]">🔍</span>
             </div>
             <button className={adminAccentButton} onClick={startCreate}>
               🎉 สร้างคูปองใหม่
@@ -264,18 +264,18 @@ export default function AdminCouponsPage() {
       </section>
 
       <section className={adminTableShell}>
-        <header className="flex flex-col gap-2 border-b border-[#F3E0C7] bg-[#FFF4E5]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <header className="flex flex-col gap-2 border-b border-[#c9f6ef] bg-[#eaf8f4]/60 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-lg font-bold text-[#3F2A1A]">รายการคูปอง</h3>
-            <p className="text-xs text-[#6F4A2E]">แก้ไขเงื่อนไขและเปิด/ปิดการใช้งานได้ทันที</p>
+            <h3 className="text-lg font-bold text-[#0b3b31]">รายการคูปอง</h3>
+            <p className="text-xs text-[#145f4b]">แก้ไขเงื่อนไขและเปิด/ปิดการใช้งานได้ทันที</p>
           </div>
-          <span className="text-xs font-medium uppercase tracking-wide text-[#8A5A33]">{filtered.length} รายการที่แสดง</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-[#0ea5a0]">{filtered.length} รายการที่แสดง</span>
         </header>
 
         {loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="flex items-center gap-3 text-sm text-[#6F4A2E]">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#C67C45] border-t-transparent" />
+            <div className="flex items-center gap-3 text-sm text-[#145f4b]">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#0ea5a0] border-t-transparent" />
               <span>กำลังโหลดข้อมูลคูปอง...</span>
             </div>
           </div>
@@ -283,7 +283,7 @@ export default function AdminCouponsPage() {
 
         {err && !loading && (
           <div className="flex items-center justify-center px-6 py-8">
-            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(63,42,26,0.35)]">
+            <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-6 py-4 text-center text-sm text-red-600 shadow-[0_18px_30px_-24px_rgba(10,83,73,0.35)]">
               <span className="mb-2 block text-2xl">⚠️</span>
               <span>{err}</span>
             </div>
@@ -294,35 +294,35 @@ export default function AdminCouponsPage() {
           <div className="overflow-hidden">
             <div className="block space-y-4 p-4 lg:hidden">
               {filtered.length === 0 ? (
-                <div className="py-8 text-center text-[#6F4A2E]">
+                <div className="py-8 text-center text-[#145f4b]">
                   <span className="mb-4 block text-4xl">🎟️</span>
                   <span>ไม่พบคูปองที่ตรงกับคำค้นหา</span>
                 </div>
               ) : (
                   filtered.map((c) => (
-                    <div key={c._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)]`}>
+                    <div key={c._id} className={`${adminInsetCardShell} bg-white/95 p-4 shadow-[0_14px_28px_-24px_rgba(10,83,73,0.5)]`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h4 className="truncate font-semibold text-[#3F2A1A]">{c.code}</h4>
-                        <p className="text-xs text-[#6F4A2E]">
+                        <h4 className="truncate font-semibold text-[#0b3b31]">{c.code}</h4>
+                        <p className="text-xs text-[#145f4b]">
                           {c.type === "percent" ? `ส่วนลด ${c.value}%` : `ส่วนลด ${formatCurrency(c.value)}`}
                         </p>
-                        <div className="mt-2 text-sm text-[#5B3A21]">ขั้นต่ำ: {formatCurrency(c.minSubtotal)}</div>
-                        <div className="mt-1 text-xs text-[#6F4A2E]">
+                        <div className="mt-2 text-sm text-[#0f5349]">ขั้นต่ำ: {formatCurrency(c.minSubtotal)}</div>
+                        <div className="mt-1 text-xs text-[#145f4b]">
                           จำกัด: {c.maxUsesPerUser ? `${c.maxUsesPerUser} ครั้ง/ผู้ใช้` : "ไม่จำกัด"}
                         </div>
-                        <div className="mt-1 text-xs text-[#6F4A2E]">
+                        <div className="mt-1 text-xs text-[#145f4b]">
                           หมดอายุ: {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <div className="flex items-center gap-2">
                           <SlidingToggle isActive={c.active} onToggle={() => toggleActive(c)} />
-                          <span className="text-xs text-[#6F4A2E]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
+                          <span className="text-xs text-[#145f4b]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
                         </div>
                         <div className="flex gap-2">
                           <button
-                            className="rounded-full border border-[#E2C39A] px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                            className="rounded-full border border-[#a4ebdf] px-3 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                             onClick={() => startEdit(c)}
                           >
                             แก้ไข
@@ -344,21 +344,21 @@ export default function AdminCouponsPage() {
             <div className="hidden overflow-x-auto lg:block">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">โค้ด</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ประเภท</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">มูลค่า</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">ขั้นต่ำ</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">จำกัด/ผู้ใช้</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">หมดอายุ</th>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สถานะ</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จัดการ</th>
+                  <tr className="border-b border-[#c9f6ef] bg-[#FFF3E0]">
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">โค้ด</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">ประเภท</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">มูลค่า</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">ขั้นต่ำ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">จำกัด/ผู้ใช้</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">หมดอายุ</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">สถานะ</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F3E0C7]">
+                <tbody className="divide-y divide-[#c9f6ef]">
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-6 py-12 text-center text-[#6F4A2E]">
+                      <td colSpan={8} className="px-6 py-12 text-center text-[#145f4b]">
                         <div className="flex flex-col items-center">
                           <span className="mb-4 text-4xl">🎟️</span>
                           <span>ไม่พบคูปองที่ตรงกับคำค้นหา</span>
@@ -371,28 +371,28 @@ export default function AdminCouponsPage() {
                         key={c._id}
                         className={`${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} transition-colors hover:bg-[#FFEFD8]`}
                       >
-                        <td className="px-6 py-4 font-semibold text-[#3F2A1A]">{c.code}</td>
-                        <td className="px-6 py-4 text-[#5B3A21]">{c.type}</td>
-                        <td className="px-6 py-4 text-[#5B3A21]">
+                        <td className="px-6 py-4 font-semibold text-[#0b3b31]">{c.code}</td>
+                        <td className="px-6 py-4 text-[#0f5349]">{c.type}</td>
+                        <td className="px-6 py-4 text-[#0f5349]">
                           {c.type === "percent" ? `${c.value}%` : formatCurrency(c.value)}
                         </td>
-                        <td className="px-6 py-4 text-[#5B3A21]">{formatCurrency(c.minSubtotal)}</td>
-                        <td className="px-6 py-4 text-[#5B3A21]">
+                        <td className="px-6 py-4 text-[#0f5349]">{formatCurrency(c.minSubtotal)}</td>
+                        <td className="px-6 py-4 text-[#0f5349]">
                           {c.maxUsesPerUser ? `${c.maxUsesPerUser} ครั้ง` : "ไม่จำกัด"}
                         </td>
-                        <td className="px-6 py-4 text-xs text-[#6F4A2E]">
+                        <td className="px-6 py-4 text-xs text-[#145f4b]">
                           {c.expiresAt ? new Date(c.expiresAt).toLocaleString("th-TH") : "ไม่มีกำหนด"}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <SlidingToggle isActive={c.active} onToggle={() => toggleActive(c)} />
-                            <span className="text-xs text-[#6F4A2E]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
+                            <span className="text-xs text-[#145f4b]">{c.active ? "ใช้งานอยู่" : "ปิดใช้งาน"}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex justify-end gap-2">
                             <button
-                              className="rounded-full border border-[#E2C39A] px-4 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                              className="rounded-full border border-[#a4ebdf] px-4 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                               onClick={() => startEdit(c)}
                             >
                               แก้ไข
@@ -417,14 +417,14 @@ export default function AdminCouponsPage() {
 
       {editing !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[#F2D5AF] bg-[#FFF9F3] shadow-[0_30px_60px_-30px_rgba(63,42,26,0.6)]">
-            <div className="flex items-center justify-between border-b border-[#F3E0C7] bg-[#FFF4E5]/70 px-6 py-4">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[#bff4ec] bg-[#f2fbf8] shadow-[0_30px_60px_-30px_rgba(10,83,73,0.6)]">
+            <div className="flex items-center justify-between border-b border-[#c9f6ef] bg-[#eaf8f4]/70 px-6 py-4">
               <div>
-                <h3 className="text-lg font-bold text-[#3F2A1A]">{editing?._id ? "แก้ไขคูปอง" : "สร้างคูปองใหม่"}</h3>
-                <p className="text-xs text-[#6F4A2E]">กำหนดรายละเอียดและเงื่อนไขคูปองให้เหมาะกับแคมเปญของคุณ</p>
+                <h3 className="text-lg font-bold text-[#0b3b31]">{editing?._id ? "แก้ไขคูปอง" : "สร้างคูปองใหม่"}</h3>
+                <p className="text-xs text-[#145f4b]">กำหนดรายละเอียดและเงื่อนไขคูปองให้เหมาะกับแคมเปญของคุณ</p>
               </div>
               <button
-                className="rounded-full border border-[#E2C39A] bg-white px-3 py-1 text-xs font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                className="rounded-full border border-[#a4ebdf] bg-white px-3 py-1 text-xs font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                 onClick={() => setEditing(null)}
               >
                 ปิด
@@ -435,7 +435,7 @@ export default function AdminCouponsPage() {
               <div className="space-y-4">
                 <Field label="รหัสคูปอง" required>
                   <input
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.code}
                     onChange={(e) =>
                       setForm((f) => ({ ...f, code: e.target.value.toUpperCase().replace(/\s+/g, "") }))
@@ -446,7 +446,7 @@ export default function AdminCouponsPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="ประเภทส่วนลด">
                     <select
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       value={form.type}
                       onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
                     >
@@ -457,7 +457,7 @@ export default function AdminCouponsPage() {
                   <Field label="มูลค่าส่วนลด">
                     <input
                       type="number"
-                      className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                      className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                       value={form.value}
                       onChange={(e) => setForm((f) => ({ ...f, value: Number(e.target.value || 0) }))}
                     />
@@ -466,7 +466,7 @@ export default function AdminCouponsPage() {
                 <Field label="ยอดสั่งซื้อขั้นต่ำ (บาท)">
                   <input
                     type="number"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.minSubtotal}
                     onChange={(e) => setForm((f) => ({ ...f, minSubtotal: Number(e.target.value || 0) }))}
                   />
@@ -476,7 +476,7 @@ export default function AdminCouponsPage() {
                     type="number"
                     min={1}
                     placeholder="เว้นว่าง = ไม่จำกัด"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.maxUsesPerUser}
                     onChange={(e) =>
                       setForm((f) => ({
@@ -492,7 +492,7 @@ export default function AdminCouponsPage() {
                 <Field label="วันหมดอายุ">
                   <input
                     type="datetime-local"
-                    className="w-full rounded-[1rem] border border-[#E2C39A] bg-white px-4 py-2 text-sm text-[#3F2A1A] shadow-[inset_0_1px_3px_rgba(63,42,26,0.12)] focus:border-[#C67C45] focus:outline-none"
+                    className="w-full rounded-[1rem] border border-[#a4ebdf] bg-white px-4 py-2 text-sm text-[#0b3b31] shadow-[inset_0_1px_3px_rgba(10,83,73,0.12)] focus:border-[#0ea5a0] focus:outline-none"
                     value={form.expiresAt}
                     onChange={(e) => setForm((f) => ({ ...f, expiresAt: e.target.value }))}
                   />
@@ -500,13 +500,13 @@ export default function AdminCouponsPage() {
 
                 <div className="flex items-center gap-3">
                   <SlidingToggle isActive={form.active} onToggle={() => setForm((f) => ({ ...f, active: !f.active }))} />
-                  <label className="text-sm font-medium text-[#3F2A1A]">เปิดใช้งานคูปองทันที</label>
+                  <label className="text-sm font-medium text-[#0b3b31]">เปิดใช้งานคูปองทันที</label>
                 </div>
 
                 <div className="flex flex-wrap justify-end gap-3 pt-4">
                   <button
                     type="button"
-                    className="rounded-full border border-[#E2C39A] px-5 py-2 text-sm font-semibold text-[#8A5A33] transition hover:bg-[#FFF4E5]"
+                    className="rounded-full border border-[#a4ebdf] px-5 py-2 text-sm font-semibold text-[#0ea5a0] transition hover:bg-[#eaf8f4]"
                     onClick={() => setEditing(null)}
                   >
                     ยกเลิก

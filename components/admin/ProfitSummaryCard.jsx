@@ -20,12 +20,12 @@ export default function ProfitSummaryCard({
 
   return (
     <div
-      className={`${adminInsetCardShell} bg-white/95 p-5 shadow-[0_16px_32px_-24px_rgba(63,42,26,0.45)]`}
+      className={`${adminInsetCardShell} bg-white/95 p-5 shadow-[0_16px_32px_-24px_rgba(10,83,73,0.45)]`}
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h4 className="text-lg font-semibold text-[#3F2A1A]">{title}</h4>
-          <p className="text-xs text-[#6F4A2E]">{subtitle}</p>
+          <h4 className="text-lg font-semibold text-[#0b3b31]">{title}</h4>
+          <p className="text-xs text-[#145f4b]">{subtitle}</p>
         </div>
         <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeClass}`}>
           {profitLabel}
@@ -33,15 +33,15 @@ export default function ProfitSummaryCard({
       </div>
 
       <dl className="mt-4 space-y-3 text-sm">
-        <div className="flex items-center justify-between text-[#5B3A21]">
+        <div className="flex items-center justify-between text-[#0f5349]">
           <dt>รายได้</dt>
-          <dd className="font-semibold text-[#3F2A1A]">฿{formatCurrency(revenue)}</dd>
+          <dd className="font-semibold text-[#0b3b31]">฿{formatCurrency(revenue)}</dd>
         </div>
-        <div className="flex items-center justify-between text-[#5B3A21]">
+        <div className="flex items-center justify-between text-[#0f5349]">
           <dt>ต้นทุนสินค้า</dt>
-          <dd className="font-semibold text-[#3F2A1A]">฿{formatCurrency(cost)}</dd>
+          <dd className="font-semibold text-[#0b3b31]">฿{formatCurrency(cost)}</dd>
         </div>
-        <div className="flex items-center justify-between text-[#5B3A21]">
+        <div className="flex items-center justify-between text-[#0f5349]">
           <dt>กำไรสุทธิ</dt>
           <dd className={`font-semibold ${profitTone}`}>฿{formatCurrency(profit)}</dd>
         </div>

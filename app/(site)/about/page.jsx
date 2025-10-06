@@ -1,145 +1,167 @@
 export const metadata = {
-  title: "เกี่ยวกับเรา | Bao Lamphun",
+  title: "เกี่ยวกับ Steaming Bun | เรื่องราวและทีมงาน",
   description:
-    "จากสูตรซาลาเปาในครอบครัวสู่ร้านซาลาเปาและขนมจีบประจำเมืองลำพูน พร้อมเสิร์ฟความอร่อยนึ่งสดทุกวัน",
+    "รู้จักที่มาของ Steaming Bun ซาลาเปาโฮมเมดในลำพูน วิธีการคัดวัตถุดิบ ทีมงาน และพัฒนาการจากครัวบ้านสู่หน้าร้านออนไลน์.",
 };
-
-const highlights = [
-  {
-    title: "นึ่งสดตลอดวัน",
-    description:
-      "เราเตรียมซาลาเปาและขนมจีบทีละเข่ง เพื่อให้ลูกค้าได้ลิ้มรสไส้แน่นๆ กับแป้งนุ่มๆ ที่ยังอุ่นอยู่เสมอ",
-    icon: "🥟",
-  },
-  {
-    title: "ไส้หลากหลายจากสูตรครอบครัว",
-    description:
-      "หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ รวมถึงไส้พิเศษที่คิดค้นตามฤดูกาล ทุกสูตรผ่านการปรับจนได้รสชาติที่คนลำพูนคุ้นเคย",
-    icon: "🍥",
-  },
-  {
-    title: "บริการเป็นกันเอง",
-    description:
-      "เราพร้อมส่งถึงบ้านในอำเภอเมืองลำพูนและยินดีออกแบบชุดซาลาเปา-ขนมจีบสำหรับงานบุญ งานประชุม และโอกาสพิเศษ",
-    icon: "🤝",
-  },
-];
 
 const milestones = [
   {
     year: "2014",
-    title: "สูตรซาลาเปาในบ้าน",
+    title: "เริ่มต้นจากครัวครอบครัว",
     description:
-      "ครอบครัวเริ่มนึ่งซาลาเปาแจกญาติพี่น้องในอำเภอเมืองลำพูน ปรับสูตรแป้งให้นุ่มและไส้หมูแน่นถูกใจทุกวัย",
+      "ทดลองสูตรแป้งกับญาติพี่น้องในอำเภอเมืองลำพูน ปรับสูตรให้เนียนนุ่มและไส้หมูแน่นถูกใจทุกวัย",
   },
   {
     year: "2017",
-    title: "เปิดร้านหน้าตลาด",
+    title: "เปิดซุ้มหน้าตลาด",
     description:
-      "ตั้งซุ้ม Bao Lamphun ใกล้ตลาดกาดกองต้า เสิร์ฟซาลาเปาและขนมจีบไส้หมูและกุ้งร้อนๆ ให้คนทำงานตอนเช้า",
+      "ตั้งเตานึ่งหน้า ตลาดกาดกองต้า บริการซาลาเปาและขนมจีบร้อนๆ สำหรับคนทำงานยามเช้า",
   },
   {
     year: "2021",
-    title: "เพิ่มบริการเดลิเวอรี",
+    title: "เพิ่มทีมจัดส่ง",
     description:
-      "ร่วมมือกับไรเดอร์ในชุมชน ส่งซาลาเปาและขนมจีบภายในเขตอำเภอเมือง พร้อมเซตประชุมและของฝาก",
+      "ร่วมมือกับไรเดอร์ในชุมชนเพื่อส่งซาลาเปาถึงบ้านภายใน 45 นาที พร้อมชุดประชุมและของฝาก",
   },
   {
     year: "2024",
-    title: "ก้าวสู่ดิจิทัล",
+    title: "เปิดหน้าร้านออนไลน์",
     description:
-      "เปิดระบบสั่งจองออนไลน์ รองรับการแจ้งไส้พิเศษและจัดส่งถึงบ้านในรหัสไปรษณีย์ 51000 ได้สะดวกกว่าเดิม",
+      "พัฒนาระบบสั่งซื้อและจองเวลาจัดส่งออนไลน์ รองรับการชำระเงินและใบเสนอราคาสำหรับงานองค์กร",
+  },
+];
+
+const commitments = [
+  {
+    icon: "🌱",
+    title: "ใช้วัตถุดิบจากชุมชน",
+    description: "เลือกหมูและกุ้งจากฟาร์มที่ผ่านการรับรองในภาคเหนือ พร้อมผักสดจากเกษตรกรลำพูน",
+  },
+  {
+    icon: "🧼",
+    title: "ความสะอาดตามมาตรฐาน HACCP",
+    description: "เตรียมวัตถุดิบในห้องเย็นและจัดการปลอดภัยทุกขั้นตอน พร้อมตรวจวัดอุณหภูมิทุกรอบ",
+  },
+  {
+    icon: "🤝",
+    title: "บริการที่ปรึกษาการจัดเลี้ยง",
+    description: "ให้คำแนะนำเรื่องจำนวนชุด ออกแบบแพ็กเกจ และจัดคิวส่งให้เหมาะกับช่วงเวลาของลูกค้า",
+  },
+  {
+    icon: "♻️",
+    title: "ลดพลาสติกด้วยบรรจุภัณฑ์รักษ์โลก",
+    description: "เลือกใช้กล่องเยื่อไผ่และช้อนส้อมไม้ ลดการใช้พลาสติกแบบครั้งเดียวทิ้งกว่า 60%",
+  },
+];
+
+const team = [
+  {
+    name: "พี่มีน",
+    role: "เชฟและผู้ก่อตั้ง",
+    bio: "ดูแลสูตรไส้หมู หมูไข่เค็ม และคุมคุณภาพการนึ่งทุกเช้า",
+  },
+  {
+    name: "ปาล์ม",
+    role: "หัวหน้าทีมปั้นขนมจีบ",
+    bio: "จัดคิวเตรียมวัตถุดิบและตรวจน้ำหนักขนมจีบให้ได้มาตรฐานทุกเข่ง",
+  },
+  {
+    name: "ทีมบริการลูกค้า",
+    role: "ที่ปรึกษาเมนู",
+    bio: "คอยตอบคำถามเรื่องแพ็กเกจ จัดเวลาส่ง และเตรียมใบเสนอราคาสำหรับลูกค้าองค์กร",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="relative overflow-hidden bg-[#fff7eb] text-[#3c1a09]">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-20 right-10 h-72 w-72 rounded-full bg-[#5b3dfc]/15 blur-3xl" />
-        <div className="absolute -bottom-24 left-0 h-80 w-80 rounded-full bg-[#f7931e]/15 blur-3xl" />
-        <div className="absolute top-1/3 left-1/3 h-40 w-40 rounded-full border-4 border-dashed border-[#5b3dfc]/30" />
-      </div>
-
-      <section className="relative mx-auto max-w-screen-xl px-6 pb-20 pt-16 lg:px-10">
-        <div className="grid items-start gap-12 lg:grid-cols-[3fr_2fr]">
+    <div className="relative overflow-hidden bg-[var(--color-cream)] text-[var(--color-rose-dark)]">
+      <section className="relative">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_0%,rgba(14,165,160,0.35),transparent_60%),radial-gradient(circle_at_90%_20%,rgba(255,135,70,0.25),transparent_60%)]" />
+        <div className="mx-auto grid max-w-screen-xl gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:px-10">
           <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#5b3dfc]/30 bg-[#fff3d6] px-4 py-1 text-sm font-semibold text-[#5b3dfc] shadow">
-              Bao Lamphun Story
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-burgundy)]/30 bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-[var(--color-burgundy-dark)]">
+              Our Story
             </span>
-            <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
-              จากครัวครอบครัวสู่ร้านซาลาเปาคู่เมืองลำพูน
+            <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
+              จากครัวบ้านสู่ตลาดซาลาเปาออนไลน์ประจำลำพูน
             </h1>
-            <p className="text-base text-[#3c1a09]/80 sm:text-lg">
-              Bao Lamphun เกิดจากความตั้งใจอยากให้คนลำพูนได้อร่อยกับซาลาเปาและขนมจีบไส้แน่นในทุกวันสำคัญ เรานึ่งสดใหม่ทีละรอบด้วยวัตถุดิบที่คัดเอง เพื่อให้ได้รสสัมผัสที่นุ่มและกลิ่นหอมเหมือนทานที่บ้าน
+            <p className="text-base text-[var(--color-rose-dark)]/75 sm:text-lg">
+              Steaming Bun เกิดจากความตั้งใจของครอบครัวที่อยากแบ่งปันซาลาเปาโฮมเมดให้คนลำพูนได้ทานทุกวันสำคัญ วันนี้เราพัฒนาระบบออนไลน์ให้คุณเลือกแพ็ก จองเวลาส่ง และติดตามสถานะได้ในที่เดียว
             </p>
-            <p className="text-sm text-[#3c1a09]/70">
-              ร้านของเราตั้งอยู่ที่อำเภอเมือง จังหวัดลำพูน 51000 พร้อมต้อนรับและจัดส่งความอร่อยถึงหน้าบ้านคุณ
-            </p>
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
-                <h2 className="text-xl font-semibold">ปรัชญาของเรา</h2>
-                <p className="mt-3 text-sm text-[#3c1a09]/70">
-                  นึ่งด้วยหัวใจ เลือกเนื้อหมูและกุ้งสดใหม่ และรักษามาตรฐานความสะอาดในทุกขั้นตอน
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="rounded-3xl border border-[var(--color-burgundy)]/25 bg-white/85 p-6 shadow-[0_22px_46px_-28px_rgba(20,95,75,0.3)]">
+                <h2 className="text-lg font-semibold text-[var(--color-rose-dark)]">พันธกิจของเรา</h2>
+                <p className="mt-2 text-sm text-[var(--color-rose-dark)]/70">
+                  เสิร์ฟซาลาเปานึ่งสดที่ดีต่อร่างกายและชุมชน พร้อมบริการที่จริงใจและตรงเวลา
                 </p>
               </div>
-              <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-6 shadow-xl shadow-[rgba(60,26,9,0.15)] backdrop-blur">
-                <h2 className="text-xl font-semibold">บริการของเรา</h2>
-                <ul className="mt-3 space-y-2 list-inside list-disc text-sm text-[#3c1a09]/70">
-                  <li>ซาลาเปาและขนมจีบประจำวัน พร้อมไส้ตามฤดูกาล</li>
-                  <li>ชุดของฝากและเซตประชุมในอำเภอเมืองลำพูน</li>
-                  <li>รับทำไส้พิเศษสำหรับงานบุญและโอกาสสำคัญ</li>
+              <div className="rounded-3xl border border-[var(--color-burgundy)]/25 bg-white/85 p-6 shadow-[0_22px_46px_-28px_rgba(20,95,75,0.3)]">
+                <h2 className="text-lg font-semibold text-[var(--color-rose-dark)]">บริการของเรา</h2>
+                <ul className="mt-3 space-y-2 list-inside list-disc text-sm text-[var(--color-rose-dark)]/70">
+                  <li>เมนูพร้อมส่งและ Pre-order สำหรับงานพิเศษ</li>
+                  <li>ชุดของฝากและเซ็ตประชุมพร้อมแพ็กเกจ</li>
+                  <li>ทีมที่ปรึกษาในการจัดเลี้ยงแบบครบวงจร</li>
                 </ul>
               </div>
             </div>
           </div>
-
-          <div className="relative flex justify-center">
-            <div className="relative w-full max-w-sm rounded-[48%] border border-[#f5c486] bg-white p-10 text-center shadow-2xl shadow-[rgba(60,26,9,0.2)]">
-              <div className="absolute -top-6 right-0 h-20 w-20 rounded-full bg-[#5b3dfc]/20 blur-2xl" />
-              <div className="absolute -bottom-8 left-6 h-24 w-24 rounded-full bg-[#f7931e]/20 blur-2xl" />
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">Since 2014</p>
-              <p className="mt-3 text-3xl font-black">นึ่งทุกเข่งด้วยความตั้งใจ</p>
-              <p className="mt-4 text-sm text-[#3c1a09]/70">
-                “ซาลาเปาหนึ่งลูกต้องทำให้ทั้งครอบครัวอบอุ่นใจ” — พี่มีน ผู้ก่อตั้ง Bao Lamphun
-              </p>
+          <div className="relative">
+            <div className="absolute -top-6 right-0 h-24 w-24 rounded-full bg-[var(--color-rose)]/20 blur-3xl" />
+            <div className="absolute -bottom-10 left-6 h-24 w-24 rounded-full bg-[var(--color-gold)]/30 blur-3xl" />
+            <div className="relative flex h-full flex-col justify-between rounded-[40px] border border-[var(--color-burgundy)]/30 bg-white/85 p-10 text-sm text-[var(--color-rose-dark)] shadow-[0_32px_60px_-32px_rgba(20,95,75,0.35)]">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--color-rose)]">
+                  สิ่งที่เรายึดมั่น
+                </p>
+                <p className="mt-4 text-2xl font-bold">
+                  นึ่งสดทุกวัน คุมคุณภาพทุกเข่ง และสื่อสารตรงไปตรงมา
+                </p>
+              </div>
+              <div className="space-y-2 text-xs text-[var(--color-rose-dark)]/70">
+                <p>• ระบบจัดการคิวจัดส่งแบบเรียลไทม์</p>
+                <p>• ห้องครัวควบคุมอุณหภูมิและบันทึก HACCP</p>
+                <p>• รายงานการจัดส่งและการใช้วัสดุที่เป็นมิตรต่อสิ่งแวดล้อม</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative bg-[#fff3d6]/70">
-        <div className="mx-auto max-w-screen-xl px-6 py-16 lg:px-10">
-          <h2 className="text-3xl font-bold">สิ่งที่เราภูมิใจ</h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
-            {highlights.map((item) => (
+      <section className="bg-white/85 px-6 py-16 lg:px-10">
+        <div className="mx-auto max-w-screen-xl">
+          <h2 className="text-3xl font-bold text-[var(--color-rose-dark)]">ความตั้งใจของเรา</h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {commitments.map(({ icon, title, description }) => (
               <div
-                key={item.title}
-                className="flex flex-col gap-4 rounded-3xl border border-[#f5c486] bg-white/95 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur"
+                key={title}
+                className="flex h-full flex-col gap-4 rounded-3xl border border-[var(--color-burgundy)]/25 bg-white/90 p-6 text-sm text-[var(--color-rose-dark)] shadow-[0_22px_48px_-28px_rgba(20,95,75,0.28)]"
               >
-                <span className="text-3xl">{item.icon}</span>
-                <h3 className="text-xl font-semibold">{item.title}</h3>
-                <p className="text-sm text-[#3c1a09]/70">{item.description}</p>
+                <span className="text-3xl" aria-hidden>
+                  {icon}
+                </span>
+                <h3 className="text-lg font-semibold text-[var(--color-rose-dark)]">{title}</h3>
+                <p className="text-[var(--color-rose-dark)]/70">{description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-screen-xl px-6 py-16 lg:px-10">
-        <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-10 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
-          <h2 className="text-3xl font-bold">เส้นทางของเรา</h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            {milestones.map((item) => (
-              <div key={item.year} className="flex gap-6">
-                <div className="flex-shrink-0">
-                  <div className="rounded-full bg-[#5b3dfc] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#5b3dfc]/40">
-                    {item.year}
-                  </div>
+      <section className="relative px-6 py-16 lg:px-10">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_85%,rgba(14,165,160,0.25),transparent_55%),radial-gradient(circle_at_90%_10%,rgba(255,135,70,0.25),transparent_60%)]" />
+        <div className="mx-auto max-w-screen-xl rounded-3xl border border-[var(--color-burgundy)]/20 bg-white/90 p-10 shadow-[0_28px_52px_-32px_rgba(20,95,75,0.32)]">
+          <h2 className="text-3xl font-bold text-[var(--color-rose-dark)]">เส้นทางการเติบโต</h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {milestones.map(({ year, title, description }) => (
+              <div key={year} className="flex gap-5 rounded-3xl border border-[var(--color-burgundy)]/20 bg-white/85 p-6 shadow-sm">
+                <div>
+                  <span className="inline-flex rounded-2xl bg-[var(--color-rose)] px-3 py-1 text-sm font-semibold text-white shadow">
+                    {year}
+                  </span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm text-[#3c1a09]/70">{item.description}</p>
+                  <h3 className="text-lg font-semibold text-[var(--color-rose-dark)]">{title}</h3>
+                  <p className="mt-2 text-sm text-[var(--color-rose-dark)]/70">{description}</p>
                 </div>
               </div>
             ))}
@@ -147,29 +169,33 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative bg-[#fef3e5]">
-        <div className="mx-auto flex max-w-screen-xl flex-col gap-10 px-6 py-16 lg:flex-row lg:items-center lg:px-10">
-          <div className="flex-1 space-y-4">
-            <h2 className="text-3xl font-bold">มารู้จักทีมของเรา</h2>
-            <p className="text-sm text-[#3c1a09]/80">
-              ทีมเล็กๆ ของ Bao Lamphun ประกอบด้วยเชฟซาลาเปา มือปั้นขนมจีบ และทีมจัดส่งที่รู้ทุกซอกซอยในอำเภอเมืองลำพูน เป้าหมายเดียวกันคือดูแลทุกออเดอร์ให้ถึงมือลูกค้าอย่างอบอุ่น
+      <section className="bg-white/80 px-6 py-16 lg:px-10">
+        <div className="mx-auto grid max-w-screen-xl gap-12 lg:grid-cols-[1fr_0.9fr]">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold text-[var(--color-rose-dark)]">ทีมงานที่อยู่หลังเตานึ่ง</h2>
+            <p className="text-sm text-[var(--color-rose-dark)]/70">
+              ทีมเล็กๆ ที่ทำงานร่วมกันทุกเช้าตั้งแต่ 05:00 น. เพื่อให้ทุกคำที่คุณชิมยังคงมาตรฐานเดียวกัน
             </p>
-            <ul className="space-y-3 list-inside list-disc text-sm text-[#3c1a09]/70">
-              <li>พี่มีน — ผู้ก่อตั้งและเชฟซาลาเปา ดูแลสูตรไส้หมูและหมูไข่เค็ม</li>
-              <li>ปาล์ม — มือปั้นขนมจีบกุ้งและหมู คุมคุณภาพทุกลูก</li>
-              <li>ทีมบริการลูกค้า — แนะนำชุดของฝากและช่วยวางแผนงานบุญ</li>
+            <ul className="space-y-3 text-sm text-[var(--color-rose-dark)]/70">
+              <li>• ใช้ระบบบันทึกการผลิตเพื่อควบคุมคุณภาพ</li>
+              <li>• ทีมไรเดอร์ผ่านการอบรมเรื่องการรักษาอุณหภูมิอาหาร</li>
+              <li>• มีตารางซ้อมสูตรใหม่และทดสอบแพ็กเกจทุกไตรมาส</li>
             </ul>
           </div>
-          <div className="flex-1">
-            <div className="rounded-3xl border border-[#f5c486] bg-white/90 p-8 shadow-xl shadow-[rgba(60,26,9,0.12)] backdrop-blur">
-              <h3 className="text-xl font-semibold">อยากร่วมงานกับเรา?</h3>
-              <p className="mt-3 text-sm text-[#3c1a09]/70">
-                เรากำลังมองหาพาร์ตเนอร์ด้านวัตถุดิบ เครื่องนึ่ง และทีมจัดส่งในลำพูนที่อยากเติบโตไปด้วยกัน ติดต่อเราได้ที่
-                <a href="mailto:hello@baolamphun.co" className="font-medium text-[#5b3dfc]">
-                  {" "}hello@baolamphun.co
-                </a>
-              </p>
-            </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {team.map(({ name, role, bio }) => (
+              <div
+                key={name}
+                className="rounded-3xl border border-[var(--color-burgundy)]/20 bg-white/90 p-6 text-sm text-[var(--color-rose-dark)] shadow-[0_20px_44px_-30px_rgba(20,95,75,0.28)]"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-cream-soft)] text-2xl">
+                  🥟
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-[var(--color-rose-dark)]">{name}</h3>
+                <p className="text-xs uppercase tracking-[0.28em] text-[var(--color-rose)]">{role}</p>
+                <p className="mt-3 text-sm text-[var(--color-rose-dark)]/70">{bio}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

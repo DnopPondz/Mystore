@@ -140,41 +140,41 @@ export default function SalesHistoryPage() {
   const orderStats = data?.orders ?? { count: 0, averageValue: 0 };
 
   return (
-    <div className="space-y-8 text-[#3F2A1A]">
+    <div className="space-y-8 text-[#0b3b31]">
       <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-[#3F2A1A]">ยอดขายย้อนหลัง</h2>
-            <p className="mt-2 max-w-2xl leading-relaxed text-[#6F4A2E]">
+            <h2 className="text-3xl font-bold text-[#0b3b31]">ยอดขายย้อนหลัง</h2>
+            <p className="mt-2 max-w-2xl leading-relaxed text-[#145f4b]">
               เลือกดูข้อมูลยอดขายตามเดือนเพื่อเปรียบเทียบรายได้ ต้นทุน และกำไรของร้านย้อนหลัง
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/85 px-4 py-2 text-sm font-medium text-[#8A5A33] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)]">
+            <label className="flex items-center gap-2 rounded-full border border-[#9be6dc] bg-white/85 px-4 py-2 text-sm font-medium text-[#0ea5a0] shadow-[inset_0_1px_4px_rgba(10,83,73,0.08)]">
               <span>เดือน</span>
               <select
-                className="bg-transparent text-[#3F2A1A] focus:outline-none"
+                className="bg-transparent text-[#0b3b31] focus:outline-none"
                 value={selectedMonth.month}
                 onChange={handleMonthChange}
                 aria-label="เลือกเดือน"
               >
                 {MONTH_LABELS.map((label, index) => (
-                  <option key={label} value={index} className="text-[#3F2A1A]">
+                  <option key={label} value={index} className="text-[#0b3b31]">
                     {label}
                   </option>
                 ))}
               </select>
             </label>
-            <label className="flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/85 px-4 py-2 text-sm font-medium text-[#8A5A33] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)]">
+            <label className="flex items-center gap-2 rounded-full border border-[#9be6dc] bg-white/85 px-4 py-2 text-sm font-medium text-[#0ea5a0] shadow-[inset_0_1px_4px_rgba(10,83,73,0.08)]">
               <span>ปี</span>
               <select
-                className="bg-transparent text-[#3F2A1A] focus:outline-none"
+                className="bg-transparent text-[#0b3b31] focus:outline-none"
                 value={selectedMonth.year}
                 onChange={handleYearChange}
                 aria-label="เลือกปี"
               >
                 {years.map((year) => (
-                  <option key={year} value={year} className="text-[#3F2A1A]">
+                  <option key={year} value={year} className="text-[#0b3b31]">
                     {year + 543}
                   </option>
                 ))}
@@ -191,7 +191,7 @@ export default function SalesHistoryPage() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-[#6F4A2E]">
+        <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-[#145f4b]">
           <span className={adminFilterPill}>
             ช่วงเวลา: {monthName} {buddhistYear}
           </span>
@@ -221,13 +221,13 @@ export default function SalesHistoryPage() {
       <section className={`${adminSubSurfaceShell} p-6`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-xl font-bold text-[#3F2A1A]">สรุปกำไร / ขาดทุน</h3>
-            <p className="text-sm text-[#6F4A2E]">
+            <h3 className="text-xl font-bold text-[#0b3b31]">สรุปกำไร / ขาดทุน</h3>
+            <p className="text-sm text-[#145f4b]">
               เปรียบเทียบรายได้และต้นทุนของช่วงเวลาที่เลือก เพื่อให้วางแผนการผลิตได้แม่นยำ
             </p>
           </div>
           {loading && (
-            <span className="rounded-full border border-[#E2C39A] bg-white px-4 py-1 text-xs font-semibold text-[#8A5A33]">
+            <span className="rounded-full border border-[#a4ebdf] bg-white px-4 py-1 text-xs font-semibold text-[#0ea5a0]">
               กำลังโหลดข้อมูล...
             </span>
           )}
@@ -263,25 +263,25 @@ export default function SalesHistoryPage() {
           <div className={`${adminSubSurfaceShell} p-6`}>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-lg font-bold text-[#3F2A1A]">ยอดขายรายวัน</h3>
-                <p className="text-sm text-[#6F4A2E]">รวมรายได้และกำไรของแต่ละวันในช่วงเวลาที่เลือก</p>
+                <h3 className="text-lg font-bold text-[#0b3b31]">ยอดขายรายวัน</h3>
+                <p className="text-sm text-[#145f4b]">รวมรายได้และกำไรของแต่ละวันในช่วงเวลาที่เลือก</p>
               </div>
             </div>
 
             <div className={`${adminInsetCardShell} mt-5 overflow-hidden`}>
               <table className="min-w-full text-sm">
-                <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
+                <thead className="border-b border-[#c9f6ef] bg-[#FFF3E0]">
                   <tr>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">วันที่</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">ต้นทุน (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร (฿)</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">วันที่</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">รายได้ (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">ต้นทุน (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">กำไร (฿)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F8E7D1]">
                   {timeline.length === 0 ? (
                     <tr>
-                      <td className="px-6 py-6 text-center text-[#6F4A2E]" colSpan={4}>
+                      <td className="px-6 py-6 text-center text-[#145f4b]" colSpan={4}>
                         ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้
                       </td>
                     </tr>
@@ -290,13 +290,13 @@ export default function SalesHistoryPage() {
                       const dayDate = new Date(day.date);
                       return (
                         <tr key={day.date} className="bg-white odd:bg-[#FFF7EA]">
-                          <td className="px-6 py-4 font-medium text-[#3F2A1A]">
+                          <td className="px-6 py-4 font-medium text-[#0b3b31]">
                             {thaiShortDate(dayDate)}
                           </td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
+                          <td className="px-6 py-4 text-right font-semibold text-[#0b3b31]">
                             ฿{formatCurrency(day.revenue)}
                           </td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">
+                          <td className="px-6 py-4 text-right font-semibold text-[#0b3b31]">
                             ฿{formatCurrency(day.cost)}
                           </td>
                           <td
@@ -317,43 +317,43 @@ export default function SalesHistoryPage() {
         </div>
 
         <div className={`${adminSubSurfaceShell} p-6`}>
-          <h3 className="text-lg font-bold text-[#3F2A1A]">สินค้าขายดี</h3>
-          <p className="mt-1 text-sm text-[#6F4A2E]">
+          <h3 className="text-lg font-bold text-[#0b3b31]">สินค้าขายดี</h3>
+          <p className="mt-1 text-sm text-[#145f4b]">
             อันดับสินค้าที่ทำรายได้สูงสุดในเดือนที่เลือก
           </p>
 
           <div className="mt-5 space-y-4">
             {topProducts.length === 0 ? (
-              <div className="rounded-[1.5rem] border border-[#F3E0C7] bg-white/90 px-4 py-5 text-center text-sm text-[#6F4A2E]">
+              <div className="rounded-[1.5rem] border border-[#c9f6ef] bg-white/90 px-4 py-5 text-center text-sm text-[#145f4b]">
                 ยังไม่มีข้อมูลสินค้าในช่วงเวลานี้
               </div>
             ) : (
               topProducts.map((product, index) => (
                 <div
                   key={product.productId || product._id || index}
-                  className="rounded-[1.5rem] border border-[#F3E0C7] bg-white/90 px-4 py-4 shadow-[0_12px_24px_-24px_rgba(63,42,26,0.45)]"
+                  className="rounded-[1.5rem] border border-[#c9f6ef] bg-white/90 px-4 py-4 shadow-[0_12px_24px_-24px_rgba(10,83,73,0.45)]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-[#3F2A1A]">
+                      <p className="text-sm font-semibold text-[#0b3b31]">
                         {index + 1}. {product.title || "ไม่ทราบชื่อสินค้า"}
                       </p>
-                      <p className="text-xs text-[#6F4A2E]">ขาย {formatInteger(product.qty)} ชิ้น</p>
+                      <p className="text-xs text-[#145f4b]">ขาย {formatInteger(product.qty)} ชิ้น</p>
                     </div>
                     <span className="text-xs font-semibold text-[#047857]">
                       ฿{formatCurrency(product.profit)}
                     </span>
                   </div>
-                  <dl className="mt-3 grid grid-cols-2 gap-2 text-xs text-[#6F4A2E]">
+                  <dl className="mt-3 grid grid-cols-2 gap-2 text-xs text-[#145f4b]">
                     <div className="rounded-xl bg-[#FFF7EA] px-3 py-2">
-                      <dt className="font-semibold text-[#8A5A33]">รายได้</dt>
-                      <dd className="font-semibold text-[#3F2A1A]">
+                      <dt className="font-semibold text-[#0ea5a0]">รายได้</dt>
+                      <dd className="font-semibold text-[#0b3b31]">
                         ฿{formatCurrency(product.revenue)}
                       </dd>
                     </div>
-                    <div className="rounded-xl bg-[#F6F1FF] px-3 py-2">
-                      <dt className="font-semibold text-[#8A5A33]">ต้นทุน</dt>
-                      <dd className="font-semibold text-[#3F2A1A]">
+                    <div className="rounded-xl bg-[#f2f7ff] px-3 py-2">
+                      <dt className="font-semibold text-[#0ea5a0]">ต้นทุน</dt>
+                      <dd className="font-semibold text-[#0b3b31]">
                         ฿{formatCurrency(product.cost)}
                       </dd>
                     </div>

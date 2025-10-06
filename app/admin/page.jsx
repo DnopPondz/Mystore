@@ -65,7 +65,7 @@ export default function AdminDashboardPage() {
 
   if (err)
     return (
-      <section className="rounded-[2rem] border border-red-200/80 bg-red-50 p-6 text-red-700 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.35)]">
+      <section className="rounded-[2rem] border border-red-200/80 bg-red-50 p-6 text-red-700 shadow-[0_20px_45px_-25px_rgba(10,83,73,0.35)]">
         <div className="flex items-center gap-3">
           <span className="text-2xl">⚠️</span>
           <span>{err}</span>
@@ -74,9 +74,9 @@ export default function AdminDashboardPage() {
     );
   if (!data)
     return (
-      <section className={`${adminSurfaceShell} p-6 text-[#5B3A21]`}>
+      <section className={`${adminSurfaceShell} p-6 text-[#0f5349]`}>
         <div className="flex items-center gap-3">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#D2691E] border-t-transparent" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#ff8746] border-t-transparent" />
           <span>กำลังโหลดข้อมูลร้าน...</span>
         </div>
       </section>
@@ -118,13 +118,13 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-8 text-[#3F2A1A]">
+    <div className="space-y-8 text-[#0b3b31]">
       {/* Header Section */}
       <section className={`${adminSurfaceShell} p-8`}>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-[#3F2A1A]">ภาพรวมร้านวันนี้</h2>
-            <p className="mt-2 max-w-xl leading-relaxed text-[#6F4A2E]">
+            <h2 className="text-3xl font-bold text-[#0b3b31]">ภาพรวมร้านวันนี้</h2>
+            <p className="mt-2 max-w-xl leading-relaxed text-[#145f4b]">
               ตรวจสอบยอดขาย ออเดอร์ และสต็อกสินค้าในมุมมองเดียว เพื่อวางแผนการผลิตและบริการลูกค้าได้อย่างมั่นใจ
             </p>
           </div>
@@ -136,10 +136,10 @@ export default function AdminDashboardPage() {
               return (
                 <div
                   key={chip.key}
-                  className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(63,42,26,0.45)]`}
+                  className={`${adminSoftBadge} gap-2 px-4 py-2 text-sm shadow-[0_10px_18px_-12px_rgba(10,83,73,0.45)]`}
                 >
-                  <span className="font-medium text-[#8A5A33]">{chip.label}</span>
-                  <span className="font-semibold text-[#3F2A1A]">
+                  <span className="font-medium text-[#0ea5a0]">{chip.label}</span>
+                  <span className="font-semibold text-[#0b3b31]">
                     {chip.prefix}
                     {displayValue}
                   </span>
@@ -191,12 +191,12 @@ export default function AdminDashboardPage() {
       <section className={`${adminSubSurfaceShell} p-6`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-xl font-bold text-[#3F2A1A]">สรุปกำไร / ขาดทุน</h3>
-            <p className="text-sm text-[#6F4A2E]">
+            <h3 className="text-xl font-bold text-[#0b3b31]">สรุปกำไร / ขาดทุน</h3>
+            <p className="text-sm text-[#145f4b]">
               วิเคราะห์รายได้และต้นทุนเพื่อวางแผนยอดขายในแต่ละช่วงเวลา
             </p>
           </div>
-          <span className="rounded-full border border-[#E2C39A] bg-white px-4 py-1 text-xs font-semibold text-[#8A5A33]">
+          <span className="rounded-full border border-[#a4ebdf] bg-white px-4 py-1 text-xs font-semibold text-[#0ea5a0]">
             อัปเดตเรียลไทม์จากคำสั่งซื้อ
           </span>
         </div>
@@ -220,26 +220,26 @@ export default function AdminDashboardPage() {
           <div className={`${adminSubSurfaceShell} p-6`}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-xl font-bold text-[#3F2A1A]">สินค้าที่ขายดีที่สุดประจำเดือน</h3>
-                <p className="mt-1 text-[#6F4A2E]">ข้อมูลอัปเดตรายวัน พร้อมดาวน์โหลดไฟล์เพื่อวิเคราะห์ต่อ</p>
+                <h3 className="text-xl font-bold text-[#0b3b31]">สินค้าที่ขายดีที่สุดประจำเดือน</h3>
+                <p className="mt-1 text-[#145f4b]">ข้อมูลอัปเดตรายวัน พร้อมดาวน์โหลดไฟล์เพื่อวิเคราะห์ต่อ</p>
               </div>
               <a
                 href="/api/admin/export/sales"
-                className={`${adminAccentButton} px-5 py-2.5 shadow-[0_14px_24px_-18px_rgba(63,42,26,0.65)]`}
+                className={`${adminAccentButton} px-5 py-2.5 shadow-[0_14px_24px_-18px_rgba(10,83,73,0.65)]`}
               >
                 ⬇️ ดาวน์โหลด CSV
               </a>
             </div>
 
-            <div className={`${adminInsetCardShell} mt-6 overflow-hidden shadow-[0_10px_20px_-18px_rgba(63,42,26,0.45)]`}>
+            <div className={`${adminInsetCardShell} mt-6 overflow-hidden shadow-[0_10px_20px_-18px_rgba(10,83,73,0.45)]`}>
               <table className="w-full text-sm">
-                <thead className="border-b border-[#F3E0C7] bg-[#FFF3E0]">
+                <thead className="border-b border-[#c9f6ef] bg-[#FFF3E0]">
                   <tr>
-                    <th className="px-6 py-4 text-left font-semibold text-[#3F2A1A]">สินค้า</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">จำนวนที่ขาย</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">รายได้ (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">ต้นทุน (฿)</th>
-                    <th className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">กำไร (฿)</th>
+                    <th className="px-6 py-4 text-left font-semibold text-[#0b3b31]">สินค้า</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">จำนวนที่ขาย</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">รายได้ (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">ต้นทุน (฿)</th>
+                    <th className="px-6 py-4 text-right font-semibold text-[#0b3b31]">กำไร (฿)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F8E7D1]">
@@ -248,7 +248,7 @@ export default function AdminDashboardPage() {
                       <td colSpan={5} className="px-6 py-8 text-center">
                         <div className="flex flex-col items-center">
                           <span className="mb-2 text-4xl">📈</span>
-                          <span className="text-[#6F4A2E]">ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้</span>
+                          <span className="text-[#145f4b]">ยังไม่มีข้อมูลยอดขายสำหรับช่วงเวลานี้</span>
                         </div>
                       </td>
                     </tr>
@@ -261,10 +261,10 @@ export default function AdminDashboardPage() {
                           key={rowKey}
                           className={`transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-[#FFF7EA]"} hover:bg-[#FFEFD8]`}
                         >
-                          <td className="px-6 py-4 font-medium text-[#3F2A1A]">{productName}</td>
-                          <td className="px-6 py-4 text-right text-[#5B3A21]">{formatInteger(p.qty)}</td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.revenue)}</td>
-                          <td className="px-6 py-4 text-right font-semibold text-[#3F2A1A]">฿{formatCurrency(p.cost)}</td>
+                          <td className="px-6 py-4 font-medium text-[#0b3b31]">{productName}</td>
+                          <td className="px-6 py-4 text-right text-[#0f5349]">{formatInteger(p.qty)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#0b3b31]">฿{formatCurrency(p.revenue)}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-[#0b3b31]">฿{formatCurrency(p.cost)}</td>
                           <td
                             className={`px-6 py-4 text-right font-semibold ${Number(p.profit || 0) >= 0 ? "text-[#047857]" : "text-[#B91C1C]"}`}
                           >
@@ -280,19 +280,19 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className={`${adminSubSurfaceShell} p-6`}>
-            <h3 className="text-xl font-bold text-[#3F2A1A]">รายการงานด่วนวันนี้</h3>
-            <p className="mt-1 text-[#6F4A2E]">จัดลำดับความสำคัญเพื่อให้ทีมในครัวและหน้าร้านทำงานสอดคล้องกัน</p>
+            <h3 className="text-xl font-bold text-[#0b3b31]">รายการงานด่วนวันนี้</h3>
+            <p className="mt-1 text-[#145f4b]">จัดลำดับความสำคัญเพื่อให้ทีมในครัวและหน้าร้านทำงานสอดคล้องกัน</p>
             <ul className="mt-6 space-y-4">
               {reminders.map((item, index) => (
                 <li
                   key={`${item.title}-${index}`}
-                  className="rounded-[1.5rem] border border-[#F0CFA3] bg-[#FFF2DD] p-5 shadow-[0_16px_30px_-24px_rgba(63,42,26,0.5)] transition-all hover:-translate-y-0.5"
+                  className="rounded-[1.5rem] border border-[#c7f5ec] bg-[#e5f8f3] p-5 shadow-[0_16px_30px_-24px_rgba(10,83,73,0.5)] transition-all hover:-translate-y-0.5"
                 >
-                  <p className="flex items-center gap-2 font-semibold text-[#3F2A1A]">
+                  <p className="flex items-center gap-2 font-semibold text-[#0b3b31]">
                     <span className="text-[#B8743B]">⚡</span>
                     {item.title}
                   </p>
-                  <p className="mt-2 leading-relaxed text-[#5B3A21]">{item.detail}</p>
+                  <p className="mt-2 leading-relaxed text-[#0f5349]">{item.detail}</p>
                 </li>
               ))}
             </ul>
@@ -301,35 +301,35 @@ export default function AdminDashboardPage() {
 
         <div className="space-y-6">
           <div className={`${adminSubSurfaceShell} p-6`}>
-            <h3 className="text-lg font-bold text-[#3F2A1A]">โน้ตสำหรับทีมงาน</h3>
+            <h3 className="text-lg font-bold text-[#0b3b31]">โน้ตสำหรับทีมงาน</h3>
             <ul className="mt-4 space-y-4">
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#C7E3FF] bg-[#F0F7FF] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#b7e8ff] bg-[#edf7ff] p-3 shadow-[0_12px_24px_-20px_rgba(10,83,73,0.4)]">
                 <span className="text-2xl">🕒</span>
-                <span className="leading-relaxed text-[#5B3A21]">
+                <span className="leading-relaxed text-[#0f5349]">
                   จัดรอบอบขนมปังเพิ่มในช่วงบ่าย หากยอดขายยังคงสูงกว่าวันปกติ
                 </span>
               </li>
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#BDE5C1] bg-[#EEF9F0] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#b7f0e2] bg-[#e4faf5] p-3 shadow-[0_12px_24px_-20px_rgba(10,83,73,0.4)]">
                 <span className="text-2xl">💬</span>
-                <span className="leading-relaxed text-[#5B3A21]">
+                <span className="leading-relaxed text-[#0f5349]">
                   ตอบแชทลูกค้าจาก Facebook &amp; LINE ให้ครบถ้วน เพื่อไม่ให้พลาดโอกาสขาย
                 </span>
               </li>
-              <li className="flex items-start gap-3 rounded-[1rem] border border-[#DCC8F0] bg-[#F6F1FF] p-3 shadow-[0_12px_24px_-20px_rgba(63,42,26,0.4)]">
+              <li className="flex items-start gap-3 rounded-[1rem] border border-[#d4e9ff] bg-[#f2f7ff] p-3 shadow-[0_12px_24px_-20px_rgba(10,83,73,0.4)]">
                 <span className="text-2xl">🚚</span>
-                <span className="leading-relaxed text-[#5B3A21]">
+                <span className="leading-relaxed text-[#0f5349]">
                   ตรวจสอบที่อยู่จัดส่งใหม่และยืนยันรอบรับสินค้ากับบริษัทขนส่ง
                 </span>
               </li>
             </ul>
           </div>
 
-          <div className="rounded-[2rem] border border-[#F0CFA3] bg-[#FFF2DD] p-6 shadow-[0_20px_45px_-25px_rgba(63,42,26,0.4)]">
-            <h3 className="text-lg font-bold text-[#3F2A1A]">ลิงก์ด่วน</h3>
+          <div className="rounded-[2rem] border border-[#c7f5ec] bg-[#e5f8f3] p-6 shadow-[0_20px_45px_-25px_rgba(10,83,73,0.4)]">
+            <h3 className="text-lg font-bold text-[#0b3b31]">ลิงก์ด่วน</h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#b6f2e7] bg-white px-4 py-3 font-semibold text-[#0ea5a0] shadow-[0_14px_28px_-24px_rgba(10,83,73,0.5)] transition hover:-translate-y-0.5 hover:bg-[#e5f8f3]"
                   href="/admin/products"
                 >
                   <span className="text-xl">➕</span>
@@ -338,7 +338,7 @@ export default function AdminDashboardPage() {
               </li>
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#b6f2e7] bg-white px-4 py-3 font-semibold text-[#0ea5a0] shadow-[0_14px_28px_-24px_rgba(10,83,73,0.5)] transition hover:-translate-y-0.5 hover:bg-[#e5f8f3]"
                   href="/admin/orders"
                 >
                   <span className="text-xl">📦</span>
@@ -347,7 +347,7 @@ export default function AdminDashboardPage() {
               </li>
               <li>
                 <a
-                  className="flex items-center gap-3 rounded-[1rem] border border-[#E7C7A0] bg-white px-4 py-3 font-semibold text-[#8A5A33] shadow-[0_14px_28px_-24px_rgba(63,42,26,0.5)] transition hover:-translate-y-0.5 hover:bg-[#FFF2DD]"
+                  className="flex items-center gap-3 rounded-[1rem] border border-[#b6f2e7] bg-white px-4 py-3 font-semibold text-[#0ea5a0] shadow-[0_14px_28px_-24px_rgba(10,83,73,0.5)] transition hover:-translate-y-0.5 hover:bg-[#e5f8f3]"
                   href="/admin/coupons"
                 >
                   <span className="text-xl">🎉</span>
@@ -365,7 +365,7 @@ export default function AdminDashboardPage() {
 function StatCard({ title, value, caption, color, icon }) {
   const colorConfig = {
     green: {
-      bg: "bg-[#F0F9ED]",
+      bg: "bg-[#e2faf5]",
       border: "border-[#C3E7C4]",
       text: "text-[#2F7A3D]",
       value: "text-[#2F2A1F]",
@@ -379,7 +379,7 @@ function StatCard({ title, value, caption, color, icon }) {
       accent: "bg-[#DCE6FA]",
     },
     orange: {
-      bg: "bg-[#FFF4E5]",
+      bg: "bg-[#eaf8f4]",
       border: "border-[#F5D4A6]",
       text: "text-[#C46A1C]",
       value: "text-[#2F2A1F]",
@@ -405,7 +405,7 @@ function StatCard({ title, value, caption, color, icon }) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.5rem] border ${config.border} ${config.bg} p-6 shadow-[0_18px_35px_-28px_rgba(63,42,26,0.55)] transition-transform duration-200 hover:-translate-y-1`}
+      className={`relative overflow-hidden rounded-[1.5rem] border ${config.border} ${config.bg} p-6 shadow-[0_18px_35px_-28px_rgba(10,83,73,0.55)] transition-transform duration-200 hover:-translate-y-1`}
     >
       <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full ${config.accent}`} />
       <div className="relative">
@@ -414,7 +414,7 @@ function StatCard({ title, value, caption, color, icon }) {
           <p className={`text-sm font-semibold ${config.text}`}>{title}</p>
         </div>
         <p className={`mb-2 text-3xl font-bold ${config.value}`}>{value}</p>
-        <p className="text-xs leading-relaxed text-[#5B3A21]">{caption}</p>
+        <p className="text-xs leading-relaxed text-[#0f5349]">{caption}</p>
       </div>
     </div>
   );

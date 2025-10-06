@@ -9,13 +9,12 @@ import { useCart } from "@/components/cart/CartProvider";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก" },
-  { href: "/about", label: "เกี่ยวกับเรา" },
+  { href: "/about", label: "เรื่องราวร้าน" },
   { href: "/preorder", label: "สั่งทำพิเศษ" },
   {
     href: "/cart",
-    label: "ตะกร้า",
+    label: "ตะกร้าช้อปปิ้ง",
     requiresAuth: true,
-    // icon: "/images/paper-bag.svg",
     iconAlt: "ตะกร้าสินค้า",
   },
 ];
@@ -82,11 +81,11 @@ export default function NavBar() {
       <Link
         key={item.href}
         href={targetHref}
-        className={`relative flex w-full items-center justify-between gap-3 rounded-full border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
+        className={`relative flex w-full items-center justify-between gap-3 rounded-2xl border border-transparent px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:w-auto md:justify-center ${
           active
-            ? "bg-[#f7931e] text-white shadow-lg shadow-[rgba(247,147,30,0.35)]"
-            : "text-[#3c1a09]/80 hover:text-[#f7931e]"
-        } ${showBadge ? "pr-6" : ""}`}
+            ? "bg-[var(--color-rose)] text-white shadow-lg shadow-[rgba(12,116,108,0.28)]"
+            : "text-[var(--color-rose-dark)]/80 hover:text-[var(--color-rose)]"
+        } ${showBadge ? "pr-7" : ""}`}
         onClick={() => setMenuOpen(false)}
       >
         {item.icon ? (
@@ -106,7 +105,7 @@ export default function NavBar() {
           item.label
         )}
         {showBadge ? (
-          <span className="pointer-events-none absolute -top-1.5 -right-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[#f7931e] px-1.5 text-[0.65rem] font-bold text-white shadow-lg shadow-[rgba(247,147,30,0.45)]">
+          <span className="pointer-events-none absolute -top-1.5 -right-2 inline-flex h-5 min-w-[1.35rem] items-center justify-center rounded-full bg-[var(--color-gold)] px-1.5 text-[0.65rem] font-bold text-white shadow-lg shadow-[rgba(255,135,70,0.45)]">
             {badgeCount}
           </span>
         ) : null}
@@ -115,176 +114,178 @@ export default function NavBar() {
   };
 
   return (
-    <header className="sticky top-0 z-30">
-      <div className="hidden md:flex items-center justify-between bg-[#5b3dfc] px-6 py-2 text-xs font-medium text-white max-w-screen-xl mx-auto">
-        <span className="tracking-wide">อบสดใหม่ทุกวัน • ส่งฟรีในเมืองเมื่อสั่งครบ ฿800</span>
-        <a
-          href="tel:021234567"
-          className="font-semibold text-white transition-colors hover:text-[#ffe37f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffe37f]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#5b3dfc]"
-        >
-          โทร. 061-267-4523
-        </a>
+    <header className="sticky top-0 z-40">
+      <div className="hidden md:block bg-[var(--color-rose)]/95 text-white">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-6 px-6 py-2 text-xs tracking-wide">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-sm">🚚</span>
+            <span>ส่งฟรีในเมืองลำพูนเมื่อสั่งครบ ฿800 และอัปเดตคิวอบสดทุกวัน</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://line.me/R/ti/p/@sweetcravings"
+              className="hidden rounded-full bg-white/10 px-3 py-1 font-medium text-white transition hover:bg-white/20 lg:inline-flex"
+              target="_blank"
+              rel="noreferrer"
+            >
+              LINE Official
+            </a>
+            <a
+              href="tel:0612674523"
+              className="font-semibold text-white transition hover:text-[#fef2e6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-rose)]"
+            >
+              โทร 061-267-4523
+            </a>
+          </div>
+        </div>
       </div>
 
-      <nav className="shadow-[0_20px_40px_-20px_rgba(91,61,252,0.25)] bg-white/95 backdrop-blur">
-        <div className="border-b border-[#f1d7b8] bg-white">
-          <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-6 px-4 py-4 sm:px-6">
-            <Link
-              href="/"
-              className="group flex items-center gap-3 rounded-full border border-[#f5c486] bg-[#fff3d6] px-3 py-1 text-[#3c1a09] transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
-            >
-              {/* <Image
-               className="h-10 w-10 rounded-full bg-white/90 shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105">
-                🥐
-              </Image> */}
-
-              <Image
-                src="/images/logo.png"
-                alt="logo"
-                width={100}
-                height={100}
-                className="h-10 w-10 rounded-full border border-[#f5c486] bg-[#ffe37f] shadow-inner flex items-center justify-center text-xl transition-transform group-hover:scale-105"
-              />
-              <span className="text-xl sm:text-2xl font-extrabold text-[#3c1a09] tracking-tight">
-               Steaming Bun
+      <nav className="border-b border-[var(--color-burgundy)]/15 bg-white/90 shadow-[0_18px_32px_-22px_rgba(14,165,160,0.45)] backdrop-blur-xl">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:gap-8">
+          <Link
+            href="/"
+            className="group flex items-center gap-3 rounded-3xl border border-[var(--color-burgundy)]/40 bg-white/70 px-3 py-2 text-[var(--color-rose-dark)] shadow-[0_10px_24px_-18px_rgba(14,165,160,0.6)] transition hover:border-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/40"
+          >
+            <Image
+              src="/images/logo.png"
+              alt="Steaming Bun Logo"
+              width={96}
+              height={96}
+              className="h-10 w-10 rounded-2xl border border-[var(--color-burgundy)]/40 bg-[var(--color-cream-soft)] object-cover p-1 shadow-inner transition-transform group-hover:scale-110"
+            />
+            <span className="flex flex-col leading-tight">
+              <span className="text-base font-semibold uppercase tracking-[0.35em] text-[var(--color-burgundy-dark)]">
+                Steaming Bun
               </span>
-            </Link>
+              <span className="text-lg font-bold text-[var(--color-rose-dark)] sm:text-xl">
+                ตลาดซาลาเปาออนไลน์
+              </span>
+            </span>
+          </Link>
 
-            <button
-              className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#f5c486] bg-[#ffe37f] text-[#3c1a09] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Toggle menu"
-              type="button"
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-6 w-6"
-              >
-                {menuOpen ? (
-                  <path
-                    fillRule="evenodd"
-                    d="M6.225 4.811a.75.75 0 011.06 0L12 9.525l4.715-4.714a.75.75 0 111.06 1.06L13.06 10.585l4.715 4.714a.75.75 0 11-1.06 1.061L12 11.646l-4.715 4.714a.75.75 0 11-1.06-1.06L10.94 10.585 6.225 5.87a.75.75 0 010-1.06z"
-                    clipRule="evenodd"
-                  />
-                ) : (
-                  <path
-                    fillRule="evenodd"
-                    d="M3.75 5.25A.75.75 0 014.5 4.5h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75zm0 6A.75.75 0 014.5 10.5h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75zm0 6a.75.75 0 01.75-.75h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75z"
-                    clipRule="evenodd"
-                  />
-                )}
-              </svg>
-            </button>
-
-            <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#fff3d6] px-2 py-1 shadow-inner shadow-[#f5c486]/40">
-                {navItems.map((item) => link(item))}
-              </div>
-              {status === "loading" && (
-                <span className="text-xs text-[#3c1a09]/70">กำลังโหลด...</span>
+          <button
+            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--color-burgundy)]/40 bg-white text-[var(--color-rose-dark)] shadow-lg transition hover:bg-[var(--color-cream-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/40 md:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="เปิดเมนูนำทาง"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-6 w-6">
+              {menuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M6 18 18 6" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
               )}
+            </svg>
+          </button>
 
-              {status === "unauthenticated" && (
-                <div className="flex items-center gap-2">
-                  <Link
-                    href="/login"
-                    className="px-4 py-2 rounded-full text-sm font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
-                  >
-                    เข้าสู่ระบบ
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f7931e] shadow-lg shadow-[rgba(247,147,30,0.4)] transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                  >
-                    สมัครสมาชิก
-                  </Link>
-                </div>
-              )}
-
-              {status === "authenticated" && (
-                <div className="flex items-center gap-3 text-sm">
-                  {session?.user?.role === "admin" && (
-                    <Link
-                      href="/admin"
-                      className="px-4 py-2 rounded-full border border-transparent bg-[#f7931e] text-white shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
-                    >
-                      จัดการร้าน
-                    </Link>
-                  )}
-                  <div className="relative" ref={userMenuRef}>
-                    <button
-                      type="button"
-                      onClick={() => setUserMenuOpen((v) => !v)}
-                      className="flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#ffe37f] px-4 py-2 text-[#3c1a09] shadow-inner transition hover:border-[#f7931e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
-                      style={{ boxShadow: "inset 3px 3px 6px rgba(60,26,9,0.1), inset -3px -3px 6px rgba(255,227,127,0.45)" }}
-                      aria-expanded={userMenuOpen}
-                      aria-haspopup="menu"
-                    >
-                      <span className="max-w-[9rem] truncate text-left font-medium">
-                        {session?.user?.name || session?.user?.email}
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        className={`h-4 w-4 transition-transform ${userMenuOpen ? "rotate-180" : "rotate-0"}`}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
-                      </svg>
-                    </button>
-                    {userMenuOpen && (
-                      <div
-                        role="menu"
-                        className="absolute right-0 z-40 mt-2 w-56 rounded-2xl border border-[#f5c486] bg-white p-2 text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.2)]"
-                      >
-                        <Link
-                          href="/profile"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
-                          role="menuitem"
-                        >
-                          <span className="text-lg">👤</span>
-                          โปรไฟล์ของฉัน
-                        </Link>
-                        <Link
-                          href="/orders"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition hover:bg-[#fff0d4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/30"
-                          role="menuitem"
-                        >
-                          <span className="text-lg">🧾</span>
-                          คำสั่งซื้อของฉัน
-                        </Link>
-                        <button
-                          onClick={() => {
-                            setUserMenuOpen(false);
-                            signOut({ callbackUrl: "/" });
-                          }}
-                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-red-200 transition hover:bg-red-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
-                          role="menuitem"
-                        >
-                          <span className="text-lg">🚪</span>
-                          ออกจากระบบ
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+          <div className="hidden flex-1 items-center justify-center md:flex">
+            <div className="flex items-center gap-1 rounded-3xl border border-[var(--color-burgundy)]/30 bg-white/80 px-1 py-1 shadow-inner">
+              {navItems.map((item) => link(item))}
             </div>
+          </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {status === "loading" && (
+              <span className="text-xs text-[var(--color-rose-dark)]/70">กำลังโหลด...</span>
+            )}
+
+            {status === "unauthenticated" && (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="rounded-2xl border border-[var(--color-burgundy)]/30 px-4 py-2 text-sm font-medium text-[var(--color-rose-dark)] transition hover:border-[var(--color-burgundy)]/70 hover:text-[var(--color-rose)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/40"
+                >
+                  เข้าสู่ระบบ
+                </Link>
+                <Link
+                  href="/register"
+                  className="rounded-2xl bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[rgba(255,135,70,0.45)] transition hover:bg-[#ff7125] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                >
+                  สมัครสมาชิก
+                </Link>
+              </div>
+            )}
+
+            {status === "authenticated" && (
+              <div className="flex items-center gap-3 text-sm text-[var(--color-rose-dark)]">
+                {session?.user?.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="rounded-2xl bg-[var(--color-rose)] px-4 py-2 font-medium text-white shadow-md shadow-[rgba(12,116,108,0.35)] transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
+                  >
+                    จัดการร้าน
+                  </Link>
+                )}
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setUserMenuOpen((v) => !v)}
+                    className="flex items-center gap-2 rounded-2xl border border-[var(--color-burgundy)]/40 bg-white px-4 py-2 text-left text-sm font-medium text-[var(--color-rose-dark)] shadow-sm transition hover:border-[var(--color-burgundy)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/40"
+                    aria-expanded={userMenuOpen}
+                    aria-haspopup="menu"
+                  >
+                    <span className="max-w-[9rem] truncate">
+                      {session?.user?.name || session?.user?.email}
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      className={`h-4 w-4 transition-transform ${userMenuOpen ? "rotate-180" : "rotate-0"}`}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                  {userMenuOpen && (
+                    <div
+                      role="menu"
+                      className="absolute right-0 z-40 mt-2 w-60 rounded-3xl border border-[var(--color-burgundy)]/40 bg-white/95 p-3 text-sm text-[var(--color-rose-dark)] shadow-2xl shadow-[rgba(20,95,75,0.22)]"
+                    >
+                      <Link
+                        href="/profile"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-[var(--color-cream-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30"
+                        role="menuitem"
+                      >
+                        <span className="text-lg">👤</span>
+                        โปรไฟล์ของฉัน
+                      </Link>
+                      <Link
+                        href="/orders"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-[var(--color-cream-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30"
+                        role="menuitem"
+                      >
+                        <span className="text-lg">🧾</span>
+                        ติดตามคำสั่งซื้อ
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          signOut({ callbackUrl: "/" });
+                        }}
+                        className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left text-sm text-red-500 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/30"
+                        role="menuitem"
+                      >
+                        <span className="text-lg">🚪</span>
+                        ออกจากระบบ
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {menuOpen && (
           <button
             type="button"
-            className="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm md:hidden"
             aria-hidden="true"
             onClick={() => setMenuOpen(false)}
           />
@@ -292,7 +293,7 @@ export default function NavBar() {
 
         <div
           id="mobile-menu"
-          className={`md:hidden fixed inset-x-4 top-[5.5rem] z-30 origin-top rounded-3xl border border-[#f5c486] bg-[#fff3d6] p-6 text-sm text-[#3c1a09] shadow-2xl shadow-[rgba(60,26,9,0.25)] backdrop-blur transition-transform duration-200 ${
+          className={`md:hidden fixed inset-x-4 top-[5.75rem] z-40 origin-top rounded-3xl border border-[var(--color-burgundy)]/30 bg-white/95 p-6 text-sm text-[var(--color-rose-dark)] shadow-[0_30px_60px_-28px_rgba(20,95,75,0.45)] transition-transform duration-200 ${
             menuOpen ? "scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
           }`}
         >
@@ -303,19 +304,19 @@ export default function NavBar() {
               </div>
             ))}
             {status === "loading" && (
-              <span className="text-xs text-[#3c1a09]/70">กำลังโหลด...</span>
+              <span className="text-xs text-[var(--color-rose-dark)]/60">กำลังโหลด...</span>
             )}
             {status === "unauthenticated" && (
               <div className="flex flex-col gap-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="rounded-2xl border border-[var(--color-burgundy)]/30 px-4 py-2 font-medium text-[var(--color-rose-dark)] transition hover:border-[var(--color-burgundy)]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30"
                 >
                   เข้าสู่ระบบ
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-full font-semibold text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="rounded-2xl bg-[var(--color-gold)] px-4 py-2 font-semibold text-white shadow-md transition hover:bg-[#ff7125] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]/40"
                 >
                   สมัครสมาชิก
                 </Link>
@@ -327,35 +328,35 @@ export default function NavBar() {
                   <Link
                     href="/admin"
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-2 rounded-full font-medium text-white bg-[#f7931e] shadow transition hover:bg-[#df7f0f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                    className="rounded-2xl bg-[var(--color-rose)] px-4 py-2 font-medium text-white shadow transition hover:bg-[var(--color-rose-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-rose)]/40"
                   >
                     จัดการร้าน
                   </Link>
                 )}
-                <div className="rounded-2xl border border-[#f5c486] bg-white p-4 text-sm text-[#3c1a09] shadow-inner">
+                <div className="rounded-2xl border border-[var(--color-burgundy)]/30 bg-white/90 p-4 shadow-inner">
                   <p className="font-semibold">{session?.user?.name || session?.user?.email}</p>
-                  <p className="mt-1 text-xs text-[#3c1a09]/70">{session?.user?.email}</p>
+                  <p className="mt-1 text-xs text-[var(--color-rose-dark)]/70">{session?.user?.email}</p>
                 </div>
                 <Link
                   href="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="rounded-2xl border border-[var(--color-burgundy)]/30 px-4 py-2 font-medium text-[var(--color-rose-dark)] transition hover:border-[var(--color-burgundy)]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30"
                 >
                   โปรไฟล์ของฉัน
                 </Link>
                 <Link
                   href="/orders"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full font-medium text-[#3c1a09] bg-[#ffe37f] shadow transition hover:bg-[#ffd76b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f7931e]/40"
+                  className="rounded-2xl border border-[var(--color-burgundy)]/30 px-4 py-2 font-medium text-[var(--color-rose-dark)] transition hover:border-[var(--color-burgundy)]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)]/30"
                 >
-                  คำสั่งซื้อของฉัน
+                  ติดตามคำสั่งซื้อ
                 </Link>
                 <button
                   onClick={() => {
                     setMenuOpen(false);
                     signOut({ callbackUrl: "/" });
                   }}
-                  className="px-4 py-2 rounded-full font-medium text-white bg-red-500/80 shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
+                  className="rounded-2xl bg-red-500/90 px-4 py-2 font-medium text-white shadow transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40"
                 >
                   ออกจากระบบ
                 </button>
