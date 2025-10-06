@@ -16,26 +16,53 @@ const saleModeCopy = {
 };
 
 const heroHighlights = [
-  "นึ่งสดใหม่ทุกเช้า",
-  "หมูอนามัยคัดพิเศษ",
-  "จัดส่งฟรีในเขตเมือง",
+  {
+    label: "นึ่งสด",
+    description: "เริ่มเตาซึ้งทุกเช้า 05:30 น.",
+  },
+  {
+    label: "เมนู",
+    description: "ซาลาเปา & ขนมจีบ 12 สูตร",
+  },
+  {
+    label: "จัดส่ง",
+    description: "ฟรีในตัวเมืองลำพูน",
+  },
+];
+
+const craftHighlights = [
+  {
+    title: "ลงมือทำเองทุกขั้นตอน",
+    description:
+      "ตั้งแต่คัดหมูอนามัย ลวกกุ้งสด ไปจนถึงการนวดแป้งและนึ่งด้วยซึ้งไม้ไผ่แบบดั้งเดิม",
+    icon: "👩‍🍳",
+  },
+  {
+    title: "สูตรนุ่มเฉพาะร้าน",
+    description:
+      "สูตรแป้งนึ่งกว่า 8 ปี ปรับให้ละมุนและยังนุ่มแม้แช่เย็น เพียงอุ่น 3 นาที กลับมานุ่มเหมือนเพิ่งนึ่ง",
+    icon: "🥢",
+  },
+  {
+    title: "เตรียมงานเลี้ยงได้",
+    description:
+      "รองรับออเดอร์จัดประชุม, คอฟฟี่เบรก หรือชุดฝากลูกค้าด้วยการแพ็กจานพร้อมเสิร์ฟ",
+    icon: "🎉",
+  },
 ];
 
 const orderSteps = [
   {
     title: "เลือกเมนู",
-    description: "หยิบซาลาเปาและขนมจีบที่ชอบลงตะกร้าหรือกรอกฟอร์มสั่งทำล่วงหน้า.",
-    icon: "🥟",
+    description: "หยิบซาลาเปาและขนมจีบลงตะกร้าหรือกรอกฟอร์มสั่งล่วงหน้า",
   },
   {
-    title: "ยืนยันการสั่ง",
-    description: "ระบุเวลารับหรือส่ง พร้อมรายละเอียดสถานที่และวิธีชำระเงินที่สะดวก.",
-    icon: "📝",
+    title: "ยืนยันรายละเอียด",
+    description: "แจ้งเวลารับหรือจัดส่ง พร้อมช่องทางการชำระเงิน",
   },
   {
     title: "รับความอร่อย",
-    description: "ทีมงานนึ่งสดตามเวลานัด ส่งตรงถึงคุณพร้อมคำแนะนำการอุ่นให้อร่อยเหมือนใหม่.",
-    icon: "🚚",
+    description: "ทีมงานส่งถึงมือ หรือเตรียมรับเองที่ร้านตามเวลานัดหมาย",
   },
 ];
 
@@ -181,7 +208,8 @@ export default async function HomePage() {
                       "@type": "Offer",
                       price: product.price,
                       priceCurrency: "THB",
-                      availability: product.saleMode === "preorder" ? "PreOrder" : "InStock",
+                      availability:
+                        product.saleMode === "preorder" ? "PreOrder" : "InStock",
                     },
                   })),
                 },
@@ -204,203 +232,278 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#fffdf8] text-[#362015]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: structuredDataJson }}
       />
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[#fef3e5]" />
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-[#5b3dfc]/10 blur-3xl" />
-        <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-[#f7931e]/20 blur-3xl" />
 
-        <div className="relative max-w-screen-xl mx-auto px-6 lg:px-8 py-20 grid gap-12 lg:grid-cols-2 items-center">
-          <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#f5c486] bg-[#fff3d6] px-4 py-1 text-sm font-medium text-[#5b3dfc] shadow">
-              นึ่งสดทุกวัน • ส่งฟรีในตัวเมืองลำพูน
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-[#3c1a09]">
-              Steaming Bun ซาลาเปาร้อนๆ นึ่งสดในลำพูน
-            </h1>
-            <p className="text-base sm:text-lg text-[#3c1a09]/80 max-w-xl">
-              เลือกซาลาเปาไส้หมูสับ หมูสับไข่เค็ม ครีม ถั่วดำ และเมนูพิเศษ
-              พร้อมขนมจีบกุ้งและหมูที่นึ่งสดใหม่ทุกเข่ง ส่งถึงมือคุณพร้อมคำแนะนำการอุ่นให้กลับมานุ่มเหมือนเพิ่งออกจากซึ้ง
-            </p>
-            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
+      <div className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#fff3d6] via-[#ffe8b5] to-[#ffd4c5]" />
+        <div className="absolute right-[12%] top-[-8%] -z-10 h-64 w-64 rounded-full bg-[#ffac7d]/60 blur-3xl" />
+        <div className="absolute left-[-10%] bottom-[-20%] -z-10 h-72 w-72 rounded-full bg-[#a689ff]/40 blur-3xl" />
+
+        <header className="mx-auto flex max-w-6xl flex-col gap-6 px-6 pb-12 pt-10 sm:flex-row sm:items-center sm:justify-between lg:px-10">
+          <div className="flex items-center gap-3 text-[#362015]">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-2xl shadow-lg">🥟</span>
+            <div>
+              <p className="text-sm uppercase tracking-[0.4em] text-[#b95700]">Steaming Bun</p>
+              <p className="font-semibold">ซาลาเปานึ่งสด เมืองลำพูน</p>
+            </div>
+          </div>
+          <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-[#5b3dfc]">
+            <a className="rounded-full bg-white/70 px-4 py-2 shadow" href="#menu">
+              เมนูวันนี้
+            </a>
+            <a className="rounded-full bg-white/0 px-4 py-2 hover:bg-white/50" href="#timeline">
+              ขั้นตอนสั่ง
+            </a>
+            <a className="rounded-full bg-white/0 px-4 py-2 hover:bg-white/50" href="#visit">
+              ช่องทางติดต่อ
+            </a>
+            <a className="rounded-full bg-white/0 px-4 py-2 hover:bg-white/50" href="#faq">
+              FAQ
+            </a>
+          </nav>
+        </header>
+
+        <section className="mx-auto grid max-w-6xl gap-10 px-6 pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:px-10">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-3 rounded-full bg-white/80 px-5 py-2 text-xs font-medium uppercase tracking-[0.3em] text-[#b95700] shadow">
+              ส่งร้อนใน 45 นาที • รับที่ร้านได้
+            </div>
+            <div className="space-y-6">
+              <h1 className="text-4xl font-black leading-tight text-[#2c1407] sm:text-5xl">
+                ซาลาเปาไส้แน่น กับขนมจีบนึ่งสด สำหรับทุกมื้อสำคัญ
+              </h1>
+              <p className="text-base text-[#2c1407]/80 sm:text-lg">
+                เราคัดหมูและกุ้งสดใหม่ทุกวัน นึ่งด้วยสูตรแป้งนุ่มเฉพาะร้าน เพื่อให้ได้ซาลาเปาและขนมจีบที่หอมละมุนพร้อมเสิร์ฟทั้งในบ้านและในงานประชุมขนาดใหญ่
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <a
                 href="#menu"
-                className="inline-flex items-center justify-center rounded-full bg-[#f7931e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(247,147,30,0.4)] hover:bg-[#df7f0f]"
+                className="inline-flex items-center justify-center rounded-full bg-[#ff7a45] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff7a45]/40 transition hover:bg-[#e8612a]"
               >
-                เลือกซาลาเปาเลย
+                เลือกเมนูลงตะกร้า
               </a>
               <a
                 href="/preorder"
-                className="inline-flex items-center justify-center rounded-full border border-[#5b3dfc]/20 bg-white px-6 py-3 text-sm font-semibold text-[#5b3dfc] shadow hover:bg-[#f5edff]"
+                className="inline-flex items-center justify-center rounded-full border border-[#5b3dfc]/20 bg-white px-6 py-3 text-sm font-semibold text-[#5b3dfc] shadow transition hover:bg-[#f2ecff]"
               >
-                สั่งเบรกเช้า & สั่งล่วงหน้า
+                สั่งทำล่วงหน้าสำหรับงาน
               </a>
               <a
                 href="tel:0612674523"
-                className="inline-flex items-center justify-center rounded-full border border-transparent bg-white/80 px-6 py-3 text-sm font-semibold text-[#3c1a09] shadow hover:bg-white"
+                className="inline-flex items-center justify-center rounded-full border border-transparent bg-[#fff1dc] px-6 py-3 text-sm font-semibold text-[#b95700] shadow transition hover:bg-[#ffe1b9]"
               >
-                โทร. 061-267-4523
+                โทร 061-267-4523
               </a>
-              {/* <a
-                href="/checkout"
-                className="inline-flex items-center justify-center rounded-full border border-white/0 bg-white/80 px-6 py-3 text-sm font-semibold text-[var(--color-choco)] shadow hover:bg-white"
-              >
-                สั่งด่วนพร้อมจัดส่ง
-              </a> */}
             </div>
-            <dl className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
-              {heroHighlights.map((item) => (
-                <div
-                  key={item}
-                  className="text-center rounded-2xl border border-[#f5c486] bg-white px-4 py-3 text-sm font-medium text-[#3c1a09] shadow"
-                >
-                  {item}
-                </div>
-              ))}
-            </dl>
-            {averageRating ? (
-              <div className="flex items-center gap-3 rounded-2xl border border-[#5b3dfc]/20 bg-white/70 px-4 py-3 text-sm text-[#3c1a09]/80 shadow">
-                <span className="text-xl" aria-hidden>
-                  ⭐
-                </span>
-                <p>
-                  ลูกค้าให้คะแนนเฉลี่ย <span className="font-semibold text-[#3c1a09]">{averageRating}</span>/5 จากรีวิวจริง {reviewCount} รายการ
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-3xl bg-white/80 p-5 shadow-[0_22px_45px_-28px_rgba(44,20,7,0.35)] backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.3em] text-[#b95700]">ทุกเช้า</p>
+                <p className="mt-2 text-lg font-semibold text-[#2c1407]">
+                  เปิดนึ่ง 05:30 และพร้อมส่งรอบแรก 07:00 น.
+                </p>
+                <p className="mt-2 text-sm text-[#2c1407]/65">
+                  จัดคิวตามเวลาที่ต้องการ หากต้องการจัดเลี้ยงแจ้งจำนวนและเวลาส่งได้เลย
                 </p>
               </div>
-            ) : null}
+              <div className="rounded-3xl border border-white/70 bg-white/50 p-5 shadow-[0_22px_45px_-28px_rgba(44,20,7,0.25)] backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.3em] text-[#5b3dfc]">ลูกค้ารีวิว</p>
+                {averageRating ? (
+                  <p className="mt-2 text-lg font-semibold text-[#2c1407]">
+                    เฉลี่ย {averageRating}/5 จากลูกค้าจริง {reviewCount} รายการ
+                  </p>
+                ) : (
+                  <p className="mt-2 text-lg font-semibold text-[#2c1407]">
+                    พร้อมเสิร์ฟความอร่อยทุกวัน
+                  </p>
+                )}
+                <p className="mt-2 text-sm text-[#2c1407]/65">
+                  คำชมเรื่องความนุ่มและไส้แน่นคือเหตุผลที่เราดูแลการผลิตเองทุกชิ้น
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="relative flex justify-center">
-            <div className="relative h-[320px] w-[320px] sm:h-[360px] sm:w-[360px] rounded-[48%] bg-[#fff3d6] shadow-2xl shadow-[rgba(60,26,9,0.25)] flex items-center justify-center">
-              <div className="absolute -top-8 right-8 h-16 w-16 rounded-full bg-[#5b3dfc]/15 shadow-lg shadow-[#5b3dfc]/25" />
-              <div className="absolute -bottom-6 left-10 h-20 w-20 rounded-full bg-[#f7931e]/25 shadow-lg shadow-[#f7931e]/35" />
-              <div className="absolute top-10 left-6 h-12 w-12 rounded-full border-4 border-dashed border-[#5b3dfc]/40" />
-              <div className="text-center px-10">
-                <p className="text-lg font-semibold text-[#5b3dfc]">
-                  เมนูขายดี!
+          <aside className="relative">
+            <div className="absolute -top-8 right-4 h-16 w-16 rounded-full bg-[#5b3dfc]/20 blur-xl" />
+            <div className="absolute -bottom-10 left-0 h-24 w-24 rounded-full bg-[#ffb347]/30 blur-2xl" />
+            <div className="relative flex h-full flex-col justify-between rounded-[40px] border border-white/60 bg-white/80 p-8 shadow-[0_30px_60px_-30px_rgba(44,20,7,0.45)] backdrop-blur">
+              <div className="space-y-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#5b3dfc]">
+                  ไฮไลต์วันนี้
                 </p>
-                <p className="mt-1 text-2xl font-black text-[#3c1a09]">
-                  ซาลาเปาหมูสับไข่เค็ม
-                </p>
-                <p className="mt-4 text-sm text-[#3c1a09]/70">
-                  หมูสับแน่นๆ พร้อมไข่เค็มเต็มคำ นึ่งด้วยแป้งสูตรนุ่มพิเศษหอมละมุน
-                </p>
+                <div className="space-y-3">
+                  {heroHighlights.map(({ label, description }) => (
+                    <div key={label} className="rounded-2xl border border-[#5b3dfc]/20 bg-[#f4efff] px-4 py-3 text-sm text-[#362015]">
+                      <span className="font-semibold text-[#5b3dfc]">{label}</span>
+                      <p className="text-xs text-[#362015]/70">{description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
+              <div className="mt-10 space-y-3">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#b95700]">
+                  วิธีสั่งด่วน
+                </p>
+                <ul className="space-y-2 text-sm text-[#362015]/75">
+                  <li className="flex items-center justify-between rounded-2xl border border-[#ff7a45]/20 bg-[#fff1dc] px-4 py-3">
+                    <span>โทร 061-267-4523</span>
+                    <span aria-hidden>→</span>
+                  </li>
+                  <li className="flex items-center justify-between rounded-2xl border border-[#5b3dfc]/20 bg-white px-4 py-3">
+                    <a
+                      className="flex-1 text-left"
+                      href="https://line.me/R/ti/p/@sweetcravings"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Line OA @steamingbun
+                    </a>
+                    <span aria-hidden>↗</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+
+      <section
+        id="timeline"
+        className="relative bg-[#fefaf3] px-6 py-20 lg:px-10"
+        aria-labelledby="order-steps-heading"
+      >
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#5b3dfc]">
+              ขั้นตอนการสั่ง
+            </p>
+            <h2 id="order-steps-heading" className="text-3xl font-bold text-[#2c1407]">
+              จากไอเดียเมนูถึงมือคุณแบบไร้กังวล
+            </h2>
+            <p className="text-sm text-[#2c1407]/70">
+              ทีมงานช่วยยืนยันเวลาและปริมาณให้เหมาะกับจำนวนคน พร้อมอัปเดตสถานะตั้งแต่เริ่มนึ่งจนส่งถึงที่
+            </p>
+          </div>
+          <div className="relative">
+            <div className="absolute left-4 top-0 bottom-0 hidden w-[2px] bg-gradient-to-b from-[#5b3dfc] to-[#ff7a45] sm:block" />
+            <div className="space-y-6">
+              {orderSteps.map(({ title, description }, index) => (
+                <article
+                  key={title}
+                  className="relative flex flex-col gap-3 rounded-3xl border border-[#5b3dfc]/20 bg-white p-6 shadow-[0_20px_45px_-32px_rgba(44,20,7,0.35)] sm:ml-12"
+                >
+                  <div className="flex items-center gap-3 text-sm font-semibold text-[#5b3dfc]">
+                    <span className="hidden h-10 w-10 items-center justify-center rounded-full bg-[#5b3dfc] text-white sm:flex">
+                      {index + 1}
+                    </span>
+                    <span className="sm:hidden">ขั้น {index + 1}</span>
+                    <span className="text-base text-[#2c1407]">{title}</span>
+                  </div>
+                  <p className="text-sm text-[#2c1407]/70">{description}</p>
+                </article>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        className="relative bg-white py-16"
-        aria-labelledby="order-steps-heading"
-      >
-        <div className="mx-auto flex max-w-screen-xl flex-col gap-12 px-6 text-[#3c1a09] lg:px-8">
-          <div className="max-w-2xl space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">
-              วิธีสั่งความอร่อย
+      <section className="relative bg-white px-6 py-20 lg:px-10">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr]">
+          <div className="space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#b95700]">
+              ความพิถีพิถันในทุกชิ้น
             </p>
-            <h2 id="order-steps-heading" className="text-3xl font-bold">
-              ขั้นตอนง่ายๆ ในการรับซาลาเปาร้อนๆ
+            <h2 className="text-3xl font-bold text-[#2c1407]">
+              ทุกไส้ถูกคัดสรรเพื่อรสชาติที่คงเส้นคงวา
             </h2>
-            <p className="text-sm sm:text-base text-[#3c1a09]/75">
-              ไม่ว่าจะรับที่ร้านหรือให้จัดส่ง ทีมงานช่วยดูแลตั้งแต่การเลือกเมนูจนถึงการเสิร์ฟถึงมือ
+            <p className="text-sm text-[#2c1407]/70">
+              เราใช้สูตรเดียวกับที่ครอบครัวเสิร์ฟในงานสำคัญ ปรับรสชาติให้ถูกใจทั้งเด็กและผู้ใหญ่ พร้อมแพ็กให้สะดวกต่อการเสิร์ฟ
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {orderSteps.map(({ title, description, icon }) => (
-              <article
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+            {craftHighlights.map(({ icon, title, description }) => (
+              <div
                 key={title}
-                className="flex flex-col gap-3 rounded-3xl border border-[#f5c486] bg-[#fff7eb] p-6 shadow-[0_18px_36px_-24px_rgba(60,26,9,0.3)]"
+                className="flex flex-col gap-3 rounded-3xl border border-[#ffe3c0] bg-[#fff7eb] p-6 text-sm text-[#2c1407]/80 shadow-[0_22px_45px_-32px_rgba(44,20,7,0.3)]"
               >
                 <span className="text-3xl" aria-hidden>
                   {icon}
                 </span>
-                <h3 className="text-lg font-semibold text-[#3c1a09]">{title}</h3>
-                <p className="text-sm text-[#3c1a09]/75">{description}</p>
-              </article>
+                <h3 className="text-lg font-semibold text-[#2c1407]">{title}</h3>
+                <p>{description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="menu" className="relative overflow-hidden py-16">
-        <div className="absolute inset-0 bg-[#fff7eb]" />
-        <div className="absolute -top-20 right-10 h-64 w-64 rounded-full bg-[#ffe37f]/40 blur-3xl" />
-        <div className="absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-[#5b3dfc]/15 blur-3xl" />
-
-        <div className="relative mx-auto flex max-w-screen-xl flex-col gap-12 px-6 lg:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">
-                Bao & Dim Sum
+      <section id="menu" className="relative bg-[#fef6eb] px-6 py-20 lg:px-10">
+        <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-white/0 to-[#fef6eb]" />
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <aside className="space-y-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#5b3dfc]">
+              Bao & Dim Sum
+            </p>
+            <h2 className="text-3xl font-bold text-[#2c1407]">เมนูประจำวัน</h2>
+            <p className="text-sm text-[#2c1407]/70">
+              เลือกเมนูลงตะกร้าเพื่อสั่งด่วน หรือกดสั่งทำล่วงหน้าเมื่ออยากได้จำนวนมากเป็นพิเศษ เมนูอาจหมุนเวียนทุกวัน
+            </p>
+            <div className="rounded-3xl border border-[#5b3dfc]/20 bg-white/70 p-6 shadow-[0_22px_45px_-28px_rgba(44,20,7,0.25)]">
+              <p className="text-sm font-semibold text-[#5b3dfc]">เคล็ดลับอุ่นให้อร่อย</p>
+              <p className="mt-2 text-xs text-[#2c1407]/70">
+                นึ่งไอน้ำ 4 นาที หรือเข้าไมโครเวฟพร้อมถ้วยน้ำ 1 นาทีครึ่ง เพื่อให้ไส้ฉ่ำเหมือนเพิ่งนึ่ง
               </p>
-              <h2 className="mt-2 text-3xl font-bold text-[#3c1a09]">
-                เมนูซาลาเปา & ขนมจีบวันนี้
-              </h2>
-              {/* <p className="mt-2 text-[var(--color-text)]/70 max-w-2xl">คำอธิบายเพิ่มเติม</p> */}
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <span className="inline-flex items-center rounded-full border border-[#f5c486] bg-white px-4 py-2 text-sm font-medium text-[#3c1a09] shadow">
-                🥟 เมนูอาจจะมีการเปลี่ยนแปลงในแต่ละวัน
-              </span>
-              {/* <span className="inline-flex items-center rounded-full border border-[var(--color-rose)]/30 bg-[var(--color-burgundy)]/70 px-4 py-2 text-sm font-medium text-[var(--color-gold)] shadow">
-                ☕ เซตอาหารเช้า
-              </span> */}
-            </div>
-          </div>
-
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          </aside>
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {products.length === 0 ? (
-              <div className="col-span-full rounded-3xl border border-[#f5c486] bg-white/90 p-10 text-center text-[#3c1a09]/80 shadow-lg shadow-[rgba(60,26,9,0.2)] backdrop-blur">
-                เมนูซาลาเปากำลังนึ่งอยู่ รอสักครู่นะคะ 🥟
+              <div className="col-span-full rounded-3xl border border-dashed border-[#ff7a45]/40 bg-white/70 p-12 text-center text-[#2c1407]/70 shadow-[0_22px_45px_-28px_rgba(44,20,7,0.2)]">
+                เมนูกำลังนึ่งอยู่ รอสักครู่แล้วรีเฟรชอีกครั้งนะคะ 🥟
               </div>
             ) : (
               products.map((p) => (
                 <div
                   key={p._id}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#f5c486] bg-white shadow-lg shadow-[rgba(60,26,9,0.15)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_40px_-24px_rgba(60,26,9,0.35)]"
+                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#ffe3c0] bg-white text-[#2c1407] shadow-[0_22px_45px_-32px_rgba(44,20,7,0.35)] transition hover:-translate-y-1 hover:shadow-[0_38px_60px_-36px_rgba(44,20,7,0.4)]"
                 >
-                  <div className="relative overflow-hidden">
-                    <div className="aspect-square w-full bg-[#fff7eb] flex items-center justify-center">
+                  <div className="relative">
+                    <div className="flex aspect-square items-center justify-center bg-[#fff0d9]">
                       {p.images?.[0] ? (
                         <img
                           src={p.images[0]}
                           alt={p.title || "ภาพเมนูซาลาเปา"}
                           loading="lazy"
                           decoding="async"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <span className="text-4xl">🥟</span>
+                        <span className="text-5xl">🥟</span>
                       )}
                     </div>
-                    <div className="absolute top-4 left-4 rounded-full border border-[#5b3dfc]/40 bg-white px-3 py-1 text-xs font-semibold text-[#5b3dfc] shadow">
+                    <div className="absolute left-4 top-4 rounded-full border border-[#5b3dfc]/20 bg-white/80 px-3 py-1 text-xs font-semibold text-[#5b3dfc]">
                       {saleModeCopy[p.saleMode] ?? "เมนูแนะนำ"}
                     </div>
                   </div>
-                  <div className="flex flex-1 flex-col gap-3 p-6">
+                  <div className="flex flex-1 flex-col gap-4 p-6">
                     <div>
-                      <h3 className="text-xl font-semibold text-[#3c1a09]">
-                        {p.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-[#3c1a09]/70 line-clamp-3">
-                        {p.description}
-                      </p>
+                      <h3 className="text-lg font-semibold">{p.title}</h3>
+                      <p className="mt-2 text-sm text-[#2c1407]/70 line-clamp-3">{p.description}</p>
                     </div>
-                    <div className="mt-auto flex items-center justify-between pt-2">
-                      <span className="text-lg font-bold text-[#f7931e]">
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                      <span className="text-lg font-bold text-[#ff7a45]">
                         ฿{Number.isFinite(p.price) ? p.price.toLocaleString("th-TH") : "-"}
                       </span>
                       <AddToCartButton product={p} />
                     </div>
                     {p.saleMode === "preorder" ? (
-                      <p className="text-xs text-[var(--color-text)]/60">
-                        สินค้าจัดทำตามสั่ง กรุณากรอกแบบฟอร์มเพื่อให้แอดมินติดต่อกลับ
+                      <p className="text-xs text-[#2c1407]/60">
+                        เมนูสั่งทำพิเศษ กรุณาแจ้งเวลารับสินค้าให้ทีมงานทราบ
                       </p>
                     ) : null}
                   </div>
@@ -411,99 +514,70 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden py-16">
-        <div className="absolute inset-0 bg-[#fef3e5]" />
-        <div className="absolute -top-24 left-10 h-64 w-64 rounded-full bg-[#5b3dfc]/12 blur-3xl" />
-        <div className="absolute -bottom-20 right-0 h-72 w-72 rounded-full bg-[#ffe37f]/35 blur-3xl" />
-        <div className="relative mx-auto grid max-w-screen-xl gap-10 px-6 py-10 text-[#3c1a09] md:grid-cols-3 lg:px-8">
-          {["ทำสดใหม่ทุกวัน", "ทำเองทุกขั้นตอน", "เลือกวัตถุดิบคุณภาพ"].map(
-            (title, idx) => (
-              <div
-                key={title}
-                className="rounded-3xl border border-[#f5c486] bg-white p-8 shadow-lg shadow-[rgba(60,26,9,0.12)]"
-              >
-                {/* <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-rose)] text-white text-xl shadow">
-                  {idx === 0 ? "👩‍🍳" : idx === 1 ? "👐" : "🌾"}
-                </div> */}
-                <h3 className="text-xl font-semibold text-[#3c1a09]">
-                  {title}
-                </h3>
-                <p className="mt-3 text-sm text-[#3c1a09]/75">
-                  {idx === 0
-                    ? "ขนมทุกชิ้นสดใหม่จากเตา ดูแลเองทุกวันเพื่อให้ได้รสชาติที่ดีที่สุด"
-                    : idx === 1
-                    ? "ลงมือทำเองทุกขั้นตอน ตั้งแต่การเตรียมแป้งจนถึงการจัดส่ง"
-                    : "ใช้วัตถุดิบที่คัดสรรอย่างดี เพื่อให้ได้คุณภาพและรสชาติที่มั่นใจ"}
-                </p>
-              </div>
-            )
-          )}
-        </div>
-      </section>
-
       <section
         id="visit"
-        className="relative bg-white py-16"
+        className="relative bg-white px-6 py-20 lg:px-10"
         aria-labelledby="visit-heading"
       >
-        <div className="mx-auto grid max-w-screen-xl gap-10 px-6 text-[#3c1a09] lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+        <div className="mx-auto grid max-w-6xl gap-10 rounded-[48px] border border-[#ffe3c0] bg-[#fff7eb] p-10 shadow-[0_30px_60px_-34px_rgba(44,20,7,0.35)] lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">
-              มาหาเราได้ทุกวัน
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#b95700]">
+              พร้อมต้อนรับทุกวัน
             </p>
-            <h2 id="visit-heading" className="text-3xl font-bold">
-              แวะรับหน้าร้านหรือสั่งให้ไปส่งถึงที่
+            <h2 id="visit-heading" className="text-3xl font-bold text-[#2c1407]">
+              รับที่หน้าร้านหรือให้เราส่งถึงที่
             </h2>
-            <p className="text-sm sm:text-base text-[#3c1a09]/75">
-              ร้านตั้งอยู่บริเวณตลาดเช้าเมืองลำพูน พร้อมบริการจัดส่งในเมืองภายใน 45 นาที*
-              และมีออปชันส่งต่างจังหวัดผ่านขนส่งเอกชน
+            <p className="text-sm text-[#2c1407]/70">
+              ร้านอยู่ใกล้ตลาดเช้าเมืองลำพูน สามารถจอดรถรับสินค้าได้สะดวก หรือให้ไรเดอร์ของเราส่งถึงคุณภายใน 45 นาที (ขึ้นอยู่กับคิว)
             </p>
-            <ul className="space-y-3 text-sm text-[#3c1a09]/80">
-              <li className="flex items-start gap-3">
-                <span aria-hidden>📍</span>
-                <address className="not-italic leading-relaxed">
+            <dl className="space-y-3 text-sm text-[#2c1407]/80">
+              <div className="flex items-start gap-3">
+                <dt aria-hidden>📍</dt>
+                <dd>
                   88/8 ถนนตลาดสด ตำบลในเมือง อำเภอเมือง จังหวัดลำพูน 51000
-                </address>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden>🕒</span>
-                <div>
-                  เปิดทุกวัน จันทร์-ศุกร์ 07:00-18:30 น. • เสาร์-อาทิตย์ 08:00-19:30 น.
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden>📞</span>
-                <div>
-                  โทร 061-267-4523 หรือแอดไลน์ @steamingbun เพื่อเช็กคิวจัดส่ง
-                </div>
-              </li>
-            </ul>
-            <p className="text-xs text-[#3c1a09]/60">*เวลาจัดส่งขึ้นอยู่กับจำนวนคิวและสภาพการจราจร</p>
+                </dd>
+              </div>
+              <div className="flex items-start gap-3">
+                <dt aria-hidden>🕒</dt>
+                <dd>
+                  จันทร์-ศุกร์ 07:00-18:30 น. • เสาร์-อาทิตย์ 08:00-19:30 น.
+                </dd>
+              </div>
+              <div className="flex items-start gap-3">
+                <dt aria-hidden>🚚</dt>
+                <dd>
+                  ส่งฟรีในเมืองลำพูน และส่งต่างจังหวัดผ่านขนส่งเอกชน คิดตามระยะทาง
+                </dd>
+              </div>
+            </dl>
+            <p className="text-xs text-[#2c1407]/60">
+              *เวลาจัดส่งขึ้นอยู่กับจำนวนคิวและสภาพการจราจร
+            </p>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border border-[#f5c486] bg-[#fff7eb] p-6 shadow-[0_18px_36px_-24px_rgba(60,26,9,0.35)]">
-            <h3 className="text-lg font-semibold text-[#3c1a09]">ช่องทางการติดต่อ</h3>
-            <p className="mt-2 text-sm text-[#3c1a09]/75">
-              เลือกช่องทางที่สะดวกเพื่อปรึกษาเมนูหรือขอใบเสนอราคาได้เลย
+          <div className="space-y-4 rounded-[32px] border border-white/60 bg-white/70 p-8 shadow-[0_22px_45px_-30px_rgba(44,20,7,0.3)] backdrop-blur">
+            <h3 className="text-lg font-semibold text-[#2c1407]">ช่องทางติดต่อ</h3>
+            <p className="text-sm text-[#2c1407]/70">
+              เลือกช่องทางที่สะดวกเพื่อปรึกษาเมนูหรือขอใบเสนอราคาได้ทุกวัน 06:00-20:00 น.
             </p>
-            <div className="mt-4 grid gap-3 text-sm">
+            <div className="grid gap-3 text-sm">
               <a
                 href="https://line.me/R/ti/p/@sweetcravings"
-                className="flex items-center justify-between rounded-2xl border border-[#5b3dfc]/20 bg-white px-4 py-3 font-medium text-[#5b3dfc] shadow transition hover:bg-[#f5edff]"
+                className="flex items-center justify-between rounded-2xl border border-[#5b3dfc]/30 bg-[#f2ecff] px-4 py-3 font-medium text-[#5b3dfc] shadow transition hover:bg-[#e3dbff]"
               >
-                <span>Line OA</span>
+                <span>Line OA @steamingbun</span>
                 <span aria-hidden>↗</span>
               </a>
               <a
                 href="https://www.facebook.com"
-                className="flex items-center justify-between rounded-2xl border border-[#f5c486] bg-[#fff3d6] px-4 py-3 font-medium text-[#3c1a09] shadow transition hover:bg-[#ffe8b5]"
+                className="flex items-center justify-between rounded-2xl border border-[#ffe3c0] bg-white px-4 py-3 font-medium text-[#2c1407] shadow transition hover:bg-[#fff0d9]"
               >
                 <span>Facebook Messenger</span>
                 <span aria-hidden>↗</span>
               </a>
               <a
                 href="mailto:hello@sweetcravings.co"
-                className="flex items-center justify-between rounded-2xl border border-[#f5c486]/70 bg-white px-4 py-3 font-medium text-[#3c1a09] shadow transition hover:bg-[#fff7eb]"
+                className="flex items-center justify-between rounded-2xl border border-[#ff7a45]/20 bg-[#fff1dc] px-4 py-3 font-medium text-[#b95700] shadow transition hover:bg-[#ffe1b9]"
               >
                 <span>hello@sweetcravings.co</span>
                 <span aria-hidden>↗</span>
@@ -515,38 +589,37 @@ export default async function HomePage() {
 
       <section
         id="faq"
-        className="relative overflow-hidden bg-[#fff7eb] py-16"
+        className="relative bg-[#fefaf3] px-6 py-20 lg:px-10"
         aria-labelledby="faq-heading"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-[#fff7eb] via-[#fff3d6] to-[#ffe8b5] opacity-60" />
-        <div className="relative mx-auto max-w-screen-xl space-y-10 px-6 text-[#3c1a09] lg:px-8">
-          <div className="max-w-2xl space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#5b3dfc]">
-              คำถามที่พบบ่อย
+        <div className="mx-auto max-w-6xl space-y-10">
+          <div className="max-w-2xl space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#5b3dfc]">
+              FAQ
             </p>
-            <h2 id="faq-heading" className="text-3xl font-bold">
-              เตรียมพร้อมก่อนสั่งซาลาเปาโฮมเมดของเรา
+            <h2 id="faq-heading" className="text-3xl font-bold text-[#2c1407]">
+              เคลียร์ทุกคำถามก่อนสั่ง
             </h2>
-            <p className="text-sm sm:text-base text-[#3c1a09]/75">
-              รวมคำตอบเรื่องเวลานึ่ง การจัดส่ง และวิธีชำระเงินเพื่อช่วยให้คุณวางแผนได้ง่ายขึ้น
+            <p className="text-sm text-[#2c1407]/70">
+              ตอบทุกข้อสงสัยเรื่องระยะเวลานึ่ง การชำระเงิน และวิธีจัดส่ง เพื่อให้คุณจัดการออเดอร์ได้ไวขึ้น
             </p>
           </div>
-          <div className="grid gap-4">
+          <div className="grid gap-4 lg:grid-cols-2">
             {faqItems.map(({ question, answer }) => (
               <details
                 key={question}
-                className="group rounded-3xl border border-[#f5c486] bg-white/80 p-5 shadow-[0_18px_36px_-24px_rgba(60,26,9,0.25)]"
+                className="group rounded-3xl border border-[#ffe3c0] bg-white p-6 text-[#2c1407] shadow-[0_20px_45px_-34px_rgba(44,20,7,0.3)]"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-[#3c1a09]">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold">
                   <span>{question}</span>
                   <span
-                    className="text-xl text-[#f7931e] transition group-open:rotate-45"
+                    className="text-xl text-[#ff7a45] transition group-open:rotate-45"
                     aria-hidden
                   >
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-[#3c1a09]/75">{answer}</p>
+                <p className="mt-3 text-sm text-[#2c1407]/70">{answer}</p>
               </details>
             ))}
           </div>
@@ -554,7 +627,6 @@ export default async function HomePage() {
       </section>
 
       <ReviewsShowcase reviews={featuredReviews} />
-
     </main>
   );
 }
