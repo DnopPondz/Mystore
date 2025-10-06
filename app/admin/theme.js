@@ -16,6 +16,8 @@ export const adminInsetCardShell =
 
 export const adminTableShell = `${adminSubSurfaceShell} overflow-hidden`;
 
+export const adminContentWidth = "mx-auto w-full max-w-6xl";
+
 export const adminFilterPill =
   "inline-flex items-center gap-2 rounded-full border border-[#E6C79C] bg-white/80 px-4 py-2 text-xs font-semibold text-[#8A5A33] shadow-[inset_0_1px_4px_rgba(63,42,26,0.08)]";
 
